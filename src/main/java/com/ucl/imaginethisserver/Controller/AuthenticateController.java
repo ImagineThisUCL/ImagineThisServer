@@ -4,15 +4,16 @@ import com.google.gson.JsonObject;
 import com.ucl.imaginethisserver.DAO.Page;
 import com.ucl.imaginethisserver.DAO.Wireframe;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 public class AuthenticateController {
 
@@ -30,6 +31,5 @@ public class AuthenticateController {
         System.out.println(responseList.get(0));
         response.setStatus(200);
         return responseList;
-
     }
 }
