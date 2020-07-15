@@ -34,8 +34,7 @@ public class FigmaAPIUtil {
                 response.append(inputLine);
             }
             in.close();
-            JsonObject figmaTreeStructure = new Gson().fromJson(response.toString(), JsonObject.class);
-            return figmaTreeStructure;
+            return new Gson().fromJson(response.toString(), JsonObject.class);
         } else {
             System.out.println("Request Failed");
             return null;
