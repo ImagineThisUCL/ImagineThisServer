@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
+import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class Page {
 
     private Map<String, Wireframe> wireframeMap = new HashMap<>();
 
-    public void loadWireframes(String projectID, String accessToken) throws IOException {
+    public void loadWireframes(String projectID, String accessToken, AuthenticateType authType) throws IOException {
         List<String> IDList = new ArrayList<>();
         for (JsonElement pageChild : this.children) {
             String type = pageChild.getAsJsonObject().get("type").toString();
@@ -33,7 +34,7 @@ public class Page {
                 IDList.add(id);
             }
         }
-        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList,projectID,accessToken).get("images").getAsJsonObject();
+        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList,projectID,accessToken,authType).get("images").getAsJsonObject();
         for (JsonElement pageChild : this.children) {
             String type = pageChild.getAsJsonObject().get("type").toString();
             if (type.equals("\"FRAME\"")) {

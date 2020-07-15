@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
+import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 
 import java.io.IOException;
@@ -23,13 +24,13 @@ public class Wireframe {
     private Map<String, FigmaComponent> componentMap = new HashMap<>();
     private Map<String, String> IDNameMap = new HashMap<>();
 
-    public void loadComponent(String projectID, String accessToken) throws IOException {
+    public void loadComponent(String projectID, String accessToken, AuthenticateType authType) throws IOException {
         List<String> IDList = new ArrayList<>();
         for (JsonElement pageChild : this.children) {
             String id = pageChild.getAsJsonObject().get("id").toString().replaceAll("\"", "");
             IDList.add(id);
         }
-        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList,projectID,accessToken).get("images").getAsJsonObject();
+        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList,projectID,accessToken, authType).get("images").getAsJsonObject();
         for (JsonElement jsonChild : children) {
             String type = jsonChild.getAsJsonObject().get("type").toString();
             type = type.substring(1, type.length() - 1);

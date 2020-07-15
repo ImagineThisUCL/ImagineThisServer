@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
+import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 
 import java.io.IOException;
@@ -19,13 +20,13 @@ public class Group extends FigmaComponent {
     String blendMode;
     private Map<String, FigmaComponent> componentMap = new HashMap<>();
 
-    public void loadComponent(String projectID, String accessToken) throws IOException {
+    public void loadComponent(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         List<String> IDList = new ArrayList<>();
         for (JsonElement pageChild : this.children) {
             String id = pageChild.getAsJsonObject().get("id").toString().replaceAll("\"", "");
             IDList.add(id);
         }
-        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList,projectID, accessToken).get("images").getAsJsonObject();
+        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList,projectID, accessToken, authenticateType).get("images").getAsJsonObject();
         for (JsonElement jsonChild : children) {
             String type = jsonChild.getAsJsonObject().get("type").toString();
             type = type.substring(1, type.length() - 1);

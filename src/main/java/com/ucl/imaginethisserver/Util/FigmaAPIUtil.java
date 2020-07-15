@@ -16,10 +16,15 @@ import java.util.List;
 import com.ucl.imaginethisserver.DAO.Page;
 
 public class FigmaAPIUtil {
-    public static JsonObject sendGetRequest(URL figmaAPI, String accessToken) throws IOException {
+    public static JsonObject sendGetRequest(URL figmaAPI, String accessToken,AuthenticateType authType) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) figmaAPI.openConnection();
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("X-Figma-Token", accessToken);
+        if(authType == AuthenticateType.ORIGINAL_TOKEN){
+            connection.setRequestProperty("X-Figma-Token", accessToken);
+        }else if(authType == AuthenticateType.OAUTH2){
+            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+        }
+
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
@@ -37,9 +42,9 @@ public class FigmaAPIUtil {
         }
     }
 
-    public static JsonObject requestFigmaFile(String project_id, String accessToken) throws IOException {
+    public static JsonObject requestFigmaFile(String project_id, String accessToken,AuthenticateType authType) throws IOException {
         URL figmaFileApi = new URL("https://api.figma.com/v1/files/" + project_id);
-        return sendGetRequest(figmaFileApi,accessToken);
+        return sendGetRequest(figmaFileApi,accessToken,authType);
     }
 
 
@@ -56,14 +61,14 @@ public class FigmaAPIUtil {
         return pageList;
     }
 
-    public static JsonObject requestImageByIDList(List<String> IDList, String projectID,String accessToken) throws IOException {
+    public static JsonObject requestImageByIDList(List<String> IDList, String projectID,String accessToken, AuthenticateType authType) throws IOException {
         StringBuilder ids = new StringBuilder();
         for (String id : IDList){
             ids.append(id).append(",");
         }
         ids.deleteCharAt(ids.length() - 1);
         URL figmaImageURL  = new URL("https://api.figma.com/v1/images/" + projectID + "?ids=" + ids);
-        return sendGetRequest(figmaImageURL, accessToken);
+        return sendGetRequest(figmaImageURL, accessToken, authType);
     }
 
 }

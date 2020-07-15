@@ -3,6 +3,7 @@ package com.ucl.imaginethisserver.Controller;
 import com.google.gson.JsonObject;
 import com.ucl.imaginethisserver.DAO.Page;
 import com.ucl.imaginethisserver.DAO.Wireframe;
+import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,18 +19,28 @@ import java.util.List;
 public class AuthenticateController {
 
     @GetMapping("/authToken")
-    public List<Wireframe> getFigmaProject(@RequestParam(value="projectID")String projectID, @RequestParam(value = "accessToken")String accessToken, HttpServletResponse response) throws IOException {
-        JsonObject figmaTreeStructure = FigmaAPIUtil.requestFigmaFile(projectID,accessToken);
-        if(figmaTreeStructure == null){
+    public List<Wireframe> getFigmaProject(@RequestParam(value = "projectID") String projectID, @RequestParam(value = "accessToken") String accessToken,
+                                           @RequestParam(value = "authType") String type, HttpServletResponse response) throws IOException {
+        AuthenticateType authType = null;
+        if(type.equals("originalToken")){
+            authType = AuthenticateType.ORIGINAL_TOKEN;
+        }else if(type.equals("oauth2Token")){
+            authType = AuthenticateType.OAUTH2;
+        }
+        JsonObject figmaTreeStructure = FigmaAPIUtil.requestFigmaFile(projectID, accessToken,authType);
+
+        if (figmaTreeStructure == null) {
             response.setStatus(500);
             return null;
         }
         List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
         Page testPage = pageList.get(0);
-        testPage.loadWireframes(projectID,accessToken);
+        testPage.loadWireframes(projectID, accessToken, authType);
         List<Wireframe> responseList = testPage.getWireframeList();
         System.out.println(responseList.get(0));
         response.setStatus(200);
         return responseList;
     }
+
+
 }
