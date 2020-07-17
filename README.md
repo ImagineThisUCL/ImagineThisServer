@@ -1,7 +1,7 @@
 # ImagineThisServer
 
 ## How to run
-We are using Intellij IDEA [link](https://www.jetbrains.com/idea/) to implement the backend and haven't tested it yet on other IDE. You might want to install that and get this project running correctly before you run the ImaginThisWeb project. Press run or use "Run - Run - ImaginethisserverApplication" to start this project. After that you may go back to run ImaginThisWeb project. 
+We are using [Intellij IDEA](https://www.jetbrains.com/idea/) to implement the backend and haven't tested it yet on other IDE. You might want to install that and get this project running correctly before you run the ImaginThisWeb project. Press run or use "Run - Run - ImaginethisserverApplication" to start this project. After that you may go back to run ImaginThisWeb project. 
 
 ## Possible Issues you might run into while running this:
 If you are running this project for the first time, you might encounter:
