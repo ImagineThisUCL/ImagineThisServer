@@ -17,6 +17,8 @@ public class Text extends FigmaComponent {
     private List<Effect> effects;
     @Expose()
     private String characters;
+    @Expose()
+    private String transitionNodeID;
 
     public String getBlendMode() {
         return blendMode;
@@ -40,5 +42,9 @@ public class Text extends FigmaComponent {
 
     public String getCharacters() {
         return characters;
+    }
+
+    public String getTransitionNodeID() {
+        return transitionNodeID;
     }
 }

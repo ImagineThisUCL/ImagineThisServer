@@ -7,12 +7,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
-
+import com.ucl.imaginethisserver.FrontendComponent.Button;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class Group extends FigmaComponent {
     JsonArray children;
@@ -65,5 +66,34 @@ public class Group extends FigmaComponent {
                 }
             }
         }
+
     }
+
+    public Button convertButton(){
+        Button button = new Button();
+        button.setPositionX(this.getPositionX());
+        button.setPositionY(this.getPositionY());
+        button.setWidth(this.getWidth());
+        button.setHeight(this.getHeight());
+        for(FigmaComponent component : this.componentMap.values()){
+            if(component.getType().equals("RECTANGLE")){
+                Rectangle rectangle = (Rectangle) component;
+                button.setCornerRadius(rectangle.getCornerRadius());
+                button.setFills(rectangle.getFills());
+                if(rectangle.getTransitionNodeID() != null){
+                    button.setTransitionNodeID(rectangle.getTransitionNodeID());
+                }
+            }
+            else if(component.getType().equals("TEXT")){
+                Text text = (Text) component;
+                button.setCharacter(text.getCharacters());
+                button.setStyle(text.getStyle());
+                if(text.getTransitionNodeID() != null){
+                    button.setTransitionNodeID(text.getTransitionNodeID());
+                }
+            }
+        }
+        return button;
+    }
+
 }

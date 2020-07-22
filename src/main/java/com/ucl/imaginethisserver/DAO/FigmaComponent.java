@@ -9,6 +9,10 @@ public class FigmaComponent {
     private String type;
     private AbsoluteBoundingBox absoluteBoundingBox;
     private String imageURL;
+    private int height;
+    private int width;
+    private int positionX;
+    private int positionY;
 
     public String toString() {
         GsonBuilder builder = new GsonBuilder();
@@ -39,6 +43,31 @@ public class FigmaComponent {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public void convertRelativePosition(AbsoluteBoundingBox wireframeBoundingbox){
+        this.height = (int)((this.absoluteBoundingBox.height / wireframeBoundingbox.height) * 100);
+        this.width = (int)((this.absoluteBoundingBox.width / wireframeBoundingbox.width) * 100);
+
+        this.positionX = (int)(((this.absoluteBoundingBox.x - wireframeBoundingbox.x) / wireframeBoundingbox.width) * 100);
+        this.positionY = (int)(((this.absoluteBoundingBox.y - wireframeBoundingbox.y) / wireframeBoundingbox.height) * 100);
+    }
+
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getPositionX() {
+        return positionX;
+    }
+
+    public int getPositionY() {
+        return positionY;
     }
 }
 

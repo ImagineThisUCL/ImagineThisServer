@@ -29,11 +29,11 @@ public class AuthenticateController {
             authType = AuthenticateType.OAUTH2;
         }
         JsonObject figmaTreeStructure = FigmaAPIUtil.requestFigmaFile(projectID, accessToken,authType);
-        String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
         if (figmaTreeStructure == null) {
             response.setStatus(500);
             return null;
         }
+        String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
         List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
         Page testPage = pageList.get(0);
         testPage.loadWireframes(projectID, accessToken, authType);
