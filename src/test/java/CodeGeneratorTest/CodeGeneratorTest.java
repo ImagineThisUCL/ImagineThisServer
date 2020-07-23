@@ -36,6 +36,7 @@ public class CodeGeneratorTest {
         Wireframe setUpWireframe = testPage.getWireframeByName("Set Up");
         setUpWireframe.loadComponent(projectID,accessToken,authType);
         setUpWireframe.sortComponentByY();
+        CodeGenerator.generateStructure();
         CodeGenerator.writeWireframeCode(setUpWireframe.getName(),setUpWireframe);
 //        CodeGenerator.writeReusableComponentCode(ReusableComponent.P);
     }
