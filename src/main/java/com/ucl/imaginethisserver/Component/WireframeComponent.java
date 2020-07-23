@@ -33,8 +33,7 @@ public class WireframeComponent{
                "    Button } from \"react-native\"\n" +
                "import React, { Component } from \"react\"" + "\n");
        if(isContainText){
-           importCode.append("import P from '../reusables/P'" + "\n");
-
+           importCode.append("import P from '../reusable/P'" + "\n");
        }
        importCode.append("\n");
 
@@ -89,6 +88,5 @@ public class WireframeComponent{
         code.append(this.generateImportCode()).append(this.generateStyleCode()).append(this.generateViewCode(className));
         return code.toString();
     }
-
 
 }

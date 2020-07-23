@@ -37,6 +37,5 @@ public class CodeGenerator {
         BufferedWriter writer = new BufferedWriter(new FileWriter("views/" + wireframeName + ".js", true));
         writer.append(outputCode);
         writer.close();
-
     }
 }
