@@ -5,7 +5,7 @@ import com.ucl.imaginethisserver.DAO.Style;
 
 import java.util.List;
 
-public class Button {
+public class Button implements FrontendComponent{
     private String character;
     private Style style;
     private int width;
@@ -87,6 +87,11 @@ public class Button {
 
     public void setFills(List<Fills> fills) {
         this.fills = fills;
+    }
+
+    @Override
+    public String generateCode() {
+        return "";
     }
 }
 

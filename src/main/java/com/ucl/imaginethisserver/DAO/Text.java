@@ -1,10 +1,11 @@
 package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.annotations.Expose;
+import com.ucl.imaginethisserver.FrontendComponent.FrontendComponent;
 
 import java.util.List;
 
-public class Text extends FigmaComponent {
+public class Text extends FigmaComponent implements FrontendComponent {
     @Expose()
     private String blendMode;
     @Expose()
@@ -46,5 +47,9 @@ public class Text extends FigmaComponent {
 
     public String getTransitionNodeID() {
         return transitionNodeID;
+    }
+
+    public String generateCode(){
+        return " <P fontSize ={" + this.style.getFontSize() +"}" + " textCenter = {true}>" + this.characters + "</P>";
     }
 }
