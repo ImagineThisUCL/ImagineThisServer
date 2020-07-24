@@ -12,7 +12,7 @@ public class Fills {
     @Expose()
     private String type;
     @Expose()
-    private Color color;
+    private FigmaColor color;
     @Expose()
     private List<Location> gradientHandlePositions;
     @Expose()
@@ -43,11 +43,11 @@ public class Fills {
         this.type = type;
     }
 
-    public Color getColor() {
+    public FigmaColor getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(FigmaColor color) {
         this.color = color;
     }
 
@@ -62,7 +62,7 @@ public class Fills {
 
 class GradientStop{
     @Expose()
-    private Color color;
+    private FigmaColor color;
     @Expose()
     double position;
 }

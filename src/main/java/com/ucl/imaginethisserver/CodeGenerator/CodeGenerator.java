@@ -1,8 +1,6 @@
 package com.ucl.imaginethisserver.CodeGenerator;
 
-import com.ucl.imaginethisserver.Component.PComponent;
-import com.ucl.imaginethisserver.Component.ReusableComponent;
-import com.ucl.imaginethisserver.Component.WireframeComponent;
+import com.ucl.imaginethisserver.Component.*;
 import com.ucl.imaginethisserver.DAO.Wireframe;
 
 import java.io.BufferedWriter;
@@ -13,14 +11,22 @@ import java.io.IOException;
 public class CodeGenerator {
     public static void writeReusableComponentCode(ReusableComponent component) throws IOException {
         String outputCode = "";
+        String fileName = "";
         switch (component){
             case P:
                 outputCode = PComponent.generateCode();
+                fileName = "P.js";
+                break;
+            case BUTTON:
+                outputCode = ButtonComponent.generateCode();
+                fileName = "Button.js";
                 break;
         }
-        File file = new File("reusable");
-        file.mkdir();
-        File component_file = new File("reusable/P.js");
+        File cfile = new File("components");
+        cfile.mkdir();
+        File vfile = new File("components/reusables");
+        vfile.mkdir();
+        File component_file = new File("components/reusables/" + fileName);
         BufferedWriter writer = new BufferedWriter(new FileWriter(component_file, false));
         writer.append(outputCode);
         writer.close();
@@ -32,9 +38,20 @@ public class CodeGenerator {
         String outputCode = "";
         WireframeComponent wireframeComponent = new WireframeComponent(wireframe);
         outputCode = wireframeComponent.generateCode(wireframeName);
-        File file = new File("views");
+        File cfile = new File("components");
+        cfile.mkdir();
+        File vfile = new File("components/views");
+        vfile.mkdir();
+        BufferedWriter writer = new BufferedWriter(new FileWriter("components/views/" + wireframeName + ".js", true));
+        writer.append(outputCode);
+        writer.close();
+    }
+
+    public static void writeBaseStyleCode() throws IOException {
+        String outputCode = BaseStyleComponent.generateCode();
+        File file = new File("assets");
         file.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("views/" + wireframeName + ".js", true));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("assets/baseStyle.js",false));
         writer.append(outputCode);
         writer.close();
     }

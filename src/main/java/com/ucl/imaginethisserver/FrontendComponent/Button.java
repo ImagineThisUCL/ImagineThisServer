@@ -5,14 +5,11 @@ import com.ucl.imaginethisserver.DAO.Style;
 
 import java.util.List;
 
-public class Button implements FrontendComponent{
+public class Button extends FrontendComponent{
     private String character;
     private Style style;
-    private int width;
-    private int height;
-    private int positionX;
-    private int positionY;
-    private List<Fills> fills;
+    private List<Fills> TextFills;
+    private List<Fills> RecFills;
     private String transitionNodeID;
     private double cornerRadius;
 
@@ -32,38 +29,6 @@ public class Button implements FrontendComponent{
         this.style = style;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public int getPositionX() {
-        return positionX;
-    }
-
-    public void setPositionX(int positionX) {
-        this.positionX = positionX;
-    }
-
-    public int getPositionY() {
-        return positionY;
-    }
-
-    public void setPositionY(int positionY) {
-        this.positionY = positionY;
-    }
-
 
     public String getTransitionNodeID() {
         return transitionNodeID;
@@ -81,17 +46,26 @@ public class Button implements FrontendComponent{
         this.cornerRadius = cornerRadius;
     }
 
-    public List<Fills> getFills() {
-        return fills;
-    }
-
-    public void setFills(List<Fills> fills) {
-        this.fills = fills;
-    }
-
-    @Override
     public String generateCode() {
-        return "";
+        String backgroundColor = this.RecFills.get(0).getColor().toString();
+        String textColor = this.TextFills.get(0).getColor().toString();
+        return "<Button\n" +
+                "   style={{backgroundColor:" + backgroundColor + ", borderRadius: " + this.getCornerRadius() + ", marginTop: base.margin}}\n" +
+                "   textStyle={{color: " + textColor + ", fontWeight: " + this.style.getFontWeight() +"}}>\n" +
+                this.character+
+                "</Button>";
+    }
+
+    public void setTextFills(List<Fills> textFills) {
+        TextFills = textFills;
+    }
+
+    public void setRecFills(List<Fills> recFills) {
+        RecFills = recFills;
+    }
+
+    public String toString(){
+        return this.height + " " + this.getPositionY();
     }
 }
 

@@ -79,7 +79,7 @@ public class Group extends FigmaComponent {
             if(component.getType().equals("RECTANGLE")){
                 Rectangle rectangle = (Rectangle) component;
                 button.setCornerRadius(rectangle.getCornerRadius());
-                button.setFills(rectangle.getFills());
+                button.setRecFills(rectangle.getFills());
                 if(rectangle.getTransitionNodeID() != null){
                     button.setTransitionNodeID(rectangle.getTransitionNodeID());
                 }
@@ -88,6 +88,7 @@ public class Group extends FigmaComponent {
                 Text text = (Text) component;
                 button.setCharacter(text.getCharacters());
                 button.setStyle(text.getStyle());
+                button.setTextFills(((Text) component).getFills());
                 if(text.getTransitionNodeID() != null){
                     button.setTransitionNodeID(text.getTransitionNodeID());
                 }

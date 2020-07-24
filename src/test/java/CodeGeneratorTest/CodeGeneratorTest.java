@@ -4,9 +4,7 @@ import com.google.gson.JsonObject;
 import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
 import com.ucl.imaginethisserver.Component.ReusableComponent;
 import com.ucl.imaginethisserver.Component.WireframeComponent;
-import com.ucl.imaginethisserver.DAO.AuthenticateResponse;
-import com.ucl.imaginethisserver.DAO.Page;
-import com.ucl.imaginethisserver.DAO.Wireframe;
+import com.ucl.imaginethisserver.DAO.*;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 
@@ -36,7 +34,13 @@ public class CodeGeneratorTest {
         Wireframe setUpWireframe = testPage.getWireframeByName("Set Up");
         setUpWireframe.loadComponent(projectID,accessToken,authType);
         setUpWireframe.sortComponentByY();
+        for(FigmaComponent component : setUpWireframe.getComponentList()){
+            if(component.getType().equals("GROUP")){
+                ((Group)component).loadComponent(projectID,accessToken,authType);
+            }
+        }
         CodeGenerator.writeWireframeCode(setUpWireframe.getName(),setUpWireframe);
 //        CodeGenerator.writeReusableComponentCode(ReusableComponent.P);
     }
+
 }

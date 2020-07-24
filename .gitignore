@@ -33,3 +33,13 @@ build/
 .vscode/
 
 .DS_Store
+
+reusable/
+
+assets/
+
+components/reusables/Button.js
+
+components/reusables/
+
+components/views/

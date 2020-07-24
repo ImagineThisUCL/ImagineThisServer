@@ -2,10 +2,11 @@ package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.annotations.Expose;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendComponent;
+import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
 
 import java.util.List;
 
-public class Text extends FigmaComponent implements FrontendComponent {
+public class Text extends FigmaComponent{
     @Expose()
     private String blendMode;
     @Expose()
@@ -49,7 +50,19 @@ public class Text extends FigmaComponent implements FrontendComponent {
         return transitionNodeID;
     }
 
-    public String generateCode(){
-        return " <P fontSize ={" + this.style.getFontSize() +"}" + " textCenter = {true}>" + this.characters + "</P>";
+    public FrontendText convertToFrontendText(){
+        FrontendText frontendText = new FrontendText();
+        frontendText.setWidth(this.getWidth());
+        frontendText.setHeight(this.getHeight());
+        frontendText.setPositionX(this.getPositionX());
+        frontendText.setPositionY(this.getPositionY());
+        frontendText.setColor(this.getFills().get(0).getColor());
+        frontendText.setText(this.characters);
+        frontendText.setFontFamily(this.style.getFontFamily());
+        frontendText.setFontSize(this.style.getFontSize());
+        frontendText.setFontWeight(this.style.getFontWeight());
+        return frontendText;
     }
+
+
 }

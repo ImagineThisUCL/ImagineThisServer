@@ -14,7 +14,7 @@ public class Effect {
     @Expose()
     double radius;
     @Expose()
-    Color color;
+    FigmaColor color;
     //How far the shadow is projected in the x and y direction
     @Expose()
     Location offset;
