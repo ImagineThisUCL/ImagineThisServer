@@ -43,3 +43,7 @@ components/reusables/Button.js
 components/reusables/
 
 components/views/
+
+outputApp/component/views/
+
+outputApp/

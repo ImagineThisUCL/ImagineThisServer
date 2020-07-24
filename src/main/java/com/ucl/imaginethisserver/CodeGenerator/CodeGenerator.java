@@ -1,9 +1,6 @@
 package com.ucl.imaginethisserver.CodeGenerator;
 
-import com.ucl.imaginethisserver.Component.PComponent;
-import com.ucl.imaginethisserver.Component.ReusableComponent;
-import com.ucl.imaginethisserver.Component.WireframeComponent;
-import com.ucl.imaginethisserver.Component.packageComponent;
+import com.ucl.imaginethisserver.Component.*;
 import com.ucl.imaginethisserver.DAO.Wireframe;
 
 import java.io.BufferedWriter;
@@ -12,19 +9,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class CodeGenerator {
-    public static void generateStructure() throws IOException {
-        File file1 = new File("outputApp");
-        file1.mkdir();
-        File file2 = new File("outputApp/component");
-        file2.mkdir();
-        generatePackageFile();
+
+    public static void generateOutputFolder() throws IOException{
+        File outputAppFolder = new File("OutputApp");
+        outputAppFolder.mkdir();
     }
 
     public static void generatePackageFile() throws IOException {
         String outputCode = "";
         outputCode = packageComponent.generateCode();
-
-        File component_file = new File("outputApp/package.json");
+        generateOutputFolder();
+        File component_file = new File("OutputApp/package.json");
         BufferedWriter writer = new BufferedWriter(new FileWriter(component_file, false));
         writer.append(outputCode);
         writer.close();
@@ -43,11 +38,12 @@ public class CodeGenerator {
                 fileName = "Button.js";
                 break;
         }
-        File cfile = new File("components");
+        generateOutputFolder();
+        File cfile = new File("OutputApp/components");
         cfile.mkdir();
-        File vfile = new File("components/reusables");
+        File vfile = new File("OutputApp/components/reusables");
         vfile.mkdir();
-        File component_file = new File("components/reusables/" + fileName);
+        File component_file = new File("OutputApp/components/reusables/" + fileName);
         BufferedWriter writer = new BufferedWriter(new FileWriter(component_file, false));
         writer.append(outputCode);
         writer.close();
@@ -59,20 +55,20 @@ public class CodeGenerator {
         String outputCode = "";
         WireframeComponent wireframeComponent = new WireframeComponent(wireframe);
         outputCode = wireframeComponent.generateCode(wireframeName);
-        File cfile = new File("components");
+        File cfile = new File("OutputApp/components");
         cfile.mkdir();
-        File vfile = new File("components/views");
+        File vfile = new File("OutputApp/components/views");
         vfile.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("components/views/" + wireframeName + ".js", true));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/components/views/" + wireframeName + ".js", true));
         writer.append(outputCode);
         writer.close();
     }
 
     public static void writeBaseStyleCode() throws IOException {
         String outputCode = BaseStyleComponent.generateCode();
-        File file = new File("assets");
+        File file = new File("OutputApp/assets");
         file.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("views/" + wireframeName + ".js", true));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/assets/baseStyle.js", true));
         writer.append(outputCode);
         writer.close();
     }
