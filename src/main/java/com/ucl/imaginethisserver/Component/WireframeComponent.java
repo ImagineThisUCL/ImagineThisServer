@@ -91,7 +91,6 @@ public class WireframeComponent{
             list.add(frontendComponentList.get(t));
         }
         inlineComponentList.add(list);
-        System.out.println(inlineComponentList);
         for(List<FrontendComponent> curList : inlineComponentList){
             //There is only one component in this line
             if(curList.size() == 1){
