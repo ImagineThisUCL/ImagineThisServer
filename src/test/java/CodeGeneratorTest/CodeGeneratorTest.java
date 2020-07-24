@@ -39,6 +39,7 @@ public class CodeGeneratorTest {
                 ((Group)component).loadComponent(projectID,accessToken,authType);
             }
         }
+        CodeGenerator.generateOutputFolder();
         CodeGenerator.writeWireframeCode(setUpWireframe.getName(),setUpWireframe);
 //        CodeGenerator.writeReusableComponentCode(ReusableComponent.P);
     }
