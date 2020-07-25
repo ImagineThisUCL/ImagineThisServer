@@ -2,9 +2,10 @@ package CodeGeneratorTest;
 
 import com.google.gson.JsonObject;
 import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
-import com.ucl.imaginethisserver.Component.ReusableComponent;
-import com.ucl.imaginethisserver.Component.WireframeComponent;
-import com.ucl.imaginethisserver.DAO.*;
+import com.ucl.imaginethisserver.DAO.FigmaComponent;
+import com.ucl.imaginethisserver.DAO.Group;
+import com.ucl.imaginethisserver.DAO.Page;
+import com.ucl.imaginethisserver.DAO.Wireframe;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 
@@ -26,22 +27,58 @@ public class CodeGeneratorTest {
         if (figmaTreeStructure == null) {
             return;
         }
-        String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
+
+        generatePage("Set Up",
+                figmaTreeStructure,
+                projectID,
+                accessToken,
+                authType);
+
+        generatePage("Information to populat messages",
+                figmaTreeStructure,
+                projectID,
+                accessToken,
+                authType);
+
+//        knowWTFisPassed("Information to populat messages",
+//                figmaTreeStructure,
+//                projectID,
+//                accessToken,
+//                authType);
+
+    }
+
+    public static void knowWTFisPassed(String name, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType) throws IOException {
         List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
         Page testPage = pageList.get(0);
         testPage.loadWireframes(projectID, accessToken, authType);
+        Wireframe foundWireframe = testPage.getWireframeByName(name);
+        foundWireframe.loadComponent(projectID,accessToken,authType);
+        foundWireframe.sortComponentByY();
+
+        System.out.print(foundWireframe);
+    }
+
+    public static void generatePage(String name, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType) throws IOException {
+        String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
+        List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
+        Page testPage = pageList.get(0);
+
+        testPage.loadWireframes(projectID, accessToken, authType);
 //        List<Wireframe> responseList = testPage.getWireframeList();
-        Wireframe setUpWireframe = testPage.getWireframeByName("Set Up");
-        setUpWireframe.loadComponent(projectID,accessToken,authType);
-        setUpWireframe.sortComponentByY();
-        for(FigmaComponent component : setUpWireframe.getComponentList()){
+        Wireframe foundWireframe = testPage.getWireframeByName(name);
+
+        foundWireframe.loadComponent(projectID,accessToken,authType);
+        foundWireframe.sortComponentByY();
+
+        for(FigmaComponent component : foundWireframe.getComponentList()){
             if(component.getType().equals("GROUP")){
                 ((Group)component).loadComponent(projectID,accessToken,authType);
             }
         }
+
         CodeGenerator.generateOutputFolder();
-        CodeGenerator.writeWireframeCode(setUpWireframe.getName(),setUpWireframe);
+        CodeGenerator.writeWireframeCode(foundWireframe.getName(),foundWireframe);
 //        CodeGenerator.writeReusableComponentCode(ReusableComponent.P);
     }
-
 }
