@@ -52,7 +52,6 @@ public class WireframeComponent{
        if(isContainButton){
             importCode.append("import Button from '../reusables/Button'" + "\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
-
        }
        importCode.append("\n");
 
