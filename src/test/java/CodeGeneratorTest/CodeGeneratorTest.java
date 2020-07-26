@@ -28,11 +28,11 @@ public class CodeGeneratorTest {
             return;
         }
 
-        generatePage("Set Up",
-                figmaTreeStructure,
-                projectID,
-                accessToken,
-                authType);
+//        generatePage("Set Up",
+//                figmaTreeStructure,
+//                projectID,
+//                accessToken,
+//                authType);
 
         generatePage("Information to populat messages",
                 figmaTreeStructure,
@@ -40,11 +40,11 @@ public class CodeGeneratorTest {
                 accessToken,
                 authType);
 
-//        knowWTFisPassed("Information to populat messages",
-//                figmaTreeStructure,
-//                projectID,
-//                accessToken,
-//                authType);
+        knowWTFisPassed("Information to populat messages",
+                figmaTreeStructure,
+                projectID,
+                accessToken,
+                authType);
 
     }
 
