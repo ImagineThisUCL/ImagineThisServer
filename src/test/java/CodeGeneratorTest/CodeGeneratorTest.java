@@ -34,13 +34,19 @@ public class CodeGeneratorTest {
 //                accessToken,
 //                authType);
 
-        generatePage("Information to populat messages",
+//        generatePage("Information to populat messages",
+//                figmaTreeStructure,
+//                projectID,
+//                accessToken,
+//                authType);
+
+        generatePage("Care Network Page",
                 figmaTreeStructure,
                 projectID,
                 accessToken,
                 authType);
 
-        knowWTFisPassed("Information to populat messages",
+        knowWTFisPassed("Care Network Page",
                 figmaTreeStructure,
                 projectID,
                 accessToken,

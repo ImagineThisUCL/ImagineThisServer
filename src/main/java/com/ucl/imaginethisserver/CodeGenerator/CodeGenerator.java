@@ -58,7 +58,7 @@ public class CodeGenerator {
         cfile.mkdir();
         File vfile = new File("OutputApp/components/views");
         vfile.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/components/views/" + wireframeName + ".js", true));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/components/views/" + wireframeName + ".js", false));
         writer.append(outputCode);
         writer.close();
     }
@@ -67,7 +67,7 @@ public class CodeGenerator {
         String outputCode = BaseStyleComponent.generateCode();
         File file = new File("OutputApp/assets");
         file.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/assets/baseStyle.js", true));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/assets/baseStyle.js", false));
         writer.append(outputCode);
         writer.close();
     }
