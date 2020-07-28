@@ -8,7 +8,8 @@ public class ButtonComponent {
                 "import {\n" +
                 "    StyleSheet,\n" +
                 "    Text,\n" +
-                "    TouchableOpacity\n" +
+                "    TouchableOpacity,\n" +
+                "    View,\n" +
                 "} from \"react-native\"\n" +
                 "\n" +
                 "import base from \"../../assets/baseStyle\"\n" +
@@ -17,11 +18,14 @@ public class ButtonComponent {
                 "    button: {\n" +
                 "        marginBottom: base.margin,\n" +
                 "        paddingHorizontal: base.padding*2,\n" +
-                "        paddingVertical: base.padding\n" +
+                "        paddingVertical: base.padding,\n" +
                 "    },\n" +
                 "    text: {\n" +
-                "        fontSize: base.font.medium\n" +
-                "    }\n" +
+                "        fontSize: base.font.medium,\n" +
+                "    },\n" +
+                "    wrapper: {\n" +
+                "        flexDirection: \"row\",\n" +
+                "    },\n" +
                 "})\n" +
                 "\n" +
                 "export default class Button extends Component {\n" +
@@ -30,14 +34,16 @@ public class ButtonComponent {
                 "        let textStyleList = [styles.text]\n" +
                 "\n" +
                 "        return (\n" +
-                "            <TouchableOpacity \n" +
-                "                {...this.props} \n" +
-                "                style={[...buttonStyleList, this.props.style]}>\n" +
-                "                <Text\n" +
-                "                    style={[...textStyleList, this.props.textStyle]}>\n" +
-                "                    {this.props.children}\n" +
-                "                </Text>\n" +
-                "            </TouchableOpacity>\n" +
+                "            <View style={styles.wrapper}>\n" +
+                "                <TouchableOpacity \n" +
+                "                    {...this.props} \n" +
+                "                    style={[...buttonStyleList, this.props.style]}>\n" +
+                "                    <Text\n" +
+                "                        style={[...textStyleList, this.props.textStyle]}>\n" +
+                "                        {this.props.children}\n" +
+                "                    </Text>\n" +
+                "                </TouchableOpacity>\n" +
+                "            </View>\n" +
                 "        )\n" +
                 "    }\n" +
                 "}";
