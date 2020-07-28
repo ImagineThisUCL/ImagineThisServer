@@ -2,17 +2,21 @@ package com.ucl.imaginethisserver.Component;
 
 import com.ucl.imaginethisserver.FrontendComponent.NavBar;
 
+import java.util.HashSet;
+
 public class AppJSComponent {
+
 
     public static String generateImportCode(NavBar navBar){
         StringBuilder importCode = new StringBuilder();
         importCode.append("import React from 'react'\n" +
                 "import { NavigationContainer } from '@react-navigation/native'\n" +
                 "import { createStackNavigator } from '@react-navigation/stack'").append('\n');
+        importCode.append("import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'\n");
         importCode.append("import { StyleSheet, Text, SafeAreaView, StatusBar} from 'react-native';\n");
         importCode.append("import Image from \"react-native-web/src/exports/Image\";\n");
-
-        for(String wireframeName : NavBar.BUTTON_MAP.values()){
+        HashSet<String> wireframeNameSet = new HashSet<>(NavBar.BUTTON_MAP.values());
+        for(String wireframeName : wireframeNameSet){
             wireframeName = wireframeName.replaceAll(" ","");
             importCode.append("import {").append(wireframeName).append("} from \"./components/views/").append(wireframeName).append("\"\n");
         }

@@ -32,6 +32,7 @@ public class CodeGeneratorTest {
         Page testPage = pageList.get(0);
         testPage.loadWireframes(projectID, accessToken, authType);
 //        List<Wireframe> responseList = testPage.getWireframeList();
+        CodeGenerator.generatePackageFile();
         Wireframe setUpWireframe = testPage.getWireframeByName("Reach out");
         setUpWireframe.loadComponent(projectID,accessToken,authType);
         setUpWireframe.sortComponentByY();
