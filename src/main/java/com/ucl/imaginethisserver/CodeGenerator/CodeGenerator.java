@@ -15,12 +15,12 @@ public class CodeGenerator {
     public static void generateOutputFolder() throws IOException{
         File outputAppFolder = new File("OutputApp");
         outputAppFolder.mkdir();
+        generatePackageFile();
     }
 
     public static void generatePackageFile() throws IOException {
         String outputCode = "";
         outputCode = packageComponent.generateCode();
-        generateOutputFolder();
         File component_file = new File("OutputApp/package.json");
         BufferedWriter writer = new BufferedWriter(new FileWriter(component_file, false));
         writer.append(outputCode);
@@ -40,7 +40,6 @@ public class CodeGenerator {
                 fileName = "Button.js";
                 break;
         }
-        generateOutputFolder();
         File cfile = new File("OutputApp/components");
         cfile.mkdir();
         File vfile = new File("OutputApp/components/reusables");
@@ -57,7 +56,6 @@ public class CodeGenerator {
         String outputCode = "";
         WireframeComponent wireframeComponent = new WireframeComponent(wireframe,projectID, accessToken, authenticateType);
         outputCode = wireframeComponent.generateCode(wireframeName);
-        generateOutputFolder();
         File cfile = new File("OutputApp/components");
         cfile.mkdir();
         File vfile = new File("OutputApp/components/views");
@@ -69,7 +67,6 @@ public class CodeGenerator {
 
     public static void writeBaseStyleCode() throws IOException {
         String outputCode = BaseStyleComponent.generateCode();
-        generateOutputFolder();
         File file = new File("OutputApp/assets");
         file.mkdir();
         BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/assets/baseStyle.js", false));
