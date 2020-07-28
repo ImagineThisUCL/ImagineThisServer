@@ -5,6 +5,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
+import com.ucl.imaginethisserver.FrontendComponent.NavBar;
+import com.ucl.imaginethisserver.FrontendComponent.NavButton;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import com.ucl.imaginethisserver.FrontendComponent.Button;
@@ -20,6 +22,10 @@ public class Group extends FigmaComponent {
     @Expose()
     String blendMode;
     private Map<String, FigmaComponent> componentMap = new HashMap<>();
+
+    public Map<String, FigmaComponent> getComponentMap(){
+        return this.componentMap;
+    }
 
     public void loadComponent(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         List<String> IDList = new ArrayList<>();
@@ -95,6 +101,31 @@ public class Group extends FigmaComponent {
             }
         }
         return button;
+    }
+
+    public NavBar convertNavBar(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
+        NavBar navBar = new NavBar();
+        navBar.setHeight(this.getHeight());
+        navBar.setWidth(this.getWidth());
+        navBar.setPositionX(this.getPositionX());
+        navBar.setPositionY(this.getPositionY());
+        for(FigmaComponent component : this.componentMap.values()){
+            if(component.getType().equals("GROUP") && component.getName().contains("button")){
+                NavButton navButton = new NavButton();
+                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
+                for(FigmaComponent childComponent: ((Group)component).getComponentMap().values()){
+                    if(childComponent.getType().equals("TEXT")){
+                        navButton.setText(((Text)childComponent).getCharacters());
+                    }else if(childComponent.getName().toLowerCase().contains("icon")){
+                        navButton.setIconURL(childComponent.getImageURL());
+                    }
+                }
+                NavBar.NAV_BUTTONS.add(navButton);
+                NavBar.BUTTON_MAP.put(navButton.getText(), "Placeholder");
+            }
+        }
+
+        return navBar;
     }
 
 }

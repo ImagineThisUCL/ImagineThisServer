@@ -5,6 +5,8 @@ import com.ucl.imaginethisserver.DAO.*;
 import com.ucl.imaginethisserver.FrontendComponent.Button;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendComponent;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
+import com.ucl.imaginethisserver.FrontendComponent.NavBar;
+import com.ucl.imaginethisserver.Util.AuthenticateType;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,10 +15,16 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private boolean isContainText, isContainButton;
+    private static boolean IS_CONTAIN_NAVBAR;
     private FigmaColor backgroundColor;
     private String backgroundImage;
+    public static NavBar NAV_BAR = null;
 
-    public WireframeComponent(Wireframe wireframe) {
+    public static boolean IsContainNavBar(){
+        return IS_CONTAIN_NAVBAR;
+    }
+
+    public WireframeComponent(Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         this.backgroundColor = wireframe.getFills().get(0).getColor();
         for(FigmaComponent component : wireframe.getComponentList()){
             //If this component is a text
@@ -36,6 +44,18 @@ public class WireframeComponent{
                     isContainButton = true;
                 }
             }
+            else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("navigation")){
+                NAV_BAR = ((Group)component).convertNavBar(projectID, accessToken, authenticateType);
+                for(String navText : NavBar.BUTTON_MAP.keySet()){
+                    if(NavBar.BUTTON_MAP.get(navText).equals("Placeholder")){
+                        NavBar.BUTTON_MAP.put(navText,wireframe.getName());
+                        break;
+                    }
+                }
+                if(!IS_CONTAIN_NAVBAR){
+                    IS_CONTAIN_NAVBAR = true;
+                }
+            }
         }
     }
 
@@ -53,6 +73,9 @@ public class WireframeComponent{
             importCode.append("import Button from '../reusables/Button'" + "\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
 
+       }
+       if(IS_CONTAIN_NAVBAR){
+           importCode.append("import { StatusBar } from 'expo-status-bar'");
        }
        importCode.append("\n");
 

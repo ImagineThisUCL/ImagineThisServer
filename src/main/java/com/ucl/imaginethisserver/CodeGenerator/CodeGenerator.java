@@ -2,6 +2,8 @@ package com.ucl.imaginethisserver.CodeGenerator;
 
 import com.ucl.imaginethisserver.Component.*;
 import com.ucl.imaginethisserver.DAO.Wireframe;
+import com.ucl.imaginethisserver.FrontendComponent.NavBar;
+import com.ucl.imaginethisserver.Util.AuthenticateType;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -50,17 +52,17 @@ public class CodeGenerator {
 
     }
 
-    public static void writeWireframeCode(String wireframeName, Wireframe wireframe) throws IOException {
+    public static void writeWireframeCode(String wireframeName, Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         wireframeName = wireframeName.replaceAll(" ","");
         String outputCode = "";
-        WireframeComponent wireframeComponent = new WireframeComponent(wireframe);
+        WireframeComponent wireframeComponent = new WireframeComponent(wireframe,projectID, accessToken, authenticateType);
         outputCode = wireframeComponent.generateCode(wireframeName);
         generateOutputFolder();
         File cfile = new File("OutputApp/components");
         cfile.mkdir();
         File vfile = new File("OutputApp/components/views");
         vfile.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/components/views/" + wireframeName + ".js", true));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/components/views/" + wireframeName + ".js", false));
         writer.append(outputCode);
         writer.close();
     }
@@ -70,8 +72,29 @@ public class CodeGenerator {
         generateOutputFolder();
         File file = new File("OutputApp/assets");
         file.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/assets/baseStyle.js", true));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/assets/baseStyle.js", false));
         writer.append(outputCode);
+        writer.close();
+    }
+
+    public static void writeAppJSCode(NavBar navBar) throws IOException{
+        String appJSCode = AppJSComponent.generateCode(navBar);
+        generateOutputFolder();
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/App.js", false));
+        writer.append(appJSCode);
+        writer.close();
+
+    }
+
+    public static void writePlaceholderCode() throws IOException{
+        String placeholderCode = PlaceholderComponent.generateCode();
+        generateOutputFolder();
+        File cfile = new File("OutputApp/components");
+        cfile.mkdir();
+        File vfile = new File("OutputApp/components/views");
+        vfile.mkdir();
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/components/views/Placeholder.js", false));
+        writer.append(placeholderCode);
         writer.close();
     }
 }
