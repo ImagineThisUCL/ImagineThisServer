@@ -15,7 +15,7 @@ import java.util.List;
 public class CodeGeneratorTest {
     public static void main(String[] args) throws IOException {
         String type = "originalToken";
-        String projectID = "BitRrRD7JWTBWYaC9qCCIN";
+        String projectID = "o611joQBw7GbvEKWX7ZKQl";
         String accessToken = "54950-b9461cc1-f3c2-41f8-9fe7-a8f741083aa7";
         AuthenticateType authType = null;
         if(type.equals("originalToken")){
@@ -28,25 +28,18 @@ public class CodeGeneratorTest {
             return;
         }
 
-//        generatePage("Set Up",
-//                figmaTreeStructure,
-//                projectID,
-//                accessToken,
-//                authType);
 
-//        generatePage("Information to populat messages",
-//                figmaTreeStructure,
-//                projectID,
-//                accessToken,
-//                authType);
+//        String name = "Set Up";
+        String name = "Information to populat messages";
+//        String name = "Care Network Page";
 
-        generatePage("Care Network Page",
+        generatePage(name,
                 figmaTreeStructure,
                 projectID,
                 accessToken,
                 authType);
 
-        knowWTFisPassed("Care Network Page",
+        knowWTFisPassed(name,
                 figmaTreeStructure,
                 projectID,
                 accessToken,

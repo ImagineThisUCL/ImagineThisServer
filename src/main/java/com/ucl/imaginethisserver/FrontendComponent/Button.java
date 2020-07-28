@@ -52,9 +52,7 @@ public class Button extends FrontendComponent{
         return "<Button\n" +
                 "   style={{backgroundColor:" + backgroundColor +
                 ", borderRadius: " + this.getCornerRadius() +
-                ", marginTop: base.margin, height: "+ (this.style.getFontSize()+25) +
-                ", width: " + (this.style.getFontSize()+25) +
-                "}}\n" +
+                ", marginTop: base.margin}}\n" +
                 "   textStyle={{color: " + textColor +
                 ", fontSize: " + this.style.getFontSize() +
                 "}}>\n" +

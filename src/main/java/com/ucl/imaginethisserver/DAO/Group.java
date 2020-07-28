@@ -8,6 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import com.ucl.imaginethisserver.FrontendComponent.Button;
+import com.ucl.imaginethisserver.FrontendComponent.TextBox;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,6 +96,28 @@ public class Group extends FigmaComponent {
             }
         }
         return button;
+    }
+
+    public TextBox convertTextBox(){
+        TextBox textbox = new TextBox();
+        textbox.setPositionX(this.getPositionX());
+        textbox.setPositionY(this.getPositionY());
+        textbox.setWidth(this.getWidth());
+        textbox.setHeight(this.getHeight());
+
+        for(FigmaComponent component : this.componentMap.values()){
+            if(component.getType().equals("RECTANGLE")){
+                Rectangle rectangle = (Rectangle) component;
+                textbox.setContainerFills(rectangle.getFills());
+                textbox.setCornerRadius(rectangle.getCornerRadius());
+            }else if(component.getType().equals("TEXT")){
+                Text text = (Text) component;
+                textbox.setText(text.getCharacters());
+                textbox.setStyle(text.getStyle());
+                textbox.setTextFills(((Text) component).getFills());
+            }
+        }
+        return textbox;
     }
 
 }

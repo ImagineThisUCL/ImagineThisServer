@@ -3,6 +3,7 @@ package com.ucl.imaginethisserver.Component;
 import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
 import com.ucl.imaginethisserver.DAO.*;
 import com.ucl.imaginethisserver.FrontendComponent.Button;
+import com.ucl.imaginethisserver.FrontendComponent.TextBox;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendComponent;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
-    private boolean isContainText, isContainButton;
+    private boolean isContainText, isContainButton, isContainTextBox;
     private FigmaColor backgroundColor;
     private String backgroundImage;
 
@@ -35,7 +36,15 @@ public class WireframeComponent{
                 if(!isContainButton){
                     isContainButton = true;
                 }
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbox")){
+
+                TextBox textBox = ((Group)component).convertTextBox();
+                frontendComponentList.add(textBox);
+                if(!isContainTextBox){
+                    isContainTextBox = true;
+                }
             }
+
         }
     }
 
@@ -52,8 +61,10 @@ public class WireframeComponent{
        if(isContainButton){
             importCode.append("import Button from '../reusables/Button'" + "\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
-
        }
+        if(isContainTextBox){
+            importCode.append("import { Input, Card, ListItem, Icon } from 'react-native-elements';" + "\n");
+        }
        importCode.append("\n");
 
        return importCode.toString();
