@@ -18,7 +18,7 @@ public class AppJSComponent {
         HashSet<String> wireframeNameSet = new HashSet<>(NavBar.BUTTON_MAP.values());
         for(String wireframeName : wireframeNameSet){
             wireframeName = wireframeName.replaceAll(" ","");
-            importCode.append("import {").append(wireframeName).append("} from \"./components/views/").append(wireframeName).append("\"\n");
+            importCode.append("import ").append(wireframeName).append(" from \"./components/views/").append(wireframeName).append("\"\n");
         }
         importCode.append("\n");
         return importCode.toString();
@@ -48,7 +48,6 @@ public class AppJSComponent {
                 "        </>\n" +
                 "    )\n" +
                 "}");
-
         return viewCode.toString();
 
     }
