@@ -6,7 +6,6 @@ import java.util.HashSet;
 
 public class AppJSComponent {
 
-
     public static String generateImportCode(NavBar navBar){
         StringBuilder importCode = new StringBuilder();
         importCode.append("import React from 'react'\n" +
