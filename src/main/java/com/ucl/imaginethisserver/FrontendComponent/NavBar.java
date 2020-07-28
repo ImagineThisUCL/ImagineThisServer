@@ -34,7 +34,7 @@ public class NavBar extends FrontendComponent{
                 "                    backgroundColor: \"#D5E6EC\",\n" +
                 "                    paddingBottom: 2\n" +
                 "                },\n" +
-                "            }}>");
+                "            }}>").append("\n");
         for(NavButton navButton : NAV_BUTTONS){
             code.append("<Tab.Screen\n" +
                     "                name=\"" + navButton.getText() + "\"\n" +
@@ -43,7 +43,7 @@ public class NavBar extends FrontendComponent{
                     "                    tabBarIcon: ({ color, size }) => (\n" +
                     "                          <Image source={{uri : "+ navButton.getIconURL() + "}}/>\n\n" +
                     "                    )\n" +
-                    "                }}/>");
+                    "                }}/>").append("\n");
         }
         code.append(" </Tab.Navigator>\n" +
                 "    );\n" +
