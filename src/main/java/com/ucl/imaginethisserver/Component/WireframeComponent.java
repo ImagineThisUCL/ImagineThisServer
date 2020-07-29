@@ -63,7 +63,8 @@ public class WireframeComponent{
             CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
        }
         if(isContainTextBox){
-            importCode.append("import { Input, Card, ListItem, Icon } from 'react-native-elements';" + "\n");
+            importCode.append("import InputField from '../reusables/InputField'" + "\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD);
         }
        importCode.append("\n");
 

@@ -40,19 +40,15 @@ public class TextBox extends FrontendComponent{
     public String generateCode() {
         //Delete defaultColor later
         String defaultColor = "\"#ffffff\"";
-        String containerColor = this.containerFills.get(0).getColor().toString();
-//        String labelColor = this.labelFills.get(0).getColor().toString();
         String textColor = this.TextFills.get(0).getColor().toString();
+        //String labelColor = this.labelFills.get(0).getColor().toString();
 
-        return "<Input\n" +
+        String containerColor = this.containerFills.get(0).getColor().toString();
+
+        return "<InputField\n" +
                "placeholder='"+ this.Text +"'\n" +
-               "containerStyle={{backgroundColor: "+ defaultColor +
+               "inputContainerStyle={{backgroundColor: "+ containerColor +
                 ", borderRadius: " + this.getCornerRadius() +
-               "}}\n" +
-               "labelStyle={{color: "+ defaultColor +
-               "}}\n" +
-               "inputStyle={{color: "+ textColor +
-                ", fontSize: " + this.style.getFontSize() +
                "}}\n" +
                "/>";
     }
