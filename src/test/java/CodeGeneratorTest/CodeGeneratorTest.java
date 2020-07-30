@@ -17,7 +17,10 @@ import java.util.List;
 public class CodeGeneratorTest {
     public static void main(String[] args) throws IOException {
         String type = "originalToken";
+        //Navigation Bar
         String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
+        //Form
+//        String projectID = "o611joQBw7GbvEKWX7ZKQl";
         String accessToken = "54950-b9461cc1-f3c2-41f8-9fe7-a8f741083aa7";
         AuthenticateType authType = null;
         if(type.equals("originalToken")){
