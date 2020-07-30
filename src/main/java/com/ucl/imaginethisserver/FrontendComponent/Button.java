@@ -50,9 +50,13 @@ public class Button extends FrontendComponent{
         String backgroundColor = this.RecFills.get(0).getColor().toString();
         String textColor = this.TextFills.get(0).getColor().toString();
         return "<Button\n" +
-                "   style={{backgroundColor:" + backgroundColor + ", borderRadius: " + this.getCornerRadius() + ", marginTop: base.margin}}\n" +
-                "   textStyle={{color: " + textColor + ", fontWeight: " + this.style.getFontWeight() +"}}>\n" +
-                this.character+
+                "   style={{backgroundColor:" + backgroundColor +
+                ", borderRadius: " + this.getCornerRadius() +
+                ", marginTop: base.margin}}\n" +
+                "   textStyle={{color: " + textColor +
+                ", fontSize: " + this.style.getFontSize() +
+                "}}>\n" +
+                this.character +
                 "</Button>";
     }
 

@@ -39,6 +39,10 @@ public class CodeGenerator {
                 outputCode = ButtonComponent.generateCode();
                 fileName = "Button.js";
                 break;
+            case INPUTFIELD:
+                outputCode = InputFieldComponent.generateCode();
+                fileName = "InputField.js";
+                break;
         }
         generateOutputFolder();
         File cfile = new File("OutputApp/components");

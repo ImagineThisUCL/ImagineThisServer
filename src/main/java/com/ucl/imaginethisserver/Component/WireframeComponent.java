@@ -3,8 +3,10 @@ package com.ucl.imaginethisserver.Component;
 import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
 import com.ucl.imaginethisserver.DAO.*;
 import com.ucl.imaginethisserver.FrontendComponent.Button;
+import com.ucl.imaginethisserver.FrontendComponent.TextBox;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendComponent;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
+import com.ucl.imaginethisserver.Util.FrontendUtil;
 import com.ucl.imaginethisserver.FrontendComponent.NavBar;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 
@@ -14,8 +16,8 @@ import java.util.List;
 
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
-    private boolean isContainText, isContainButton;
     private static boolean IS_CONTAIN_NAVBAR;
+    private boolean isContainText, isContainButton, isContainTextBox;
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -42,6 +44,13 @@ public class WireframeComponent{
                 frontendComponentList.add(button);
                 if(!isContainButton){
                     isContainButton = true;
+                }
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbox")){
+
+                TextBox textBox = ((Group)component).convertTextBox();
+                frontendComponentList.add(textBox);
+                if(!isContainTextBox){
+                    isContainTextBox = true;
                 }
             }
             else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("navigation")){
@@ -72,48 +81,27 @@ public class WireframeComponent{
        if(isContainButton){
             importCode.append("import Button from '../reusables/Button'" + "\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
-
        }
        if(IS_CONTAIN_NAVBAR){
            importCode.append("import { StatusBar } from 'expo-status-bar'");
        }
+        if(isContainTextBox){
+            importCode.append("import InputField from '../reusables/InputField'" + "\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD);
+        }
        importCode.append("\n");
 
        return importCode.toString();
     }
 
     public String generateViewCode(String className){
-        ArrayList<List<FrontendComponent>> inlineComponentList = new ArrayList<>();
         StringBuilder viewCode = new StringBuilder();
         viewCode.append("class ").append(className).append(" extends Component {");
         viewCode.append("render() {\n" +
                 "        return (\n" +
                 "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: "+backgroundColor.toString()+"}}>" + "\n");
-//        for(FrontendComponent frontendComponent : frontendComponentList){
-//            viewCode.append(frontendComponent.generateCode()).append("\n");
-//        }
-        FrontendComponent preComponent = frontendComponentList.get(0);
-        int startIndex = 0;
-        int endIndex = -1;
-        for(int i = 0; i < frontendComponentList.size(); i++){
-            if(!frontendComponentList.get(i).isSameLine(preComponent)){
-                preComponent = frontendComponentList.get(i);
-                List<FrontendComponent> list = new ArrayList<>();
-                for(int t = startIndex; t <= endIndex; t++){
-                    list.add(frontendComponentList.get(t));
-                }
-                inlineComponentList.add(list);
-                startIndex = i;
-                endIndex = startIndex;
-            }else{
-                endIndex ++;
-            }
-        }
-        List<FrontendComponent> list = new ArrayList<>();
-        for(int t = startIndex; t <= endIndex; t++){
-            list.add(frontendComponentList.get(t));
-        }
-        inlineComponentList.add(list);
+
+        ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
         for(List<FrontendComponent> curList : inlineComponentList){
             //There is only one component in this line
             if(curList.size() == 1){
