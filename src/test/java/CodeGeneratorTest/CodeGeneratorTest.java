@@ -27,12 +27,9 @@ public class CodeGeneratorTest {
         if (figmaTreeStructure == null) {
             return;
         }
-
-
 //        String name = "Set Up";
         String name = "Information to populat messages";
 //        String name = "Care Network Page";
-
         generatePage(name,
                 figmaTreeStructure,
                 projectID,

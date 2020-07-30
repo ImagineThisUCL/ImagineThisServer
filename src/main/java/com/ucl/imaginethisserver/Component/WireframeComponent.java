@@ -6,6 +6,7 @@ import com.ucl.imaginethisserver.FrontendComponent.Button;
 import com.ucl.imaginethisserver.FrontendComponent.TextBox;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendComponent;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
+import com.ucl.imaginethisserver.Util.FrontendUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,37 +73,13 @@ public class WireframeComponent{
     }
 
     public String generateViewCode(String className){
-        ArrayList<List<FrontendComponent>> inlineComponentList = new ArrayList<>();
         StringBuilder viewCode = new StringBuilder();
         viewCode.append("class ").append(className).append(" extends Component {");
         viewCode.append("render() {\n" +
                 "        return (\n" +
                 "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: "+backgroundColor.toString()+"}}>" + "\n");
-//        for(FrontendComponent frontendComponent : frontendComponentList){
-//            viewCode.append(frontendComponent.generateCode()).append("\n");
-//        }
-        FrontendComponent preComponent = frontendComponentList.get(0);
-        int startIndex = 0;
-        int endIndex = -1;
-        for(int i = 0; i < frontendComponentList.size(); i++){
-            if(!frontendComponentList.get(i).isSameLine(preComponent)){
-                preComponent = frontendComponentList.get(i);
-                List<FrontendComponent> list = new ArrayList<>();
-                for(int t = startIndex; t <= endIndex; t++){
-                    list.add(frontendComponentList.get(t));
-                }
-                inlineComponentList.add(list);
-                startIndex = i;
-                endIndex = startIndex;
-            }else{
-                endIndex ++;
-            }
-        }
-        List<FrontendComponent> list = new ArrayList<>();
-        for(int t = startIndex; t <= endIndex; t++){
-            list.add(frontendComponentList.get(t));
-        }
-        inlineComponentList.add(list);
+
+        ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
         for(List<FrontendComponent> curList : inlineComponentList){
             //There is only one component in this line
             if(curList.size() == 1){

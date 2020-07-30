@@ -5,10 +5,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
+import com.ucl.imaginethisserver.FrontendComponent.Form;
+import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import com.ucl.imaginethisserver.FrontendComponent.Button;
 import com.ucl.imaginethisserver.FrontendComponent.TextBox;
+
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,12 +116,33 @@ public class Group extends FigmaComponent {
                 textbox.setCornerRadius(rectangle.getCornerRadius());
             }else if(component.getType().equals("TEXT")){
                 Text text = (Text) component;
-                textbox.setText(text.getCharacters());
+                textbox.setPlaceholder(text.getCharacters());
                 textbox.setStyle(text.getStyle());
                 textbox.setTextFills(((Text) component).getFills());
             }
         }
         return textbox;
+    }
+
+    public Form convertForm(){
+        Form form = new Form();
+        form.setHeight(this.getHeight());
+        form.setWidth(this.getWidth());
+        form.setPositionX(this.getPositionX());
+        form.setPositionY(this.getPositionY());
+        for(FigmaComponent component: this.componentMap.values()){
+            if(component.getType().equals("TEXT")){
+                FrontendText text = ((Text)component).convertToFrontendText();
+                form.frontendComponentList.add(text);
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbox")){
+                TextBox textBox = ((Group)component).convertTextBox();
+                form.frontendComponentList.add(textBox);
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("button")){
+                Button button = ((Group)component).convertButton();
+                form.frontendComponentList.add(button);
+            }
+        }
+        return form;
     }
 
 }

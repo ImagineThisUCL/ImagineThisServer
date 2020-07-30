@@ -6,7 +6,7 @@ import com.ucl.imaginethisserver.DAO.Style;
 import java.util.List;
 
 public class TextBox extends FrontendComponent{
-    private String Text;
+    private String placeholder;
     private Style style;
     private List<Fills> containerFills;
     private List<Fills> labelFills;
@@ -21,8 +21,8 @@ public class TextBox extends FrontendComponent{
         this.cornerRadius = cornerRadius;
     }
 
-    public void setText(String character) {
-        this.Text = character;
+    public void setPlaceholder(String character) {
+        this.placeholder = character;
     }
 
     public void setStyle(Style style) {
@@ -46,7 +46,7 @@ public class TextBox extends FrontendComponent{
         String containerColor = this.containerFills.get(0).getColor().toString();
 
         return "<InputField\n" +
-               "placeholder='"+ this.Text +"'\n" +
+               "placeholder='"+ this.placeholder +"'\n" +
                "inputContainerStyle={{backgroundColor: "+ containerColor +
                 ", borderRadius: " + this.getCornerRadius() +
                "}}\n" +
