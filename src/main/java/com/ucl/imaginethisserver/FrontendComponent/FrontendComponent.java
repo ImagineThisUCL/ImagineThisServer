@@ -43,10 +43,28 @@ package com.ucl.imaginethisserver.FrontendComponent;
      }
 
      public boolean isSameLine(FrontendComponent a_component){
-         if( a_component.positionY + a_component.height > this.positionY){
-             return true;
-         }else{
-             return false;
+         if(this.positionX < a_component.positionX){
+             if(this.positionX + this.width < a_component.positionX){
+                 if( a_component.positionY + a_component.height > this.positionY){
+                     return true;
+                 }else{
+                     return false;
+                 }
+
+             }else{
+                 return false;
+             }
+         }else {
+             if(a_component.positionX + a_component.width < this.positionX){
+                 if( a_component.positionY + a_component.height > this.positionY){
+                     return true;
+                 }else{
+                     return false;
+                 }
+
+             }else{
+                 return false;
+             }
          }
      }
 

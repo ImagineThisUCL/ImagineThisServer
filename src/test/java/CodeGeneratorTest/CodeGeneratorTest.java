@@ -2,6 +2,7 @@ package CodeGeneratorTest;
 
 import com.google.gson.JsonObject;
 import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
+import com.ucl.imaginethisserver.Component.WireframeComponent;
 import com.ucl.imaginethisserver.DAO.FigmaComponent;
 import com.ucl.imaginethisserver.DAO.Group;
 import com.ucl.imaginethisserver.DAO.Page;
@@ -16,7 +17,7 @@ import java.util.List;
 public class CodeGeneratorTest {
     public static void main(String[] args) throws IOException {
         String type = "originalToken";
-        String projectID = "o611joQBw7GbvEKWX7ZKQl";
+        String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
         String accessToken = "54950-b9461cc1-f3c2-41f8-9fe7-a8f741083aa7";
         AuthenticateType authType = null;
         if(type.equals("originalToken")){
@@ -28,8 +29,7 @@ public class CodeGeneratorTest {
         if (figmaTreeStructure == null) {
             return;
         }
-//        String name = "Set Up";
-        String name = "Information to populat messages";
+        String name = "Reach out";
 //        String name = "Care Network Page";
         generatePage(name,
                 figmaTreeStructure,
@@ -37,12 +37,11 @@ public class CodeGeneratorTest {
                 accessToken,
                 authType);
 
-        knowWTFisPassed(name,
-                figmaTreeStructure,
-                projectID,
-                accessToken,
-                authType);
-
+//        knowWTFisPassed(name,
+//                figmaTreeStructure,
+//                projectID,
+//                accessToken,
+//                authType);
     }
 
     public static void knowWTFisPassed(String name, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType) throws IOException {
@@ -64,7 +63,7 @@ public class CodeGeneratorTest {
         testPage.loadWireframes(projectID, accessToken, authType);
 //        List<Wireframe> responseList = testPage.getWireframeList();
         CodeGenerator.generatePackageFile();
-        Wireframe setUpWireframe = testPage.getWireframeByName("Reach out");
+        Wireframe setUpWireframe = testPage.getWireframeByName(name);
         setUpWireframe.loadComponent(projectID,accessToken,authType);
         setUpWireframe.sortComponentByY();
         for(FigmaComponent component : setUpWireframe.getComponentList()){

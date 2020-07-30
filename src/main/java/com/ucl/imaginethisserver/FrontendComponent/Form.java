@@ -46,15 +46,16 @@ public class Form extends FrontendComponent{
     public String generateCode(){
         StringBuilder code = new StringBuilder();
         code. append("<Card containerStyle={{borderRadius: " + this.cornerRadius + " , margin: 0, padding: 10}}>").append("\n");
+
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(this.frontendComponentList);
         for(List<FrontendComponent> curList : inlineComponentList){
             code.append("<View style={{flexDirection: 'row'}}>\n");
             for(FrontendComponent component: curList){
                 code.append(component.generateCode()).append("\n");
             }
-            code.append("</view>\n");
+            code.append("</View>\n");
         }
-        code.append("/Card\n");
+        code.append("</Card>\n");
         return code.toString();
     }
 }

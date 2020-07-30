@@ -36,13 +36,19 @@ public class NavBar extends FrontendComponent{
                 "                },\n" +
                 "            }}>").append("\n");
         for(NavButton navButton : NAV_BUTTONS){
-            code.append("<Tab.Screen\n" +
+            code.append(" <Tab.Screen\n" +
                     "                name=\"" + navButton.getText() + "\"\n" +
-                    "                component={" + BUTTON_MAP.get(navButton.getText()).replaceAll(" ","") +"}\n" +
+                    "                component={" + BUTTON_MAP.get(navButton.getText()).replaceAll(" ","") + "}\n" +
                     "                options={{\n" +
-                    "                    tabBarIcon: ({ color, size }) => (\n" +
-                    "                          <Image source={{uri : "+ navButton.getIconURL() + "}}/>\n\n" +
-                    "                    )\n" +
+                    "                    tabBarIcon: () => {\n" +
+                    "                        return (\n" +
+                    "                            /* Option b with uri */\n" +
+                    "                            <Image\n" +
+                    "                                source={{uri: " + navButton.getIconURL() + "}}\n" +
+                    "                                style={{width: 24, height: 22}}\n" +
+                    "                            />\n" +
+                    "                        )\n" +
+                    "                    },\n" +
                     "                }}/>").append("\n");
         }
         code.append(" </Tab.Navigator>\n" +

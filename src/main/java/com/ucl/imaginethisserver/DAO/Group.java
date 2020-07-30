@@ -27,6 +27,7 @@ public class Group extends FigmaComponent {
     @Expose()
     String blendMode;
     private Map<String, FigmaComponent> componentMap = new HashMap<>();
+    private AbsoluteBoundingBox wireframeBoundingBox;
 
     public Map<String, FigmaComponent> getComponentMap(){
         return this.componentMap;
@@ -47,6 +48,7 @@ public class Group extends FigmaComponent {
                     Rectangle rectangle = new Gson().fromJson(jsonChild, Rectangle.class);
                     String imageURL = imageJson.get(rectangle.getId()).toString();
                     rectangle.setImageURL(imageURL);
+                    rectangle.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(rectangle.getName(), rectangle);
 
                 }
@@ -54,18 +56,22 @@ public class Group extends FigmaComponent {
                     Text text = new Gson().fromJson(jsonChild, Text.class);
                     String imageURL = imageJson.get(text.getId()).toString();
                     text.setImageURL(imageURL);
+                    text.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(text.getName(), text);
                 }
                 case "VECTOR" -> {
                     Vector vector = new Gson().fromJson(jsonChild, Vector.class);
                     String imageURL = imageJson.get(vector.getId()).toString();
                     vector.setImageURL(imageURL);
+                    vector.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(vector.getName(), vector);
                 }
                 case "GROUP" -> {
                     Group group = new Gson().fromJson(jsonChild, Group.class);
                     String imageURL = imageJson.get(group.getId()).toString();
                     group.setImageURL(imageURL);
+                    group.setWireframeBoundingBox(this.wireframeBoundingBox);
+                    group.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(group.getName(), group);
                 }
 
@@ -145,17 +151,18 @@ public class Group extends FigmaComponent {
                 Rectangle rectangle = (Rectangle) component;
                 textbox.setContainerFills(rectangle.getFills());
                 textbox.setCornerRadius(rectangle.getCornerRadius());
-            }else if(component.getType().equals("TEXT")){
+            }else if(component.getType().equals("TEXT") && component.getName().toLowerCase().equals("placeholder")){
                 Text text = (Text) component;
+//                System.out.println(text);
                 textbox.setPlaceholder(text.getCharacters());
                 textbox.setStyle(text.getStyle());
-                textbox.setTextFills(((Text) component).getFills());
+                textbox.setTextFills(text.getFills());
             }
         }
         return textbox;
     }
 
-    public Form convertForm(){
+    public Form convertForm(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         Form form = new Form();
         form.setHeight(this.getHeight());
         form.setWidth(this.getWidth());
@@ -166,14 +173,24 @@ public class Group extends FigmaComponent {
                 FrontendText text = ((Text)component).convertToFrontendText();
                 form.frontendComponentList.add(text);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbox")){
+                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
                 TextBox textBox = ((Group)component).convertTextBox();
                 form.frontendComponentList.add(textBox);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("button")){
+                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
                 Button button = ((Group)component).convertButton();
                 form.frontendComponentList.add(button);
+            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().equals("background")){
+                form.setBackgroundColor(((Rectangle)component).getFills().get(0).getColor());
+                form.setCornerRadius(((Rectangle)component).getCornerRadius());
             }
+
         }
+        form.sortComponentByY();
         return form;
     }
 
+    public void setWireframeBoundingBox(AbsoluteBoundingBox wireframeBoundingBox) {
+        this.wireframeBoundingBox = wireframeBoundingBox;
+    }
 }

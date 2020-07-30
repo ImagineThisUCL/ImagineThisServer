@@ -64,6 +64,7 @@ public class Wireframe {
                     Group group = new Gson().fromJson(jsonChild, Group.class);
                     String imageURL = imageJson.get(group.getId()).toString();
                     group.setImageURL(imageURL);
+                    group.setWireframeBoundingBox(this.absoluteBoundingBox);
                     group.convertRelativePosition(this.absoluteBoundingBox);
                     componentMap.put(group.getName(), group);
                     componentList.add(group);

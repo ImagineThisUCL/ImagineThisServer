@@ -2,12 +2,8 @@ package com.ucl.imaginethisserver.Component;
 
 import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
 import com.ucl.imaginethisserver.DAO.*;
-import com.ucl.imaginethisserver.FrontendComponent.Button;
-import com.ucl.imaginethisserver.FrontendComponent.TextBox;
-import com.ucl.imaginethisserver.FrontendComponent.FrontendComponent;
-import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
+import com.ucl.imaginethisserver.FrontendComponent.*;
 import com.ucl.imaginethisserver.Util.FrontendUtil;
-import com.ucl.imaginethisserver.FrontendComponent.NavBar;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 
 import java.io.IOException;
@@ -17,7 +13,7 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
-    private boolean isContainText, isContainButton, isContainTextBox;
+    private boolean isContainText, isContainButton, isContainTextBox, isContainForm;
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -64,6 +60,13 @@ public class WireframeComponent{
                 if(!IS_CONTAIN_NAVBAR){
                     IS_CONTAIN_NAVBAR = true;
                 }
+            }
+            else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("form")){
+                Form form = ((Group) component).convertForm(projectID, accessToken, authenticateType);
+                if(!isContainForm){
+                    isContainForm = true;
+                }
+                frontendComponentList.add(form);
             }
         }
     }

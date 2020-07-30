@@ -12,8 +12,7 @@ public class AppJSComponent {
                 "import { NavigationContainer } from '@react-navigation/native'\n" +
                 "import { createStackNavigator } from '@react-navigation/stack'").append('\n');
         importCode.append("import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'\n");
-        importCode.append("import { StyleSheet, Text, SafeAreaView, StatusBar} from 'react-native';\n");
-        importCode.append("import Image from \"react-native-web/src/exports/Image\";\n");
+        importCode.append("import { StyleSheet, Text, SafeAreaView, Image, StatusBar} from 'react-native';\n");
         HashSet<String> wireframeNameSet = new HashSet<>(NavBar.BUTTON_MAP.values());
         for(String wireframeName : wireframeNameSet){
             wireframeName = wireframeName.replaceAll(" ","");
