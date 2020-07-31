@@ -32,6 +32,7 @@ public class CodeGeneratorTest {
         if (figmaTreeStructure == null) {
             return;
         }
+        String name = "Information to populat messages";
 //        String name = "Reach out";
 //        String name = "Care Network Page";
         String name = "Information to populat messages";
@@ -40,23 +41,6 @@ public class CodeGeneratorTest {
                 projectID,
                 accessToken,
                 authType);
-
-//        knowWTFisPassed(name,
-//                figmaTreeStructure,
-//                projectID,
-//                accessToken,
-//                authType);
-    }
-
-    public static void knowWTFisPassed(String name, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType) throws IOException {
-        List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
-        Page testPage = pageList.get(0);
-        testPage.loadWireframes(projectID, accessToken, authType);
-        Wireframe foundWireframe = testPage.getWireframeByName(name);
-        foundWireframe.loadComponent(projectID,accessToken,authType);
-        foundWireframe.sortComponentByY();
-
-        System.out.print(foundWireframe);
     }
 
     public static void generatePage(String name, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType) throws IOException {
