@@ -92,6 +92,9 @@ public class WireframeComponent{
             importCode.append("import InputField from '../reusables/InputField'" + "\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD);
         }
+        if(isContainForm){
+            importCode.append("import { Card } from 'react-native-elements';" + "\n");
+        }
        importCode.append("\n");
 
        return importCode.toString();
