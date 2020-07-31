@@ -35,7 +35,7 @@ public class CodeGeneratorTest {
         String name = "Information to populat messages";
 //        String name = "Reach out";
 //        String name = "Care Network Page";
-        String name = "Information to populat messages";
+//        String name = "Information to populat messages";
         generatePage(name,
                 figmaTreeStructure,
                 projectID,

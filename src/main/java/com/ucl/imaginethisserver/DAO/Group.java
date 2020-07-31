@@ -100,6 +100,10 @@ public class Group extends FigmaComponent {
                 if(rectangle.getTransitionNodeID() != null){
                     button.setTransitionNodeID(rectangle.getTransitionNodeID());
                 }
+                if(rectangle.getStrokes().size() > 0){
+                    button.setBorderColor(rectangle.getStrokes().get(0).getColor());
+                }
+                button.setBorderWidth(rectangle.getStrokeWeight());
             }
             else if(component.getType().equals("TEXT")){
                 Text text = (Text) component;

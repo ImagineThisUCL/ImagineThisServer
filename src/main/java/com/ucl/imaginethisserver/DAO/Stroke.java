@@ -10,12 +10,16 @@ public class Stroke {
     @Expose()
     String type;
     @Expose()
-    FigmaColor color;
+    public FigmaColor color;
 
     public String toString() {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
         return gson.toJson(this);
+    }
+
+    public FigmaColor getColor(){
+        return this.color;
     }
 }

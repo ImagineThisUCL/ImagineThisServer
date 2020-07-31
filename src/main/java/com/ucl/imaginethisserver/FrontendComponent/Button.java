@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
+import com.ucl.imaginethisserver.DAO.FigmaColor;
 import com.ucl.imaginethisserver.DAO.Fills;
 import com.ucl.imaginethisserver.DAO.Style;
 
@@ -12,6 +13,8 @@ public class Button extends FrontendComponent{
     private List<Fills> RecFills;
     private String transitionNodeID;
     private double cornerRadius;
+    private FigmaColor borderColor;
+    private double borderWidth;
 
     public void setCharacter(String character) {
         this.character = character;
@@ -49,15 +52,29 @@ public class Button extends FrontendComponent{
     public String generateCode() {
         String backgroundColor = this.RecFills.get(0).getColor().toString();
         String textColor = this.TextFills.get(0).getColor().toString();
-        return "<Button\n" +
-                "   style={{backgroundColor:" + backgroundColor +
-                ", borderRadius: " + this.getCornerRadius() +
-                ", marginTop: base.margin}}\n" +
-                "   textStyle={{color: " + textColor +
-                ", fontSize: " + this.style.getFontSize() +
-                "}}>\n" +
-                this.character +
-                "</Button>";
+        if(this.borderColor!=null){
+            String borderColorStr = this.borderColor.toString();
+            return "<Button\n" +
+                    "   style={{backgroundColor:" + backgroundColor +
+                    ", borderRadius: " + this.getCornerRadius() +
+                    ", marginTop: base.margin, borderColor: " + borderColorStr + " ,borderWidth: " + this.borderWidth +"}}\n" +
+                    "   textStyle={{color: " + textColor +
+                    ", fontSize: " + this.style.getFontSize() +
+                    "}}>\n" +
+                    this.character +
+                    "</Button>";
+        }else{
+            return "<Button\n" +
+                    "   style={{backgroundColor:" + backgroundColor +
+                    ", borderRadius: " + this.getCornerRadius() +
+                    ", marginTop: base.margin}}\n" +
+                    "   textStyle={{color: " + textColor +
+                    ", fontSize: " + this.style.getFontSize() +
+                    "}}>\n" +
+                    this.character +
+                    "</Button>";
+        }
+
     }
 
     public void setTextFills(List<Fills> textFills) {
@@ -70,6 +87,22 @@ public class Button extends FrontendComponent{
 
     public String toString(){
         return this.height + " " + this.getPositionY();
+    }
+
+    public FigmaColor getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(FigmaColor borderColor) {
+        this.borderColor = borderColor;
+    }
+
+    public double getBorderWidth() {
+        return borderWidth;
+    }
+
+    public void setBorderWidth(double borderWidth) {
+        this.borderWidth = borderWidth;
     }
 }
 

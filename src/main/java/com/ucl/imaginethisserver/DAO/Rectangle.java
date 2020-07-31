@@ -56,4 +56,8 @@ public class Rectangle extends FigmaComponent {
     public String getStrokeJoin() {
         return strokeJoin;
     }
+
+    public List<Stroke> getStrokes() {
+        return strokes;
+    }
 }
