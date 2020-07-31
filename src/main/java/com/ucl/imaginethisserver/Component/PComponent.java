@@ -90,7 +90,7 @@ public class PComponent {
                 "    styleList.push({fontSize: this.props.fontSize})\n" +
                 "\n" +
                 "    return (\n" +
-                "      <Text {...this.props} style={[...styleList, this.props.style]}>{this.props.text}</Text>\n" +
+                "      <Text {...this.props} style={[...styleList, this.props.style]}/>\n" +
                 "    )\n" +
                 "  }\n" +
                 "}\n" +
