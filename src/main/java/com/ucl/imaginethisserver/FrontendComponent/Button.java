@@ -52,29 +52,31 @@ public class Button extends FrontendComponent{
     public String generateCode() {
         String backgroundColor = this.RecFills.get(0).getColor().toString();
         String textColor = this.TextFills.get(0).getColor().toString();
-        if(this.borderColor!=null){
-            String borderColorStr = this.borderColor.toString();
-            return "<Button\n" +
-                    "   style={{backgroundColor:" + backgroundColor +
-                    ", borderRadius: " + this.getCornerRadius() +
-                    ", marginTop: base.margin, borderColor: " + borderColorStr + " ,borderWidth: " + this.borderWidth +"}}\n" +
-                    "   textStyle={{color: " + textColor +
-                    ", fontSize: " + this.style.getFontSize() +
-                    "}}>\n" +
-                    this.character +
-                    "</Button>";
-        }else{
-            return "<Button\n" +
-                    "   style={{backgroundColor:" + backgroundColor +
-                    ", borderRadius: " + this.getCornerRadius() +
-                    ", marginTop: base.margin}}\n" +
-                    "   textStyle={{color: " + textColor +
-                    ", fontSize: " + this.style.getFontSize() +
-                    "}}>\n" +
-                    this.character +
-                    "</Button>";
+
+        StringBuilder buttonCode = new StringBuilder();
+        buttonCode.append("<Button\n");
+
+        if(this.transitionNodeID != null){
+            buttonCode.append("   onPress={() => this.props.navigation.navigate('Empty')}\n");
         }
 
+        buttonCode.append("   style={{backgroundColor:" + backgroundColor +
+                ", borderRadius: " + this.getCornerRadius() +
+                ", marginTop: base.margin");
+
+        if(this.borderColor != null){
+            String borderColorStr = this.borderColor.toString();
+            buttonCode.append(", borderColor: " + borderColorStr +
+                    " ,borderWidth: " + this.borderWidth);
+        }
+
+        buttonCode.append("}}\n" +
+                "   textStyle={{color: " + textColor +
+                ", fontSize: " + this.style.getFontSize() +
+                "}}>\n" +
+                this.character +
+                "</Button>");
+        return buttonCode.toString();
     }
 
     public void setTextFills(List<Fills> textFills) {
