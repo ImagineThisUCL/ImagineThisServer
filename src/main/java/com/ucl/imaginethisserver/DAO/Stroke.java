@@ -10,7 +10,7 @@ public class Stroke {
     @Expose()
     String type;
     @Expose()
-    public FigmaColor color;
+    private FigmaColor color;
 
     public String toString() {
         GsonBuilder builder = new GsonBuilder();

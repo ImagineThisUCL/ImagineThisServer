@@ -13,6 +13,7 @@ public class FigmaComponent {
     private int width;
     private int positionX;
     private int positionY;
+    private String align;
 
     public String toString() {
         GsonBuilder builder = new GsonBuilder();
@@ -51,6 +52,14 @@ public class FigmaComponent {
 
         this.positionX = (int)(((this.absoluteBoundingBox.x - wireframeBoundingbox.x) / wireframeBoundingbox.width) * 100);
         this.positionY = (int)(((this.absoluteBoundingBox.y - wireframeBoundingbox.y) / wireframeBoundingbox.height) * 100);
+
+        if(this.positionX + this.width < 50){
+            this.align = "LEFT";
+        }else if(this.positionX > 50){
+            this.align = "RIGHT";
+        }else{
+            this.align = "CENTER";
+        }
     }
 
 
@@ -68,6 +77,10 @@ public class FigmaComponent {
 
     public int getPositionY() {
         return positionY;
+    }
+
+    public String getAlign() {
+        return align;
     }
 }
 

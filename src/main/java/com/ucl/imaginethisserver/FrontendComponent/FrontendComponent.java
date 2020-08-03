@@ -5,6 +5,7 @@ package com.ucl.imaginethisserver.FrontendComponent;
      protected int height;
      protected int positionX;
      protected int positionY;
+     protected String align;
 
      public String generateCode(){
          return "";
@@ -41,6 +42,10 @@ package com.ucl.imaginethisserver.FrontendComponent;
      public void setPositionY(int positionY) {
          this.positionY = positionY;
      }
+
+     public void setAlign(String align){this.align = align; }
+
+     public String getAlign() {return this.align;}
 
      public boolean isSameLine(FrontendComponent a_component){
          if(this.positionX < a_component.positionX){

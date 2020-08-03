@@ -43,6 +43,9 @@ public class CodeGenerator {
                 outputCode = InputFieldComponent.generateCode();
                 fileName = "InputField.js";
                 break;
+            case SLIDER:
+                outputCode = SliderComponent.generateCode();
+                fileName = "CustomSlider.js";
         }
         generateOutputFolder();
         File cfile = new File("OutputApp/components");
