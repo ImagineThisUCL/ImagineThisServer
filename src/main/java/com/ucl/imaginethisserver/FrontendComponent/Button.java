@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
+import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
 import com.ucl.imaginethisserver.DAO.FigmaColor;
 import com.ucl.imaginethisserver.DAO.Fills;
 import com.ucl.imaginethisserver.DAO.Style;

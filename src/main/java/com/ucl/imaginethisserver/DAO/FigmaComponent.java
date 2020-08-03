@@ -13,6 +13,7 @@ public class FigmaComponent {
     private int width;
     private int positionX;
     private int positionY;
+    private String transitionNodeID;
 
     public String toString() {
         GsonBuilder builder = new GsonBuilder();
@@ -68,6 +69,10 @@ public class FigmaComponent {
 
     public int getPositionY() {
         return positionY;
+    }
+
+    public String getTransitionNodeID(){
+        return transitionNodeID;
     }
 }
 

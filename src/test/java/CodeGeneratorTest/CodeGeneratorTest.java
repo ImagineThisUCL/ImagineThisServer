@@ -32,8 +32,8 @@ public class CodeGeneratorTest {
         if (figmaTreeStructure == null) {
             return;
         }
-        String name = "Set Up";
-//        String name = "Information to populat messages";
+//        String name = "Set Up";
+        String name = "Information to populat messages";
 //        String name = "Reach out";
 //        String name = "Care Network Page";
 //        String name = "Information to populat messages";

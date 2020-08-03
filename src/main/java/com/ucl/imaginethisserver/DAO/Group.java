@@ -43,42 +43,44 @@ public class Group extends FigmaComponent {
         for (JsonElement jsonChild : children) {
             String type = jsonChild.getAsJsonObject().get("type").toString();
             type = type.substring(1, type.length() - 1);
-            String imageURL;
             switch (type) {
-                case "RECTANGLE":
+                case "RECTANGLE" -> {
                     Rectangle rectangle = new Gson().fromJson(jsonChild, Rectangle.class);
-                    imageURL = imageJson.get(rectangle.getId()).toString();
+                    String imageURL = imageJson.get(rectangle.getId()).toString();
                     rectangle.setImageURL(imageURL);
                     rectangle.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(rectangle.getName(), rectangle);
 
-                case "TEXT":
+                }
+                case "TEXT" -> {
                     Text text = new Gson().fromJson(jsonChild, Text.class);
-                    imageURL = imageJson.get(text.getId()).toString();
+                    String imageURL = imageJson.get(text.getId()).toString();
                     text.setImageURL(imageURL);
                     text.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(text.getName(), text);
-
-                case "VECTOR":
+                }
+                case "VECTOR" -> {
                     Vector vector = new Gson().fromJson(jsonChild, Vector.class);
-                    imageURL = imageJson.get(vector.getId()).toString();
+                    String imageURL = imageJson.get(vector.getId()).toString();
                     vector.setImageURL(imageURL);
                     vector.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(vector.getName(), vector);
-
-                case "GROUP":
+                }
+                case "GROUP" -> {
                     Group group = new Gson().fromJson(jsonChild, Group.class);
-                    imageURL = imageJson.get(group.getId()).toString();
+                    String imageURL = imageJson.get(group.getId()).toString();
                     group.setImageURL(imageURL);
                     group.setWireframeBoundingBox(this.wireframeBoundingBox);
                     group.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(group.getName(), group);
+                }
 
-                default:
+                default -> {
                     FigmaComponent figmaComponent = new Gson().fromJson(jsonChild, FigmaComponent.class);
-                    imageURL = imageJson.get(figmaComponent.getId()).toString();
+                    String imageURL = imageJson.get(figmaComponent.getId()).toString();
                     figmaComponent.setImageURL(imageURL);
                     componentMap.put(figmaComponent.getName(), figmaComponent);
+                }
             }
         }
 
@@ -90,6 +92,11 @@ public class Group extends FigmaComponent {
         button.setPositionY(this.getPositionY());
         button.setWidth(this.getWidth());
         button.setHeight(this.getHeight());
+
+        if(this.getTransitionNodeID() != null){
+            button.setTransitionNodeID(this.getTransitionNodeID());
+        }
+
         for(FigmaComponent component : this.componentMap.values()){
             if(component.getType().equals("RECTANGLE")){
                 Rectangle rectangle = (Rectangle) component;

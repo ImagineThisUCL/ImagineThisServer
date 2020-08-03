@@ -15,6 +15,10 @@ public class CodeGenerator {
     public static void generateOutputFolder() throws IOException{
         File outputAppFolder = new File("OutputApp");
         outputAppFolder.mkdir();
+        File cfile = new File("OutputApp/components");
+        cfile.mkdir();
+        File vfile = new File("OutputApp/components/views");
+        vfile.mkdir();
     }
 
     public static void generatePackageFile() throws IOException {
@@ -53,7 +57,6 @@ public class CodeGenerator {
         BufferedWriter writer = new BufferedWriter(new FileWriter(component_file, false));
         writer.append(outputCode);
         writer.close();
-
     }
 
     public static void writeWireframeCode(String wireframeName, Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
@@ -62,10 +65,7 @@ public class CodeGenerator {
         WireframeComponent wireframeComponent = new WireframeComponent(wireframe,projectID, accessToken, authenticateType);
         outputCode = wireframeComponent.generateCode(wireframeName);
         generateOutputFolder();
-        File cfile = new File("OutputApp/components");
-        cfile.mkdir();
-        File vfile = new File("OutputApp/components/views");
-        vfile.mkdir();
+
         BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/components/views/" + wireframeName + ".js", false));
         writer.append(outputCode);
         writer.close();
@@ -93,12 +93,17 @@ public class CodeGenerator {
     public static void writePlaceholderCode() throws IOException{
         String placeholderCode = PlaceholderComponent.generateCode();
         generateOutputFolder();
-        File cfile = new File("OutputApp/components");
-        cfile.mkdir();
-        File vfile = new File("OutputApp/components/views");
-        vfile.mkdir();
         BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/components/views/Placeholder.js", false));
         writer.append(placeholderCode);
         writer.close();
     }
+
+    public static void writeEmptyDirectedPage() throws IOException{
+        String emptyPage = emptyComponent.generateCode();
+        generateOutputFolder();
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/components/views/Empty.js", false));
+        writer.append(emptyPage);
+        writer.close();
+    }
+
 }

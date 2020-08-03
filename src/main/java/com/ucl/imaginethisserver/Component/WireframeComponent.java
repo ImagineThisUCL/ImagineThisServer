@@ -41,6 +41,10 @@ public class WireframeComponent{
                 if(!isContainButton){
                     isContainButton = true;
                 }
+                if(button.getTransitionNodeID() != null){
+                    CodeGenerator.writeEmptyDirectedPage();
+                }
+            // if this component is a textbox
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbox")){
 
                 TextBox textBox = ((Group)component).convertTextBox();
@@ -49,6 +53,7 @@ public class WireframeComponent{
                     isContainTextBox = true;
                 }
             }
+            // if this component is a navigation bar
             else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("navigation")){
                 NAV_BAR = ((Group)component).convertNavBar(projectID, accessToken, authenticateType);
                 for(String navText : NavBar.BUTTON_MAP.keySet()){
@@ -61,6 +66,7 @@ public class WireframeComponent{
                     IS_CONTAIN_NAVBAR = true;
                 }
             }
+            // if this component is a form
             else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("form")){
                 Form form = ((Group) component).convertForm(projectID, accessToken, authenticateType);
                 if(!isContainForm){
