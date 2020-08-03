@@ -170,6 +170,7 @@ public class Group extends FigmaComponent {
         form.setPositionY(this.getPositionY());
         form.setAlign(this.getAlign());
         for(FigmaComponent component: this.componentMap.values()){
+            System.out.println(component.getType());
             if(component.getType().equals("TEXT")){
                 FrontendText text = ((Text)component).convertToFrontendText();
                 form.frontendComponentList.add(text);
@@ -181,11 +182,18 @@ public class Group extends FigmaComponent {
                 ((Group)component).loadComponent(projectID,accessToken,authenticateType);
                 Button button = ((Group)component).convertButton();
                 form.frontendComponentList.add(button);
-            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().equals("background")){
-                form.setBackgroundColor(((Rectangle)component).getFills().get(0).getColor());
-                form.setCornerRadius(((Rectangle)component).getCornerRadius());
+            }else if((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")){
+                switch (component.getType()){
+                    case "RECTANGLE":
+                        form.setBackgroundColor(((Rectangle)component).getFills().get(0).getColor());
+                        form.setCornerRadius(((Rectangle)component).getCornerRadius());
+                        break;
+                    case "VECTOR":
+                        form.setBackgroundColor(((Vector)component).getFills().get(0).getColor());
+                        form.setCornerRadius(((Vector)component).getCornerRadius());
+                        break;
+                }
             }
-
         }
         form.sortComponentByY();
         return form;
@@ -195,7 +203,7 @@ public class Group extends FigmaComponent {
         this.wireframeBoundingBox = wireframeBoundingBox;
     }
 
-    public Slider convertSideBar(){
+    public Slider convertSlider(){
         Slider slider = new Slider();
         slider.setHeight(this.getHeight());
         slider.setWidth(this.getWidth());

@@ -68,7 +68,7 @@ public class WireframeComponent{
                 }
                 frontendComponentList.add(form);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("sidebar")){
-                Slider slider = ((Group) component).convertSideBar();
+                Slider slider = ((Group) component).convertSlider();
                 if(!isContainSideBar){
                     isContainSideBar = true;
                 }
@@ -98,9 +98,9 @@ public class WireframeComponent{
             importCode.append("import InputField from '../reusables/InputField'" + "\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD);
         }
-        if(isContainForm){
-            importCode.append("import { Card } from 'react-native-elements';" + "\n");
-        }
+//        if(isContainForm){
+//            importCode.append("import { Card } from 'react-native-elements';" + "\n");
+//        }
         if(isContainSideBar){
             importCode.append("import CustomSlider from \"../reusables/CustomSlider\"").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.SLIDER);

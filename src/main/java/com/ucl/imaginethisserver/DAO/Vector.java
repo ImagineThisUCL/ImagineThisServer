@@ -27,6 +27,9 @@ public class Vector extends FigmaComponent{
     //Opacity of the node
     @Expose()
     private double opacity;
+    @Expose()
+    private double cornerRadius;
+
 
     public String getBlendMode() {
         return blendMode;
@@ -62,5 +65,17 @@ public class Vector extends FigmaComponent{
 
     public double getOpacity() {
         return opacity;
+    }
+
+    public List<Fills> getFills() {
+        return fills;
+    }
+
+    public double getCornerRadius() {
+        return cornerRadius;
+    }
+
+    public void setCornerRadius(double cornerRadius) {
+        this.cornerRadius = cornerRadius;
     }
 }
