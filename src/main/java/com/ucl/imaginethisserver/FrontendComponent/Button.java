@@ -4,6 +4,7 @@ import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
 import com.ucl.imaginethisserver.DAO.FigmaColor;
 import com.ucl.imaginethisserver.DAO.Fills;
 import com.ucl.imaginethisserver.DAO.Style;
+import com.ucl.imaginethisserver.DAO.Page;
 
 import java.util.List;
 
@@ -57,6 +58,7 @@ public class Button extends FrontendComponent{
         StringBuilder buttonCode = new StringBuilder();
         buttonCode.append("<Button\n");
 
+        System.out.println("ButtonTransitionID:"+this.transitionNodeID);
         if(this.transitionNodeID != null){
             buttonCode.append("   onPress={() => this.props.navigation.navigate('Empty')}\n");
         }

@@ -14,12 +14,17 @@ public class FigmaComponent {
     private int positionX;
     private int positionY;
     private String align;
+    private String transitionNodeID;
 
     public String toString() {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
         return gson.toJson(this);
+    }
+
+    public String getTransitionNodeID() {
+        return transitionNodeID;
     }
 
     public String getName() {

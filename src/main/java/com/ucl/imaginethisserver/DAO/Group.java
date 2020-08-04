@@ -88,6 +88,11 @@ public class Group extends FigmaComponent {
         button.setWidth(this.getWidth());
         button.setHeight(this.getHeight());
         button.setAlign(this.getAlign());
+
+        if(this.getTransitionNodeID() != null){
+            button.setTransitionNodeID(this.getTransitionNodeID());
+        }
+
         for(FigmaComponent component : this.componentMap.values()){
             if(component.getType().equals("RECTANGLE")){
                 Rectangle rectangle = (Rectangle) component;

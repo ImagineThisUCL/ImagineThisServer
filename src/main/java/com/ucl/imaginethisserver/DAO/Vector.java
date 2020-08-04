@@ -21,9 +21,6 @@ public class Vector extends FigmaComponent{
     private List<Fills> fills;
     @Expose()
     private Effect effect;
-    //Node ID of node to transition to in prototyping
-    @Expose()
-    private String transitionNodeID;
     //Opacity of the node
     @Expose()
     private double opacity;
@@ -57,10 +54,6 @@ public class Vector extends FigmaComponent{
 
     public Effect getEffect() {
         return effect;
-    }
-
-    public String getTransitionNodeID() {
-        return transitionNodeID;
     }
 
     public double getOpacity() {
