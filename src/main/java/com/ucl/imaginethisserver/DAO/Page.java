@@ -24,6 +24,7 @@ public class Page {
     }
 
     private Map<String, Wireframe> wireframeMap = new HashMap<>();
+    private Map<String, Wireframe> wireframeIDMap = new HashMap<>();
 
     public void loadWireframes(String projectID, String accessToken, AuthenticateType authType) throws IOException {
         List<String> IDList = new ArrayList<>();
@@ -42,6 +43,7 @@ public class Page {
                 String imageURL = imageJson.get(wireframe.getId()).toString().replaceAll("\"","");
                 wireframe.setImageURL(imageURL);
                 wireframeMap.put(wireframe.getName(), wireframe);
+                wireframeIDMap.put(wireframe.getId(),wireframe);
             }
         }
     }
@@ -53,7 +55,9 @@ public class Page {
         }
         return wireframeList;
     }
-
+    public Wireframe getWireframeByID(String id) {
+        return wireframeIDMap.get(id);
+    }
     public Wireframe getWireframeByName(String name){
         return wireframeMap.get(name);
     }
