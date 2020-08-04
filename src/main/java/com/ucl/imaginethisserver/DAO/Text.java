@@ -50,6 +50,7 @@ public class Text extends FigmaComponent{
         frontendText.setHeight(this.getHeight());
         frontendText.setPositionX(this.getPositionX());
         frontendText.setPositionY(this.getPositionY());
+        frontendText.setAlign(this.getAlign());
         frontendText.setColor(this.getFills().get(0).getColor());
         frontendText.setText(this.characters);
         frontendText.setFontFamily(this.style.getFontFamily());

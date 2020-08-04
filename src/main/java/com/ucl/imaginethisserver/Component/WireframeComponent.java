@@ -13,7 +13,7 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
-    private boolean isContainText, isContainButton, isContainTextBox, isContainForm;
+    private boolean isContainText, isContainButton, isContainTextBox, isContainForm, isContainSideBar;
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -73,6 +73,12 @@ public class WireframeComponent{
                     isContainForm = true;
                 }
                 frontendComponentList.add(form);
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("sidebar")){
+                Slider slider = ((Group) component).convertSlider();
+                if(!isContainSideBar){
+                    isContainSideBar = true;
+                }
+                frontendComponentList.add(slider);
             }
         }
     }
@@ -98,8 +104,12 @@ public class WireframeComponent{
             importCode.append("import InputField from '../reusables/InputField'" + "\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD);
         }
-        if(isContainForm){
-            importCode.append("import { Card } from 'react-native-elements';" + "\n");
+//        if(isContainForm){
+//            importCode.append("import { Card } from 'react-native-elements';" + "\n");
+//        }
+        if(isContainSideBar){
+            importCode.append("import CustomSlider from \"../reusables/CustomSlider\"").append("\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.SLIDER);
         }
        importCode.append("\n");
 
@@ -117,7 +127,22 @@ public class WireframeComponent{
         for(List<FrontendComponent> curList : inlineComponentList){
             //There is only one component in this line
             if(curList.size() == 1){
-                viewCode.append(curList.get(0).generateCode() + "\n");
+                String alignCode = "";
+                String align = curList.get(0).getAlign();
+                switch (align){
+                    case "RIGHT":
+                        alignCode = "<View style={{flexDirection: \"row\", justifyContent: \"flex-end\"}}>\n";
+                        break;
+                    default:
+                        alignCode = "";
+                }
+                viewCode.append(alignCode);
+                viewCode.append(curList.get(0).generateCode()).append("\n");
+                // If the component is align to right;
+                if(alignCode.length() > 0){
+                    viewCode.append("</View>\n");
+                }
+
             }else if(curList.size() > 1){
                 viewCode.append("<View style={{flexDirection: \"row\", justifyContent: \"space-between\"}}>" + "\n");
                 for(FrontendComponent component : curList){

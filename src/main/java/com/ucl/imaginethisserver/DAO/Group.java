@@ -5,16 +5,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
-import com.ucl.imaginethisserver.FrontendComponent.Form;
-import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
-import com.ucl.imaginethisserver.FrontendComponent.NavBar;
-import com.ucl.imaginethisserver.FrontendComponent.NavButton;
+import com.ucl.imaginethisserver.FrontendComponent.*;
+import com.ucl.imaginethisserver.FrontendComponent.Button;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
-import com.ucl.imaginethisserver.FrontendComponent.Button;
-import com.ucl.imaginethisserver.FrontendComponent.TextBox;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,11 +87,7 @@ public class Group extends FigmaComponent {
         button.setPositionY(this.getPositionY());
         button.setWidth(this.getWidth());
         button.setHeight(this.getHeight());
-
-        if(this.getTransitionNodeID() != null){
-            button.setTransitionNodeID(this.getTransitionNodeID());
-        }
-
+        button.setAlign(this.getAlign());
         for(FigmaComponent component : this.componentMap.values()){
             if(component.getType().equals("RECTANGLE")){
                 Rectangle rectangle = (Rectangle) component;
@@ -154,7 +145,7 @@ public class Group extends FigmaComponent {
         textbox.setPositionY(this.getPositionY());
         textbox.setWidth(this.getWidth());
         textbox.setHeight(this.getHeight());
-
+        textbox.setAlign(this.getAlign());
         for(FigmaComponent component : this.componentMap.values()){
             if(component.getType().equals("RECTANGLE")){
                 Rectangle rectangle = (Rectangle) component;
@@ -177,7 +168,9 @@ public class Group extends FigmaComponent {
         form.setWidth(this.getWidth());
         form.setPositionX(this.getPositionX());
         form.setPositionY(this.getPositionY());
+        form.setAlign(this.getAlign());
         for(FigmaComponent component: this.componentMap.values()){
+            System.out.println(component.getType());
             if(component.getType().equals("TEXT")){
                 FrontendText text = ((Text)component).convertToFrontendText();
                 form.frontendComponentList.add(text);
@@ -189,11 +182,18 @@ public class Group extends FigmaComponent {
                 ((Group)component).loadComponent(projectID,accessToken,authenticateType);
                 Button button = ((Group)component).convertButton();
                 form.frontendComponentList.add(button);
-            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().equals("background")){
-                form.setBackgroundColor(((Rectangle)component).getFills().get(0).getColor());
-                form.setCornerRadius(((Rectangle)component).getCornerRadius());
+            }else if((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")){
+                switch (component.getType()){
+                    case "RECTANGLE":
+                        form.setBackgroundColor(((Rectangle)component).getFills().get(0).getColor());
+                        form.setCornerRadius(((Rectangle)component).getCornerRadius());
+                        break;
+                    case "VECTOR":
+                        form.setBackgroundColor(((Vector)component).getFills().get(0).getColor());
+                        form.setCornerRadius(((Vector)component).getCornerRadius());
+                        break;
+                }
             }
-
         }
         form.sortComponentByY();
         return form;
@@ -201,5 +201,31 @@ public class Group extends FigmaComponent {
 
     public void setWireframeBoundingBox(AbsoluteBoundingBox wireframeBoundingBox) {
         this.wireframeBoundingBox = wireframeBoundingBox;
+    }
+
+    public Slider convertSlider(){
+        Slider slider = new Slider();
+        slider.setHeight(this.getHeight());
+        slider.setWidth(this.getWidth());
+        slider.setPositionX(this.getPositionX());
+        slider.setPositionY(this.getPositionY());
+        slider.setAlign(this.getAlign());
+        for(FigmaComponent component : this.componentMap.values()){
+            if(component.getType().equals("TEXT") && component.getName().toLowerCase().equals("cur_value")){
+                int cur_value = Integer.parseInt(((Text)component).getCharacters());
+                slider.setCur_value(cur_value);
+            }else if(component.getType().equals("TEXT") && component.getName().toLowerCase().equals("min_value")){
+                int min_value = Integer.parseInt(((Text)component).getCharacters());
+                slider.setMin_value(min_value);
+            }else if(component.getType().equals("TEXT") && component.getName().toLowerCase().equals("max_value")){
+                int max_value = Integer.parseInt(((Text)component).getCharacters());
+                slider.setMax_value(max_value);
+            } else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().equals("background")) {
+                Rectangle rectangle = (Rectangle)component;
+                slider.setBackgroundColor(rectangle.getFills().get(0).getColor());
+                slider.setBorderRadius(rectangle.getCornerRadius());
+            }
+        }
+        return slider;
     }
 }
