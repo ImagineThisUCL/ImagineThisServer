@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.Component;
 
-public class packageComponent {
+public class PackageComponent {
     public static String generateCode(){
         return "{\n" +
                 "  \"main\": \"node_modules/expo/AppEntry.js\",\n" +

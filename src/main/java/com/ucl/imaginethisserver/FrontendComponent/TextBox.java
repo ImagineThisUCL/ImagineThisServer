@@ -6,7 +6,8 @@ import com.ucl.imaginethisserver.DAO.Style;
 import java.util.List;
 
 public class TextBox extends FrontendComponent{
-    private String placeholder;
+    private String placeholder = null;
+    private String label = null;
     private Style style;
     private List<Fills> containerFills;
     private List<Fills> labelFills;
@@ -38,19 +39,23 @@ public class TextBox extends FrontendComponent{
     }
 
     public String generateCode() {
-        //Delete defaultColor later
-        String defaultColor = "\"#ffffff\"";
-        String textColor = this.TextFills.get(0).getColor().toString();
-        //String labelColor = this.labelFills.get(0).getColor().toString();
-
         String containerColor = this.containerFills.get(0).getColor().toString();
 
-        return "<InputField\n" +
-               "placeholder='"+ this.placeholder +"'\n" +
-               "inputContainerStyle={{backgroundColor: "+ containerColor +
-                ", borderRadius: " + this.getCornerRadius() +
-               "}}\n" +
-               "/>";
+        StringBuilder textBoxCode = new StringBuilder();
+        textBoxCode.append("<InputField\n");
+        if(label != null){
+            textBoxCode.append("label='").append(this.label).append("'\n");
+        }
+        if(placeholder != null){
+            textBoxCode.append("placeholder='").append(this.placeholder).append("'\n");
+        }
+        textBoxCode.append("inputContainerStyle={{backgroundColor: "+ containerColor +"\n" +
+                "                , borderRadius: \"" + this.getCornerRadius() +"\"}}\n"+
+                "               />");
+        return textBoxCode.toString();
     }
 
+    public void setLabel(String label) {
+        this.label = label;
+    }
 }

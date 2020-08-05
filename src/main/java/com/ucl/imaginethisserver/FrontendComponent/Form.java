@@ -48,11 +48,13 @@ public class Form extends FrontendComponent{
         code. append("<View style={{borderRadius: " + this.cornerRadius + " , margin: 0, padding: 10, backgroundColor: " + this.backgroundColor.toString() +"}}>").append("\n");
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(this.frontendComponentList);
         for(List<FrontendComponent> curList : inlineComponentList){
-            code.append("<View style={{flexDirection: 'row'}}>\n");
-            for(FrontendComponent component: curList){
-                code.append(component.generateCode()).append("\n");
+            if(curList.size() > 0) {
+                code.append("<View style={{flexDirection: 'row'}}>\n");
+                for (FrontendComponent component : curList) {
+                    code.append(component.generateCode()).append("\n");
+                }
+                code.append("</View>\n");
             }
-            code.append("</View>\n");
         }
         code.append("</View>\n");
         return code.toString();

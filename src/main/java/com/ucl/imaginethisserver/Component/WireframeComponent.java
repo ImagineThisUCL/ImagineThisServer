@@ -35,14 +35,12 @@ public class WireframeComponent{
             }
             // if this component is a button
             else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("button")){
-
                 Button button = ((Group)component).convertButton();
                 frontendComponentList.add(button);
                 if(!isContainButton){
                     isContainButton = true;
                 }
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbox")){
-
                 TextBox textBox = ((Group)component).convertTextBox();
                 frontendComponentList.add(textBox);
                 if(!isContainTextBox){

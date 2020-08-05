@@ -19,7 +19,7 @@ public class CodeGenerator {
 
     public static void generatePackageFile() throws IOException {
         String outputCode = "";
-        outputCode = packageComponent.generateCode();
+        outputCode = PackageComponent.generateCode();
         generateOutputFolder();
         File component_file = new File("OutputApp/package.json");
         BufferedWriter writer = new BufferedWriter(new FileWriter(component_file, false));

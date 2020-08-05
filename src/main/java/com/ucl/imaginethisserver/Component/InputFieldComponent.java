@@ -26,6 +26,6 @@ public class InputFieldComponent {
                 "            />\n" +
                 "        )\n" +
                 "    }\n" +
-                "}\n";
+                "}";
     }
 }
