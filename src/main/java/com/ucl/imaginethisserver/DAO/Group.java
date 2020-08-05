@@ -21,6 +21,7 @@ public class Group extends FigmaComponent {
     JsonArray children;
     @Expose()
     String blendMode;
+    String transitionNodeID;
     private Map<String, FigmaComponent> componentMap = new HashMap<>();
     private AbsoluteBoundingBox wireframeBoundingBox;
 
@@ -88,14 +89,16 @@ public class Group extends FigmaComponent {
         button.setWidth(this.getWidth());
         button.setHeight(this.getHeight());
         button.setAlign(this.getAlign());
+        if(this.transitionNodeID!=null){
+            button.setTransitionNodeID(this.transitionNodeID);
+            String wireframeName = Page.getWireframeByID(this.transitionNodeID).getName();
+            Navigator.NAVIGATOR_MAP.put(wireframeName,wireframeName);
+        }
         for(FigmaComponent component : this.componentMap.values()){
             if(component.getType().equals("RECTANGLE")){
                 Rectangle rectangle = (Rectangle) component;
                 button.setCornerRadius(rectangle.getCornerRadius());
                 button.setRecFills(rectangle.getFills());
-                if(rectangle.getTransitionNodeID() != null){
-                    button.setTransitionNodeID(rectangle.getTransitionNodeID());
-                }
                 if(rectangle.getStrokes().size() > 0){
                     button.setBorderColor(rectangle.getStrokes().get(0).getColor());
                 }
@@ -106,9 +109,6 @@ public class Group extends FigmaComponent {
                 button.setCharacter(text.getCharacters());
                 button.setStyle(text.getStyle());
                 button.setTextFills(((Text) component).getFills());
-                if(text.getTransitionNodeID() != null){
-                    button.setTransitionNodeID(text.getTransitionNodeID());
-                }
             }
         }
         return button;
@@ -170,7 +170,6 @@ public class Group extends FigmaComponent {
         form.setPositionY(this.getPositionY());
         form.setAlign(this.getAlign());
         for(FigmaComponent component: this.componentMap.values()){
-            System.out.println(component.getType());
             if(component.getType().equals("TEXT")){
                 FrontendText text = ((Text)component).convertToFrontendText();
                 form.frontendComponentList.add(text);

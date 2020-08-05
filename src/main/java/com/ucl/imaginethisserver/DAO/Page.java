@@ -24,7 +24,7 @@ public class Page {
     }
 
     private Map<String, Wireframe> wireframeMap = new HashMap<>();
-    private Map<String, Wireframe> wireframeIDMap = new HashMap<>();
+    private static Map<String, Wireframe> wireframeIDMap = new HashMap<>();
 
     public void loadWireframes(String projectID, String accessToken, AuthenticateType authType) throws IOException {
         List<String> IDList = new ArrayList<>();
@@ -55,7 +55,7 @@ public class Page {
         }
         return wireframeList;
     }
-    public Wireframe getWireframeByID(String id) {
+    public static Wireframe getWireframeByID(String id) {
         return wireframeIDMap.get(id);
     }
     public Wireframe getWireframeByName(String name){

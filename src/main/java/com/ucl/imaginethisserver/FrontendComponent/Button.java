@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.FrontendComponent;
 
 import com.ucl.imaginethisserver.DAO.FigmaColor;
 import com.ucl.imaginethisserver.DAO.Fills;
+import com.ucl.imaginethisserver.DAO.Page;
 import com.ucl.imaginethisserver.DAO.Style;
 
 import java.util.List;
@@ -52,29 +53,21 @@ public class Button extends FrontendComponent{
     public String generateCode() {
         String backgroundColor = this.RecFills.get(0).getColor().toString();
         String textColor = this.TextFills.get(0).getColor().toString();
+        StringBuilder buttonCode = new StringBuilder();
+        buttonCode.append("<Button\n");
+        if(this.transitionNodeID!=null){
+            String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName().replaceAll(" ","");
+            buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
+        }
         if(this.borderColor!=null){
             String borderColorStr = this.borderColor.toString();
-            return "<Button\n" +
-                    "   style={{backgroundColor:" + backgroundColor +
-                    ", borderRadius: " + this.getCornerRadius() +
-                    ", marginTop: base.margin, borderColor: " + borderColorStr + " ,borderWidth: " + this.borderWidth +"}}\n" +
-                    "   textStyle={{color: " + textColor +
-                    ", fontSize: " + this.style.getFontSize() +
-                    "}}>\n" +
-                    this.character +
-                    "</Button>";
+            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", borderRadius: ").append(this.getCornerRadius()).append(", marginTop: base.margin, borderColor: ").append(borderColorStr).append(" ,borderWidth: ").append(this.borderWidth).append("}}\n");
         }else{
-            return "<Button\n" +
-                    "   style={{backgroundColor:" + backgroundColor +
-                    ", borderRadius: " + this.getCornerRadius() +
-                    ", marginTop: base.margin}}\n" +
-                    "   textStyle={{color: " + textColor +
-                    ", fontSize: " + this.style.getFontSize() +
-                    "}}>\n" +
-                    this.character +
-                    "</Button>";
+            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", borderRadius: ").append(this.getCornerRadius()).append(", marginTop: base.margin}}\n");
         }
+        buttonCode.append("   textStyle={{color: ").append(textColor).append(", fontSize: ").append(this.style.getFontSize()).append("}}>\n").append(this.character).append("</Button>");
 
+        return buttonCode.toString();
     }
 
     public void setTextFills(List<Fills> textFills) {

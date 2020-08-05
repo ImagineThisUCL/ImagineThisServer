@@ -8,19 +8,18 @@ import com.ucl.imaginethisserver.DAO.Group;
 import com.ucl.imaginethisserver.DAO.Page;
 import com.ucl.imaginethisserver.DAO.Wireframe;
 import com.ucl.imaginethisserver.FrontendComponent.NavBar;
+import com.ucl.imaginethisserver.FrontendComponent.Navigator;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CodeGeneratorTest {
     public static void main(String[] args) throws IOException {
         String type = "originalToken";
-        //Navigation Bar
         String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
-        //Form
-//        String projectID = "o611joQBw7GbvEKWX7ZKQl";
         String accessToken = "54950-b9461cc1-f3c2-41f8-9fe7-a8f741083aa7";
         AuthenticateType authType = null;
         if(type.equals("originalToken")){
@@ -32,18 +31,21 @@ public class CodeGeneratorTest {
         if (figmaTreeStructure == null) {
             return;
         }
-        String name = "Weekly Confirm Wellbeing";
+        ArrayList<String> nameList = new ArrayList<>();
+        nameList.add("Set Up");
+//        nameList.add("Information to populat messages");
+        nameList.add("Reach out");
 //        String name = "Reach out";
 //        String name = "Care Network Page";
 //        String name = "Information to populat messages";
-        generatePage(name,
+        generatePage(nameList,
                 figmaTreeStructure,
                 projectID,
                 accessToken,
                 authType);
     }
 
-    public static void generatePage(String name, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType) throws IOException {
+    public static void generatePage(ArrayList<String> names, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType) throws IOException {
         String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
         List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
         Page testPage = pageList.get(0);
@@ -51,19 +53,29 @@ public class CodeGeneratorTest {
         testPage.loadWireframes(projectID, accessToken, authType);
 //        List<Wireframe> responseList = testPage.getWireframeList();
         CodeGenerator.generatePackageFile();
-        Wireframe setUpWireframe = testPage.getWireframeByName(name);
-        setUpWireframe.loadComponent(projectID,accessToken,authType);
-        setUpWireframe.sortComponentByY();
-        for(FigmaComponent component : setUpWireframe.getComponentList()){
-            if(component.getType().equals("GROUP")){
-                ((Group)component).loadComponent(projectID,accessToken,authType);
+        for(String name : names){
+            Wireframe setUpWireframe = testPage.getWireframeByName(name);
+            setUpWireframe.loadComponent(projectID,accessToken,authType);
+            setUpWireframe.sortComponentByY();
+            for(FigmaComponent component : setUpWireframe.getComponentList()){
+                if(component.getType().equals("GROUP")){
+                    ((Group)component).loadComponent(projectID,accessToken,authType);
+                }
+            }
+            CodeGenerator.writeWireframeCode(setUpWireframe.getName(),setUpWireframe, projectID, accessToken, authType);
+        }
+        for(String wireframeName : Navigator.NAVIGATOR_MAP.keySet()){
+            if(!names.contains(wireframeName)){
+                Navigator.NAVIGATOR_MAP.put(wireframeName, "Placeholder");
+                Navigator.hasPlaceholder = true;
             }
         }
-        CodeGenerator.writeWireframeCode(setUpWireframe.getName(),setUpWireframe, projectID, accessToken, authType);
         if(WireframeComponent.IsContainNavBar()){
             CodeGenerator.writeAppJSCode(WireframeComponent.NAV_BAR);
+        }else if(!Navigator.NAVIGATOR_MAP.isEmpty()){
+            CodeGenerator.writeAppJSCode(null);
         }
-        if(NavBar.hasPlaceholder()){
+        if(NavBar.hasPlaceholder() || Navigator.hasPlaceholder){
             CodeGenerator.writePlaceholderCode();
         }
     }
