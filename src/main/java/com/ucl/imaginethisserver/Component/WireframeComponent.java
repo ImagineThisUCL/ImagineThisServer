@@ -67,7 +67,7 @@ public class WireframeComponent{
                     isContainForm = true;
                 }
                 frontendComponentList.add(form);
-            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("sidebar")){
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
                 Slider slider = ((Group) component).convertSlider();
                 if(!isContainSideBar){
                     isContainSideBar = true;

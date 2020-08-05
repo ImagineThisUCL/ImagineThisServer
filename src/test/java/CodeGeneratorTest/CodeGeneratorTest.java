@@ -33,7 +33,7 @@ public class CodeGeneratorTest {
         }
         ArrayList<String> nameList = new ArrayList<>();
         nameList.add("Set Up");
-//        nameList.add("Information to populat messages");
+        nameList.add("Information to populat messages");
         nameList.add("Reach out");
 //        String name = "Reach out";
 //        String name = "Care Network Page";
