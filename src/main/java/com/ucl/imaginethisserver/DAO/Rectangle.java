@@ -7,8 +7,6 @@ public class Rectangle extends FigmaComponent {
     private double cornerRadius;
     private List<Double> rectangleCornerRadii;
     private Effect effect;
-    //Node ID of node to transition to in prototyping
-    private String transitionNodeID;
     private List<Stroke> strokes;
     private double strokeWeight;
     private String strokeAlign;
@@ -27,10 +25,6 @@ public class Rectangle extends FigmaComponent {
 
     public List<Double> getRectangleCornerRadii() {
         return rectangleCornerRadii;
-    }
-
-    public String getTransitionNodeID() {
-        return transitionNodeID;
     }
 
     public double getStrokeWeight() {
