@@ -33,11 +33,11 @@ public class CodeGeneratorTest {
         }
         ArrayList<String> nameList = new ArrayList<>();
 
-//        nameList.add("Set Up");
-//        nameList.add("Information to populat messages");
-//        nameList.add("Care Network Page");
-//        nameList.add("Start Passive Tracking and Reporting");
-//        nameList.add("Weekly Confirm Wellbeing");
+        nameList.add("Set Up");
+        nameList.add("Information to populat messages");
+        nameList.add("Care Network Page");
+        nameList.add("Start Passive Tracking and Reporting");
+        nameList.add("Weekly Confirm Wellbeing");
         nameList.add("Reach out");
 
 //        String name = "Care Network Page";
