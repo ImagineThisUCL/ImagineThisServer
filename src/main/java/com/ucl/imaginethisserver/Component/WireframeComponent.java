@@ -81,7 +81,6 @@ public class WireframeComponent{
                "import React, { Component } from \"react\"" + "\n");
        importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
        CodeGenerator.writeBaseStyleCode();
-       importCode.append("import { StatusBar } from 'expo-status-bar'\n");
        if(isContainText){
            importCode.append("import P from '../reusables/P'" + "\n");
            CodeGenerator.writeReusableComponentCode(ReusableComponent.P);
