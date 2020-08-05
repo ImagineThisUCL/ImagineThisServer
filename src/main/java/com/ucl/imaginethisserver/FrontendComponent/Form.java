@@ -45,7 +45,11 @@ public class Form extends FrontendComponent{
 
     public String generateCode(){
         StringBuilder code = new StringBuilder();
-        code. append("<View style={{borderRadius: " + this.cornerRadius + " , margin: 0, padding: 10, backgroundColor: " + this.backgroundColor.toString() +"}}>").append("\n");
+        code.append("<View style={{borderRadius: " + this.cornerRadius + " , margin: 0, padding: 10");
+        if(this.backgroundColor != null){
+            code.append(", backgroundColor: " + this.backgroundColor.toString());
+        }
+        code.append("}}>\n");
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(this.frontendComponentList);
         for(List<FrontendComponent> curList : inlineComponentList){
             code.append("<View style={{flexDirection: 'row'}}>\n");

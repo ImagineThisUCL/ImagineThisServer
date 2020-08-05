@@ -33,7 +33,6 @@ public class Button extends FrontendComponent{
         this.style = style;
     }
 
-
     public String getTransitionNodeID() {
         return transitionNodeID;
     }
@@ -51,22 +50,32 @@ public class Button extends FrontendComponent{
     }
 
     public String generateCode() {
-        String backgroundColor = this.RecFills.get(0).getColor().toString();
-        String textColor = this.TextFills.get(0).getColor().toString();
         StringBuilder buttonCode = new StringBuilder();
         buttonCode.append("<Button\n");
         if(this.transitionNodeID!=null){
             String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName().replaceAll(" ","");
             buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
         }
+        buttonCode.append("   style={{");
+        if(this.RecFills != null){
+            String backgroundColor = this.RecFills.get(0).getColor().toString();
+            buttonCode.append("backgroundColor:").append(backgroundColor).append(", ");
+        }
+        buttonCode.append("borderRadius: ").append(this.getCornerRadius()).append(", marginTop: base.margin");
         if(this.borderColor!=null){
             String borderColorStr = this.borderColor.toString();
-            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", borderRadius: ").append(this.getCornerRadius()).append(", marginTop: base.margin, borderColor: ").append(borderColorStr).append(" ,borderWidth: ").append(this.borderWidth).append("}}\n");
-        }else{
-            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", borderRadius: ").append(this.getCornerRadius()).append(", marginTop: base.margin}}\n");
+            buttonCode.append(", borderColor: ").append(borderColorStr).append(" ,borderWidth: ").append(this.borderWidth);
         }
-        buttonCode.append("   textStyle={{color: ").append(textColor).append(", fontSize: ").append(this.style.getFontSize()).append("}}>\n").append(this.character).append("</Button>");
-
+        buttonCode.append("}}\n");
+        buttonCode.append("   textStyle={{");
+        if(this.TextFills != null){
+            String textColor = this.TextFills.get(0).getColor().toString();
+            buttonCode.append("color: ").append(textColor);
+        }
+        if(this.style != null){
+            buttonCode.append(", fontSize: ").append(this.style.getFontSize());
+        }
+        buttonCode.append("}}>\n").append(this.character).append("</Button>");
         return buttonCode.toString();
     }
 
