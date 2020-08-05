@@ -36,8 +36,8 @@ public class CodeGeneratorTest {
 //        nameList.add("Information to populat messages");
 //        nameList.add("Care Network Page");
 //        nameList.add("Start Passive Tracking and Reporting");
-        nameList.add("Weekly Confirm Wellbeing");
-//        nameList.add("Reach out");
+//        nameList.add("Weekly Confirm Wellbeing");
+        nameList.add("Reach out");
 
 //        String name = "Care Network Page";
         generatePage(nameList,

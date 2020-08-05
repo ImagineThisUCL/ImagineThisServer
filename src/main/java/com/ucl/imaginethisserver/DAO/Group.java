@@ -139,6 +139,19 @@ public class Group extends FigmaComponent {
         return navBar;
     }
 
+    public IconButton convertIconButton(){
+        IconButton ibutton = new IconButton();
+        ibutton.setPositionX(this.getPositionX());
+        ibutton.setPositionY(this.getPositionY());
+        ibutton.setWidth(this.getWidth());
+        ibutton.setHeight(this.getHeight());
+        ibutton.setAlign(this.getAlign());
+        for(FigmaComponent component : this.componentMap.values()){
+            ibutton.setIconURL(component.getImageURL());
+        }
+        return ibutton;
+    }
+
     public TextBox convertTextBox(){
         TextBox textbox = new TextBox();
         textbox.setPositionX(this.getPositionX());
@@ -227,4 +240,5 @@ public class Group extends FigmaComponent {
         }
         return slider;
     }
+
 }

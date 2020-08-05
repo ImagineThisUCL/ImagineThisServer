@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
-public class IconButton {
+public class IconButton extends FrontendComponent{
 
     private String text;
     private String iconURL;
@@ -19,6 +19,18 @@ public class IconButton {
 
     public void setIconURL(String iconURL) {
         this.iconURL = iconURL;
+    }
+
+    public String generateCode() {
+        return
+        "<TouchableOpacity>\n" +
+        "<Image\n" +
+        "source={{uri: " + this.getIconURL() + "}}\n" +
+        "style={{width: " + this.width +
+        ", height: " + this.height +
+        "}}\n" +
+        "/>\n" +
+        "</TouchableOpacity>";
     }
 
 }

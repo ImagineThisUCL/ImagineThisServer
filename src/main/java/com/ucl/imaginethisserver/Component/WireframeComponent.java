@@ -13,7 +13,7 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
-    private boolean isContainText, isContainButton, isContainTextBox, isContainForm, isContainSideBar;
+    private boolean isContainText, isContainButton, isContainTextBox, isContainForm, isContainSideBar,isContainIcon;
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -73,16 +73,24 @@ public class WireframeComponent{
                     isContainSideBar = true;
                 }
                 frontendComponentList.add(slider);
-            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("iconbutton")){
-
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("icon")){
+                IconButton ibutton = ((Group) component).convertIconButton();
+                if(!isContainIcon){
+                    isContainIcon = true;
+                }
+                frontendComponentList.add(ibutton);
             }
         }
     }
 
     public String generateImportCode() throws IOException {
        StringBuilder importCode = new StringBuilder();
-       importCode.append("import { View, ScrollView } from \"react-native\"\n" +
-               "import React, { Component } from \"react\"" + "\n");
+       importCode.append("import { View, ScrollView");
+       if(isContainIcon){
+           importCode.append(", TouchableOpacity, Image");
+       }
+       importCode.append("} from \"react-native\"\n");
+       importCode.append("import React, { Component } from \"react\"" + "\n");
        importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
        CodeGenerator.writeBaseStyleCode();
        if(isContainText){
