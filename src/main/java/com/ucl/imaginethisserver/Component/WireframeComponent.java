@@ -73,12 +73,6 @@ public class WireframeComponent{
                     isContainSideBar = true;
                 }
                 frontendComponentList.add(slider);
-            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("icon")){
-                IconButton ibutton = ((Group) component).convertIconButton();
-                if(!isContainIcon){
-                    isContainIcon = true;
-                }
-                frontendComponentList.add(ibutton);
             }
         }
     }

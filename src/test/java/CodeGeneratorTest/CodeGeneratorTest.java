@@ -32,6 +32,7 @@ public class CodeGeneratorTest {
             return;
         }
         ArrayList<String> nameList = new ArrayList<>();
+
 //        nameList.add("Set Up");
 //        nameList.add("Information to populat messages");
 //        nameList.add("Care Network Page");
@@ -40,6 +41,7 @@ public class CodeGeneratorTest {
         nameList.add("Reach out");
 
 //        String name = "Care Network Page";
+//        String name = "Information to populat messages";
         generatePage(nameList,
                 figmaTreeStructure,
                 projectID,
