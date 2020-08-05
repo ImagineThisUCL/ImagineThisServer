@@ -13,7 +13,7 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
-    private boolean isContainText, isContainButton, isContainTextBox, isContainForm, isContainSideBar,isContainIcon;
+    private boolean isContainText, isContainButton, isContainTextBox, isContainForm, isContainSideBar;
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -80,9 +80,6 @@ public class WireframeComponent{
     public String generateImportCode() throws IOException {
        StringBuilder importCode = new StringBuilder();
        importCode.append("import { View, ScrollView");
-       if(isContainIcon){
-           importCode.append(", TouchableOpacity, Image");
-       }
        importCode.append("} from \"react-native\"\n");
        importCode.append("import React, { Component } from \"react\"" + "\n");
        importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
