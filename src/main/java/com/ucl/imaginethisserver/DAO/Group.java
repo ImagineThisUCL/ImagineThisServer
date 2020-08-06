@@ -96,7 +96,6 @@ public class Group extends FigmaComponent {
             Navigator.NAVIGATOR_MAP.put(wireframeName,wireframeName);
         }
         for(FigmaComponent component : this.componentMap.values()){
-            System.out.println(component.getType());
             if(component.getType().equals("RECTANGLE")){
                 Rectangle rectangle = (Rectangle) component;
                 button.setCornerRadius(rectangle.getCornerRadius());

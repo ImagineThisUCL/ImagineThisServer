@@ -21,10 +21,12 @@ public class AppJSComponent {
             wireframeName = wireframeName.replaceAll(" ", "");
             importCode.append("import ").append(wireframeName).append(" from \"./components/views/").append(wireframeName).append("\"\n");
         }
+        HashSet<String> importSet = new HashSet<>();
         for (String wireframeName : Navigator.NAVIGATOR_MAP.values()) {
-            if (!wireframeNameSet.contains(wireframeName)) {
+            if (!wireframeNameSet.contains(wireframeName) && !importSet.contains(wireframeName)) {
                 wireframeName = wireframeName.replaceAll(" ", "");
                 importCode.append("import ").append(wireframeName).append(" from \"./components/views/").append(wireframeName).append("\"\n");
+                importSet.add(wireframeName);
             }
         }
         importCode.append("\n");
