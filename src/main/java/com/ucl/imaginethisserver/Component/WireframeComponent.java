@@ -55,7 +55,9 @@ public class WireframeComponent{
                 }
             }
             else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("navigation")){
-                NAV_BAR = ((Group)component).convertNavBar(projectID, accessToken, authenticateType);
+                if(NAV_BAR == null) {
+                    NAV_BAR = ((Group) component).convertNavBar(projectID, accessToken, authenticateType);
+                }
                 for(String navText : NavBar.BUTTON_MAP.keySet()){
                     if(NavBar.BUTTON_MAP.get(navText).equals("Placeholder")){
                         NavBar.BUTTON_MAP.put(navText,wireframe.getName());
@@ -132,7 +134,7 @@ public class WireframeComponent{
             CodeGenerator.writeReusableComponentCode(ReusableComponent.SLIDER);
         }
         if(isContainImageButton){
-            importCode.append("import CustomSlider from \"../reusables/ImageButton\"").append("\n");
+            importCode.append("import ImageButton from \"../reusables/ImageButton\"").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.IMAGE_BUTTON);
         }
        importCode.append("\n");

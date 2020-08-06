@@ -128,38 +128,35 @@ public class Group extends FigmaComponent {
             Navigator.NAVIGATOR_MAP.put(wireframeName,wireframeName);
         }
         for(FigmaComponent component : this.componentMap.values()){
-            if(component.getType().equals("GROUP")&&component.getName().toLowerCase().contains("image")){
-                Group image = (Group) component;
-                image.loadComponent(projectID,accessToken,authenticateType);
-                imageButton.setImageURL(image.getImageURL());
+            if((component.getType().equals("GROUP") || component.getType().equals("RECTANGLE")) && component.getName().toLowerCase().contains("image")){
+                imageButton.setImageURL(component.getImageURL());
             }
         }
         return imageButton;
     }
 
     public NavBar convertNavBar(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
-        NavBar navBar = new NavBar();
-        navBar.setHeight(this.getHeight());
-        navBar.setWidth(this.getWidth());
-        navBar.setPositionX(this.getPositionX());
-        navBar.setPositionY(this.getPositionY());
-        for(FigmaComponent component : this.componentMap.values()){
-            if(component.getType().equals("GROUP") && component.getName().contains("button")){
-                NavButton navButton = new NavButton();
-                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
-                for(FigmaComponent childComponent: ((Group)component).getComponentMap().values()){
-                    if(childComponent.getType().equals("TEXT")){
-                        navButton.setText(((Text)childComponent).getCharacters());
-                    }else if(childComponent.getName().toLowerCase().contains("icon")){
-                        navButton.setIconURL(childComponent.getImageURL());
+            NavBar navBar = new NavBar();
+            navBar.setHeight(this.getHeight());
+            navBar.setWidth(this.getWidth());
+            navBar.setPositionX(this.getPositionX());
+            navBar.setPositionY(this.getPositionY());
+            for (FigmaComponent component : this.componentMap.values()) {
+                if (component.getType().equals("GROUP") && component.getName().contains("button")) {
+                    NavButton navButton = new NavButton();
+                    ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+                    for (FigmaComponent childComponent : ((Group) component).getComponentMap().values()) {
+                        if (childComponent.getType().equals("TEXT")) {
+                            navButton.setText(((Text) childComponent).getCharacters());
+                        } else if (childComponent.getName().toLowerCase().contains("icon")) {
+                            navButton.setIconURL(childComponent.getImageURL());
+                        }
                     }
+                    NavBar.NAV_BUTTONS.add(navButton);
+                    NavBar.BUTTON_MAP.put(navButton.getText(), "Placeholder");
                 }
-                NavBar.NAV_BUTTONS.add(navButton);
-                NavBar.BUTTON_MAP.put(navButton.getText(), "Placeholder");
             }
-        }
-
-        return navBar;
+            return navBar;
     }
 
     public TextBox convertTextBox(){
