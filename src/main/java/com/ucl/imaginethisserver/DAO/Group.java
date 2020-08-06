@@ -204,27 +204,45 @@ public class Group extends FigmaComponent {
             if(component.getType().equals("TEXT")){
                 FrontendText text = ((Text)component).convertToFrontendText();
                 form.frontendComponentList.add(text);
+                form.setContainText(true);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbox")){
                 ((Group)component).loadComponent(projectID,accessToken,authenticateType);
                 TextBox textBox = ((Group)component).convertTextBox();
                 form.frontendComponentList.add(textBox);
+                form.setContainTextBox(true);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")){
                 ((Group)component).loadComponent(projectID,accessToken,authenticateType);
                 Button button = ((Group)component).convertButton();
                 form.frontendComponentList.add(button);
+                form.setContainButton(true);
             }else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")){
                 ((Group)component).loadComponent(projectID,accessToken,authenticateType);
                 ImageButton imageButton = ((Group)component).convertImageButton(projectID,accessToken,authenticateType);
                 form.frontendComponentList.add(imageButton);
+                form.setContainImageButton(true);
             } else if((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")){
                 switch (component.getType()){
                     case "RECTANGLE":
-                        form.setBackgroundColor(((Rectangle)component).getFills().get(0).getColor());
-                        form.setCornerRadius(((Rectangle)component).getCornerRadius());
+                        Rectangle rectangle = (Rectangle)component;
+                        if(rectangle.getFills().size() > 0){
+                            form.setBackgroundColor(rectangle.getFills().get(0).getColor());
+                        }
+                        form.setCornerRadius(rectangle.getCornerRadius());
+                        if(rectangle.getStrokes().size() > 0){
+                            form.setBorderColor(rectangle.getStrokes().get(0).getColor());
+                        }
+                        form.setBorderWidth(rectangle.getStrokeWeight());
                         break;
                     case "VECTOR":
-                        form.setBackgroundColor(((Vector)component).getFills().get(0).getColor());
-                        form.setCornerRadius(((Vector)component).getCornerRadius());
+                        Vector vector = (Vector) component;
+                        if(vector.getFills().size() > 0){
+                            form.setBackgroundColor(vector.getFills().get(0).getColor());
+                        }
+                        form.setCornerRadius((vector.getCornerRadius()));
+                        if(vector.getStrokes().size() > 0){
+                            form.setBorderColor(vector.getStrokes().get(0).getColor());
+                        }
+                        form.setBorderWidth(vector.getStrokeWeight());
                         break;
                 }
             }

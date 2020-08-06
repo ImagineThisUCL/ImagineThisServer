@@ -12,7 +12,10 @@ import java.util.List;
 public class Form extends FrontendComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private FigmaColor backgroundColor;
+    private FigmaColor borderColor;
     private double cornerRadius;
+    private double borderWidth;
+    private boolean isContainText, isContainButton, isContainTextBox,isContainImageButton;
 
     public FigmaColor getBackgroundColor() {
         return backgroundColor;
@@ -45,7 +48,18 @@ public class Form extends FrontendComponent{
 
     public String generateCode(){
         StringBuilder code = new StringBuilder();
-        code. append("<View style={{borderRadius: " + this.cornerRadius + " , margin: 0, padding: 10, backgroundColor: " + this.backgroundColor.toString() +"}}>").append("\n");
+        String backgroundColorStr = "";
+        if(this.backgroundColor == null){
+            backgroundColorStr = "\"rgba(0,0,0,0)\"";
+        }else{
+            backgroundColorStr = this.backgroundColor.toString();
+        }
+        if(this.borderColor!=null){
+            String borderColorStr = this.borderColor.toString();
+            code.append("<View style={{borderRadius: " + this.cornerRadius + " , margin: 0, padding: 10, backgroundColor: " + backgroundColorStr +",borderColor: " + borderColorStr + ", borderWidth: " + borderWidth + "}}>\n");
+        }else{
+            code.append("<View style={{borderRadius: " + this.cornerRadius + " , margin: 0, padding: 10, backgroundColor: " + backgroundColorStr +"}}>").append("\n");
+        }
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(this.frontendComponentList);
         for(List<FrontendComponent> curList : inlineComponentList){
             if(curList.size() == 1) {
@@ -62,5 +76,45 @@ public class Form extends FrontendComponent{
         }
         code.append("</View>\n");
         return code.toString();
+    }
+
+    public void setContainText(boolean containText) {
+        isContainText = containText;
+    }
+
+    public void setContainButton(boolean containButton) {
+        isContainButton = containButton;
+    }
+
+    public void setContainTextBox(boolean containTextBox) {
+        isContainTextBox = containTextBox;
+    }
+
+    public void setContainImageButton(boolean containImageButton) {
+        isContainImageButton = containImageButton;
+    }
+
+    public void setBorderColor(FigmaColor borderColor) {
+        this.borderColor = borderColor;
+    }
+
+    public void setBorderWidth(double borderWidth) {
+        this.borderWidth = borderWidth;
+    }
+
+    public boolean isContainText() {
+        return isContainText;
+    }
+
+    public boolean isContainButton() {
+        return isContainButton;
+    }
+
+    public boolean isContainTextBox() {
+        return isContainTextBox;
+    }
+
+    public boolean isContainImageButton() {
+        return isContainImageButton;
     }
 }

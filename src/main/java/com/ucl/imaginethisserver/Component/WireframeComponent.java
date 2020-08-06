@@ -64,12 +64,25 @@ public class WireframeComponent{
                 if(!isContainForm){
                     isContainForm = true;
                 }
+                if(!isContainText && form.isContainText()){
+                    isContainText = true;
+                }
+                if(!isContainImageButton && form.isContainImageButton()){
+                    isContainImageButton = true;
+                }
+                if(!isContainButton && form.isContainButton()){
+                    isContainButton = true;
+                }
+                if(!isContainTextBox && form.isContainTextBox()){
+                    isContainTextBox = true;
+                }
                 frontendComponentList.add(form);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
                 Slider slider = ((Group) component).convertSlider();
                 if(!isContainSideBar){
                     isContainSideBar = true;
                 }
+
                 frontendComponentList.add(slider);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")){
                 ImageButton imageButton = ((Group) component).convertImageButton(projectID,accessToken,authenticateType);
