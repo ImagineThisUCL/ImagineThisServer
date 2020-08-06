@@ -1,5 +1,8 @@
 package com.ucl.imaginethisserver.DAO;
 
+import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
+import com.ucl.imaginethisserver.FrontendComponent.Image;
+
 import java.util.List;
 
 public class Rectangle extends FigmaComponent {
@@ -53,5 +56,16 @@ public class Rectangle extends FigmaComponent {
 
     public List<Stroke> getStrokes() {
         return strokes;
+    }
+
+    public Image convertToImage(){
+        Image image = new Image();
+        image.setWidth(this.getWidth());
+        image.setHeight(this.getHeight());
+        image.setPositionX(this.getPositionX());
+        image.setPositionY(this.getPositionY());
+        image.setAlign(this.getAlign());
+        image.setImageURL(this.getImageURL());
+        return image;
     }
 }
