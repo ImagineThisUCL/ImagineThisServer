@@ -109,7 +109,7 @@ public class WireframeComponent{
             CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
        }
        if(IS_CONTAIN_NAVBAR){
-           importCode.append("import { StatusBar } from 'expo-status-bar'");
+           importCode.append("import { StatusBar } from 'expo-status-bar'" + "\n");
        }
         if(isContainTextBox){
             importCode.append("import InputField from '../reusables/InputField'" + "\n");
