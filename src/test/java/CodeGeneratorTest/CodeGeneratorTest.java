@@ -54,7 +54,7 @@ public class CodeGeneratorTest {
 //        List<Wireframe> responseList = testPage.getWireframeList();
         CodeGenerator.generatePackageFile();
         for(String name : names){
-            System.out.println("Generating Page: " + name);
+            System.out.println("Now Generating: " + name);
             Wireframe setUpWireframe = testPage.getWireframeByName(name);
             setUpWireframe.loadComponent(projectID,accessToken,authType);
             setUpWireframe.sortComponentByY();
