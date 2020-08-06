@@ -47,15 +47,15 @@ public class FigmaComponent {
     }
 
     public void convertRelativePosition(AbsoluteBoundingBox wireframeBoundingbox){
-        this.height = (int)((this.absoluteBoundingBox.height / wireframeBoundingbox.height) * 100);
-        this.width = (int)((this.absoluteBoundingBox.width / wireframeBoundingbox.width) * 100);
+        this.height = (int)(this.absoluteBoundingBox.height);
+        this.width = (int)(this.absoluteBoundingBox.width);
 
-        this.positionX = (int)(((this.absoluteBoundingBox.x - wireframeBoundingbox.x) / wireframeBoundingbox.width) * 100);
-        this.positionY = (int)(((this.absoluteBoundingBox.y - wireframeBoundingbox.y) / wireframeBoundingbox.height) * 100);
+        this.positionX = (int)((this.absoluteBoundingBox.x - wireframeBoundingbox.x));
+        this.positionY = (int)((this.absoluteBoundingBox.y - wireframeBoundingbox.y));
 
-        if(this.positionX + this.width < 50){
+        if(this.positionX + this.width < wireframeBoundingbox.width / 2){
             this.align = "LEFT";
-        }else if(this.positionX > 50){
+        }else if(this.positionX > wireframeBoundingbox.width / 2){
             this.align = "RIGHT";
         }else{
             this.align = "CENTER";

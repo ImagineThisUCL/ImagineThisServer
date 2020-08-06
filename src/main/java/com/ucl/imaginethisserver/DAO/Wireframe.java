@@ -40,7 +40,7 @@ public class Wireframe {
                     String imageURL = imageJson.get(rectangle.getId()).toString();
                     rectangle.setImageURL(imageURL);
                     rectangle.convertRelativePosition(this.absoluteBoundingBox);
-                    componentMap.put(rectangle.getName(), rectangle);
+                    componentMap.put(rectangle.getId(), rectangle);
                     componentList.add(rectangle);
 
                 }
@@ -49,7 +49,7 @@ public class Wireframe {
                     String imageURL = imageJson.get(text.getId()).toString();
                     text.setImageURL(imageURL);
                     text.convertRelativePosition(this.absoluteBoundingBox);
-                    componentMap.put(text.getName(), text);
+                    componentMap.put(text.getId(), text);
                     componentList.add(text);
                 }
                 case "VECTOR" -> {
@@ -57,7 +57,7 @@ public class Wireframe {
                     String imageURL = imageJson.get(vector.getId()).toString();
                     vector.setImageURL(imageURL);
                     vector.convertRelativePosition(this.absoluteBoundingBox);
-                    componentMap.put(vector.getName(), vector);
+                    componentMap.put(vector.getId(), vector);
                     componentList.add(vector);
                 }
                 case "GROUP" -> {
@@ -66,7 +66,7 @@ public class Wireframe {
                     group.setImageURL(imageURL);
                     group.setWireframeBoundingBox(this.absoluteBoundingBox);
                     group.convertRelativePosition(this.absoluteBoundingBox);
-                    componentMap.put(group.getName(), group);
+                    componentMap.put(group.getId(), group);
                     componentList.add(group);
                 }
 
@@ -75,7 +75,7 @@ public class Wireframe {
                     String imageURL = imageJson.get(figmaComponent.getId()).toString();
                     figmaComponent.setImageURL(imageURL);
                     figmaComponent.convertRelativePosition(this.absoluteBoundingBox);
-                    componentMap.put(figmaComponent.getName(), figmaComponent);
+                    componentMap.put(figmaComponent.getId(), figmaComponent);
                     componentList.add(figmaComponent);
                 }
             }

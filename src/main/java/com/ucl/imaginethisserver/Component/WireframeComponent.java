@@ -13,7 +13,7 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
-    private boolean isContainText, isContainButton, isContainTextBox, isContainForm, isContainSideBar, isContainImage;
+    private boolean isContainText, isContainButton, isContainTextBox, isContainForm, isContainSideBar, isContainImage, isContainImageButton;
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -32,13 +32,16 @@ public class WireframeComponent{
                 if(!isContainText){
                     isContainText = true;
                 }
+
             }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("picture")){
                 Image image = ((Rectangle)component).convertToImage();
                 frontendComponentList.add(image);
                 if(!isContainImage){
                     isContainImage = true;
                 }
-            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("button")){
+            }
+              // if this component is a button
+              else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")){
                 Button button = ((Group)component).convertButton();
                 frontendComponentList.add(button);
                 if(!isContainButton){
@@ -68,13 +71,32 @@ public class WireframeComponent{
                 if(!isContainForm){
                     isContainForm = true;
                 }
+                if(!isContainText && form.isContainText()){
+                    isContainText = true;
+                }
+                if(!isContainImageButton && form.isContainImageButton()){
+                    isContainImageButton = true;
+                }
+                if(!isContainButton && form.isContainButton()){
+                    isContainButton = true;
+                }
+                if(!isContainTextBox && form.isContainTextBox()){
+                    isContainTextBox = true;
+                }
                 frontendComponentList.add(form);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
                 Slider slider = ((Group) component).convertSlider();
                 if(!isContainSideBar){
                     isContainSideBar = true;
                 }
+
                 frontendComponentList.add(slider);
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")){
+                ImageButton imageButton = ((Group) component).convertImageButton(projectID,accessToken,authenticateType);
+                if(!isContainImageButton){
+                    isContainImageButton = true;
+                }
+                frontendComponentList.add(imageButton);
             }
         }
     }
@@ -109,6 +131,10 @@ public class WireframeComponent{
             importCode.append("import CustomSlider from \"../reusables/CustomSlider\"").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.SLIDER);
         }
+        if(isContainImageButton){
+            importCode.append("import CustomSlider from \"../reusables/ImageButton\"").append("\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.IMAGE_BUTTON);
+        }
        importCode.append("\n");
 
        return importCode.toString();
@@ -117,9 +143,7 @@ public class WireframeComponent{
     public String generateViewCode(String className){
         StringBuilder viewCode = new StringBuilder();
         viewCode.append("class ").append(className).append(" extends Component {");
-        viewCode.append("render() {\n" +
-                "        return (\n" +
-                "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: "+backgroundColor.toString()+"}}>" + "\n");
+        viewCode.append("render() {\n" + "        return (\n" + "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
 
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
         for(List<FrontendComponent> curList : inlineComponentList){
@@ -144,7 +168,7 @@ public class WireframeComponent{
             }else if(curList.size() > 1){
                 viewCode.append("<View style={{flexDirection: \"row\", justifyContent: \"space-between\"}}>" + "\n");
                 for(FrontendComponent component : curList){
-                    viewCode.append(component.generateCode() + "\n");
+                    viewCode.append(component.generateCode()).append("\n");
                 }
                 viewCode.append(" </View>" + "\n");
             }
