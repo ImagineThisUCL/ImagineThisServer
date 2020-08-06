@@ -128,10 +128,8 @@ public class Group extends FigmaComponent {
             Navigator.NAVIGATOR_MAP.put(wireframeName,wireframeName);
         }
         for(FigmaComponent component : this.componentMap.values()){
-            if(component.getType().equals("GROUP")&&component.getName().toLowerCase().contains("image")){
-                Group image = (Group) component;
-                image.loadComponent(projectID,accessToken,authenticateType);
-                imageButton.setImageURL(image.getImageURL());
+            if((component.getType().equals("GROUP") || component.getType().equals("RECTANGLE")) && component.getName().toLowerCase().contains("image")){
+                imageButton.setImageURL(component.getImageURL());
             }
         }
         return imageButton;
