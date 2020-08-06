@@ -32,7 +32,7 @@ public class WireframeComponent{
                 if(!isContainText){
                     isContainText = true;
                 }
-            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("image")){
+            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("picture")){
                 Image image = ((Rectangle)component).convertToImage();
                 frontendComponentList.add(image);
                 if(!isContainImage){
