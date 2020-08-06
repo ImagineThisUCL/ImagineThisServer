@@ -10,6 +10,7 @@ import com.ucl.imaginethisserver.FrontendComponent.Button;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +46,7 @@ public class Group extends FigmaComponent {
                     String imageURL = imageJson.get(rectangle.getId()).toString();
                     rectangle.setImageURL(imageURL);
                     rectangle.convertRelativePosition(this.wireframeBoundingBox);
-                    componentMap.put(rectangle.getName(), rectangle);
+                    componentMap.put(rectangle.getId(), rectangle);
 
                 }
                 case "TEXT" -> {
@@ -53,14 +54,14 @@ public class Group extends FigmaComponent {
                     String imageURL = imageJson.get(text.getId()).toString();
                     text.setImageURL(imageURL);
                     text.convertRelativePosition(this.wireframeBoundingBox);
-                    componentMap.put(text.getName(), text);
+                    componentMap.put(text.getId(), text);
                 }
                 case "VECTOR" -> {
                     Vector vector = new Gson().fromJson(jsonChild, Vector.class);
                     String imageURL = imageJson.get(vector.getId()).toString();
                     vector.setImageURL(imageURL);
                     vector.convertRelativePosition(this.wireframeBoundingBox);
-                    componentMap.put(vector.getName(), vector);
+                    componentMap.put(vector.getId(), vector);
                 }
                 case "GROUP" -> {
                     Group group = new Gson().fromJson(jsonChild, Group.class);
@@ -68,14 +69,14 @@ public class Group extends FigmaComponent {
                     group.setImageURL(imageURL);
                     group.setWireframeBoundingBox(this.wireframeBoundingBox);
                     group.convertRelativePosition(this.wireframeBoundingBox);
-                    componentMap.put(group.getName(), group);
+                    componentMap.put(group.getId(), group);
                 }
 
                 default -> {
                     FigmaComponent figmaComponent = new Gson().fromJson(jsonChild, FigmaComponent.class);
                     String imageURL = imageJson.get(figmaComponent.getId()).toString();
                     figmaComponent.setImageURL(imageURL);
-                    componentMap.put(figmaComponent.getName(), figmaComponent);
+                    componentMap.put(figmaComponent.getId(), figmaComponent);
                 }
             }
         }
@@ -112,6 +113,28 @@ public class Group extends FigmaComponent {
             }
         }
         return button;
+    }
+
+    public ImageButton convertImageButton(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
+        ImageButton imageButton = new ImageButton();
+        imageButton.setPositionX(this.getPositionX());
+        imageButton.setPositionY(this.getPositionY());
+        imageButton.setWidth(this.getWidth());
+        imageButton.setHeight(this.getHeight());
+        imageButton.setAlign(this.getAlign());
+        if(this.transitionNodeID!=null){
+            imageButton.setTransitionNodeID(this.transitionNodeID);
+            String wireframeName = Page.getWireframeByID(this.transitionNodeID).getName();
+            Navigator.NAVIGATOR_MAP.put(wireframeName,wireframeName);
+        }
+        for(FigmaComponent component : this.componentMap.values()){
+            if(component.getType().equals("GROUP")&&component.getName().toLowerCase().contains("image")){
+                Group image = (Group) component;
+                image.loadComponent(projectID,accessToken,authenticateType);
+                imageButton.setImageURL(image.getImageURL());
+            }
+        }
+        return imageButton;
     }
 
     public NavBar convertNavBar(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
@@ -185,11 +208,15 @@ public class Group extends FigmaComponent {
                 ((Group)component).loadComponent(projectID,accessToken,authenticateType);
                 TextBox textBox = ((Group)component).convertTextBox();
                 form.frontendComponentList.add(textBox);
-            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("button")){
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")){
                 ((Group)component).loadComponent(projectID,accessToken,authenticateType);
                 Button button = ((Group)component).convertButton();
                 form.frontendComponentList.add(button);
-            }else if((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")){
+            }else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")){
+                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
+                ImageButton imageButton = ((Group)component).convertImageButton(projectID,accessToken,authenticateType);
+                form.frontendComponentList.add(imageButton);
+            } else if((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")){
                 switch (component.getType()){
                     case "RECTANGLE":
                         form.setBackgroundColor(((Rectangle)component).getFills().get(0).getColor());

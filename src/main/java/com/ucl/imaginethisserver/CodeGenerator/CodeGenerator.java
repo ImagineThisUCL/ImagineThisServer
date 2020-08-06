@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.CodeGenerator;
 
 import com.ucl.imaginethisserver.Component.*;
 import com.ucl.imaginethisserver.DAO.Wireframe;
+import com.ucl.imaginethisserver.FrontendComponent.ImageButton;
 import com.ucl.imaginethisserver.FrontendComponent.NavBar;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 
@@ -46,6 +47,11 @@ public class CodeGenerator {
             case SLIDER:
                 outputCode = SliderComponent.generateCode();
                 fileName = "CustomSlider.js";
+                break;
+            case IMAGE_BUTTON:
+                outputCode = ImageButtonComponent.generateCode();
+                fileName = "ImageButton.js";
+                break;
         }
         generateOutputFolder();
         File cfile = new File("OutputApp/components");

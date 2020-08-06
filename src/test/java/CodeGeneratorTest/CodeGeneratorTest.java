@@ -33,8 +33,8 @@ public class CodeGeneratorTest {
         }
         ArrayList<String> nameList = new ArrayList<>();
 //        nameList.add("Set Up");
-        nameList.add("Information to populat messages");
-//        nameList.add("Reach out");
+//        nameList.add("Information to populat messages");
+        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
 //        nameList.add("Start Passive Tracking and Reporting");
         generatePage(nameList,
@@ -53,7 +53,6 @@ public class CodeGeneratorTest {
 //        List<Wireframe> responseList = testPage.getWireframeList();
         CodeGenerator.generatePackageFile();
         for(String name : names){
-            System.out.println("Generating Page: " + name);
             Wireframe setUpWireframe = testPage.getWireframeByName(name);
             setUpWireframe.loadComponent(projectID,accessToken,authType);
             setUpWireframe.sortComponentByY();
