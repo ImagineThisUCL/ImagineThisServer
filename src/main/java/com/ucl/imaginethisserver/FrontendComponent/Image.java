@@ -13,7 +13,9 @@ public class Image extends FrontendComponent {
 
     public String generateCode(){
         return "<Image\n" +
-                "source={require("+ this.imageURL +")}\n" +
+                "source={{uri:"+ this.imageURL + "}}\n" +
+                "style={{width: " + this.width +
+                ", height: " + this.height + "}}\n" +
                 "/>";
     }
 }
