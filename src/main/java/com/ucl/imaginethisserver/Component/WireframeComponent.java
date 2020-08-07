@@ -99,6 +99,7 @@ public class WireframeComponent{
                 if(!isContainChart){
                     isContainChart = true;
                 }
+                frontendComponentList.add(fixedChart);
             }
         }
     }
