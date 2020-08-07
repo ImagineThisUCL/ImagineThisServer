@@ -277,4 +277,20 @@ public class Group extends FigmaComponent {
         }
         return slider;
     }
+
+    public Chart convertToFixedChart(){
+        Chart fixedChart = new Chart();
+        fixedChart.setHeight(this.getHeight());
+        fixedChart.setWidth(this.getWidth());
+        fixedChart.setPositionX(this.getPositionX());
+        fixedChart.setPositionY(this.getPositionY());
+        fixedChart.setAlign(this.getAlign());
+//        for(FigmaComponent component : this.componentMap.values()){
+//            if(component.getType().equals("TEXT") && component.getName().toLowerCase().contains("title")){
+//                Text title = (Text) component;
+//                fixedChart.setTitle(title.getCharacters());
+//            }
+//        }
+        return fixedChart;
+    }
 }

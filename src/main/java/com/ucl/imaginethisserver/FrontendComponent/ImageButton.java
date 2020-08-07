@@ -12,8 +12,6 @@ public class ImageButton extends FrontendComponent {
         this.imageURL = imageURL;
     }
 
-
-
     public void setTransitionNodeID(String transitionNodeID) {
         this.transitionNodeID = transitionNodeID;
     }

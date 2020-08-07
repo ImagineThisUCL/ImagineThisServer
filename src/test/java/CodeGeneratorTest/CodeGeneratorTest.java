@@ -37,8 +37,7 @@ public class CodeGeneratorTest {
 //        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
 //        nameList.add("Start Passive Tracking and Reporting");
-//        nameList.add("ABUB");
-        nameList.add("Wellbeing Network");
+        nameList.add("Report for Sharing");
         generatePage(nameList,
                 figmaTreeStructure,
                 projectID,
