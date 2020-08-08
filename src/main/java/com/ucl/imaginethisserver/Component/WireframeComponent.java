@@ -197,7 +197,7 @@ public class WireframeComponent{
                 viewCode.append(" </View>" + "\n");
             }
         }
-        viewCode.append("  </ScrollView>\n" +
+        viewCode.append("            </ScrollView>\n" +
                 "        )\n" +
                 "    }\n" +
                 "}\n" +
