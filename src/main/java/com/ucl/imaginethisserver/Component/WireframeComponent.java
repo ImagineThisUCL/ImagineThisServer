@@ -177,6 +177,9 @@ public class WireframeComponent{
         if(isContainChart){
             viewCode.append(FixedChartComponent.generateCode());
         }
+        if(isContainSwitch){
+            viewCode.append(FixedSwitchComponent.generateCode());
+        }
         viewCode.append("        return (\n" +
                 "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
 
