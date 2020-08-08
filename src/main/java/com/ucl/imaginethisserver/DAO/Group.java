@@ -40,44 +40,46 @@ public class Group extends FigmaComponent {
         for (JsonElement jsonChild : children) {
             String type = jsonChild.getAsJsonObject().get("type").toString();
             type = type.substring(1, type.length() - 1);
+            String imageURL = "";
             switch (type) {
-                case "RECTANGLE" -> {
+                case "RECTANGLE":
                     Rectangle rectangle = new Gson().fromJson(jsonChild, Rectangle.class);
-                    String imageURL = imageJson.get(rectangle.getId()).toString();
+                    imageURL = imageJson.get(rectangle.getId()).toString();
                     rectangle.setImageURL(imageURL);
                     rectangle.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(rectangle.getId(), rectangle);
+                    break;
 
-                }
-                case "TEXT" -> {
+                case "TEXT":
                     Text text = new Gson().fromJson(jsonChild, Text.class);
-                    String imageURL = imageJson.get(text.getId()).toString();
+                    imageURL = imageJson.get(text.getId()).toString();
                     text.setImageURL(imageURL);
                     text.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(text.getId(), text);
-                }
-                case "VECTOR" -> {
+                    break;
+
+                case "VECTOR":
                     Vector vector = new Gson().fromJson(jsonChild, Vector.class);
-                    String imageURL = imageJson.get(vector.getId()).toString();
+                    imageURL = imageJson.get(vector.getId()).toString();
                     vector.setImageURL(imageURL);
                     vector.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(vector.getId(), vector);
-                }
-                case "GROUP" -> {
+                    break;
+                case "GROUP":
                     Group group = new Gson().fromJson(jsonChild, Group.class);
-                    String imageURL = imageJson.get(group.getId()).toString();
+                    imageURL = imageJson.get(group.getId()).toString();
                     group.setImageURL(imageURL);
                     group.setWireframeBoundingBox(this.wireframeBoundingBox);
                     group.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(group.getId(), group);
-                }
+                    break;
 
-                default -> {
+                default:
                     FigmaComponent figmaComponent = new Gson().fromJson(jsonChild, FigmaComponent.class);
-                    String imageURL = imageJson.get(figmaComponent.getId()).toString();
+                    imageURL = imageJson.get(figmaComponent.getId()).toString();
                     figmaComponent.setImageURL(imageURL);
                     componentMap.put(figmaComponent.getId(), figmaComponent);
-                }
+                    break;
             }
         }
 
@@ -285,12 +287,19 @@ public class Group extends FigmaComponent {
         fixedChart.setPositionX(this.getPositionX());
         fixedChart.setPositionY(this.getPositionY());
         fixedChart.setAlign(this.getAlign());
-//        for(FigmaComponent component : this.componentMap.values()){
-//            if(component.getType().equals("TEXT") && component.getName().toLowerCase().contains("title")){
-//                Text title = (Text) component;
-//                fixedChart.setTitle(title.getCharacters());
-//            }
-//        }
+
         return fixedChart;
     }
+
+    public Dropdown convertToDropdown(){
+        Dropdown dropdown = new Dropdown();
+        dropdown.setHeight(this.getHeight());
+        dropdown.setWidth(this.getWidth());
+        dropdown.setPositionX(this.getPositionX());
+        dropdown.setPositionY(this.getPositionY());
+        dropdown.setAlign(this.getAlign());
+
+        return dropdown;
+    }
+
 }

@@ -52,6 +52,10 @@ public class CodeGenerator {
                 outputCode = ImageButtonComponent.generateCode();
                 fileName = "ImageButton.js";
                 break;
+            case DROPDOWN:
+                outputCode = DropdownComponent.generateCode();
+                fileName = "Dropdown.js";
+                break;
         }
         generateOutputFolder();
         File cfile = new File("OutputApp/components");

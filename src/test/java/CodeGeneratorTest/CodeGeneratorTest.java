@@ -34,15 +34,16 @@ public class CodeGeneratorTest {
         ArrayList<String> nameList = new ArrayList<>();
 //        nameList.add("Set Up");
 //        nameList.add("Information to populat messages");
-        nameList.add("Reach out");
+//        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
 //        nameList.add("Start Passive Tracking and Reporting");
-        nameList.add("Report for Sharing");
-        nameList.add("Wellbeing Network");
-        nameList.add("Torfaen");
-        nameList.add("Headspace");
-        nameList.add("Dementia Support");
-        nameList.add("Calls made v Well-being");
+//        nameList.add("Report for Sharing");
+//        nameList.add("Wellbeing Network");
+//        nameList.add("Torfaen");
+//        nameList.add("Headspace");
+//        nameList.add("Dementia Support");
+//        nameList.add("Calls made v Well-being");
+        nameList.add("Auto Populated Mesage 2");
         generatePage(nameList,
                 figmaTreeStructure,
                 projectID,

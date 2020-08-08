@@ -16,7 +16,7 @@ public class WireframeComponent{
 
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainForm, isContainSideBar, isContainImageButton,
-            isContainImage, isContainChart;
+            isContainImage, isContainChart, isContainDropdown;
 
     private FigmaColor backgroundColor;
     private String backgroundImage;
@@ -109,6 +109,12 @@ public class WireframeComponent{
                     isContainChart = true;
                 }
                 frontendComponentList.add(fixedChart);
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("dropdown")){
+                Dropdown dropdown = ((Group) component).convertToDropdown();
+                if(!isContainDropdown){
+                    isContainDropdown = true;
+                }
+                frontendComponentList.add(dropdown);
             }
         }
     }
@@ -120,22 +126,22 @@ public class WireframeComponent{
            importCode.append(", Image");
        }
        importCode.append(" } from \"react-native\"\n");
-       importCode.append("import React, { Component } from \"react\"" + "\n");
-       importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
+       importCode.append("import React, { Component } from \"react\"").append("\n");
+       importCode.append("import base from \"../../assets/baseStyle\"").append("\n");
        CodeGenerator.writeBaseStyleCode();
        if(isContainText || isContainChart){
-           importCode.append("import P from '../reusables/P'" + "\n");
+           importCode.append("import P from '../reusables/P'").append("\n");
            CodeGenerator.writeReusableComponentCode(ReusableComponent.P);
        }
        if(isContainButton){
-            importCode.append("import Button from '../reusables/Button'" + "\n");
+            importCode.append("import Button from '../reusables/Button'").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
        }
        if(IS_CONTAIN_NAVBAR){
-           importCode.append("import { StatusBar } from 'expo-status-bar'" + "\n");
+           importCode.append("import { StatusBar } from 'expo-status-bar'").append("\n");
        }
         if(isContainTextBox){
-            importCode.append("import InputField from '../reusables/InputField'" + "\n");
+            importCode.append("import InputField from '../reusables/InputField'").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD);
         }
 
@@ -153,6 +159,10 @@ public class WireframeComponent{
                     .append("  BarChart,\n")
                     .append("  PieChart\n")
                     .append("} from \"react-native-chart-kit\"").append("\n");
+        }
+        if(isContainDropdown){
+            importCode.append("import Dropdown from \"../reusables/Dropdown\"").append("\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.DROPDOWN);
         }
        importCode.append("\n");
 
