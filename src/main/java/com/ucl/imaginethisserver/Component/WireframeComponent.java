@@ -13,7 +13,11 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
-    private boolean isContainText, isContainButton, isContainTextBox, isContainForm, isContainSideBar, isContainImage, isContainImageButton;
+
+    private boolean isContainText, isContainButton, isContainTextBox,
+            isContainForm, isContainSideBar, isContainImageButton,
+            isContainImage, isContainChart;
+
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -99,6 +103,12 @@ public class WireframeComponent{
                     isContainImageButton = true;
                 }
                 frontendComponentList.add(imageButton);
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("chart")){
+                Chart fixedChart = ((Group) component).convertToFixedChart();
+                if(!isContainChart){
+                    isContainChart = true;
+                }
+                frontendComponentList.add(fixedChart);
             }
         }
     }
@@ -113,7 +123,7 @@ public class WireframeComponent{
        importCode.append("import React, { Component } from \"react\"" + "\n");
        importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
        CodeGenerator.writeBaseStyleCode();
-       if(isContainText){
+       if(isContainText || isContainChart){
            importCode.append("import P from '../reusables/P'" + "\n");
            CodeGenerator.writeReusableComponentCode(ReusableComponent.P);
        }
@@ -137,6 +147,13 @@ public class WireframeComponent{
             importCode.append("import ImageButton from \"../reusables/ImageButton\"").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.IMAGE_BUTTON);
         }
+        if(isContainChart){
+            importCode.append("import {\n")
+                    .append("  LineChart,\n")
+                    .append("  BarChart,\n")
+                    .append("  PieChart\n")
+                    .append("} from \"react-native-chart-kit\"").append("\n");
+        }
        importCode.append("\n");
 
        return importCode.toString();
@@ -145,7 +162,12 @@ public class WireframeComponent{
     public String generateViewCode(String className){
         StringBuilder viewCode = new StringBuilder();
         viewCode.append("class ").append(className).append(" extends Component {");
-        viewCode.append("render() {\n" + "        return (\n" + "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
+        viewCode.append("render() {\n");
+        if(isContainChart){
+            viewCode.append(FixedChartComponent.generateCode());
+        }
+        viewCode.append("        return (\n" +
+                "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
 
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
         for(List<FrontendComponent> curList : inlineComponentList){

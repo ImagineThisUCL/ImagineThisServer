@@ -37,6 +37,7 @@ public class CodeGeneratorTest {
 //        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
 //        nameList.add("Start Passive Tracking and Reporting");
+        nameList.add("Report for Sharing");
 //        nameList.add("Wellbeing by Activity");
         nameList.add("Wellbeing Network");
 //        nameList.add("Age Connect");
