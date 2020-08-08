@@ -15,7 +15,7 @@ public class WireframeComponent{
     private static boolean IS_CONTAIN_NAVBAR;
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainForm, isContainSideBar, isContainImageButton,
-            isContainSwitch;
+            isContainImage, isContainChart, isContainSwitch;
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -34,6 +34,12 @@ public class WireframeComponent{
                 if(!isContainText){
                     isContainText = true;
                 }
+            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("picture")){
+                Image image = ((Rectangle)component).convertToImage();
+                frontendComponentList.add(image);
+                if(!isContainImage){
+                    isContainImage = true;
+                }
             }else if(component.getName().toLowerCase().contains("type:switch")){
                 Switch aSwitch = component.convertSwitch();
                 frontendComponentList.add(aSwitch);
@@ -41,8 +47,8 @@ public class WireframeComponent{
                     isContainSwitch = true;
                 }
             }
-            // if this component is a button
-            else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")){
+              // if this component is a button
+              else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")){
                 Button button = ((Group)component).convertButton();
                 frontendComponentList.add(button);
                 if(!isContainButton){
@@ -99,6 +105,12 @@ public class WireframeComponent{
                     isContainImageButton = true;
                 }
                 frontendComponentList.add(imageButton);
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("chart")){
+                Chart fixedChart = ((Group) component).convertToFixedChart();
+                if(!isContainChart){
+                    isContainChart = true;
+                }
+                frontendComponentList.add(fixedChart);
             }
         }
     }
@@ -106,11 +118,14 @@ public class WireframeComponent{
     public String generateImportCode() throws IOException {
        StringBuilder importCode = new StringBuilder();
        importCode.append("import { View, ScrollView");
-       if(isContainSwitch){
+      if(isContainImage){
+          importCode.append(", Image");
+      }
+      if(isContainSwitch){
            importCode.append(", Switch");
        }
        importCode.append(" } from \"react-native\"\n");
-       
+
        importCode.append("import React, { Component");
        if(isContainSwitch){
             importCode.append(", useState ");
@@ -119,7 +134,7 @@ public class WireframeComponent{
 
        importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
        CodeGenerator.writeBaseStyleCode();
-       if(isContainText){
+       if(isContainText || isContainChart){
            importCode.append("import P from '../reusables/P'" + "\n");
            CodeGenerator.writeReusableComponentCode(ReusableComponent.P);
        }
@@ -128,7 +143,7 @@ public class WireframeComponent{
             CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
        }
        if(IS_CONTAIN_NAVBAR){
-           importCode.append("import { StatusBar } from 'expo-status-bar'\n");
+           importCode.append("import { StatusBar } from 'expo-status-bar'" + "\n");
        }
         if(isContainTextBox){
             importCode.append("import InputField from '../reusables/InputField'" + "\n");
@@ -143,6 +158,13 @@ public class WireframeComponent{
             importCode.append("import ImageButton from \"../reusables/ImageButton\"").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.IMAGE_BUTTON);
         }
+        if(isContainChart){
+            importCode.append("import {\n")
+                    .append("  LineChart,\n")
+                    .append("  BarChart,\n")
+                    .append("  PieChart\n")
+                    .append("} from \"react-native-chart-kit\"").append("\n");
+        }
        importCode.append("\n");
 
        return importCode.toString();
@@ -151,7 +173,12 @@ public class WireframeComponent{
     public String generateViewCode(String className){
         StringBuilder viewCode = new StringBuilder();
         viewCode.append("class ").append(className).append(" extends Component {");
-        viewCode.append("render() {\n" + "        return (\n" + "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
+        viewCode.append("render() {\n");
+        if(isContainChart){
+            viewCode.append(FixedChartComponent.generateCode());
+        }
+        viewCode.append("        return (\n" +
+                "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
 
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
         for(List<FrontendComponent> curList : inlineComponentList){
