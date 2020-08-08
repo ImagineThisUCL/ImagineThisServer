@@ -314,10 +314,16 @@ public class Group extends FigmaComponent {
         dropdown.setPositionY(this.getPositionY());
         dropdown.setAlign(this.getAlign());
 
-        for(FigmaComponent component : this.componentMap.values()){
-            if(component.getType().equals("TEXT") && component.getName().toLowerCase().contains("option")){
-                String option = ((Text)component).getCharacters();
-                dropdown.setOption(option);
+        for(FigmaComponent component : this.componentMap.values()) {
+            if(component.getType().equals("RECTANGLE")){
+                Rectangle rectangle = (Rectangle) component;
+                dropdown.setContainerFills(rectangle.getFills());
+                dropdown.setCornerRadius(rectangle.getCornerRadius());
+            }else if(component.getType().equals("TEXT") && component.getName().toLowerCase().contains("option")){
+                Text text = (Text) component;
+                dropdown.setOption(text.getCharacters());
+                dropdown.setStyle(text.getStyle());
+                dropdown.setTextFills(text.getFills());
             }
         }
 

@@ -24,6 +24,9 @@ public class DropdownComponent {
                 "    initText: {\n" +
                 "        color: \"#8d8d8d\"\n" +
                 "    },\n" +
+                "    rootContainer: {\n" +
+                "        flex: 1,\n" +
+                "    },\n" +
                 "})\n" +
                 "\n" +
                 "export default class Dropdown extends Component {\n" +
@@ -46,6 +49,7 @@ public class DropdownComponent {
                 "                data={items}\n" +
                 "                initValue=\"Please select\"\n" +
                 "                selectStyle={containerStyle}\n" +
+                "                style={styles.rootContainer}\n" +
                 "                selectTextStyle={textStyle}\n" +
                 "                initValueTextStyle={[textStyle, styles.initText]}\n" +
                 "                optionTextStyle={styles.modalText}\n" +
