@@ -37,8 +37,10 @@ public class CodeGeneratorTest {
 //        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
 //        nameList.add("Start Passive Tracking and Reporting");
-//        nameList.add("ABUB");
+//        nameList.add("Wellbeing by Activity");
         nameList.add("Wellbeing Network");
+//        nameList.add("Age Connect");
+//        nameList.add("Friend of Mine");
         generatePage(nameList,
                 figmaTreeStructure,
                 projectID,
@@ -55,6 +57,7 @@ public class CodeGeneratorTest {
 //        List<Wireframe> responseList = testPage.getWireframeList();
         CodeGenerator.generatePackageFile();
         for(String name : names){
+            System.out.println("Now Generating: " + name);
             Wireframe setUpWireframe = testPage.getWireframeByName(name);
             setUpWireframe.loadComponent(projectID,accessToken,authType);
             setUpWireframe.sortComponentByY();
