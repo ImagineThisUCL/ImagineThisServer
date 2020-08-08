@@ -13,9 +13,11 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
+
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainForm, isContainSideBar, isContainImageButton,
-            isContainChart;
+            isContainImage, isContainChart;
+
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -34,9 +36,16 @@ public class WireframeComponent{
                 if(!isContainText){
                     isContainText = true;
                 }
+
+            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("picture")){
+                Image image = ((Rectangle)component).convertToImage();
+                frontendComponentList.add(image);
+                if(!isContainImage){
+                    isContainImage = true;
+                }
             }
-            // if this component is a button
-            else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")){
+              // if this component is a button
+              else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")){
                 Button button = ((Group)component).convertButton();
                 frontendComponentList.add(button);
                 if(!isContainButton){
@@ -106,8 +115,12 @@ public class WireframeComponent{
 
     public String generateImportCode() throws IOException {
        StringBuilder importCode = new StringBuilder();
-       importCode.append("import { View, ScrollView } from \"react-native\"\n" +
-               "import React, { Component } from \"react\"" + "\n");
+       importCode.append("import { View, ScrollView");
+       if(isContainImage){
+           importCode.append(", Image");
+       }
+       importCode.append(" } from \"react-native\"\n");
+       importCode.append("import React, { Component } from \"react\"" + "\n");
        importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
        CodeGenerator.writeBaseStyleCode();
        if(isContainText || isContainChart){
@@ -119,7 +132,7 @@ public class WireframeComponent{
             CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
        }
        if(IS_CONTAIN_NAVBAR){
-           importCode.append("import { StatusBar } from 'expo-status-bar'\n");
+           importCode.append("import { StatusBar } from 'expo-status-bar'" + "\n");
        }
         if(isContainTextBox){
             importCode.append("import InputField from '../reusables/InputField'" + "\n");
