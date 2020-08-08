@@ -40,7 +40,7 @@ public class WireframeComponent{
                 if(!isContainImage){
                     isContainImage = true;
                 }
-            }else if(component.getName().toLowerCase().contains("type:switch")){
+            }else if(component.getName().toLowerCase().contains("switch")){
                 Switch aSwitch = component.convertSwitch();
                 frontendComponentList.add(aSwitch);
                 if(!isContainSwitch){
