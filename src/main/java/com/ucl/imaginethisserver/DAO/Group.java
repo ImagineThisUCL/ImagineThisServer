@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.ucl.imaginethisserver.FrontendComponent.*;
 import com.ucl.imaginethisserver.FrontendComponent.Button;
+import com.ucl.imaginethisserver.FrontendComponent.Image;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 
@@ -219,7 +220,21 @@ public class Group extends FigmaComponent {
                 ImageButton imageButton = ((Group)component).convertImageButton(projectID,accessToken,authenticateType);
                 form.frontendComponentList.add(imageButton);
                 form.setContainImageButton(true);
-            } else if((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")){
+            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("picture")){
+                Image image = ((Rectangle)component).convertToImage();
+                form.frontendComponentList.add(image);
+                form.setContainImage(true);
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("chart")){
+                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
+                Chart fixedChart = ((Group) component).convertToFixedChart();
+                form.frontendComponentList.add(fixedChart);
+                form.setContainChart(true);
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("dropdown")){
+                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
+                Dropdown dropdown = ((Group) component).convertToDropdown();
+                form.frontendComponentList.add(dropdown);
+                form.setContainDropdown(true);
+            }else if((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")){
                 switch (component.getType()){
                     case "RECTANGLE":
                         Rectangle rectangle = (Rectangle)component;
@@ -298,6 +313,13 @@ public class Group extends FigmaComponent {
         dropdown.setPositionX(this.getPositionX());
         dropdown.setPositionY(this.getPositionY());
         dropdown.setAlign(this.getAlign());
+
+        for(FigmaComponent component : this.componentMap.values()){
+            if(component.getType().equals("TEXT") && component.getName().toLowerCase().contains("option")){
+                String option = ((Text)component).getCharacters();
+                dropdown.setOption(option);
+            }
+        }
 
         return dropdown;
     }

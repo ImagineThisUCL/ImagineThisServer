@@ -89,6 +89,15 @@ public class WireframeComponent{
                 if(!isContainTextBox && form.isContainTextBox()){
                     isContainTextBox = true;
                 }
+                if(!isContainImage && form.isContainImage()){
+                    isContainImage = true;
+                }
+                if(!isContainChart && form.isContainChart()){
+                    isContainChart = true;
+                }
+                if(!isContainDropdown && form.isContainDropdown()){
+                    isContainDropdown = true;
+                }
                 frontendComponentList.add(form);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
                 Slider slider = ((Group) component).convertSlider();

@@ -43,6 +43,7 @@ public class CodeGeneratorTest {
 //        nameList.add("Headspace");
 //        nameList.add("Dementia Support");
 //        nameList.add("Calls made v Well-being");
+        nameList.add("Auto Populated Mesage 1");
         nameList.add("Auto Populated Mesage 2");
         generatePage(nameList,
                 figmaTreeStructure,
