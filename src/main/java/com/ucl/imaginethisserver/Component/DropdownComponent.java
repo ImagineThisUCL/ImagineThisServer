@@ -47,7 +47,7 @@ public class DropdownComponent {
                 "        return (\n" +
                 "            <ModalSelector\n" +
                 "                data={items}\n" +
-                "                initValue=\"Please select\"\n" +
+                "                selectedKey={items[0].key}\n" +
                 "                selectStyle={containerStyle}\n" +
                 "                style={styles.rootContainer}\n" +
                 "                selectTextStyle={textStyle}\n" +
