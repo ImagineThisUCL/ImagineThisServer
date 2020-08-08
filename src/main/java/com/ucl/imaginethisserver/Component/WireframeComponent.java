@@ -13,7 +13,9 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
-    private boolean isContainText, isContainButton, isContainTextBox, isContainForm, isContainSideBar, isContainImageButton;
+    private boolean isContainText, isContainButton, isContainTextBox,
+            isContainForm, isContainSideBar, isContainImageButton,
+            isContainSwitch;
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -31,6 +33,12 @@ public class WireframeComponent{
                 frontendComponentList.add(frontendText);
                 if(!isContainText){
                     isContainText = true;
+                }
+            }else if(component.getName().toLowerCase().contains("type:switch")){
+                Switch aSwitch = component.convertSwitch();
+                frontendComponentList.add(aSwitch);
+                if(!isContainSwitch){
+                    isContainSwitch = true;
                 }
             }
             // if this component is a button
@@ -84,7 +92,6 @@ public class WireframeComponent{
                 if(!isContainSideBar){
                     isContainSideBar = true;
                 }
-
                 frontendComponentList.add(slider);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")){
                 ImageButton imageButton = ((Group) component).convertImageButton(projectID,accessToken,authenticateType);
@@ -98,8 +105,18 @@ public class WireframeComponent{
 
     public String generateImportCode() throws IOException {
        StringBuilder importCode = new StringBuilder();
-       importCode.append("import { View, ScrollView } from \"react-native\"\n" +
-               "import React, { Component } from \"react\"" + "\n");
+       importCode.append("import { View, ScrollView");
+       if(isContainSwitch){
+           importCode.append(", Switch");
+       }
+       importCode.append(" } from \"react-native\"\n");
+       
+       importCode.append("import React, { Component");
+       if(isContainSwitch){
+            importCode.append(", useState ");
+       }
+       importCode.append(" } from \"react\"" + "\n");
+
        importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
        CodeGenerator.writeBaseStyleCode();
        if(isContainText){
