@@ -92,6 +92,9 @@ public class WireframeComponent{
                 if(!isContainTextBox && form.isContainTextBox()){
                     isContainTextBox = true;
                 }
+                if(!isContainSwitch && form.isContainSwitch()){
+                    isContainSwitch = true;
+                }
                 frontendComponentList.add(form);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
                 Slider slider = ((Group) component).convertSlider();
@@ -121,15 +124,9 @@ public class WireframeComponent{
       if(isContainImage){
           importCode.append(", Image");
       }
-      if(isContainSwitch){
-           importCode.append(", Switch");
-       }
        importCode.append(" } from \"react-native\"\n");
 
        importCode.append("import React, { Component");
-       if(isContainSwitch){
-            importCode.append(", useState ");
-       }
        importCode.append(" } from \"react\"" + "\n");
 
        importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
@@ -158,6 +155,10 @@ public class WireframeComponent{
             importCode.append("import ImageButton from \"../reusables/ImageButton\"").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.IMAGE_BUTTON);
         }
+        if(isContainSwitch){
+            importCode.append("import Toggle from \"../reusables/Toggle\"").append("\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.SWITCH);
+        }
         if(isContainChart){
             importCode.append("import {\n")
                     .append("  LineChart,\n")
@@ -176,9 +177,6 @@ public class WireframeComponent{
         viewCode.append("render() {\n");
         if(isContainChart){
             viewCode.append(FixedChartComponent.generateCode());
-        }
-        if(isContainSwitch){
-            viewCode.append(FixedSwitchComponent.generateCode());
         }
         viewCode.append("        return (\n" +
                 "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");

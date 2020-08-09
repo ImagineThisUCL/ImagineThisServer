@@ -15,7 +15,8 @@ public class Form extends FrontendComponent{
     private FigmaColor borderColor;
     private double cornerRadius;
     private double borderWidth;
-    private boolean isContainText, isContainButton, isContainTextBox,isContainImageButton;
+    private boolean isContainText, isContainButton, isContainTextBox,
+            isContainImageButton, isContainSwitch;
 
     public FigmaColor getBackgroundColor() {
         return backgroundColor;
@@ -96,6 +97,10 @@ public class Form extends FrontendComponent{
         isContainImageButton = containImageButton;
     }
 
+    public void setContainSwitch(boolean containSwitch) {
+        isContainSwitch = containSwitch;
+    }
+
     public void setBorderColor(FigmaColor borderColor) {
         this.borderColor = borderColor;
     }
@@ -118,5 +123,9 @@ public class Form extends FrontendComponent{
 
     public boolean isContainImageButton() {
         return isContainImageButton;
+    }
+
+    public boolean isContainSwitch() {
+        return isContainSwitch;
     }
 }

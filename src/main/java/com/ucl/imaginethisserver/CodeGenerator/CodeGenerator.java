@@ -52,6 +52,10 @@ public class CodeGenerator {
                 outputCode = ImageButtonComponent.generateCode();
                 fileName = "ImageButton.js";
                 break;
+            case SWITCH:
+                outputCode = SwitchComponent.generateCode();
+                fileName = "Toggle.js";
+                break;
         }
         generateOutputFolder();
         File cfile = new File("OutputApp/components");
