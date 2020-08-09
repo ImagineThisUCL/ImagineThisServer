@@ -16,7 +16,7 @@ public class WireframeComponent{
 
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainForm, isContainSideBar, isContainImageButton,
-            isContainImage, isContainChart;
+            isContainImage, isContainChart, isContainMap;
 
     private FigmaColor backgroundColor;
     private String backgroundImage;
@@ -42,6 +42,12 @@ public class WireframeComponent{
                 frontendComponentList.add(image);
                 if(!isContainImage){
                     isContainImage = true;
+                }
+            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("map")){
+                Map map = ((Rectangle)component).convertToMap();
+                frontendComponentList.add(map);
+                if(!isContainMap){
+                    isContainMap = true;
                 }
             }
               // if this component is a button
@@ -153,6 +159,10 @@ public class WireframeComponent{
                     .append("  BarChart,\n")
                     .append("  PieChart\n")
                     .append("} from \"react-native-chart-kit\"").append("\n");
+        }
+        if(isContainMap){
+            importCode.append("import GoogleMap from \"../reusables/GoogleMap\"").append("\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.GOOGLE_MAP);
         }
        importCode.append("\n");
 

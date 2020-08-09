@@ -52,6 +52,10 @@ public class CodeGenerator {
                 outputCode = ImageButtonComponent.generateCode();
                 fileName = "ImageButton.js";
                 break;
+            case GOOGLE_MAP:
+                outputCode = GoogleMapComponent.generateCode();
+                fileName = "GoogleMap.js";
+                break;
         }
         generateOutputFolder();
         File cfile = new File("OutputApp/components");
