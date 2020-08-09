@@ -15,7 +15,8 @@ public class WireframeComponent{
     private static boolean IS_CONTAIN_NAVBAR;
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainForm, isContainSideBar, isContainImageButton,
-            isContainImage, isContainChart, isContainSwitch;
+            isContainImage, isContainChart, isContainSwitch,
+            isContainDropdown;
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -92,7 +93,15 @@ public class WireframeComponent{
                 if(!isContainTextBox && form.isContainTextBox()){
                     isContainTextBox = true;
                 }
-                if(!isContainSwitch && form.isContainSwitch()){
+                if(!isContainImage && form.isContainImage()){
+                    isContainImage = true;
+                }
+                if(!isContainChart && form.isContainChart()){
+                    isContainChart = true;
+                }
+                if(!isContainDropdown && form.isContainDropdown()){
+                    isContainDropdown = true;
+                }if(!isContainSwitch && form.isContainSwitch()){
                     isContainSwitch = true;
                 }
                 frontendComponentList.add(form);
@@ -114,6 +123,12 @@ public class WireframeComponent{
                     isContainChart = true;
                 }
                 frontendComponentList.add(fixedChart);
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("dropdown")){
+                Dropdown dropdown = ((Group) component).convertToDropdown();
+                if(!isContainDropdown){
+                    isContainDropdown = true;
+                }
+                frontendComponentList.add(dropdown);
             }
         }
     }
@@ -132,18 +147,18 @@ public class WireframeComponent{
        importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
        CodeGenerator.writeBaseStyleCode();
        if(isContainText || isContainChart){
-           importCode.append("import P from '../reusables/P'" + "\n");
+           importCode.append("import P from '../reusables/P'").append("\n");
            CodeGenerator.writeReusableComponentCode(ReusableComponent.P);
        }
        if(isContainButton){
-            importCode.append("import Button from '../reusables/Button'" + "\n");
+            importCode.append("import Button from '../reusables/Button'").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
        }
        if(IS_CONTAIN_NAVBAR){
-           importCode.append("import { StatusBar } from 'expo-status-bar'" + "\n");
+           importCode.append("import { StatusBar } from 'expo-status-bar'").append("\n");
        }
         if(isContainTextBox){
-            importCode.append("import InputField from '../reusables/InputField'" + "\n");
+            importCode.append("import InputField from '../reusables/InputField'").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD);
         }
 
@@ -165,6 +180,10 @@ public class WireframeComponent{
                     .append("  BarChart,\n")
                     .append("  PieChart\n")
                     .append("} from \"react-native-chart-kit\"").append("\n");
+        }
+        if(isContainDropdown){
+            importCode.append("import Dropdown from \"../reusables/Dropdown\"").append("\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.DROPDOWN);
         }
        importCode.append("\n");
 
@@ -209,7 +228,7 @@ public class WireframeComponent{
                 viewCode.append(" </View>" + "\n");
             }
         }
-        viewCode.append("  </ScrollView>\n" +
+        viewCode.append("            </ScrollView>\n" +
                 "        )\n" +
                 "    }\n" +
                 "}\n" +

@@ -56,6 +56,11 @@ public class CodeGenerator {
                 outputCode = SwitchComponent.generateCode();
                 fileName = "Toggle.js";
                 break;
+            case DROPDOWN:
+                outputCode = DropdownComponent.generateCode();
+                fileName = "Dropdown.js";
+                break;
+
         }
         generateOutputFolder();
         File cfile = new File("OutputApp/components");
