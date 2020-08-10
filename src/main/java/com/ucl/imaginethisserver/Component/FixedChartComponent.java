@@ -22,8 +22,6 @@ public class FixedChartComponent {
                 "            strokeWidth: 2, // optional, default 3\n" +
                 "            barPercentage: 0.5,\n" +
                 "            useShadowColorFromDataset: true // optional\n" +
-                "        }\n" +
-                "\n" +
-                "        const CHART_WIDTH = base.window.width - base.padding*4\n";
+                "        }\n";
     }
 }

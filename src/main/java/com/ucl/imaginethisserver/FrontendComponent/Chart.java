@@ -12,8 +12,8 @@ public class Chart extends FrontendComponent {
         code.append("<View style={{padding: 10, backgroundColor: \"#ffffff\", borderRadius: 10, marginBottom: 10}}>\n" +
                 "<LineChart\n" +
                 "data={LINE_CHART_DATA}\n" +
-                "width={CHART_WIDTH}\n" +
-                "height={256}\n" +
+                "width={" + this.width + "}\n" +
+                "height={" + this.height + "}\n" +
                 "chartConfig={LINE_CHART_CONFIG}\n" +
                 "bezier/>\n" +
                 "</View>\n");
