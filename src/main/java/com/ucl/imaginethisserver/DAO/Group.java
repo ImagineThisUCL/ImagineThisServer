@@ -147,6 +147,10 @@ public class Group extends FigmaComponent {
             for (FigmaComponent component : this.componentMap.values()) {
                 if (component.getType().equals("GROUP") && component.getName().contains("button")) {
                     NavButton navButton = new NavButton();
+                    navButton.setWidth(component.getWidth());
+                    navButton.setHeight(component.getHeight());
+                    navButton.setPositionX(component.getPositionX());
+                    navButton.setPositionY(component.getPositionY());
                     ((Group) component).loadComponent(projectID, accessToken, authenticateType);
                     for (FigmaComponent childComponent : ((Group) component).getComponentMap().values()) {
                         if (childComponent.getType().equals("TEXT")) {
@@ -224,8 +228,13 @@ public class Group extends FigmaComponent {
                 ImageButton imageButton = ((Group)component).convertImageButton(projectID,accessToken,authenticateType);
                 form.frontendComponentList.add(imageButton);
                 form.setContainImageButton(true);
-            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("picture")){
-                Image image = ((Rectangle)component).convertToImage();
+            }else if((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && component.getName().toLowerCase().contains("picture")){
+                Image image;
+                if(component.getType().equals("RECTANGLE")) {
+                    image = ((Rectangle) component).convertToImage();
+                }else{
+                    image = ((Group)component).convertToImage();
+                }
                 form.frontendComponentList.add(image);
                 form.setContainImage(true);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("chart")){
@@ -332,6 +341,16 @@ public class Group extends FigmaComponent {
         }
 
         return dropdown;
+    }
+
+    public Image convertToImage(){
+        Image image = new Image();
+        image.setWidth(this.getWidth());
+        image.setHeight(this.getHeight());
+        image.setPositionX(this.getPositionX());
+        image.setPositionY(this.getPositionY());
+        image.setImageURL(this.getImageURL());
+        return image;
     }
 
 }

@@ -62,19 +62,38 @@ public class Form extends FrontendComponent{
         }else{
             code.append("<View style={{borderRadius: " + this.cornerRadius + " , margin: 0, padding: 10, backgroundColor: " + backgroundColorStr +"}}>").append("\n");
         }
+        int preY = this.positionY;
         if(this.frontendComponentList.size() > 0) {
             ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(this.frontendComponentList);
             for (List<FrontendComponent> curList : inlineComponentList) {
                 if (curList.size() == 1) {
-                    code.append("<View style={{flexDirection: 'row'}}>\n");
+                    int marginTop = Math.max(curList.get(0).getPositionY() - preY, 0);
+                    if(curList.get(0).getAlign().equals("RIGHT")){
+                        code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + ", justifyContent: \"flex-end\"}}>\n");
+                    }else {
+                        code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + "}}>\n");
+                    }
                     code.append(curList.get(0).generateCode()).append("\n");
                     code.append("</View>\n");
+                    preY = curList.get(0).getPositionY() + curList.get(0).getHeight();
                 } else if (curList.size() > 1) {
-                    code.append("<View style={{flexDirection: 'row', justifyContent: \"space-between\"}}>\n");
+                    int minY = Integer.MAX_VALUE;
+                    int maxY = -1;
+                    for(FrontendComponent component : curList){
+                        if(component.getPositionY() < minY){
+                            minY = component.getPositionY();
+                        }
+                    }
+                    int marginTop = Math.max(minY - preY, 0);
+                    code.append("<View style={{flexDirection: 'row', justifyContent: \"space-between\", marginTop: " + marginTop +"}}>\n");
                     for (FrontendComponent component : curList) {
                         code.append(component.generateCode()).append("\n");
+                        if(component.getPositionY() + component.getHeight() > maxY){
+                            maxY = component.getPositionY() + component.getHeight();
+                        }
                     }
                     code.append("</View>\n");
+                    preY = maxY;
                 }
             }
         }

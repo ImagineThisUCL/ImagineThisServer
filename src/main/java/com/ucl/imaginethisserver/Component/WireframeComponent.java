@@ -35,8 +35,13 @@ public class WireframeComponent{
                 if(!isContainText){
                     isContainText = true;
                 }
-            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("picture")){
-                Image image = ((Rectangle)component).convertToImage();
+            }else if((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && component.getName().toLowerCase().contains("picture")){
+                Image image;
+                if(component.getType().equals("RECTANGLE")) {
+                    image = ((Rectangle) component).convertToImage();
+                }else{
+                    image = ((Group)component).convertToImage();
+                }
                 frontendComponentList.add(image);
                 if(!isContainImage){
                     isContainImage = true;
@@ -201,31 +206,44 @@ public class WireframeComponent{
                 "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
 
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
+        int preY = 0;
         for(List<FrontendComponent> curList : inlineComponentList){
             //There is only one component in this line
             if(curList.size() == 1){
+                int marginTop = Math.max(curList.get(0).getPositionY() - preY, 0);
                 String alignCode = "";
                 String align = curList.get(0).getAlign();
                 switch (align){
                     case "RIGHT":
-                        alignCode = "<View style={{flexDirection: \"row\", justifyContent: \"flex-end\"}}>\n";
+                        alignCode = "<View style={{flexDirection: \"row\", justifyContent: \"flex-end\", marginTop: " + marginTop + "}}>\n";
                         break;
                     default:
-                        alignCode = "";
+                        alignCode = "<View style={{marginTop: " + marginTop +"}}>\n";
                 }
                 viewCode.append(alignCode);
                 viewCode.append(curList.get(0).generateCode()).append("\n");
                 // If the component is align to right;
-                if(alignCode.length() > 0){
-                    viewCode.append("</View>\n");
-                }
+                viewCode.append("</View>\n");
+                preY = curList.get(0).getPositionY() + curList.get(0).getHeight();
 
             }else if(curList.size() > 1){
-                viewCode.append("<View style={{flexDirection: \"row\", justifyContent: \"space-between\"}}>" + "\n");
+                int minY = Integer.MAX_VALUE;
+                int maxY = -1;
+                for(FrontendComponent component : curList){
+                   if(component.getPositionY() < minY){
+                       minY = component.getPositionY();
+                   }
+                }
+                int marginTop = Math.max(minY - preY, 0);
+                viewCode.append("<View style={{flexDirection: \"row\", justifyContent: \"space-between\", marginTop: " + marginTop + "}}>" + "\n");
                 for(FrontendComponent component : curList){
                     viewCode.append(component.generateCode()).append("\n");
+                    if(component.getPositionY() + component.getHeight() > maxY){
+                        maxY = component.getPositionY() + component.getHeight();
+                    }
                 }
                 viewCode.append(" </View>" + "\n");
+                preY = maxY;
             }
         }
         viewCode.append("            </ScrollView>\n" +

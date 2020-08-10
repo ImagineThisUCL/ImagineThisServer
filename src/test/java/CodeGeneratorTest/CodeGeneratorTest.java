@@ -33,15 +33,18 @@ public class CodeGeneratorTest {
         }
         ArrayList<String> nameList = new ArrayList<>();
 //        nameList.add("Set Up");
-//        nameList.add("Information to populat messages");
+        nameList.add("Information to populat messages");
 //        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
-        nameList.add("Start Passive Tracking and Reporting");
+//        nameList.add("Start Passive Tracking and Reporting");
 //        nameList.add("Report for Sharing");
 //        nameList.add("Wellbeing by Activity");
 //        nameList.add("Wellbeing Network");
 //        nameList.add("Age Connect");
 //        nameList.add("Friend of Mine");
+//        nameList.add("Auto Populated Mesage 1");
+//        nameList.add("Auto Populated Mesage 2");
+//        nameList.add("Home Page: Weekly");
         generatePage(nameList,
                 figmaTreeStructure,
                 projectID,

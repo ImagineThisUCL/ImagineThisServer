@@ -75,7 +75,7 @@ public class CodeGenerator {
     }
 
     public static void writeWireframeCode(String wireframeName, Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
-        wireframeName = wireframeName.replaceAll(" ","");
+        wireframeName = wireframeName.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ ]","");
         String outputCode = "";
         WireframeComponent wireframeComponent = new WireframeComponent(wireframe,projectID, accessToken, authenticateType);
         outputCode = wireframeComponent.generateCode(wireframeName);
