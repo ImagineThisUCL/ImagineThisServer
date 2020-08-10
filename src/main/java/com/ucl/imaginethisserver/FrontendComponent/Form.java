@@ -17,7 +17,7 @@ public class Form extends FrontendComponent{
     private double borderWidth;
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainImageButton, isContainImage, isContainChart,
-            isContainDropdown;
+            isContainDropdown, isContainSwitch;
 
     public FigmaColor getBackgroundColor() {
         return backgroundColor;
@@ -110,6 +110,10 @@ public class Form extends FrontendComponent{
         isContainDropdown = containDropdown;
     }
 
+    public void setContainSwitch(boolean containSwitch) {
+        isContainSwitch = containSwitch;
+    }
+
     public void setBorderColor(FigmaColor borderColor) {
         this.borderColor = borderColor;
     }
@@ -133,16 +137,16 @@ public class Form extends FrontendComponent{
     public boolean isContainImageButton() {
         return isContainImageButton;
     }
-
     public boolean isContainImage() {
         return isContainImage;
     }
-
     public boolean isContainChart() {
         return isContainChart;
     }
-
     public boolean isContainDropdown() {
         return isContainDropdown;
+    }
+    public boolean isContainSwitch() {
+        return isContainSwitch;
     }
 }

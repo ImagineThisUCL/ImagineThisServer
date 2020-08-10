@@ -205,6 +205,10 @@ public class Group extends FigmaComponent {
                 FrontendText text = ((Text)component).convertToFrontendText();
                 form.frontendComponentList.add(text);
                 form.setContainText(true);
+            }else if(component.getName().toLowerCase().contains("switch")){
+                Switch aSwitch = component.convertSwitch();
+                form.frontendComponentList.add(aSwitch);
+                form.setContainSwitch(true);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbox")){
                 ((Group)component).loadComponent(projectID,accessToken,authenticateType);
                 TextBox textBox = ((Group)component).convertTextBox();

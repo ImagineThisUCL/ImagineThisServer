@@ -13,11 +13,10 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
-
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainForm, isContainSideBar, isContainImageButton,
-            isContainImage, isContainChart, isContainDropdown;
-
+            isContainImage, isContainChart, isContainSwitch,
+            isContainDropdown;
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -36,12 +35,17 @@ public class WireframeComponent{
                 if(!isContainText){
                     isContainText = true;
                 }
-
             }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("picture")){
                 Image image = ((Rectangle)component).convertToImage();
                 frontendComponentList.add(image);
                 if(!isContainImage){
                     isContainImage = true;
+                }
+            }else if(component.getName().toLowerCase().contains("switch")){
+                Switch aSwitch = component.convertSwitch();
+                frontendComponentList.add(aSwitch);
+                if(!isContainSwitch){
+                    isContainSwitch = true;
                 }
             }
               // if this component is a button
@@ -97,6 +101,8 @@ public class WireframeComponent{
                 }
                 if(!isContainDropdown && form.isContainDropdown()){
                     isContainDropdown = true;
+                }if(!isContainSwitch && form.isContainSwitch()){
+                    isContainSwitch = true;
                 }
                 frontendComponentList.add(form);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
@@ -104,7 +110,6 @@ public class WireframeComponent{
                 if(!isContainSideBar){
                     isContainSideBar = true;
                 }
-
                 frontendComponentList.add(slider);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")){
                 ImageButton imageButton = ((Group) component).convertImageButton(projectID,accessToken,authenticateType);
@@ -131,12 +136,15 @@ public class WireframeComponent{
     public String generateImportCode() throws IOException {
        StringBuilder importCode = new StringBuilder();
        importCode.append("import { View, ScrollView");
-       if(isContainImage){
-           importCode.append(", Image");
-       }
+      if(isContainImage){
+          importCode.append(", Image");
+      }
        importCode.append(" } from \"react-native\"\n");
-       importCode.append("import React, { Component } from \"react\"").append("\n");
-       importCode.append("import base from \"../../assets/baseStyle\"").append("\n");
+
+       importCode.append("import React, { Component");
+       importCode.append(" } from \"react\"" + "\n");
+
+       importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
        CodeGenerator.writeBaseStyleCode();
        if(isContainText || isContainChart){
            importCode.append("import P from '../reusables/P'").append("\n");
@@ -161,6 +169,10 @@ public class WireframeComponent{
         if(isContainImageButton){
             importCode.append("import ImageButton from \"../reusables/ImageButton\"").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.IMAGE_BUTTON);
+        }
+        if(isContainSwitch){
+            importCode.append("import Toggle from \"../reusables/Toggle\"").append("\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.SWITCH);
         }
         if(isContainChart){
             importCode.append("import {\n")

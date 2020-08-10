@@ -36,15 +36,12 @@ public class CodeGeneratorTest {
 //        nameList.add("Information to populat messages");
 //        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
-//        nameList.add("Start Passive Tracking and Reporting");
+        nameList.add("Start Passive Tracking and Reporting");
 //        nameList.add("Report for Sharing");
+//        nameList.add("Wellbeing by Activity");
 //        nameList.add("Wellbeing Network");
-//        nameList.add("Torfaen");
-//        nameList.add("Headspace");
-//        nameList.add("Dementia Support");
-//        nameList.add("Calls made v Well-being");
-        nameList.add("Auto Populated Mesage 1");
-        nameList.add("Auto Populated Mesage 2");
+//        nameList.add("Age Connect");
+//        nameList.add("Friend of Mine");
         generatePage(nameList,
                 figmaTreeStructure,
                 projectID,
