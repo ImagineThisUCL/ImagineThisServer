@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.DAO;
 
 import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
 import com.ucl.imaginethisserver.FrontendComponent.Image;
+import com.ucl.imaginethisserver.FrontendComponent.Map;
 
 import java.util.List;
 
@@ -66,6 +67,16 @@ public class Rectangle extends FigmaComponent {
         image.setPositionY(this.getPositionY());
         image.setAlign(this.getAlign());
         image.setImageURL(this.getImageURL());
+        return image;
+    }
+    public Map convertToMap(){
+        Map image = new Map();
+        image.setWidth(this.getWidth());
+        image.setHeight(this.getHeight());
+        image.setPositionX(this.getPositionX());
+        image.setPositionY(this.getPositionY());
+        image.setAlign(this.getAlign());
+
         return image;
     }
 }

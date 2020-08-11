@@ -52,6 +52,10 @@ public class CodeGenerator {
                 outputCode = ImageButtonComponent.generateCode();
                 fileName = "ImageButton.js";
                 break;
+            case GOOGLE_MAP:
+                outputCode = GoogleMapComponent.generateCode();
+                fileName = "GoogleMap.js";
+                break;
             case SWITCH:
                 outputCode = SwitchComponent.generateCode();
                 fileName = "Toggle.js";
@@ -60,7 +64,6 @@ public class CodeGenerator {
                 outputCode = DropdownComponent.generateCode();
                 fileName = "Dropdown.js";
                 break;
-
         }
         generateOutputFolder();
         File cfile = new File("OutputApp/components");

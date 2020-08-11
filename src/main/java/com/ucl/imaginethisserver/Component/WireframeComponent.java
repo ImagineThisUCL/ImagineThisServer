@@ -15,8 +15,9 @@ public class WireframeComponent{
     private static boolean IS_CONTAIN_NAVBAR;
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainForm, isContainSideBar, isContainImageButton,
-            isContainImage, isContainChart, isContainSwitch,
-            isContainDropdown;
+            isContainImage, isContainChart, isContainMap, 
+            isContainSwitch, isContainDropdown;
+
     private FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
@@ -45,6 +46,12 @@ public class WireframeComponent{
                 frontendComponentList.add(image);
                 if(!isContainImage){
                     isContainImage = true;
+                }
+            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("map")){
+                Map map = ((Rectangle)component).convertToMap();
+                frontendComponentList.add(map);
+                if(!isContainMap){
+                    isContainMap = true;
                 }
             }else if(component.getName().toLowerCase().contains("switch")){
                 Switch aSwitch = component.convertSwitch();
@@ -186,6 +193,10 @@ public class WireframeComponent{
                     .append("  BarChart,\n")
                     .append("  PieChart\n")
                     .append("} from \"react-native-chart-kit\"").append("\n");
+        }
+        if(isContainMap){
+            importCode.append("import GoogleMap from \"../reusables/GoogleMap\"").append("\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.GOOGLE_MAP);
         }
         if(isContainDropdown){
             importCode.append("import Dropdown from \"../reusables/Dropdown\"").append("\n");
