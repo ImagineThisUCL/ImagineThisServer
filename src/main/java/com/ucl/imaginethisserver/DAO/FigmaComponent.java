@@ -2,6 +2,8 @@ package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ucl.imaginethisserver.FrontendComponent.Button;
+import com.ucl.imaginethisserver.FrontendComponent.Switch;
 
 public class FigmaComponent {
     private String id;
@@ -62,7 +64,6 @@ public class FigmaComponent {
         }
     }
 
-
     public int getHeight() {
         return height;
     }
@@ -81,6 +82,20 @@ public class FigmaComponent {
 
     public String getAlign() {
         return align;
+    }
+
+    public Switch convertSwitch(){
+        Switch aSwitch = new Switch();
+        aSwitch.setPositionX(this.getPositionX());
+        aSwitch.setPositionY(this.getPositionY());
+        aSwitch.setWidth(this.getWidth());
+        aSwitch.setHeight(this.getHeight());
+        aSwitch.setAlign(this.getAlign());
+        return aSwitch;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
 

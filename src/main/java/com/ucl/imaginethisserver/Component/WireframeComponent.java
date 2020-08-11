@@ -13,10 +13,10 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
-
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainForm, isContainSideBar, isContainImageButton,
-            isContainImage, isContainChart, isContainMap;
+            isContainImage, isContainChart, isContainMap, 
+            isContainSwitch, isContainDropdown;
 
     private FigmaColor backgroundColor;
     private String backgroundImage;
@@ -36,9 +36,13 @@ public class WireframeComponent{
                 if(!isContainText){
                     isContainText = true;
                 }
-
-            }else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("picture")){
-                Image image = ((Rectangle)component).convertToImage();
+            }else if((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && component.getName().toLowerCase().contains("picture")){
+                Image image;
+                if(component.getType().equals("RECTANGLE")) {
+                    image = ((Rectangle) component).convertToImage();
+                }else{
+                    image = ((Group)component).convertToImage();
+                }
                 frontendComponentList.add(image);
                 if(!isContainImage){
                     isContainImage = true;
@@ -48,6 +52,12 @@ public class WireframeComponent{
                 frontendComponentList.add(map);
                 if(!isContainMap){
                     isContainMap = true;
+                }
+            }else if(component.getName().toLowerCase().contains("switch")){
+                Switch aSwitch = component.convertSwitch();
+                frontendComponentList.add(aSwitch);
+                if(!isContainSwitch){
+                    isContainSwitch = true;
                 }
             }
               // if this component is a button
@@ -64,9 +74,10 @@ public class WireframeComponent{
                     isContainTextBox = true;
                 }
             }
-            else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("navigation")){
+            else if(component.getType().equals("GROUP")&& component.getName().toLowerCase().contains("navigation")){
                 if(NAV_BAR == null) {
                     NAV_BAR = ((Group) component).convertNavBar(projectID, accessToken, authenticateType);
+
                 }
                 for(String navText : NavBar.BUTTON_MAP.keySet()){
                     if(NavBar.BUTTON_MAP.get(navText).equals("Placeholder")){
@@ -95,13 +106,23 @@ public class WireframeComponent{
                 if(!isContainTextBox && form.isContainTextBox()){
                     isContainTextBox = true;
                 }
+                if(!isContainImage && form.isContainImage()){
+                    isContainImage = true;
+                }
+                if(!isContainChart && form.isContainChart()){
+                    isContainChart = true;
+                }
+                if(!isContainDropdown && form.isContainDropdown()){
+                    isContainDropdown = true;
+                }if(!isContainSwitch && form.isContainSwitch()){
+                    isContainSwitch = true;
+                }
                 frontendComponentList.add(form);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
                 Slider slider = ((Group) component).convertSlider();
                 if(!isContainSideBar){
                     isContainSideBar = true;
                 }
-
                 frontendComponentList.add(slider);
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")){
                 ImageButton imageButton = ((Group) component).convertImageButton(projectID,accessToken,authenticateType);
@@ -115,6 +136,12 @@ public class WireframeComponent{
                     isContainChart = true;
                 }
                 frontendComponentList.add(fixedChart);
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("dropdown")){
+                Dropdown dropdown = ((Group) component).convertToDropdown();
+                if(!isContainDropdown){
+                    isContainDropdown = true;
+                }
+                frontendComponentList.add(dropdown);
             }
         }
     }
@@ -122,26 +149,29 @@ public class WireframeComponent{
     public String generateImportCode() throws IOException {
        StringBuilder importCode = new StringBuilder();
        importCode.append("import { View, ScrollView");
-       if(isContainImage){
-           importCode.append(", Image");
-       }
+      if(isContainImage){
+          importCode.append(", Image");
+      }
        importCode.append(" } from \"react-native\"\n");
-       importCode.append("import React, { Component } from \"react\"" + "\n");
+
+       importCode.append("import React, { Component");
+       importCode.append(" } from \"react\"" + "\n");
+
        importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
        CodeGenerator.writeBaseStyleCode();
        if(isContainText || isContainChart){
-           importCode.append("import P from '../reusables/P'" + "\n");
+           importCode.append("import P from '../reusables/P'").append("\n");
            CodeGenerator.writeReusableComponentCode(ReusableComponent.P);
        }
        if(isContainButton){
-            importCode.append("import Button from '../reusables/Button'" + "\n");
+            importCode.append("import Button from '../reusables/Button'").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
        }
        if(IS_CONTAIN_NAVBAR){
-           importCode.append("import { StatusBar } from 'expo-status-bar'" + "\n");
+           importCode.append("import { StatusBar } from 'expo-status-bar'").append("\n");
        }
         if(isContainTextBox){
-            importCode.append("import InputField from '../reusables/InputField'" + "\n");
+            importCode.append("import InputField from '../reusables/InputField'").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD);
         }
 
@@ -153,6 +183,10 @@ public class WireframeComponent{
             importCode.append("import ImageButton from \"../reusables/ImageButton\"").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.IMAGE_BUTTON);
         }
+        if(isContainSwitch){
+            importCode.append("import Toggle from \"../reusables/Toggle\"").append("\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.SWITCH);
+        }
         if(isContainChart){
             importCode.append("import {\n")
                     .append("  LineChart,\n")
@@ -163,6 +197,10 @@ public class WireframeComponent{
         if(isContainMap){
             importCode.append("import GoogleMap from \"../reusables/GoogleMap\"").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.GOOGLE_MAP);
+        }
+        if(isContainDropdown){
+            importCode.append("import Dropdown from \"../reusables/Dropdown\"").append("\n");
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.DROPDOWN);
         }
        importCode.append("\n");
 
@@ -180,31 +218,44 @@ public class WireframeComponent{
                 "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
 
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
+        int preY = 0;
         for(List<FrontendComponent> curList : inlineComponentList){
             //There is only one component in this line
             if(curList.size() == 1){
+                int marginTop = Math.max(curList.get(0).getPositionY() - preY, 0);
                 String alignCode = "";
                 String align = curList.get(0).getAlign();
                 switch (align){
                     case "RIGHT":
-                        alignCode = "<View style={{flexDirection: \"row\", justifyContent: \"flex-end\"}}>\n";
+                        alignCode = "<View style={{flexDirection: \"row\", justifyContent: \"flex-end\", marginTop: " + marginTop + "}}>\n";
                         break;
                     default:
-                        alignCode = "";
+                        alignCode = "<View style={{marginTop: " + marginTop +"}}>\n";
                 }
                 viewCode.append(alignCode);
                 viewCode.append(curList.get(0).generateCode()).append("\n");
                 // If the component is align to right;
-                if(alignCode.length() > 0){
-                    viewCode.append("</View>\n");
-                }
+                viewCode.append("</View>\n");
+                preY = curList.get(0).getPositionY() + curList.get(0).getHeight();
 
             }else if(curList.size() > 1){
-                viewCode.append("<View style={{flexDirection: \"row\", justifyContent: \"space-between\"}}>" + "\n");
+                int minY = Integer.MAX_VALUE;
+                int maxY = -1;
+                for(FrontendComponent component : curList){
+                   if(component.getPositionY() < minY){
+                       minY = component.getPositionY();
+                   }
+                }
+                int marginTop = Math.max(minY - preY, 0);
+                viewCode.append("<View style={{flexDirection: \"row\", justifyContent: \"space-between\", marginTop: " + marginTop + "}}>" + "\n");
                 for(FrontendComponent component : curList){
                     viewCode.append(component.generateCode()).append("\n");
+                    if(component.getPositionY() + component.getHeight() > maxY){
+                        maxY = component.getPositionY() + component.getHeight();
+                    }
                 }
                 viewCode.append(" </View>" + "\n");
+                preY = maxY;
             }
         }
         viewCode.append("            </ScrollView>\n" +

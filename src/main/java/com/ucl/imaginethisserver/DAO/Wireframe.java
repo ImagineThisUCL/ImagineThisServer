@@ -60,8 +60,9 @@ public class Wireframe {
                     componentMap.put(vector.getId(), vector);
                     componentList.add(vector);
                 }
-                case "GROUP" -> {
+                case "GROUP", "INSTANCE" -> {
                     Group group = new Gson().fromJson(jsonChild, Group.class);
+                    group.setType("GROUP");
                     String imageURL = imageJson.get(group.getId()).toString();
                     group.setImageURL(imageURL);
                     group.setWireframeBoundingBox(this.absoluteBoundingBox);
@@ -69,6 +70,7 @@ public class Wireframe {
                     componentMap.put(group.getId(), group);
                     componentList.add(group);
                 }
+
 
                 default -> {
                     FigmaComponent figmaComponent = new Gson().fromJson(jsonChild, FigmaComponent.class);

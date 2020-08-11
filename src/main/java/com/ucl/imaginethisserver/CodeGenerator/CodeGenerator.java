@@ -56,6 +56,14 @@ public class CodeGenerator {
                 outputCode = GoogleMapComponent.generateCode();
                 fileName = "GoogleMap.js";
                 break;
+            case SWITCH:
+                outputCode = SwitchComponent.generateCode();
+                fileName = "Toggle.js";
+                break;
+            case DROPDOWN:
+                outputCode = DropdownComponent.generateCode();
+                fileName = "Dropdown.js";
+                break;
         }
         generateOutputFolder();
         File cfile = new File("OutputApp/components");
@@ -70,7 +78,7 @@ public class CodeGenerator {
     }
 
     public static void writeWireframeCode(String wireframeName, Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
-        wireframeName = wireframeName.replaceAll(" ","");
+        wireframeName = wireframeName.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
         String outputCode = "";
         WireframeComponent wireframeComponent = new WireframeComponent(wireframe,projectID, accessToken, authenticateType);
         outputCode = wireframeComponent.generateCode(wireframeName);

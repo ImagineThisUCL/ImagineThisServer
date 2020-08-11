@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.FrontendComponent;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class NavBar extends FrontendComponent{
@@ -22,6 +23,16 @@ public class NavBar extends FrontendComponent{
     }
 
     public String generateCode(){
+        NAV_BUTTONS.sort(new Comparator<NavButton>() {
+            @Override
+            public int compare(NavButton o1, NavButton o2) {
+                if (o1.getPositionX() > o2.getPositionX()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+        });
         StringBuilder code = new StringBuilder();
         code.append("function NavigationBar() {\n" +
                 "    return (\n" +
@@ -40,7 +51,7 @@ public class NavBar extends FrontendComponent{
         for(NavButton navButton : NAV_BUTTONS){
             code.append(" <Tab.Screen\n" +
                     "                name=\"" + navButton.getText() + "\"\n" +
-                    "                component={" + BUTTON_MAP.get(navButton.getText()).replaceAll(" ","") + "}\n" +
+                    "                component={" + BUTTON_MAP.get(navButton.getText()).replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","") + "}\n" +
                     "                options={{\n" +
                     "                    tabBarIcon: () => {\n" +
                     "                        return (\n" +

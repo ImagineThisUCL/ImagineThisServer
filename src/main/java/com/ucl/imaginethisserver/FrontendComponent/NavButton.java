@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
-public class NavButton{
+public class NavButton extends FrontendComponent{
     private String text;
     private String iconURL;
 
