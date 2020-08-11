@@ -18,13 +18,13 @@ public class AppJSComponent {
         importCode.append("import { StyleSheet, Text, SafeAreaView, Image, StatusBar} from 'react-native';\n");
         HashSet<String> wireframeNameSet = new HashSet<>(NavBar.BUTTON_MAP.values());
         for (String wireframeName : wireframeNameSet) {
-            wireframeName = wireframeName.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ ]", "");
+            wireframeName = wireframeName.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
             importCode.append("import ").append(wireframeName).append(" from \"./components/views/").append(wireframeName).append("\"\n");
         }
         HashSet<String> importSet = new HashSet<>();
         for (String wireframeName : Navigator.NAVIGATOR_MAP.values()) {
             if (!wireframeNameSet.contains(wireframeName) && !importSet.contains(wireframeName)) {
-                wireframeName = wireframeName.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ ]", "");
+                wireframeName = wireframeName.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
                 importCode.append("import ").append(wireframeName).append(" from \"./components/views/").append(wireframeName).append("\"\n");
                 importSet.add(wireframeName);
             }
@@ -56,7 +56,7 @@ public class AppJSComponent {
         }
         for (String wireframeKey : Navigator.NAVIGATOR_MAP.keySet()) {
             String wireframeComponent = Navigator.NAVIGATOR_MAP.get(wireframeKey).replaceAll(" ", "");
-            viewCode.append("                    <Stack.Screen\n" + "                        name=\"").append(wireframeKey.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ ]", "")).append("\"\n").append("                        component={").append(wireframeComponent).append("}/>\n");
+            viewCode.append("                    <Stack.Screen\n" + "                        name=\"").append(wireframeKey.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "")).append("\"\n").append("                        component={").append(wireframeComponent).append("}/>\n");
         }
 
         viewCode.append("                </Stack.Navigator>\n" +

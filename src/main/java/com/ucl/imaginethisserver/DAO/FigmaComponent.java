@@ -93,6 +93,10 @@ public class FigmaComponent {
         aSwitch.setAlign(this.getAlign());
         return aSwitch;
     }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }
 
 

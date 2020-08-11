@@ -66,10 +66,11 @@ public class Group extends FigmaComponent {
                     vector.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(vector.getId(), vector);
                     break;
-                case "GROUP":
+                case "GROUP", "INSTANCE":
                     Group group = new Gson().fromJson(jsonChild, Group.class);
                     imageURL = imageJson.get(group.getId()).toString();
                     group.setImageURL(imageURL);
+                    group.setType("GROUP");
                     group.setWireframeBoundingBox(this.wireframeBoundingBox);
                     group.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(group.getId(), group);
@@ -113,6 +114,14 @@ public class Group extends FigmaComponent {
                 button.setCharacter(text.getCharacters());
                 button.setStyle(text.getStyle());
                 button.setTextFills(((Text) component).getFills());
+            }else if(component.getType().equals("VECTOR")){
+                Vector vector = (Vector) component;
+                button.setCornerRadius(vector.getCornerRadius());
+                button.setRecFills(vector.getFills());
+                if(vector.getStrokes().size() > 0){
+                    button.setBorderColor(vector.getStrokes().get(0).getColor());
+                }
+                button.setBorderWidth(vector.getStrokeWeight());
             }
         }
         return button;
@@ -183,7 +192,7 @@ public class Group extends FigmaComponent {
                 Vector vector = (Vector) component;
                 textbox.setContainerFills(vector.getFills());
                 textbox.setCornerRadius(vector.getCornerRadius());
-            }else if(component.getType().equals("TEXT") && component.getName().toLowerCase().equals("placeholder")){
+            }else if(component.getType().equals("TEXT") && component.getName().toLowerCase().contains("placeholder")){
                 Text text = (Text) component;
                 textbox.setPlaceholder(text.getCharacters());
                 textbox.setStyle(text.getStyle());

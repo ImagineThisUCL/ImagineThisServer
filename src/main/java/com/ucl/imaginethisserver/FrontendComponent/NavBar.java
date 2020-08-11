@@ -51,7 +51,7 @@ public class NavBar extends FrontendComponent{
         for(NavButton navButton : NAV_BUTTONS){
             code.append(" <Tab.Screen\n" +
                     "                name=\"" + navButton.getText() + "\"\n" +
-                    "                component={" + BUTTON_MAP.get(navButton.getText()).replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ ]","") + "}\n" +
+                    "                component={" + BUTTON_MAP.get(navButton.getText()).replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","") + "}\n" +
                     "                options={{\n" +
                     "                    tabBarIcon: () => {\n" +
                     "                        return (\n" +

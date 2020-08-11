@@ -67,9 +67,10 @@ public class WireframeComponent{
                     isContainTextBox = true;
                 }
             }
-            else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("navigation")){
+            else if(component.getType().equals("GROUP")&& component.getName().toLowerCase().contains("navigation")){
                 if(NAV_BAR == null) {
                     NAV_BAR = ((Group) component).convertNavBar(projectID, accessToken, authenticateType);
+
                 }
                 for(String navText : NavBar.BUTTON_MAP.keySet()){
                     if(NavBar.BUTTON_MAP.get(navText).equals("Placeholder")){
