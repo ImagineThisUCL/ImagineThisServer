@@ -207,7 +207,7 @@ public class WireframeComponent{
        return importCode.toString();
     }
 
-    public String generateViewCode(String className){
+    public String generateViewCode(String className) throws IOException {
         StringBuilder viewCode = new StringBuilder();
         viewCode.append("class ").append(className).append(" extends Component {");
         viewCode.append("render() {\n");
