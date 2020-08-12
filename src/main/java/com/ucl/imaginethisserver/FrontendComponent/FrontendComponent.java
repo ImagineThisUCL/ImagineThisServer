@@ -1,13 +1,15 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
- public abstract class FrontendComponent {
+import java.io.IOException;
+
+public abstract class FrontendComponent {
      protected int width;
      protected int height;
      protected int positionX;
      protected int positionY;
      protected String align;
 
-     public String generateCode(){
+     public String generateCode() throws IOException {
          return "";
      }
 

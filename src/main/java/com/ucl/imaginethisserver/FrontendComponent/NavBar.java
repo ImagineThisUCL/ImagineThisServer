@@ -1,6 +1,9 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
 
+import com.ucl.imaginethisserver.Util.FrontendUtil;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -22,7 +25,7 @@ public class NavBar extends FrontendComponent{
         return false;
     }
 
-    public String generateCode(){
+    public String generateCode() throws IOException {
         NAV_BUTTONS.sort(new Comparator<NavButton>() {
             @Override
             public int compare(NavButton o1, NavButton o2) {
@@ -49,6 +52,8 @@ public class NavBar extends FrontendComponent{
                 "                },\n" +
                 "            }}>").append("\n");
         for(NavButton navButton : NAV_BUTTONS){
+            String imageName = FrontendUtil.downloadImage(navButton.getIconURL().replaceAll("\"",""));
+            imageName = imageName.replace("OutputApp",".");
             code.append(" <Tab.Screen\n" +
                     "                name=\"" + navButton.getText() + "\"\n" +
                     "                component={" + BUTTON_MAP.get(navButton.getText()).replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","") + "}\n" +
@@ -57,7 +62,7 @@ public class NavBar extends FrontendComponent{
                     "                        return (\n" +
                     "                            /* Option b with uri */\n" +
                     "                            <Image\n" +
-                    "                                source={{uri: " + navButton.getIconURL() + "}}\n" +
+                    "                                source={require(\'" + imageName + "\')}\n" +
                     "                                style={{width: 24, height: 22}}\n" +
                     "                            />\n" +
                     "                        )\n" +

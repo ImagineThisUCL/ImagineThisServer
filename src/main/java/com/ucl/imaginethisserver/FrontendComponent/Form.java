@@ -5,6 +5,7 @@ import com.ucl.imaginethisserver.DAO.FigmaColor;
 import com.ucl.imaginethisserver.DAO.FigmaComponent;
 import com.ucl.imaginethisserver.Util.FrontendUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -48,7 +49,7 @@ public class Form extends FrontendComponent{
         });
     }
 
-    public String generateCode(){
+    public String generateCode() throws IOException {
         StringBuilder code = new StringBuilder();
         String backgroundColorStr = "";
         if(this.backgroundColor == null){

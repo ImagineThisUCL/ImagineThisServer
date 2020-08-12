@@ -1,8 +1,9 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
 import com.ucl.imaginethisserver.DAO.Page;
+import com.ucl.imaginethisserver.Util.FrontendUtil;
 
-import java.util.List;
+import java.io.IOException;
 
 public class ImageButton extends FrontendComponent {
     private String imageURL;
@@ -16,8 +17,10 @@ public class ImageButton extends FrontendComponent {
         this.transitionNodeID = transitionNodeID;
     }
 
-    public String generateCode(){
+    public String generateCode() throws IOException {
         StringBuilder imageButtonCode = new StringBuilder();
+        String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"",""));
+        imageName = imageName.replace("OutputApp","../..");
         imageButtonCode.append("<ImageButton\n");
         if(this.transitionNodeID!=null){
             String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName().replaceAll(" ","");
@@ -25,7 +28,7 @@ public class ImageButton extends FrontendComponent {
         }
         imageButtonCode.append("style={{padding: 10}}\n");
         imageButtonCode.append("imageStyle={{width: ").append(this.getWidth()).append(", height: ").append(this.getHeight()).append("}}\n");
-        imageButtonCode.append("imageSrc={{uri: ").append(this.imageURL).append("}}/>");
+        imageButtonCode.append("imageSrc={require(\'").append(imageName).append("\')}/>");
 
         return imageButtonCode.toString();
     }

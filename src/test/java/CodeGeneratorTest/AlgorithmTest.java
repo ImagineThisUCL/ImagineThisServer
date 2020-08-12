@@ -3,48 +3,21 @@ package CodeGeneratorTest;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendComponent;
 import net.minidev.json.JSONUtil;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlgorithmTest {
-    public static void main(String[] args) {
-       String str = "abcd\nefg";
-       String oStr = str.replaceAll("\n","{\"\\\\n\"}");
-        System.out.println(oStr);
-//        ArrayList<Integer> testList = new ArrayList<>();
-//        testList.add(2);
-//        testList.add(2);
-//        testList.add(3);
-//        testList.add(3);
-//        testList.add(5);
-//        testList.add(7);
-//        testList.add(8);
-//        testList.add(8);
-//        testList.add(9);
-//        testList.add(9);
-//        ArrayList<List<Integer>> equalList = new ArrayList<>();
-//        int startIndex = 0;
-//        int endIndex = -1;
-//        int previousPosY = testList.get(0);
-//        for(int i = 0; i < testList.size(); i++){
-//            if(testList.get(i)!= previousPosY){
-//                previousPosY = testList.get(i);
-//                List<Integer> list = new ArrayList<>();
-//                for(int t = startIndex; t <= endIndex; t++){
-//                    list.add(testList.get(t));
-//                }
-//                equalList.add(list);
-//                startIndex = i;
-//                endIndex = startIndex;
-//            }else{
-//                endIndex ++;
-//            }
-//        }
-//        List<Integer> list = new ArrayList<>();
-//        for(int t = startIndex; t <= endIndex; t++){
-//            list.add(testList.get(t));
-//        }
-//        equalList.add(list);
-//        System.out.println(equalList);
+    public static void main(String[] args) throws IOException {
+      //https://s3-us-west-2.amazonaws.com/figma-alpha-api/img/3ff4/ed9f/331978df1311a5cb8720d0f7e479b53c
+        String urls = "https://s3-us-west-2.amazonaws.com/figma-alpha-api/img/3ff4/ed9f/331978df1311a5cb8720d0f7e479b53c";
+        URL url = new URL(urls);
+        BufferedImage img = ImageIO.read(url);
+        File file = new File("1.png");
+        ImageIO.write(img, "png", file);
     }
 }

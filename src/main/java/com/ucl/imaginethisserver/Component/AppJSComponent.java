@@ -3,6 +3,7 @@ package com.ucl.imaginethisserver.Component;
 import com.ucl.imaginethisserver.FrontendComponent.NavBar;
 import com.ucl.imaginethisserver.FrontendComponent.Navigator;
 
+import java.io.IOException;
 import java.util.HashSet;
 
 public class AppJSComponent {
@@ -33,7 +34,7 @@ public class AppJSComponent {
         return importCode.toString();
     }
 
-    public static String generateViewCode(NavBar navBar) {
+    public static String generateViewCode(NavBar navBar) throws IOException {
         StringBuilder viewCode = new StringBuilder();
         if (navBar != null) {
             viewCode.append("const Tab = createBottomTabNavigator();").append("\n");
@@ -70,7 +71,7 @@ public class AppJSComponent {
 
     }
 
-    public static String generateCode(NavBar navBar) {
+    public static String generateCode(NavBar navBar) throws IOException {
         return generateImportCode(navBar) +
                 generateViewCode(navBar);
     }
