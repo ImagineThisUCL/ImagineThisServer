@@ -54,11 +54,7 @@ public class FrontendText extends FrontendComponent {
     public String generateCode(){
         this.text = this.text.replaceAll("\n","{\"\\\\n\"}");
         String color = this.color.toString();
-        if(this.flex != -1) {
-            return "<P style={{fontSize: " + this.getFontSize() +", color: " + color + ", textAlign: \'" + this.textAlign.toLowerCase() + "\', flex: " + this.flex + "}}>" + this.text + "</P>";
-        }else{
-            return "<P style={{fontSize: " + this.getFontSize() +", color: " + color + ", textAlign: \'" + this.textAlign.toLowerCase() + "\'}}>" + this.text + "</P>";
-        }
+        return "<P style={{fontSize: " + this.getFontSize() +", color: " + color + ", textAlign: \'" + this.textAlign.toLowerCase() + "\'}}>" + this.text + "</P>";
     }
 
     public String toString(){

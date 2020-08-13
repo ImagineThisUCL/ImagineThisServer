@@ -91,8 +91,11 @@ public class Form extends FrontendComponent{
                     code.append("<View style={{flexDirection: 'row', justifyContent: \"space-between\", marginTop: " + marginTop +"}}>\n");
                     for (FrontendComponent component : curList) {
                         int flex = Math.max((int)(((double)component.width)/((double)this.width) * 10) , 1);
+
                         component.setFlex(flex);
+                        code.append("<View style={{flex: " + flex + "}}>\n");
                         code.append(component.generateCode()).append("\n");
+                        code.append("</View>\n");
                         if(component.getPositionY() + component.getHeight() > maxY){
                             maxY = component.getPositionY() + component.getHeight();
                         }

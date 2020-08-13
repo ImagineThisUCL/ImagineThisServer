@@ -68,9 +68,6 @@ public class Button extends FrontendComponent{
             String borderColorStr = this.borderColor.toString();
             buttonCode.append(", borderColor: ").append(borderColorStr).append(" ,borderWidth: ").append(this.borderWidth);
         }
-        if(this.flex != -1){
-            buttonCode.append(", flex: ").append(this.flex);
-        }
         buttonCode.append("}}\n");
         buttonCode.append("   textStyle={{color: ").append(textColor).append(", fontSize: ").append(this.style.getFontSize()).append("}}\n");
         if(isCircle){

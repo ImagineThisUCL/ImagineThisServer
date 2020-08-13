@@ -34,9 +34,9 @@ public class CodeGeneratorTest {
         ArrayList<String> nameList = new ArrayList<>();
 //        nameList.add("Set Up");
 //        nameList.add("Information to populat messages");
-        nameList.add("Reach out");
+//        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
-        nameList.add("Start Passive Tracking and Reporting");
+//        nameList.add("Start Passive Tracking and Reporting");
 //        nameList.add("Report for Sharing");
 //        nameList.add("Wellbeing by Activity");
 //        nameList.add("Wellbeing Network");
@@ -46,7 +46,7 @@ public class CodeGeneratorTest {
 //        nameList.add("Auto Populated Mesage 2");
 //        nameList.add("Home Page: Weekly");
 //        nameList.add("Wellbeing rating 2");
-//        nameList.add("Messages Sent");
+        nameList.add("Messages Sent");
 //        nameList.add("Outdoor steps v Well-being");
         generatePage(nameList,
                 figmaTreeStructure,

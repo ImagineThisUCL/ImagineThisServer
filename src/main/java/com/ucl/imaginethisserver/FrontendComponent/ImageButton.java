@@ -25,11 +25,8 @@ public class ImageButton extends FrontendComponent {
         if(this.transitionNodeID!=null){
             String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName().replaceAll(" ","");
             imageButtonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
-        }if(this.flex != -1){
-            imageButtonCode.append("style={{padding: 10, flex: " + this.flex + "}}\n");
-        }else{
-            imageButtonCode.append("style={{padding: 10}}\n");
         }
+        imageButtonCode.append("style={{padding: 10}}\n");
         imageButtonCode.append("imageStyle={{width: ").append(this.getWidth()).append(", height: ").append(this.getHeight()).append("}}\n");
         imageButtonCode.append("imageSrc={require(\'").append(imageName).append("\')}/>");
 

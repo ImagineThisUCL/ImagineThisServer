@@ -16,21 +16,13 @@ public class Image extends FrontendComponent {
     }
 
     public String generateCode() throws IOException {
-        String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"",""));
-        imageName = imageName.replace("OutputApp","../..");
-        if(this.flex != - 1){
-            return "<Image\n" +
-                    "source={require(\'"+ imageName + "\')}\n" +
-                    "style={{width: " + this.width +
-                    ", height: " + this.height + ", flex: " + this.flex + "}}\n" +
-                    "resizeMode='contain'\n" +
-                    "/>";
-        }else{
-            return "<Image\n" +
-                    "source={require(\'" + imageName + "\')}\n" +
-                    "style={{width: " + this.width +
-                    ", height: " + this.height + "}}\n" +
-                    "/>";
-        }
+        String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"", ""));
+        imageName = imageName.replace("OutputApp", "../..");
+        return "<Image\n" +
+                "source={require(\'" + imageName + "\')}\n" +
+                "style={{width: " + this.width +
+                ", height: " + this.height + "}}\n" +
+                "/>";
+
     }
 }
