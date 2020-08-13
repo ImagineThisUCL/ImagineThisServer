@@ -71,7 +71,9 @@ public class Form extends FrontendComponent{
                     int marginTop = Math.max(curList.get(0).getPositionY() - preY, 0);
                     if(curList.get(0).getAlign().equals("RIGHT")){
                         code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + ", justifyContent: \"flex-end\"}}>\n");
-                    }else {
+                    }else if(curList.get(0).getAlign().equals("CENTER")){
+                        code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + ", justifyContent: \"center\"}}>\n");
+                    }else{
                         code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + "}}>\n");
                     }
                     code.append(curList.get(0).generateCode()).append("\n");
@@ -88,6 +90,8 @@ public class Form extends FrontendComponent{
                     int marginTop = Math.max(minY - preY, 0);
                     code.append("<View style={{flexDirection: 'row', justifyContent: \"space-between\", marginTop: " + marginTop +"}}>\n");
                     for (FrontendComponent component : curList) {
+                        int flex = Math.max((int)(((double)component.width)/((double)this.width) * 10) , 1);
+                        component.setFlex(flex);
                         code.append(component.generateCode()).append("\n");
                         if(component.getPositionY() + component.getHeight() > maxY){
                             maxY = component.getPositionY() + component.getHeight();

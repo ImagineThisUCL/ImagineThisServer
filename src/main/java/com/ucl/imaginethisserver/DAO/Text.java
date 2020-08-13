@@ -56,6 +56,7 @@ public class Text extends FigmaComponent{
         frontendText.setFontFamily(this.style.getFontFamily());
         frontendText.setFontSize(this.style.getFontSize());
         frontendText.setFontWeight(this.style.getFontWeight());
+        frontendText.setTextAlign(this.style.getTextAlignHorizontal());
         return frontendText;
     }
 

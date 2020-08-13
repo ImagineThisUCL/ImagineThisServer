@@ -50,8 +50,11 @@ public class TextBox extends FrontendComponent{
             textBoxCode.append("placeholder='").append(this.placeholder).append("'\n");
         }
         textBoxCode.append("inputContainerStyle={{backgroundColor: "+ containerColor +"\n" +
-                "                , borderRadius: " + this.getCornerRadius() +"}}\n"+
-                "               />");
+                "                , borderRadius: " + this.getCornerRadius() +", borderWidth: 1}}\n");
+        if(this.flex != -1){
+            textBoxCode.append("containerStyle={{flex: " + this.flex + "}}");
+        }
+        textBoxCode.append("/>");
         return textBoxCode.toString();
     }
 

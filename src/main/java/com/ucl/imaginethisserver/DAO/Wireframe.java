@@ -70,7 +70,14 @@ public class Wireframe {
                     componentMap.put(group.getId(), group);
                     componentList.add(group);
                 }
-
+                case "ELLIPSE" -> {
+                    Ellipse ellipse = new Gson().fromJson(jsonChild, Ellipse.class);
+                    imageURL = imageJson.get(ellipse.getId()).toString();
+                    ellipse.setImageURL(imageURL);
+                    ellipse.convertRelativePosition(this.absoluteBoundingBox);
+                    componentMap.put(ellipse.getId(), ellipse);
+                    componentList.add(ellipse);
+                }
 
                 default -> {
                     FigmaComponent figmaComponent = new Gson().fromJson(jsonChild, FigmaComponent.class);

@@ -8,11 +8,18 @@ public abstract class FrontendComponent {
      protected int positionX;
      protected int positionY;
      protected String align;
+     protected int flex = -1;
 
      public String generateCode() throws IOException {
          return "";
      }
+     public int getFlex(){
+         return this.flex;
+     }
 
+     public void setFlex(int flex){
+         this.flex = flex;
+     }
      public int getWidth(){
          return this.width;
      }

@@ -75,8 +75,15 @@ public class Group extends FigmaComponent {
                     group.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(group.getId(), group);
                     break;
-
+                case "ELLIPSE":
+                    Ellipse ellipse = new Gson().fromJson(jsonChild, Ellipse.class);
+                    imageURL = imageJson.get(ellipse.getId()).toString();
+                    ellipse.setImageURL(imageURL);
+                    ellipse.convertRelativePosition(this.wireframeBoundingBox);
+                    componentMap.put(ellipse.getId(), ellipse);
+                    break;
                 default:
+                    System.out.println(jsonChild);
                     FigmaComponent figmaComponent = new Gson().fromJson(jsonChild, FigmaComponent.class);
                     imageURL = imageJson.get(figmaComponent.getId()).toString();
                     figmaComponent.setImageURL(imageURL);
@@ -108,8 +115,7 @@ public class Group extends FigmaComponent {
                     button.setBorderColor(rectangle.getStrokes().get(0).getColor());
                 }
                 button.setBorderWidth(rectangle.getStrokeWeight());
-            }
-            else if(component.getType().equals("TEXT")){
+            } else if(component.getType().equals("TEXT")){
                 Text text = (Text) component;
                 button.setCharacter(text.getCharacters());
                 button.setStyle(text.getStyle());
@@ -122,6 +128,14 @@ public class Group extends FigmaComponent {
                     button.setBorderColor(vector.getStrokes().get(0).getColor());
                 }
                 button.setBorderWidth(vector.getStrokeWeight());
+            }else if(component.getType().equals("ELLIPSE")){
+                Ellipse ellipse = (Ellipse) component;
+                button.setCircle(true);
+                button.setRecFills(ellipse.getFills());
+                if(ellipse.getStrokes().size() > 0){
+                    button.setBorderColor(ellipse.getStrokes().get(0).getColor());
+                }
+                button.setBorderWidth(ellipse.getStrokeWeight());
             }
         }
         return button;

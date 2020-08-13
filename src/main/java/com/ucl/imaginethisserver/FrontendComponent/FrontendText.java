@@ -8,6 +8,7 @@ public class FrontendText extends FrontendComponent {
     private String fontFamily;
     private FigmaColor color;
     private String text;
+    private String textAlign;
 
     public String getFontSize() {
         return fontSize;
@@ -53,10 +54,22 @@ public class FrontendText extends FrontendComponent {
     public String generateCode(){
         this.text = this.text.replaceAll("\n","{\"\\\\n\"}");
         String color = this.color.toString();
-        return "<P style={{fontSize: " + this.getFontSize() +", color: " + color + "}}>" + this.text + "</P>";
+        if(this.flex != -1) {
+            return "<P style={{fontSize: " + this.getFontSize() +", color: " + color + ", textAlign: \'" + this.textAlign.toLowerCase() + "\', flex: " + this.flex + "}}>" + this.text + "</P>";
+        }else{
+            return "<P style={{fontSize: " + this.getFontSize() +", color: " + color + ", textAlign: \'" + this.textAlign.toLowerCase() + "\'}}>" + this.text + "</P>";
+        }
     }
 
     public String toString(){
         return this.getHeight() + " " + this.getPositionY();
+    }
+
+    public void setTextAlign(String textAlign) {
+        this.textAlign = textAlign;
+    }
+
+    public void setFlex(int flex) {
+        this.flex = flex;
     }
 }

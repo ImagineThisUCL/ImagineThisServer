@@ -16,6 +16,7 @@ public class Button extends FrontendComponent{
     private double cornerRadius;
     private FigmaColor borderColor;
     private double borderWidth;
+    private boolean isCircle = false;
 
     public void setCharacter(String character) {
         this.character = character;
@@ -59,13 +60,23 @@ public class Button extends FrontendComponent{
             String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName().replaceAll(" ","");
             buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
         }
+        buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", marginTop: base.margin");
+        if(!isCircle){
+            buttonCode.append(", borderRadius: ").append(this.cornerRadius);
+        }
         if(this.borderColor!=null){
             String borderColorStr = this.borderColor.toString();
-            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", borderRadius: ").append(this.getCornerRadius()).append(", marginTop: base.margin, borderColor: ").append(borderColorStr).append(" ,borderWidth: ").append(this.borderWidth).append("}}\n");
-        }else{
-            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", borderRadius: ").append(this.getCornerRadius()).append(", marginTop: base.margin}}\n");
+            buttonCode.append(", borderColor: ").append(borderColorStr).append(" ,borderWidth: ").append(this.borderWidth);
         }
-        buttonCode.append("   textStyle={{color: ").append(textColor).append(", fontSize: ").append(this.style.getFontSize()).append("}}>\n").append(this.character).append("</Button>");
+        if(this.flex != -1){
+            buttonCode.append(", flex: ").append(this.flex);
+        }
+        buttonCode.append("}}\n");
+        buttonCode.append("   textStyle={{color: ").append(textColor).append(", fontSize: ").append(this.style.getFontSize()).append("}}\n");
+        if(isCircle){
+            buttonCode.append("circleDiameter={").append(this.width).append("}");
+        }
+        buttonCode.append(">").append(this.character).append("</Button>");
 
         return buttonCode.toString();
     }
@@ -96,6 +107,10 @@ public class Button extends FrontendComponent{
 
     public void setBorderWidth(double borderWidth) {
         this.borderWidth = borderWidth;
+    }
+
+    public void setCircle(boolean circle) {
+        isCircle = circle;
     }
 }
 
