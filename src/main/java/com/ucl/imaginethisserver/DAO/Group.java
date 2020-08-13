@@ -83,7 +83,6 @@ public class Group extends FigmaComponent {
                     componentMap.put(ellipse.getId(), ellipse);
                     break;
                 default:
-                    System.out.println(jsonChild);
                     FigmaComponent figmaComponent = new Gson().fromJson(jsonChild, FigmaComponent.class);
                     imageURL = imageJson.get(figmaComponent.getId()).toString();
                     figmaComponent.setImageURL(imageURL);
