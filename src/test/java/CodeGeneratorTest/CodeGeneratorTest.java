@@ -34,20 +34,32 @@ public class CodeGeneratorTest {
         ArrayList<String> nameList = new ArrayList<>();
         nameList.add("Set Up");
         nameList.add("Information to populat messages");
-        nameList.add("Reach out");
         nameList.add("Care Network Page");
         nameList.add("Start Passive Tracking and Reporting");
+        nameList.add("Weekly Confirm Wellbeing");
         nameList.add("Report for Sharing");
+        nameList.add("Reach out");
+        nameList.add("Auto Populated Mesage 1");
+        nameList.add("Auto Populated Mesage 2");
+        nameList.add("Wellbeing Network");
         nameList.add("Wellbeing by Activity");
-//        nameList.add("Wellbeing Network");
-//        nameList.add("Age Connect");
-//        nameList.add("Friend of Mine");
-//        nameList.add("Auto Populated Mesage 1");
-//        nameList.add("Auto Populated Mesage 2");
-//        nameList.add("Home Page: Weekly");
-//        nameList.add("Wellbeing rating 2");
+//        nameList.add("Wellbeing rating 1");
+        nameList.add("Wellbeing rating 2");
+        nameList.add("ABUB");
+        nameList.add("Age Connect");
+        nameList.add("Friend of Mine");
+        nameList.add("Torfaen");
+        nameList.add("Carers Trust");
+        nameList.add("Dewis");
+        nameList.add("Calls made v Well-being");
+        nameList.add("Outdoor steps v Well-being");
         nameList.add("Messages Sent");
-//        nameList.add("Outdoor steps v Well-being");
+        nameList.add("Dementia Support 1");
+        nameList.add("Dementia Support 2");
+        nameList.add("Headspace");
+        nameList.add("Home Page: Weekly");
+        nameList.add("UK Wide Resource");
+
         generatePage(nameList,
                 figmaTreeStructure,
                 projectID,
