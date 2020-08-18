@@ -19,7 +19,8 @@ import java.util.List;
 public class CodeGeneratorTest {
     public static void main(String[] args) throws IOException {
         String type = "originalToken";
-        String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
+//        String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
+        String projectID = "NZFfXsPz4Zhkt3zSa6lIyB";
         String accessToken = "54950-b9461cc1-f3c2-41f8-9fe7-a8f741083aa7";
         AuthenticateType authType = null;
         if(type.equals("originalToken")){
@@ -31,46 +32,58 @@ public class CodeGeneratorTest {
         if (figmaTreeStructure == null) {
             return;
         }
+        String pageName = "Screens";
         ArrayList<String> nameList = new ArrayList<>();
-        nameList.add("Set Up");
-        nameList.add("Information to populat messages");
-        nameList.add("Care Network Page");
-        nameList.add("Start Passive Tracking and Reporting");
-        nameList.add("Weekly Confirm Wellbeing");
-        nameList.add("Report for Sharing");
-        nameList.add("Reach out");
-        nameList.add("Auto Populated Mesage 1");
-        nameList.add("Auto Populated Mesage 2");
-        nameList.add("Wellbeing Network");
-        nameList.add("Wellbeing by Activity");
-//        nameList.add("Wellbeing rating 1");
-        nameList.add("Wellbeing rating 2");
-        nameList.add("ABUB");
-        nameList.add("Age Connect");
-        nameList.add("Friend of Mine");
-        nameList.add("Torfaen");
-        nameList.add("Carers Trust");
-        nameList.add("Dewis");
-        nameList.add("Calls made v Well-being");
-        nameList.add("Outdoor steps v Well-being");
-        nameList.add("Messages Sent");
-        nameList.add("Dementia Support 1");
-        nameList.add("Dementia Support 2");
-        nameList.add("Headspace");
-        nameList.add("Home Page: Weekly");
-        nameList.add("UK Wide Resource");
+        nameList.add("CFA Menu");
+        nameList.add("CFA_Register");
+        nameList.add("CFA_Support");
 
-        generatePage(nameList,
+//        nameList.add("Set Up");
+//        nameList.add("Information to populat messages");
+//        nameList.add("Care Network Page");
+//        nameList.add("Start Passive Tracking and Reporting");
+//        nameList.add("Weekly Confirm Wellbeing");
+//        nameList.add("Report for Sharing");
+//        nameList.add("Reach out");
+//        nameList.add("Auto Populated Mesage 1");
+//        nameList.add("Auto Populated Mesage 2");
+//        nameList.add("Wellbeing Network");
+//        nameList.add("Wellbeing by Activity");
+////        nameList.add("Wellbeing rating 1");
+//        nameList.add("Wellbeing rating 2");
+//        nameList.add("ABUB");
+//        nameList.add("Age Connect");
+//        nameList.add("Friend of Mine");
+//        nameList.add("Torfaen");
+//        nameList.add("Carers Trust");
+//        nameList.add("Dewis");
+//        nameList.add("Calls made v Well-being");
+//        nameList.add("Outdoor steps v Well-being");
+//        nameList.add("Messages Sent");
+//        nameList.add("Dementia Support 1");
+//        nameList.add("Dementia Support 2");
+//        nameList.add("Headspace");
+//        nameList.add("Home Page: Weekly");
+//        nameList.add("UK Wide Resource");
+
+        generatePage(pageName,
+                nameList,
                 figmaTreeStructure,
                 projectID,
                 accessToken,
                 authType);
     }
 
-    public static void generatePage(ArrayList<String> names, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType) throws IOException {
+    public static void generatePage(String pageName, ArrayList<String> names, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType) throws IOException {
         String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
         List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
         Page testPage = pageList.get(0);
+
+        for(Page i : pageList){
+            if(i.getName().equals(pageName)){
+                testPage = i;
+            }
+        }
 
         testPage.loadWireframes(projectID, accessToken, authType);
 //        List<Wireframe> responseList = testPage.getWireframeList();
