@@ -215,7 +215,7 @@ public class WireframeComponent{
             viewCode.append(FixedChartComponent.generateCode());
         }
         viewCode.append("        return (\n" +
-                "            <ScrollView style={{flex: 1, padding: 10, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
+                "            <ScrollView style={{flex: 1, padding: 0, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
 
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
         int preY = 0;

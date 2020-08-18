@@ -106,35 +106,40 @@ public class Group extends FigmaComponent {
             Navigator.NAVIGATOR_MAP.put(wireframeName,wireframeName);
         }
         for(FigmaComponent component : this.componentMap.values()){
-            if(component.getType().equals("RECTANGLE")){
-                Rectangle rectangle = (Rectangle) component;
-                button.setCornerRadius(rectangle.getCornerRadius());
-                button.setRecFills(rectangle.getFills());
-                if(rectangle.getStrokes().size() > 0){
-                    button.setBorderColor(rectangle.getStrokes().get(0).getColor());
+            switch (component.getType()) {
+                case "RECTANGLE" -> {
+                    Rectangle rectangle = (Rectangle) component;
+                    button.setCornerRadius(rectangle.getCornerRadius());
+                    button.setRecFills(rectangle.getFills());
+                    if (rectangle.getStrokes().size() > 0) {
+                        button.setBorderColor(rectangle.getStrokes().get(0).getColor());
+                    }
+                    button.setBorderWidth(rectangle.getStrokeWeight());
                 }
-                button.setBorderWidth(rectangle.getStrokeWeight());
-            } else if(component.getType().equals("TEXT")){
-                Text text = (Text) component;
-                button.setCharacter(text.getCharacters());
-                button.setStyle(text.getStyle());
-                button.setTextFills(((Text) component).getFills());
-            }else if(component.getType().equals("VECTOR")){
-                Vector vector = (Vector) component;
-                button.setCornerRadius(vector.getCornerRadius());
-                button.setRecFills(vector.getFills());
-                if(vector.getStrokes().size() > 0){
-                    button.setBorderColor(vector.getStrokes().get(0).getColor());
+                case "TEXT" -> {
+                    Text text = (Text) component;
+                    button.setCharacter(text.getCharacters());
+                    button.setStyle(text.getStyle());
+                    button.setTextFills(((Text) component).getFills());
                 }
-                button.setBorderWidth(vector.getStrokeWeight());
-            }else if(component.getType().equals("ELLIPSE")){
-                Ellipse ellipse = (Ellipse) component;
-                button.setCircle(true);
-                button.setRecFills(ellipse.getFills());
-                if(ellipse.getStrokes().size() > 0){
-                    button.setBorderColor(ellipse.getStrokes().get(0).getColor());
+                case "VECTOR" -> {
+                    Vector vector = (Vector) component;
+                    button.setCornerRadius(vector.getCornerRadius());
+                    button.setRecFills(vector.getFills());
+                    if (vector.getStrokes().size() > 0) {
+                        button.setBorderColor(vector.getStrokes().get(0).getColor());
+                    }
+                    button.setBorderWidth(vector.getStrokeWeight());
                 }
-                button.setBorderWidth(ellipse.getStrokeWeight());
+                case "ELLIPSE" -> {
+                    Ellipse ellipse = (Ellipse) component;
+                    button.setCircle(true);
+                    button.setRecFills(ellipse.getFills());
+                    if (ellipse.getStrokes().size() > 0) {
+                        button.setBorderColor(ellipse.getStrokes().get(0).getColor());
+                    }
+                    button.setBorderWidth(ellipse.getStrokeWeight());
+                }
             }
         }
         return button;
@@ -281,6 +286,7 @@ public class Group extends FigmaComponent {
                             form.setBorderColor(rectangle.getStrokes().get(0).getColor());
                         }
                         form.setBorderWidth(rectangle.getStrokeWeight());
+
                         break;
                     case "VECTOR":
                         Vector vector = (Vector) component;

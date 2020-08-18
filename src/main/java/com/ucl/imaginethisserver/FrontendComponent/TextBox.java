@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
+import com.ucl.imaginethisserver.DAO.FigmaColor;
 import com.ucl.imaginethisserver.DAO.Fills;
 import com.ucl.imaginethisserver.DAO.Style;
 
@@ -39,8 +40,11 @@ public class TextBox extends FrontendComponent{
     }
 
     public String generateCode() {
-        String containerColor = this.containerFills.get(0).getColor().toString();
-
+        //default color:  transparent;
+        String containerColor = new FigmaColor(0.f,0.f,0.f,0.f).toString();
+        if(containerFills.size() > 0) {
+            containerColor = this.containerFills.get(0).getColor().toString();
+        }
         StringBuilder textBoxCode = new StringBuilder();
         textBoxCode.append("<InputField\n");
         if(label != null){

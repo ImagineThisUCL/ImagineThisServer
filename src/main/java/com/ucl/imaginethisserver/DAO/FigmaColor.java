@@ -14,6 +14,13 @@ public class FigmaColor {
     @Expose()
     private float a;
 
+    public FigmaColor(float r, float g, float b, float a){
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
+    }
+
     public String toString(){
        return "\"rgba("+(int)(r * 255) +","+(int)(g * 255) +","+(int)(b * 255)+","+a+")\"";
     }

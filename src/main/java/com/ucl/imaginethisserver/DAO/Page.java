@@ -35,15 +35,17 @@ public class Page {
                 IDList.add(id);
             }
         }
-        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList,projectID,accessToken,authType).get("images").getAsJsonObject();
-        for (JsonElement pageChild : this.children) {
-            String type = pageChild.getAsJsonObject().get("type").toString();
-            if (type.equals("\"FRAME\"")) {
-                Wireframe wireframe = new Gson().fromJson(pageChild, Wireframe.class);
-                String imageURL = imageJson.get(wireframe.getId()).toString().replaceAll("\"","");
-                wireframe.setImageURL(imageURL);
-                wireframeMap.put(wireframe.getName(), wireframe);
-                wireframeIDMap.put(wireframe.getId(),wireframe);
+        if(IDList.size() >= 1) {
+            JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList, projectID, accessToken, authType).get("images").getAsJsonObject();
+            for (JsonElement pageChild : this.children) {
+                String type = pageChild.getAsJsonObject().get("type").toString();
+                if (type.equals("\"FRAME\"")) {
+                    Wireframe wireframe = new Gson().fromJson(pageChild, Wireframe.class);
+                    String imageURL = imageJson.get(wireframe.getId()).toString().replaceAll("\"", "");
+                    wireframe.setImageURL(imageURL);
+                    wireframeMap.put(wireframe.getName(), wireframe);
+                    wireframeIDMap.put(wireframe.getId(), wireframe);
+                }
             }
         }
     }

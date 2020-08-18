@@ -19,7 +19,6 @@ public class Form extends FrontendComponent{
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainImageButton, isContainImage, isContainChart,
             isContainDropdown, isContainSwitch;
-
     public FigmaColor getBackgroundColor() {
         return backgroundColor;
     }
@@ -59,9 +58,9 @@ public class Form extends FrontendComponent{
         }
         if(this.borderColor!=null){
             String borderColorStr = this.borderColor.toString();
-            code.append("<View style={{borderRadius: " + this.cornerRadius + " , margin: 0, padding: 10, backgroundColor: " + backgroundColorStr +",borderColor: " + borderColorStr + ", borderWidth: " + borderWidth + "}}>\n");
+            code.append("<View style={{borderRadius: " + this.cornerRadius + " , marginLeft: "+ this.positionX + ", marginRight: " + this.positionX + ", padding: 0, backgroundColor: " + backgroundColorStr +",borderColor: " + borderColorStr + ", borderWidth: " + borderWidth + "}}>\n");
         }else{
-            code.append("<View style={{borderRadius: " + this.cornerRadius + " , margin: 0, padding: 10, backgroundColor: " + backgroundColorStr +"}}>").append("\n");
+            code.append("<View style={{borderRadius: " + this.cornerRadius + " , marginLeft: "+ this.positionX + ", marginRight: " + this.positionX + ", padding: 0, backgroundColor: " + backgroundColorStr +"}}>").append("\n");
         }
         int preY = this.positionY;
         if(this.frontendComponentList.size() > 0) {

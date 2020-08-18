@@ -56,7 +56,7 @@ public class AppJSComponent {
                     "                        options={{headerShown: false}}/>\n");
         }
         for (String wireframeKey : Navigator.NAVIGATOR_MAP.keySet()) {
-            String wireframeComponent = Navigator.NAVIGATOR_MAP.get(wireframeKey).replaceAll(" ", "");
+            String wireframeComponent = Navigator.NAVIGATOR_MAP.get(wireframeKey).replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
             viewCode.append("                    <Stack.Screen\n" + "                        name=\"").append(wireframeKey.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "")).append("\"\n").append("                        component={").append(wireframeComponent).append("}/>\n");
         }
 
