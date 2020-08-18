@@ -19,6 +19,7 @@ import java.util.List;
 public class CodeGeneratorTest {
     public static void main(String[] args) throws IOException {
         String type = "originalToken";
+//        String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
         String projectID = "NZFfXsPz4Zhkt3zSa6lIyB";
         String accessToken = "54950-b9461cc1-f3c2-41f8-9fe7-a8f741083aa7";
         AuthenticateType authType = null;
@@ -31,26 +32,35 @@ public class CodeGeneratorTest {
         if (figmaTreeStructure == null) {
             return;
         }
+        String pageName = "Screens";
         ArrayList<String> nameList = new ArrayList<>();
-        nameList.add("CFA_Register");
-//        nameList.add("Information to populat messages");
-//        nameList.add("Reach out");
-//        nameList.add("Care Network Page");
-//        nameList.add("Start Passive Tracking and Reporting");
-//        nameList.add("Report for Sharing");
-//        nameList.add("Wellbeing by Activity");
+        nameList.add("Set Up");
+        nameList.add("Information to populat messages");
+        nameList.add("Reach out");
+        nameList.add("Care Network Page");
+        nameList.add("Start Passive Tracking and Reporting");
+        nameList.add("Report for Sharing");
+        nameList.add("Wellbeing by Activity");
 //        nameList.add("Wellbeing Network");
+//        nameList.add("Wellbeing by Activity");
+////        nameList.add("Wellbeing rating 1");
+//        nameList.add("Wellbeing rating 2");
+//        nameList.add("ABUB");
 //        nameList.add("Age Connect");
 //        nameList.add("Friend of Mine");
-//        nameList.add("Auto Populated Mesage 1");
-//        nameList.add("Auto Populated Mesage 2");
-//        nameList.add("Home Page: Weekly");
-//        nameList.add("Wellbeing rating 2");
-//        nameList.add("Messages Sent");
-//        nameList.add("Outdoor steps v Well-being");
 //        nameList.add("Torfaen");
 //        nameList.add("Carers Trust");
 //        nameList.add("Dewis");
+//        nameList.add("Calls made v Well-being");
+//        nameList.add("Outdoor steps v Well-being");
+//        nameList.add("Messages Sent");
+//        nameList.add("Dementia Support 1");
+//        nameList.add("Dementia Support 2");
+//        nameList.add("Headspace");
+//        nameList.add("Home Page: Weekly");
+//        nameList.add("Wellbeing rating 2");
+        nameList.add("Messages Sent");
+//        nameList.add("Outdoor steps v Well-being");
         generatePage(nameList,
                 figmaTreeStructure,
                 projectID,
@@ -58,10 +68,11 @@ public class CodeGeneratorTest {
                 authType);
     }
 
-    public static void generatePage(ArrayList<String> names, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType) throws IOException {
+    public static void generatePage(String pageName, ArrayList<String> names, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType) throws IOException {
         String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
         List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
         Page testPage = pageList.get(0);
+
         testPage.loadWireframes(projectID, accessToken, authType);
 //        List<Wireframe> responseList = testPage.getWireframeList();
         CodeGenerator.generatePackageFile();
