@@ -61,7 +61,7 @@ public class CodeGeneratorTest {
 //        nameList.add("Wellbeing rating 2");
         nameList.add("Messages Sent");
 //        nameList.add("Outdoor steps v Well-being");
-        generatePage(nameList,
+        generatePage(pageName, nameList,
                 figmaTreeStructure,
                 projectID,
                 accessToken,
@@ -72,6 +72,12 @@ public class CodeGeneratorTest {
         String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
         List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
         Page testPage = pageList.get(0);
+
+        for(Page i : pageList){
+            if(i.getName().equals(pageName)){
+                testPage = i;
+            }
+        }
 
         testPage.loadWireframes(projectID, accessToken, authType);
 //        List<Wireframe> responseList = testPage.getWireframeList();
