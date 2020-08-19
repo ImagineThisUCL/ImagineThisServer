@@ -13,22 +13,24 @@ import java.io.IOException;
 
 public class CodeGenerator {
 
-    public static void generateOutputFolder() throws IOException{
-        File outputAppFolder = new File("OutputApp");
+    public static void generateOutputFolder(String folderName) throws IOException{
+        File storageFolder = new File("OutputStorage");
+        storageFolder.mkdir();
+        File outputAppFolder = new File("OutputStorage/" + folderName);
         outputAppFolder.mkdir();
     }
 
-    public static void generatePackageFile() throws IOException {
+    public static void generatePackageFile(String folderName) throws IOException {
         String outputCode = "";
         outputCode = PackageComponent.generateCode();
-        generateOutputFolder();
-        File component_file = new File("OutputApp/package.json");
+        generateOutputFolder(folderName);
+        File component_file = new File("OutputStorage/" + folderName + "/package.json");
         BufferedWriter writer = new BufferedWriter(new FileWriter(component_file, false));
         writer.append(outputCode);
         writer.close();
     }
 
-    public static void writeReusableComponentCode(ReusableComponent component) throws IOException {
+    public static void writeReusableComponentCode(ReusableComponent component, String folderName) throws IOException {
         String outputCode = "";
         String fileName = "";
         switch (component){
@@ -65,60 +67,60 @@ public class CodeGenerator {
                 fileName = "Dropdown.js";
                 break;
         }
-        generateOutputFolder();
-        File cfile = new File("OutputApp/components");
+        generateOutputFolder(folderName);
+        File cfile = new File("OutputStorage/" + folderName + "/components");
         cfile.mkdir();
-        File vfile = new File("OutputApp/components/reusables");
+        File vfile = new File("OutputStorage/" + folderName + "/components/reusables");
         vfile.mkdir();
-        File component_file = new File("OutputApp/components/reusables/" + fileName);
+        File component_file = new File("OutputStorage/" + folderName + "/components/reusables/" + fileName);
         BufferedWriter writer = new BufferedWriter(new FileWriter(component_file, false));
         writer.append(outputCode);
         writer.close();
 
     }
 
-    public static void writeWireframeCode(String wireframeName, Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
+    public static void writeWireframeCode(String wireframeName, Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType, String folderName) throws IOException {
         wireframeName = wireframeName.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
         String outputCode = "";
         WireframeComponent wireframeComponent = new WireframeComponent(wireframe,projectID, accessToken, authenticateType);
-        outputCode = wireframeComponent.generateCode(wireframeName);
-        generateOutputFolder();
-        File cfile = new File("OutputApp/components");
+        outputCode = wireframeComponent.generateCode(wireframeName, folderName);
+        generateOutputFolder(folderName);
+        File cfile = new File("OutputStorage/" + folderName + "/components");
         cfile.mkdir();
-        File vfile = new File("OutputApp/components/views");
+        File vfile = new File("OutputStorage/" + folderName + "/components/views");
         vfile.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/components/views/" + wireframeName + ".js", false));
+        BufferedWriter writer = new BufferedWriter(new FileWriter( "OutputStorage/" + folderName + "/components/views/" + wireframeName + ".js", false));
         writer.append(outputCode);
         writer.close();
     }
 
-    public static void writeBaseStyleCode() throws IOException {
+    public static void writeBaseStyleCode(String folderName) throws IOException {
         String outputCode = BaseStyleComponent.generateCode();
-        generateOutputFolder();
-        File file = new File("OutputApp/assets");
+        generateOutputFolder(folderName);
+        File file = new File("OutputStorage/" + folderName + "/assets");
         file.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/assets/baseStyle.js", false));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputStorage/" + folderName + "/assets/baseStyle.js", false));
         writer.append(outputCode);
         writer.close();
     }
 
-    public static void writeAppJSCode(NavBar navBar) throws IOException{
+    public static void writeAppJSCode(NavBar navBar, String folderName) throws IOException{
         String appJSCode = AppJSComponent.generateCode(navBar);
-        generateOutputFolder();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/App.js", false));
+        generateOutputFolder(folderName);
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputStorage/" + folderName + "/App.js", false));
         writer.append(appJSCode);
         writer.close();
 
     }
 
-    public static void writePlaceholderCode() throws IOException{
+    public static void writePlaceholderCode(String folderName) throws IOException{
         String placeholderCode = PlaceholderComponent.generateCode();
-        generateOutputFolder();
-        File cfile = new File("OutputApp/components");
+        generateOutputFolder(folderName);
+        File cfile = new File("OutputStorage/" + folderName + "/components");
         cfile.mkdir();
-        File vfile = new File("OutputApp/components/views");
+        File vfile = new File("OutputStorage/" + folderName + "/components/views");
         vfile.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputApp/components/views/Placeholder.js", false));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputStorage/" + folderName + "/components/views/Placeholder.js", false));
         writer.append(placeholderCode);
         writer.close();
     }

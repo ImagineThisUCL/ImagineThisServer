@@ -146,7 +146,7 @@ public class WireframeComponent{
         }
     }
 
-    public String generateImportCode() throws IOException {
+    public String generateImportCode(String folderName) throws IOException {
        StringBuilder importCode = new StringBuilder();
        importCode.append("import { View, ScrollView");
       if(isContainImage){
@@ -158,34 +158,34 @@ public class WireframeComponent{
        importCode.append(" } from \"react\"" + "\n");
 
        importCode.append("import base from \"../../assets/baseStyle\"" + "\n");
-       CodeGenerator.writeBaseStyleCode();
+       CodeGenerator.writeBaseStyleCode(folderName);
        if(isContainText || isContainChart){
            importCode.append("import P from '../reusables/P'").append("\n");
-           CodeGenerator.writeReusableComponentCode(ReusableComponent.P);
+           CodeGenerator.writeReusableComponentCode(ReusableComponent.P, folderName);
        }
        if(isContainButton){
             importCode.append("import Button from '../reusables/Button'").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON);
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON, folderName);
        }
        if(IS_CONTAIN_NAVBAR){
            importCode.append("import { StatusBar } from 'expo-status-bar'").append("\n");
        }
         if(isContainTextBox){
             importCode.append("import InputField from '../reusables/InputField'").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD);
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD, folderName);
         }
 
         if(isContainSideBar){
             importCode.append("import CustomSlider from \"../reusables/CustomSlider\"").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.SLIDER);
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.SLIDER, folderName);
         }
         if(isContainImageButton){
             importCode.append("import ImageButton from \"../reusables/ImageButton\"").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.IMAGE_BUTTON);
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.IMAGE_BUTTON, folderName);
         }
         if(isContainSwitch){
             importCode.append("import Toggle from \"../reusables/Toggle\"").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.SWITCH);
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.SWITCH, folderName);
         }
         if(isContainChart){
             importCode.append("import {\n")
@@ -196,11 +196,11 @@ public class WireframeComponent{
         }
         if(isContainMap){
             importCode.append("import GoogleMap from \"../reusables/GoogleMap\"").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.GOOGLE_MAP);
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.GOOGLE_MAP, folderName);
         }
         if(isContainDropdown){
             importCode.append("import Dropdown from \"../reusables/Dropdown\"").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.DROPDOWN);
+            CodeGenerator.writeReusableComponentCode(ReusableComponent.DROPDOWN, folderName);
         }
        importCode.append("\n");
 
@@ -267,9 +267,9 @@ public class WireframeComponent{
         return viewCode.toString();
     }
 
-    public String generateCode(String className) throws IOException {
+    public String generateCode(String className, String folderName) throws IOException {
         StringBuilder code = new StringBuilder();
-        code.append(this.generateImportCode()).append(this.generateViewCode(className));
+        code.append(this.generateImportCode(folderName)).append(this.generateViewCode(className));
         return code.toString();
     }
 
