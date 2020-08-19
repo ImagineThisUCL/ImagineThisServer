@@ -52,8 +52,8 @@ public class NavBar extends FrontendComponent{
                 "                },\n" +
                 "            }}>").append("\n");
         for(NavButton navButton : NAV_BUTTONS){
-            String imageName = FrontendUtil.downloadImage(navButton.getIconURL().replaceAll("\"",""));
-            imageName = imageName.replace("OutputApp",".");
+            String imageName = FrontendUtil.downloadImage(navButton.getIconURL().replaceAll("\"",""), FrontendUtil.FOLDER_NAME);
+            imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, ".");
             code.append(" <Tab.Screen\n" +
                     "                name=\"" + navButton.getText() + "\"\n" +
                     "                component={" + BUTTON_MAP.get(navButton.getText()).replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","") + "}\n" +

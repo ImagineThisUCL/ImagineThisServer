@@ -19,8 +19,8 @@ public class ImageButton extends FrontendComponent {
 
     public String generateCode() throws IOException {
         StringBuilder imageButtonCode = new StringBuilder();
-        String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"",""));
-        imageName = imageName.replace("OutputApp","../..");
+        String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"",""),FrontendUtil.FOLDER_NAME);
+        imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, "../..");
         imageButtonCode.append("<ImageButton\n");
         if(this.transitionNodeID!=null){
             String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName().replaceAll(" ","");

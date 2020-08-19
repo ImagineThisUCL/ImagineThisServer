@@ -11,6 +11,7 @@ import com.ucl.imaginethisserver.FrontendComponent.NavBar;
 import com.ucl.imaginethisserver.FrontendComponent.Navigator;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
+import com.ucl.imaginethisserver.Util.FrontendUtil;
 import com.ucl.imaginethisserver.Util.ZipUtil;
 import org.apache.commons.io.FileUtils;
 
@@ -41,9 +42,9 @@ public class CodeGeneratorTest {
         }
         String pageName = "Screens";
         ArrayList<String> nameList = new ArrayList<>();
-        nameList.add("Set Up");
+//        nameList.add("Set Up");
 //        nameList.add("Information to populat messages");
-//        nameList.add("Reach out");
+        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
 //        nameList.add("Start Passive Tracking and Reporting");
 //        nameList.add("Report for Sharing");
@@ -68,24 +69,18 @@ public class CodeGeneratorTest {
 //        nameList.add("Wellbeing rating 2");
 //        nameList.add("Messages Sent");
 //        nameList.add("Outdoor steps v Well-being");
+        FrontendUtil.FOLDER_NAME = projectID;
         generatePageByName(nameList,
                 figmaTreeStructure,
                 projectID,
                 accessToken,
-                authType,
-                projectID);
+                authType,FrontendUtil.FOLDER_NAME);
     }
 
     public static void generatePageByName(List<String> names, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType, String folderName) throws IOException {
         String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
         List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
         Page testPage = pageList.get(0);
-
-        for(Page i : pageList){
-            if(i.getName().equals(pageName)){
-                testPage = i;
-            }
-        }
 
         testPage.loadWireframes(projectID, accessToken, authType);
         CodeGenerator.generatePackageFile(folderName);

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.ucl.imaginethisserver.DAO.GenerateResponse;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
+import com.ucl.imaginethisserver.Util.FrontendUtil;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -40,12 +41,12 @@ public class GenerationController {
             if (figmaTreeStructure == null) {
                 return new GenerateResponse(false, null);
             }
-            String outputDirectoryName = projectID;
+            FrontendUtil.FOLDER_NAME = projectID;
             FigmaAPIUtil.generatePageByName(nameList,
                     figmaTreeStructure,
                     projectID,
                     accessToken,
-                    authType,projectID);
+                    authType,FrontendUtil.FOLDER_NAME);
             return new GenerateResponse(true, "OutputStorage/" + projectID + ".zip");
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,7 +64,6 @@ public class GenerationController {
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
         headers.setContentDispositionFormData("myfile","OutputApp.zip");
-
         InputStreamResource resource = null;
         try {
             resource = new InputStreamResource(new FileInputStream(file));

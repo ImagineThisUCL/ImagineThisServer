@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FrontendUtil {
     private static final AtomicInteger IMAGE_ID = new AtomicInteger(0);
-
+    public static String FOLDER_NAME = "";
     public static ArrayList<List<FrontendComponent>> getInlineComponentList(ArrayList<FrontendComponent> frontendComponentList){
         ArrayList<List<FrontendComponent>> inlineComponentList = new ArrayList<>();
         FrontendComponent preComponent = frontendComponentList.get(0);
@@ -68,17 +68,19 @@ public class FrontendUtil {
         return inlineComponentList;
     }
 
-    public static String downloadImage(String imageUrl) throws IOException {
-        File outputAppFolder = new File("OutputApp");
+    public static String downloadImage(String imageUrl, String folderName) throws IOException {
+        File storageFile = new File("OutputStorage");
+        storageFile.mkdir();
+        File outputAppFolder = new File(folderName);
         outputAppFolder.mkdir();
-        File assetsFolder = new File("OutputApp/assets");
+        File assetsFolder = new File("OutputStorage/" + folderName + "/assets");
         assetsFolder.mkdir();
-        File imgFolder = new File("OutputApp/assets/img");
+        File imgFolder = new File("OutputStorage/" + folderName + "/assets/img");
         imgFolder.mkdir();
 
         URL url = new URL(imageUrl);
         BufferedImage img = ImageIO.read(url);
-        String imageName = "OutputApp/assets/img/" + IMAGE_ID.incrementAndGet() + ".png";
+        String imageName = "OutputStorage/" + folderName + "/assets/img/" + IMAGE_ID.incrementAndGet() + ".png";
         File file = new File(imageName);
         ImageIO.write(img, "png", file);
         return imageName;

@@ -16,8 +16,8 @@ public class Image extends FrontendComponent {
     }
 
     public String generateCode() throws IOException {
-        String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"", ""));
-        imageName = imageName.replace("OutputApp", "../..");
+        String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"", ""), FrontendUtil.FOLDER_NAME);
+        imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, "../..");
         return "<Image\n" +
                 "source={require(\'" + imageName + "\')}\n" +
                 "style={{width: " + this.width +
