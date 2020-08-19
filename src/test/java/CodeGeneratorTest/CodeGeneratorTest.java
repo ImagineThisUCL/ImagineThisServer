@@ -81,6 +81,12 @@ public class CodeGeneratorTest {
         List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
         Page testPage = pageList.get(0);
 
+        for(Page i : pageList){
+            if(i.getName().equals(pageName)){
+                testPage = i;
+            }
+        }
+
         testPage.loadWireframes(projectID, accessToken, authType);
         CodeGenerator.generatePackageFile(folderName);
         for(String name : names){
