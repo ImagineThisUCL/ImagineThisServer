@@ -4,11 +4,11 @@ import com.google.gson.annotations.Expose;
 
 public class AbsoluteBoundingBox {
     @Expose()
-    double width;
+    public double width;
     @Expose()
-    double height;
+    public double height;
     @Expose()
-    double x;
+    public double x;
     @Expose()
-    double y;
+    public double y;
 }

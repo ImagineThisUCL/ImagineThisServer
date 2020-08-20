@@ -17,6 +17,7 @@ public class WireframeComponent{
             isContainForm, isContainSideBar, isContainImageButton,
             isContainImage, isContainChart, isContainMap, 
             isContainSwitch, isContainDropdown;
+    private double wWidth;
 
     private FigmaColor backgroundColor;
     private String backgroundImage;
@@ -28,6 +29,7 @@ public class WireframeComponent{
 
     public WireframeComponent(Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         this.backgroundColor = wireframe.getFills().get(0).getColor();
+        this.wWidth = wireframe.getAbsoluteBoundingBox().width;
         for(FigmaComponent component : wireframe.getComponentList()){
             //If this component is a text
             if(component.getType().equals("TEXT")){
@@ -223,15 +225,10 @@ public class WireframeComponent{
             //There is only one component in this line
             if(curList.size() == 1){
                 int marginTop = Math.max(curList.get(0).getPositionY() - preY, 0);
-                String alignCode = "";
-                String align = curList.get(0).getAlign();
-                switch (align){
-                    case "RIGHT":
-                        alignCode = "<View style={{flexDirection: \"row\", justifyContent: \"flex-end\", marginTop: " + marginTop + "}}>\n";
-                        break;
-                    default:
-                        alignCode = "<View style={{marginTop: " + marginTop +"}}>\n";
-                }
+                FrontendComponent curComponent = curList.get(0);
+                int marginLeft =  curList.get(0).getPositionX();
+                int marginRight = Integer.max((int)(wWidth - (curComponent.getPositionX() + curComponent.getWidth())), 0);
+                String alignCode = "<View style={{marginTop: " + marginTop +",marginLeft: " + marginLeft + ", marginRight: " + marginRight + "}}>\n";
                 viewCode.append(alignCode);
                 viewCode.append(curList.get(0).generateCode()).append("\n");
                 // If the component is align to right;

@@ -44,7 +44,7 @@ public class CodeGeneratorTest {
         ArrayList<String> nameList = new ArrayList<>();
 //        nameList.add("Set Up");
 //        nameList.add("Information to populat messages");
-        nameList.add("Reach out");
+//        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
 //        nameList.add("Start Passive Tracking and Reporting");
 //        nameList.add("Report for Sharing");
@@ -53,6 +53,7 @@ public class CodeGeneratorTest {
 //        nameList.add("Wellbeing by Activity");
 ////        nameList.add("Wellbeing rating 1");
 //        nameList.add("Wellbeing rating 2");
+        nameList.add("Weekly Confirm Wellbeing");
 //        nameList.add("ABUB");
 //        nameList.add("Age Connect");
 //        nameList.add("Friend of Mine");
@@ -111,7 +112,7 @@ public class CodeGeneratorTest {
             CodeGenerator.writePlaceholderCode(folderName);
         }
         //Zip the output folder to a zip file so that the user could download
-        ZipUtil.zipFile("OutputStorage/" + folderName);
-        FileUtils.deleteDirectory(new File("OutputStorage/" + folderName));
+//        ZipUtil.zipFile("OutputStorage/" + folderName);
+//        FileUtils.deleteDirectory(new File("OutputStorage/" + folderName));
     }
 }
