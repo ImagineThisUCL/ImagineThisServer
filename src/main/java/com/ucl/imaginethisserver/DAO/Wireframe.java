@@ -30,63 +30,64 @@ public class Wireframe {
             String id = pageChild.getAsJsonObject().get("id").toString().replaceAll("\"", "");
             IDList.add(id);
         }
-        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList,projectID,accessToken, authType).get("images").getAsJsonObject();
+        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList, projectID, accessToken, authType).get("images").getAsJsonObject();
         for (JsonElement jsonChild : children) {
             String type = jsonChild.getAsJsonObject().get("type").toString();
             type = type.substring(1, type.length() - 1);
+            String imageURL = "";
             switch (type) {
-                case "RECTANGLE" -> {
+                case "RECTANGLE":
                     Rectangle rectangle = new Gson().fromJson(jsonChild, Rectangle.class);
-                    String imageURL = imageJson.get(rectangle.getId()).toString();
+                    imageURL = imageJson.get(rectangle.getId()).toString();
                     rectangle.setImageURL(imageURL);
                     rectangle.convertRelativePosition(this.absoluteBoundingBox);
                     componentMap.put(rectangle.getId(), rectangle);
                     componentList.add(rectangle);
-
-                }
-                case "TEXT" -> {
+                    break;
+                case "TEXT":
                     Text text = new Gson().fromJson(jsonChild, Text.class);
-                    String imageURL = imageJson.get(text.getId()).toString();
+                    imageURL = imageJson.get(text.getId()).toString();
                     text.setImageURL(imageURL);
                     text.convertRelativePosition(this.absoluteBoundingBox);
                     componentMap.put(text.getId(), text);
                     componentList.add(text);
-                }
-                case "VECTOR" -> {
+                    break;
+                case "VECTOR":
                     Vector vector = new Gson().fromJson(jsonChild, Vector.class);
-                    String imageURL = imageJson.get(vector.getId()).toString();
+                    imageURL = imageJson.get(vector.getId()).toString();
                     vector.setImageURL(imageURL);
                     vector.convertRelativePosition(this.absoluteBoundingBox);
                     componentMap.put(vector.getId(), vector);
                     componentList.add(vector);
-                }
-                case "GROUP", "INSTANCE" -> {
+                    break;
+                case "GROUP":
+                case "INSTANCE":
                     Group group = new Gson().fromJson(jsonChild, Group.class);
                     group.setType("GROUP");
-                    String imageURL = imageJson.get(group.getId()).toString();
+                    imageURL = imageJson.get(group.getId()).toString();
                     group.setImageURL(imageURL);
                     group.setWireframeBoundingBox(this.absoluteBoundingBox);
                     group.convertRelativePosition(this.absoluteBoundingBox);
                     componentMap.put(group.getId(), group);
                     componentList.add(group);
-                }
-                case "ELLIPSE" -> {
+                    break;
+                case "ELLIPSE":
                     Ellipse ellipse = new Gson().fromJson(jsonChild, Ellipse.class);
                     imageURL = imageJson.get(ellipse.getId()).toString();
                     ellipse.setImageURL(imageURL);
                     ellipse.convertRelativePosition(this.absoluteBoundingBox);
                     componentMap.put(ellipse.getId(), ellipse);
                     componentList.add(ellipse);
-                }
+                    break;
 
-                default -> {
+                default:
                     FigmaComponent figmaComponent = new Gson().fromJson(jsonChild, FigmaComponent.class);
-                    String imageURL = imageJson.get(figmaComponent.getId()).toString();
+                    imageURL = imageJson.get(figmaComponent.getId()).toString();
                     figmaComponent.setImageURL(imageURL);
                     figmaComponent.convertRelativePosition(this.absoluteBoundingBox);
                     componentMap.put(figmaComponent.getId(), figmaComponent);
                     componentList.add(figmaComponent);
-                }
+                    break;
             }
         }
     }
@@ -107,7 +108,7 @@ public class Wireframe {
         return this.componentMap;
     }
 
-    public void sortComponentByY(){
+    public void sortComponentByY() {
         componentList.sort(new Comparator<FigmaComponent>() {
             @Override
             public int compare(FigmaComponent o1, FigmaComponent o2) {
@@ -155,7 +156,7 @@ public class Wireframe {
         this.imageURL = imageURL;
     }
 
-    public ArrayList<FigmaComponent> getComponentList(){
+    public ArrayList<FigmaComponent> getComponentList() {
         return this.componentList;
     }
 }

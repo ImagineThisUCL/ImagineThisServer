@@ -6,12 +6,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.ucl.imaginethisserver.FrontendComponent.*;
-import com.ucl.imaginethisserver.FrontendComponent.Button;
-import com.ucl.imaginethisserver.FrontendComponent.Image;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +24,7 @@ public class Group extends FigmaComponent {
     private Map<String, FigmaComponent> componentMap = new HashMap<>();
     private AbsoluteBoundingBox wireframeBoundingBox;
 
-    public Map<String, FigmaComponent> getComponentMap(){
+    public Map<String, FigmaComponent> getComponentMap() {
         return this.componentMap;
     }
 
@@ -37,7 +34,7 @@ public class Group extends FigmaComponent {
             String id = pageChild.getAsJsonObject().get("id").toString().replaceAll("\"", "");
             IDList.add(id);
         }
-        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList,projectID, accessToken, authenticateType).get("images").getAsJsonObject();
+        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList, projectID, accessToken, authenticateType).get("images").getAsJsonObject();
         for (JsonElement jsonChild : children) {
             String type = jsonChild.getAsJsonObject().get("type").toString();
             type = type.substring(1, type.length() - 1);
@@ -66,7 +63,8 @@ public class Group extends FigmaComponent {
                     vector.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(vector.getId(), vector);
                     break;
-                case "GROUP", "INSTANCE":
+                case "GROUP":
+                case "INSTANCE":
                     Group group = new Gson().fromJson(jsonChild, Group.class);
                     imageURL = imageJson.get(group.getId()).toString();
                     group.setImageURL(imageURL);
@@ -93,21 +91,21 @@ public class Group extends FigmaComponent {
 
     }
 
-    public Button convertButton(){
+    public Button convertButton() {
         Button button = new Button();
         button.setPositionX(this.getPositionX());
         button.setPositionY(this.getPositionY());
         button.setWidth(this.getWidth());
         button.setHeight(this.getHeight());
         button.setAlign(this.getAlign());
-        if(this.transitionNodeID!=null){
+        if (this.transitionNodeID != null) {
             button.setTransitionNodeID(this.transitionNodeID);
             String wireframeName = Page.getWireframeByID(this.transitionNodeID).getName();
-            Navigator.NAVIGATOR_MAP.put(wireframeName,wireframeName);
+            Navigator.NAVIGATOR_MAP.put(wireframeName, wireframeName);
         }
-        for(FigmaComponent component : this.componentMap.values()){
+        for (FigmaComponent component : this.componentMap.values()) {
             switch (component.getType()) {
-                case "RECTANGLE" -> {
+                case "RECTANGLE" :
                     Rectangle rectangle = (Rectangle) component;
                     button.setCornerRadius(rectangle.getCornerRadius());
                     button.setRecFills(rectangle.getFills());
@@ -115,14 +113,14 @@ public class Group extends FigmaComponent {
                         button.setBorderColor(rectangle.getStrokes().get(0).getColor());
                     }
                     button.setBorderWidth(rectangle.getStrokeWeight());
-                }
-                case "TEXT" -> {
+                break;
+                case "TEXT":
                     Text text = (Text) component;
                     button.setCharacter(text.getCharacters());
                     button.setStyle(text.getStyle());
                     button.setTextFills(((Text) component).getFills());
-                }
-                case "VECTOR" -> {
+                break;
+                case "VECTOR":
                     Vector vector = (Vector) component;
                     button.setCornerRadius(vector.getCornerRadius());
                     button.setRecFills(vector.getFills());
@@ -130,8 +128,8 @@ public class Group extends FigmaComponent {
                         button.setBorderColor(vector.getStrokes().get(0).getColor());
                     }
                     button.setBorderWidth(vector.getStrokeWeight());
-                }
-                case "ELLIPSE" -> {
+                break;
+                case "ELLIPSE":
                     Ellipse ellipse = (Ellipse) component;
                     button.setCircle(true);
                     button.setRecFills(ellipse.getFills());
@@ -139,7 +137,7 @@ public class Group extends FigmaComponent {
                         button.setBorderColor(ellipse.getStrokes().get(0).getColor());
                     }
                     button.setBorderWidth(ellipse.getStrokeWeight());
-                }
+                break;
             }
         }
         return button;
@@ -152,13 +150,13 @@ public class Group extends FigmaComponent {
         imageButton.setWidth(this.getWidth());
         imageButton.setHeight(this.getHeight());
         imageButton.setAlign(this.getAlign());
-        if(this.transitionNodeID!=null){
+        if (this.transitionNodeID != null) {
             imageButton.setTransitionNodeID(this.transitionNodeID);
             String wireframeName = Page.getWireframeByID(this.transitionNodeID).getName();
-            Navigator.NAVIGATOR_MAP.put(wireframeName,wireframeName);
+            Navigator.NAVIGATOR_MAP.put(wireframeName, wireframeName);
         }
-        for(FigmaComponent component : this.componentMap.values()){
-            if((component.getType().equals("GROUP") || component.getType().equals("RECTANGLE")) && component.getName().toLowerCase().contains("image")){
+        for (FigmaComponent component : this.componentMap.values()) {
+            if ((component.getType().equals("GROUP") || component.getType().equals("RECTANGLE")) && component.getName().toLowerCase().contains("image")) {
                 imageButton.setImageURL(component.getImageURL());
             }
         }
@@ -166,34 +164,34 @@ public class Group extends FigmaComponent {
     }
 
     public NavBar convertNavBar(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
-            NavBar navBar = new NavBar();
-            navBar.setHeight(this.getHeight());
-            navBar.setWidth(this.getWidth());
-            navBar.setPositionX(this.getPositionX());
-            navBar.setPositionY(this.getPositionY());
-            for (FigmaComponent component : this.componentMap.values()) {
-                if (component.getType().equals("GROUP") && component.getName().contains("button")) {
-                    NavButton navButton = new NavButton();
-                    navButton.setWidth(component.getWidth());
-                    navButton.setHeight(component.getHeight());
-                    navButton.setPositionX(component.getPositionX());
-                    navButton.setPositionY(component.getPositionY());
-                    ((Group) component).loadComponent(projectID, accessToken, authenticateType);
-                    for (FigmaComponent childComponent : ((Group) component).getComponentMap().values()) {
-                        if (childComponent.getType().equals("TEXT")) {
-                            navButton.setText(((Text) childComponent).getCharacters());
-                        } else if (childComponent.getName().toLowerCase().contains("icon")) {
-                            navButton.setIconURL(childComponent.getImageURL());
-                        }
+        NavBar navBar = new NavBar();
+        navBar.setHeight(this.getHeight());
+        navBar.setWidth(this.getWidth());
+        navBar.setPositionX(this.getPositionX());
+        navBar.setPositionY(this.getPositionY());
+        for (FigmaComponent component : this.componentMap.values()) {
+            if (component.getType().equals("GROUP") && component.getName().contains("button")) {
+                NavButton navButton = new NavButton();
+                navButton.setWidth(component.getWidth());
+                navButton.setHeight(component.getHeight());
+                navButton.setPositionX(component.getPositionX());
+                navButton.setPositionY(component.getPositionY());
+                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+                for (FigmaComponent childComponent : ((Group) component).getComponentMap().values()) {
+                    if (childComponent.getType().equals("TEXT")) {
+                        navButton.setText(((Text) childComponent).getCharacters());
+                    } else if (childComponent.getName().toLowerCase().contains("icon")) {
+                        navButton.setIconURL(childComponent.getImageURL());
                     }
-                    NavBar.NAV_BUTTONS.add(navButton);
-                    NavBar.BUTTON_MAP.put(navButton.getText(), "Placeholder");
                 }
+                NavBar.NAV_BUTTONS.add(navButton);
+                NavBar.BUTTON_MAP.put(navButton.getText(), "Placeholder");
             }
-            return navBar;
+        }
+        return navBar;
     }
 
-    public TextBox convertTextBox(){
+    public TextBox convertTextBox() {
         TextBox textbox = new TextBox();
         textbox.setPositionX(this.getPositionX());
         textbox.setPositionY(this.getPositionY());
@@ -201,21 +199,21 @@ public class Group extends FigmaComponent {
         textbox.setHeight(this.getHeight());
         textbox.setAlign(this.getAlign());
 
-        for(FigmaComponent component : this.componentMap.values()){
-            if(component.getType().equals("RECTANGLE")){
+        for (FigmaComponent component : this.componentMap.values()) {
+            if (component.getType().equals("RECTANGLE")) {
                 Rectangle rectangle = (Rectangle) component;
                 textbox.setContainerFills(rectangle.getFills());
                 textbox.setCornerRadius(rectangle.getCornerRadius());
-            }else if(component.getType().equals("VECTOR")){
+            } else if (component.getType().equals("VECTOR")) {
                 Vector vector = (Vector) component;
                 textbox.setContainerFills(vector.getFills());
                 textbox.setCornerRadius(vector.getCornerRadius());
-            }else if(component.getType().equals("TEXT") && component.getName().toLowerCase().contains("placeholder")){
+            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("placeholder")) {
                 Text text = (Text) component;
                 textbox.setPlaceholder(text.getCharacters());
                 textbox.setStyle(text.getStyle());
                 textbox.setTextFills(text.getFills());
-            }else if(component.getType().equals("TEXT") && component.getName().toLowerCase().contains("label")){
+            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("label")) {
                 Text text = (Text) component;
                 textbox.setLabel(text.getCharacters());
             }
@@ -231,58 +229,58 @@ public class Group extends FigmaComponent {
         form.setPositionX(this.getPositionX());
         form.setPositionY(this.getPositionY());
         form.setAlign(this.getAlign());
-        for(FigmaComponent component: this.componentMap.values()){
-            if(component.getType().equals("TEXT")){
-                FrontendText text = ((Text)component).convertToFrontendText();
+        for (FigmaComponent component : this.componentMap.values()) {
+            if (component.getType().equals("TEXT")) {
+                FrontendText text = ((Text) component).convertToFrontendText();
                 form.frontendComponentList.add(text);
                 form.setContainText(true);
-            }else if(component.getName().toLowerCase().contains("switch")){
+            } else if (component.getName().toLowerCase().contains("switch")) {
                 Switch aSwitch = component.convertSwitch();
                 form.frontendComponentList.add(aSwitch);
                 form.setContainSwitch(true);
-            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbox")){
-                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
-                TextBox textBox = ((Group)component).convertTextBox();
+            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbox")) {
+                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+                TextBox textBox = ((Group) component).convertTextBox();
                 form.frontendComponentList.add(textBox);
                 form.setContainTextBox(true);
-            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")){
-                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
-                Button button = ((Group)component).convertButton();
+            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")) {
+                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+                Button button = ((Group) component).convertButton();
                 form.frontendComponentList.add(button);
                 form.setContainButton(true);
-            }else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")){
-                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
-                ImageButton imageButton = ((Group)component).convertImageButton(projectID,accessToken,authenticateType);
+            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")) {
+                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+                ImageButton imageButton = ((Group) component).convertImageButton(projectID, accessToken, authenticateType);
                 form.frontendComponentList.add(imageButton);
                 form.setContainImageButton(true);
-            }else if((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && component.getName().toLowerCase().contains("picture")){
+            } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && component.getName().toLowerCase().contains("picture")) {
                 Image image;
-                if(component.getType().equals("RECTANGLE")) {
+                if (component.getType().equals("RECTANGLE")) {
                     image = ((Rectangle) component).convertToImage();
-                }else{
-                    image = ((Group)component).convertToImage();
+                } else {
+                    image = ((Group) component).convertToImage();
                 }
                 form.frontendComponentList.add(image);
                 form.setContainImage(true);
-            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("chart")){
-                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
+            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("chart")) {
+                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
                 Chart fixedChart = ((Group) component).convertToFixedChart();
                 form.frontendComponentList.add(fixedChart);
                 form.setContainChart(true);
-            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("dropdown")){
-                ((Group)component).loadComponent(projectID,accessToken,authenticateType);
+            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("dropdown")) {
+                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
                 Dropdown dropdown = ((Group) component).convertToDropdown();
                 form.frontendComponentList.add(dropdown);
                 form.setContainDropdown(true);
-            }else if((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")){
-                switch (component.getType()){
+            } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")) {
+                switch (component.getType()) {
                     case "RECTANGLE":
-                        Rectangle rectangle = (Rectangle)component;
-                        if(rectangle.getFills().size() > 0){
+                        Rectangle rectangle = (Rectangle) component;
+                        if (rectangle.getFills().size() > 0) {
                             form.setBackgroundColor(rectangle.getFills().get(0).getColor());
                         }
                         form.setCornerRadius(rectangle.getCornerRadius());
-                        if(rectangle.getStrokes().size() > 0){
+                        if (rectangle.getStrokes().size() > 0) {
                             form.setBorderColor(rectangle.getStrokes().get(0).getColor());
                         }
                         form.setBorderWidth(rectangle.getStrokeWeight());
@@ -290,11 +288,11 @@ public class Group extends FigmaComponent {
                         break;
                     case "VECTOR":
                         Vector vector = (Vector) component;
-                        if(vector.getFills().size() > 0){
+                        if (vector.getFills().size() > 0) {
                             form.setBackgroundColor(vector.getFills().get(0).getColor());
                         }
                         form.setCornerRadius((vector.getCornerRadius()));
-                        if(vector.getStrokes().size() > 0){
+                        if (vector.getStrokes().size() > 0) {
                             form.setBorderColor(vector.getStrokes().get(0).getColor());
                         }
                         form.setBorderWidth(vector.getStrokeWeight());
@@ -310,25 +308,25 @@ public class Group extends FigmaComponent {
         this.wireframeBoundingBox = wireframeBoundingBox;
     }
 
-    public Slider convertSlider(){
+    public Slider convertSlider() {
         Slider slider = new Slider();
         slider.setHeight(this.getHeight());
         slider.setWidth(this.getWidth());
         slider.setPositionX(this.getPositionX());
         slider.setPositionY(this.getPositionY());
         slider.setAlign(this.getAlign());
-        for(FigmaComponent component : this.componentMap.values()){
-            if(component.getType().equals("TEXT") && component.getName().toLowerCase().equals("cur_value")){
-                int cur_value = Integer.parseInt(((Text)component).getCharacters());
+        for (FigmaComponent component : this.componentMap.values()) {
+            if (component.getType().equals("TEXT") && component.getName().toLowerCase().equals("cur_value")) {
+                int cur_value = Integer.parseInt(((Text) component).getCharacters());
                 slider.setCur_value(cur_value);
-            }else if(component.getType().equals("TEXT") && component.getName().toLowerCase().equals("min_value")){
-                int min_value = Integer.parseInt(((Text)component).getCharacters());
+            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().equals("min_value")) {
+                int min_value = Integer.parseInt(((Text) component).getCharacters());
                 slider.setMin_value(min_value);
-            }else if(component.getType().equals("TEXT") && component.getName().toLowerCase().equals("max_value")){
-                int max_value = Integer.parseInt(((Text)component).getCharacters());
+            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().equals("max_value")) {
+                int max_value = Integer.parseInt(((Text) component).getCharacters());
                 slider.setMax_value(max_value);
-            } else if(component.getType().equals("RECTANGLE") && component.getName().toLowerCase().equals("background")) {
-                Rectangle rectangle = (Rectangle)component;
+            } else if (component.getType().equals("RECTANGLE") && component.getName().toLowerCase().equals("background")) {
+                Rectangle rectangle = (Rectangle) component;
                 slider.setBackgroundColor(rectangle.getFills().get(0).getColor());
                 slider.setBorderRadius(rectangle.getCornerRadius());
             }
@@ -336,7 +334,7 @@ public class Group extends FigmaComponent {
         return slider;
     }
 
-    public Chart convertToFixedChart(){
+    public Chart convertToFixedChart() {
         Chart fixedChart = new Chart();
         fixedChart.setHeight(this.getHeight());
         fixedChart.setWidth(this.getWidth());
@@ -347,7 +345,7 @@ public class Group extends FigmaComponent {
         return fixedChart;
     }
 
-    public Dropdown convertToDropdown(){
+    public Dropdown convertToDropdown() {
         Dropdown dropdown = new Dropdown();
         dropdown.setHeight(this.getHeight());
         dropdown.setWidth(this.getWidth());
@@ -355,12 +353,12 @@ public class Group extends FigmaComponent {
         dropdown.setPositionY(this.getPositionY());
         dropdown.setAlign(this.getAlign());
 
-        for(FigmaComponent component : this.componentMap.values()) {
-            if(component.getType().equals("RECTANGLE")){
+        for (FigmaComponent component : this.componentMap.values()) {
+            if (component.getType().equals("RECTANGLE")) {
                 Rectangle rectangle = (Rectangle) component;
                 dropdown.setContainerFills(rectangle.getFills());
                 dropdown.setCornerRadius(rectangle.getCornerRadius());
-            }else if(component.getType().equals("TEXT") && component.getName().toLowerCase().contains("option")){
+            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("option")) {
                 Text text = (Text) component;
                 dropdown.setOption(text.getCharacters());
                 dropdown.setStyle(text.getStyle());
@@ -371,7 +369,7 @@ public class Group extends FigmaComponent {
         return dropdown;
     }
 
-    public Image convertToImage(){
+    public Image convertToImage() {
         Image image = new Image();
         image.setWidth(this.getWidth());
         image.setHeight(this.getHeight());
