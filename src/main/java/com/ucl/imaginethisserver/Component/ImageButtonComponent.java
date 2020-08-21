@@ -11,6 +11,7 @@ public class ImageButtonComponent {
                 "    TouchableOpacity,\n" +
                 "    View,\n" +
                 "} from \"react-native\"\n" +
+                "import propTypes from 'prop-types'\n" +
                 "\n" +
                 "import base from \"../../assets/baseStyle\"\n" +
                 "\n" +
@@ -35,6 +36,12 @@ public class ImageButtonComponent {
                 "            </View>\n" +
                 "        )\n" +
                 "    }\n" +
-                "}";
+                "}\n" +
+                "\n" +
+                "Button.propTypes = {\n" +
+                "    imageSrc: propTypes.object.isRequired,\n" +
+                "    style: propTypes.object, // container styles\n" +
+                "    imageStyle: propTypes.object, // image styles\n" +
+                "}\n";
     }
 }

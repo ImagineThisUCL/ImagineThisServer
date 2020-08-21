@@ -3,11 +3,9 @@ package com.ucl.imaginethisserver.Component;
 public class SwitchComponent {
     public static String generateCode(){
         return "import React, { Component } from \"react\"\n" +
-                "import { StyleSheet } from \"react-native\"\n" +
-                "import { Button } from 'react-native-elements';\n" +
-                "\n" +
-                "import base from \"../../assets/baseStyle\"\n" +
-                "import { Switch } from \"react-native-gesture-handler\";\n" +
+                "import propTypes from 'prop-types'\n" +
+                "import {Switch } from \"react-native\";\n" +
+                "import { color } from \"react-native-reanimated\";\n" +
                 "\n" +
                 "export default class Toggle extends Component {\n" +
                 "    constructor(props) {\n" +
@@ -27,6 +25,17 @@ public class SwitchComponent {
                 "            />  \n" +
                 "        )\n" +
                 "    }\n" +
+                "}\n" +
+                "\n" +
+                "Toggle.propTypes = {\n" +
+                "    // prop types for react-native Switch\n" +
+                "    disabled: propTypes.bool,\n" +
+                "    ios_backgroundColor: propTypes.string,\n" +
+                "    onChange: propTypes.func,\n" +
+                "    onValueChange: propTypes.func,\n" +
+                "    thumbColor: propTypes.string,\n" +
+                "    trackColor: propTypes.object,\n" +
+                "    value: propTypes.bool,\n" +
                 "}\n";
     }
 }

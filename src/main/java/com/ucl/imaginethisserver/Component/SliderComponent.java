@@ -11,6 +11,7 @@ public class SliderComponent {
                 "    Text,\n" +
                 "} from \"react-native\"\n" +
                 "import Slider from '@react-native-community/slider'\n" +
+                "import propTypes from 'prop-types'\n" +
                 "\n" +
                 "import base from \"../../assets/baseStyle\"\n" +
                 "\n" +
@@ -20,6 +21,10 @@ public class SliderComponent {
                 "        justifyContent: \"space-between\",\n" +
                 "        paddingHorizontal: 10,\n" +
                 "        paddingVertical: 5,\n" +
+                "    },\n" +
+                "    sliderWrapper: {\n" +
+                "        flexDirection: \"column\",\n" +
+                "        flexGrow: 1,\n" +
                 "    },\n" +
                 "})\n" +
                 "\n" +
@@ -37,7 +42,7 @@ public class SliderComponent {
                 "        let labelStyleList = []\n" +
                 "\n" +
                 "        return (\n" +
-                "            <View>\n" +
+                "            <View style={styles.sliderWrapper}>\n" +
                 "                <View style={styles.labelsWrapper}>\n" +
                 "                    <Text style={[...labelStyleList, this.props.labelStyle]}>{this.props.minimumValue}</Text>\n" +
                 "                    <Text style={[...labelStyleList, this.props.valueLabelStyle]}>{this.state.sliderValue}</Text>\n" +
@@ -49,6 +54,21 @@ public class SliderComponent {
                 "            </View>\n" +
                 "        )\n" +
                 "    }\n" +
-                "}";
+                "}\n" +
+                "\n" +
+                "CustomSlider.propTypes = {\n" +
+                "    minimumValue: propTypes.number.isRequired,\n" +
+                "    maximumValue: propTypes.number.isRequired,\n" +
+                "    value: propTypes.number.isRequired,\n" +
+                "    step: propTypes.number, // default is 1\n" +
+                "    minimumTrackTintColor: propTypes.string, // track color for left side\n" +
+                "    maximumTrackTintColor: propTypes.string, // track color for right side\n" +
+                "    thumbTintColor: propTypes.string, // color of drag element\n" +
+                "    labelStyle: propTypes.object, // style object for min/max labels\n" +
+                "    valueLabelStyle: propTypes.object, // style object for value label\n" +
+                "    /* \n" +
+                "        For other props please refer to @react-native-community/slider documentation\n" +
+                "    */\n" +
+                "}\n";
     }
 }

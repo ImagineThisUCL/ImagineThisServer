@@ -4,7 +4,8 @@ public class GoogleMapComponent {
     public static String generateCode(){
         return "import { View, StyleSheet} from \"react-native\"\n" +
                 "import React, { Component } from \"react\"\n" +
-                "import MapView ,{ PROVIDER_GOOGLE }from 'react-native-maps';\n" +
+                "import MapView ,{ PROVIDER_GOOGLE }from 'react-native-maps'\n" +
+                "import propTypes from 'prop-types'\n" +
                 "\n" +
                 "import base from \"../../assets/baseStyle\"\n" +
                 "\n" +
@@ -39,6 +40,10 @@ public class GoogleMapComponent {
                 "            </View>\n" +
                 "        )\n" +
                 "    }\n" +
+                "}\n" +
+                "\n" +
+                "GoogleMap.propTypes = {\n" +
+                "    mapStyle: propTypes.object, // override default styles, e.g. set fixed width and height\n" +
                 "}\n";
     }
 }

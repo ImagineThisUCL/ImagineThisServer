@@ -5,6 +5,7 @@ public class DropdownComponent {
         return "import React, { Component } from \"react\"\n" +
                 "import { StyleSheet } from \"react-native\"\n" +
                 "import ModalSelector from 'react-native-modal-selector'\n" +
+                "import propTypes from 'prop-types'\n" +
                 "\n" +
                 "import base from \"../../assets/baseStyle\"\n" +
                 "\n" +
@@ -59,6 +60,16 @@ public class DropdownComponent {
                 "                cancelText=\"Cancel\" />\n" +
                 "        )\n" +
                 "    }\n" +
+                "}\n" +
+                "\n" +
+                "Dropdown.propTypes = {\n" +
+                "    items: propTypes.array.isRequired, // requires dropdown options\n" +
+                "    textStyle: propTypes.object, // input box text style\n" +
+                "    containerStyle: propTypes.object, // input box container style\n" +
+                "    /* \n" +
+                "        Other props are set directly in this file - for more information, please\n" +
+                "        refer to react-native-modal-selector documentation\n" +
+                "    */\n" +
                 "}\n";
     }
 }
