@@ -5,6 +5,7 @@ import com.ucl.imaginethisserver.DAO.GenerateResponse;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import com.ucl.imaginethisserver.Util.FrontendUtil;
+import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class GenerationController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/generatePage")
-    public GenerateResponse generatePages(@RequestBody Map<String, Object> payload, HttpServletResponse response) {
+    public GenerateResponse generatePages(@RequestBody Map<String, Object> payload, HttpServletResponse response) throws IOException {
         String accessToken = payload.get("accessToken").toString();
         String projectID = payload.get("projectID").toString();
         String type = payload.get("authType").toString();
@@ -50,6 +51,7 @@ public class GenerationController {
             return new GenerateResponse(true, "OutputStorage/" + projectID + ".zip");
         } catch (Exception e) {
             e.printStackTrace();
+            FileUtils.deleteDirectory(new File("OutputStorage/" + FrontendUtil.FOLDER_NAME));
             return new GenerateResponse(false, null);
 
         }

@@ -26,7 +26,7 @@ public class WireframeComponent{
     public static boolean IsContainNavBar(){
         return IS_CONTAIN_NAVBAR;
     }
-
+    public static void setIsContainNavbar(boolean isContainNavbar) {IS_CONTAIN_NAVBAR = isContainNavbar;}
     public WireframeComponent(Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         this.backgroundColor = wireframe.getFills().get(0).getColor();
         this.wWidth = wireframe.getAbsoluteBoundingBox().width;
@@ -218,7 +218,9 @@ public class WireframeComponent{
         }
         viewCode.append("        return (\n" +
                 "            <ScrollView style={{flex: 1, padding: 0, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
-
+        if(frontendComponentList.size() == 0){
+            return "";
+        }
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
         int preY = 0;
         for(List<FrontendComponent> curList : inlineComponentList){

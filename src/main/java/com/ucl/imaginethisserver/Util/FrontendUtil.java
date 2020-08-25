@@ -1,7 +1,11 @@
 package com.ucl.imaginethisserver.Util;
 
+import com.ucl.imaginethisserver.Component.WireframeComponent;
 import com.ucl.imaginethisserver.DAO.FigmaComponent;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendComponent;
+import com.ucl.imaginethisserver.FrontendComponent.NavBar;
+import com.ucl.imaginethisserver.FrontendComponent.NavButton;
+import com.ucl.imaginethisserver.FrontendComponent.Navigator;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -11,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -71,7 +76,7 @@ public class FrontendUtil {
     public static String downloadImage(String imageUrl, String folderName) throws IOException {
         File storageFile = new File("OutputStorage");
         storageFile.mkdir();
-        File outputAppFolder = new File(folderName);
+        File outputAppFolder = new File("OutputStorage/" + folderName);
         outputAppFolder.mkdir();
         File assetsFolder = new File("OutputStorage/" + folderName + "/assets");
         assetsFolder.mkdir();
@@ -84,5 +89,17 @@ public class FrontendUtil {
         File file = new File(imageName);
         ImageIO.write(img, "png", file);
         return imageName;
+    }
+
+    public static void refreshStaticVariable(){
+        WireframeComponent.NAV_BAR = null;
+        WireframeComponent.setIsContainNavbar(false);
+
+        Navigator.NAVIGATOR_MAP = new HashMap<>();
+        Navigator.hasPlaceholder = false;
+
+        NavBar.NAV_BUTTONS = new ArrayList<>();
+        NavBar.NAV_BAR_NAME = null;
+        NavBar.BUTTON_MAP = new HashMap<>();
     }
 }

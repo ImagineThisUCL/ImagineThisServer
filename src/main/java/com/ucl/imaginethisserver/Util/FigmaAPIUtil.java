@@ -88,6 +88,7 @@ public class FigmaAPIUtil {
     }
 
     public static void generatePageByName(List<String> names, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType, String folderName) throws IOException {
+        FrontendUtil.refreshStaticVariable();
         String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
         List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
         Page testPage = pageList.get(0);
@@ -121,6 +122,7 @@ public class FigmaAPIUtil {
             CodeGenerator.writePlaceholderCode(folderName);
         }
         //Zip the output folder to a zip file so that the user could download
+
         ZipUtil.zipFile("OutputStorage/" + folderName);
         FileUtils.deleteDirectory(new File("OutputStorage/" + folderName));
     }
