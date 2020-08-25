@@ -2,17 +2,18 @@ package com.ucl.imaginethisserver.Controller;
 
 import com.google.gson.JsonObject;
 import com.ucl.imaginethisserver.DAO.AuthenticateResponse;
-import com.ucl.imaginethisserver.DAO.GenerateResponse;
 import com.ucl.imaginethisserver.DAO.Page;
 import com.ucl.imaginethisserver.DAO.Wireframe;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class AuthenticateController {

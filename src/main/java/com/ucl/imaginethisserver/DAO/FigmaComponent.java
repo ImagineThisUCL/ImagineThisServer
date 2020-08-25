@@ -2,7 +2,6 @@ package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ucl.imaginethisserver.FrontendComponent.Button;
 import com.ucl.imaginethisserver.FrontendComponent.Switch;
 
 public class FigmaComponent {

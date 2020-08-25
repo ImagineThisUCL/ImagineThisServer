@@ -1,17 +1,14 @@
 package com.ucl.imaginethisserver.Util;
 
 import com.ucl.imaginethisserver.Component.WireframeComponent;
-import com.ucl.imaginethisserver.DAO.FigmaComponent;
 import com.ucl.imaginethisserver.FrontendComponent.FrontendComponent;
 import com.ucl.imaginethisserver.FrontendComponent.NavBar;
-import com.ucl.imaginethisserver.FrontendComponent.NavButton;
 import com.ucl.imaginethisserver.FrontendComponent.Navigator;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;

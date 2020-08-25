@@ -1,6 +1,5 @@
 package com.ucl.imaginethisserver.DAO;
 
-import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
 import com.ucl.imaginethisserver.FrontendComponent.Image;
 import com.ucl.imaginethisserver.FrontendComponent.Map;
 

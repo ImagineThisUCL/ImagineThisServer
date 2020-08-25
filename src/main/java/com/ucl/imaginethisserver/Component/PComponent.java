@@ -1,7 +1,5 @@
 package com.ucl.imaginethisserver.Component;
 
-import com.ucl.imaginethisserver.FrontendComponent.FrontendComponent;
-
 public class PComponent {
     public static String generateCode(){
         return "import React, { Component } from \"react\"\n" +

@@ -4,6 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
+import com.ucl.imaginethisserver.Component.WireframeComponent;
+import com.ucl.imaginethisserver.DAO.FigmaComponent;
+import com.ucl.imaginethisserver.DAO.Group;
+import com.ucl.imaginethisserver.DAO.Page;
+import com.ucl.imaginethisserver.DAO.Wireframe;
+import com.ucl.imaginethisserver.FrontendComponent.NavBar;
+import com.ucl.imaginethisserver.FrontendComponent.Navigator;
+import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,17 +23,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
-import com.ucl.imaginethisserver.Component.WireframeComponent;
-import com.ucl.imaginethisserver.DAO.FigmaComponent;
-import com.ucl.imaginethisserver.DAO.Group;
-import com.ucl.imaginethisserver.DAO.Page;
-import com.ucl.imaginethisserver.DAO.Wireframe;
-import com.ucl.imaginethisserver.FrontendComponent.NavBar;
-import com.ucl.imaginethisserver.FrontendComponent.Navigator;
-import org.apache.commons.io.FileUtils;
-import org.yaml.snakeyaml.events.Event;
 
 public class FigmaAPIUtil {
     public static JsonObject sendGetRequest(URL figmaAPI, String accessToken,AuthenticateType authType) throws IOException {

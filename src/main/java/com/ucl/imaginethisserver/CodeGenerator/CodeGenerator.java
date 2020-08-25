@@ -2,7 +2,6 @@ package com.ucl.imaginethisserver.CodeGenerator;
 
 import com.ucl.imaginethisserver.Component.*;
 import com.ucl.imaginethisserver.DAO.Wireframe;
-import com.ucl.imaginethisserver.FrontendComponent.ImageButton;
 import com.ucl.imaginethisserver.FrontendComponent.NavBar;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 

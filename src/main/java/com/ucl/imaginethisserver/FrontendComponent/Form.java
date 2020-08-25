@@ -2,7 +2,6 @@ package com.ucl.imaginethisserver.FrontendComponent;
 
 
 import com.ucl.imaginethisserver.DAO.FigmaColor;
-import com.ucl.imaginethisserver.DAO.FigmaComponent;
 import com.ucl.imaginethisserver.Util.FrontendUtil;
 
 import java.io.IOException;
