@@ -96,6 +96,18 @@ public class FigmaComponent {
     public void setType(String type) {
         this.type = type;
     }
+
+    public void setAbsoluteBoundingBox(AbsoluteBoundingBox absoluteBoundingBox) {
+        this.absoluteBoundingBox = absoluteBoundingBox;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }
 
 

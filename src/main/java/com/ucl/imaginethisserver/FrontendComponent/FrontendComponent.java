@@ -57,9 +57,13 @@ public abstract class FrontendComponent {
      public String getAlign() {return this.align;}
 
      public boolean isSameLine(FrontendComponent a_component){
+         // If they are the same component.
+         if(a_component.width == this.width && a_component.height == this.height && a_component.positionY == this.positionY && a_component.positionX == positionX){
+             return true;
+         }
          if(this.positionX < a_component.positionX){
              if(this.positionX + this.width < a_component.positionX){
-                 if( a_component.positionY + a_component.height > this.positionY){
+                 if((this.positionY + this.height > a_component.positionY && this.positionY <= a_component.positionY)||(a_component.positionY + a_component.height > this.height && a_component.positionY <= this.positionY)){
                      return true;
                  }else{
                      return false;
@@ -70,7 +74,7 @@ public abstract class FrontendComponent {
              }
          }else {
              if(a_component.positionX + a_component.width < this.positionX){
-                 if( a_component.positionY + a_component.height > this.positionY){
+                 if((this.positionY + this.height > a_component.positionY && this.positionY <= a_component.positionY)||(a_component.positionY + a_component.height > this.height && a_component.positionY <= this.positionY)){
                      return true;
                  }else{
                      return false;
