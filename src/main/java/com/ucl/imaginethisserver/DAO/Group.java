@@ -186,6 +186,9 @@ public class Group extends FigmaComponent {
                 }
                 NavBar.NAV_BUTTONS.add(navButton);
                 NavBar.BUTTON_MAP.put(navButton.getText(), "Placeholder");
+                if(NavBar.NAV_BAR_NAME == null) {
+                    NavBar.NAV_BAR_NAME = navButton.getText();
+                }
             }
         }
         return navBar;

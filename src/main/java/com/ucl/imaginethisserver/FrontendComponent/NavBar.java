@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class NavBar extends FrontendComponent{
 
     public static ArrayList<NavButton> NAV_BUTTONS = new ArrayList<>();
-
+    public static String NAV_BAR_NAME = null;
     public static HashMap<String, String> BUTTON_MAP = new HashMap<>();
 
     public static boolean hasNavBar = false;

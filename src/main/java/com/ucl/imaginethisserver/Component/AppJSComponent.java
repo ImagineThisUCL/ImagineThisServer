@@ -35,6 +35,7 @@ public class AppJSComponent {
     }
 
     public static String generateViewCode(NavBar navBar) throws IOException {
+        String navBarName = NavBar.NAV_BAR_NAME.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\\\\\[\\\\\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
         StringBuilder viewCode = new StringBuilder();
         if (navBar != null) {
             viewCode.append("const Tab = createBottomTabNavigator();").append("\n");
@@ -48,10 +49,10 @@ public class AppJSComponent {
                 "        <SafeAreaView style={{flex: 1, backgroundColor: \"#D5E6EC\"}}>\n" +
                 "\n" +
                 "            <NavigationContainer>\n" +
-                "                <Stack.Navigator initialRouteName=\"Home\">\n");
+                "                <Stack.Navigator initialRouteName=\"" + navBarName + "\">\n");
         if (navBar != null) {
             viewCode.append("                    <Stack.Screen\n" +
-                    "                        name=\"Home\"\n" +
+                    "                        name=\"" + navBarName + "\"\n" +
                     "                        component={NavigationBar}\n" +
                     "                        options={{headerShown: false}}/>\n");
         }
