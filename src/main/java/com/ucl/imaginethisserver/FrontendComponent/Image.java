@@ -15,14 +15,18 @@ public class Image extends FrontendComponent {
         this.imageURL = imageURL;
     }
 
-    public String generateCode() throws IOException {
-        String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"", ""), FrontendUtil.FOLDER_NAME);
-        imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, "../..");
-        return "<Image\n" +
-                "source={require(\'" + imageName + "\')}\n" +
-                "style={{width: " + this.width +
-                ", height: " + this.height + "}}\n" +
-                "/>";
+    public String generateCode(){
+        try {
+            String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"", ""), FrontendUtil.FOLDER_NAME);
+            imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, "../..");
+            return "<Image\n" +
+                    "source={require(\'" + imageName + "\')}\n" +
+                    "style={{width: " + this.width +
+                    ", height: " + this.height + "}}\n" +
+                    "/>";
+        }catch (Exception e){
+            return "<P>The image component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
+        }
 
     }
 }

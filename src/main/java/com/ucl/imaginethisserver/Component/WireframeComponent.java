@@ -13,7 +13,7 @@ import java.util.List;
 public class WireframeComponent{
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
-    private boolean isContainText, isContainButton, isContainTextBox,
+    private boolean isContainText = true, isContainButton, isContainTextBox,
             isContainForm, isContainSideBar, isContainImageButton,
             isContainImage, isContainChart, isContainMap, 
             isContainSwitch, isContainDropdown;
@@ -35,9 +35,6 @@ public class WireframeComponent{
             if(component.getType().equals("TEXT")){
                 FrontendText frontendText = ((Text)component).convertToFrontendText();
                 frontendComponentList.add(frontendText);
-                if(!isContainText){
-                    isContainText = true;
-                }
             }else if((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && component.getName().toLowerCase().contains("picture")){
                 Image image;
                 if(component.getType().equals("RECTANGLE")) {
@@ -69,7 +66,7 @@ public class WireframeComponent{
                 if(!isContainButton){
                     isContainButton = true;
                 }
-            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbox")){
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("input")){
                 TextBox textBox = ((Group)component).convertTextBox();
                 frontendComponentList.add(textBox);
                 if(!isContainTextBox){
@@ -79,7 +76,6 @@ public class WireframeComponent{
             else if(component.getType().equals("GROUP")&& component.getName().toLowerCase().contains("navigation")){
                 if(NAV_BAR == null) {
                     NAV_BAR = ((Group) component).convertNavBar(projectID, accessToken, authenticateType);
-
                 }
                 for(String navText : NavBar.BUTTON_MAP.keySet()){
                     if(NavBar.BUTTON_MAP.get(navText).equals("Placeholder")){
