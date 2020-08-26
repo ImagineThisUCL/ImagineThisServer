@@ -52,30 +52,34 @@ public class Button extends FrontendComponent{
     }
 
     public String generateCode() {
-        String backgroundColor = this.RecFills.get(0).getColor().toString();
-        String textColor = this.TextFills.get(0).getColor().toString();
-        StringBuilder buttonCode = new StringBuilder();
-        buttonCode.append("<Button\n");
-        if(this.transitionNodeID!=null){
-            String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName().replaceAll(" ","");
-            buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
-        }
-        buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", marginTop: base.margin");
-        if(!isCircle){
-            buttonCode.append(", borderRadius: ").append(this.cornerRadius);
-        }
-        if(this.borderColor!=null){
-            String borderColorStr = this.borderColor.toString();
-            buttonCode.append(", borderColor: ").append(borderColorStr).append(" ,borderWidth: ").append(this.borderWidth);
-        }
-        buttonCode.append("}}\n");
-        buttonCode.append("   textStyle={{color: ").append(textColor).append(", fontSize: ").append(this.style.getFontSize()).append("}}\n");
-        if(isCircle){
-            buttonCode.append("circleDiameter={").append(this.width).append("}");
-        }
-        buttonCode.append(">").append(this.character).append("</Button>");
+        try {
+            String backgroundColor = this.RecFills.get(0).getColor().toString();
+            String textColor = this.TextFills.get(0).getColor().toString();
+            StringBuilder buttonCode = new StringBuilder();
+            buttonCode.append("<Button\n");
+            if (this.transitionNodeID != null) {
+                String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName().replaceAll(" ", "");
+                buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
+            }
+            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", marginTop: base.margin");
+            if (!isCircle) {
+                buttonCode.append(", borderRadius: ").append(this.cornerRadius);
+            }
+            if (this.borderColor != null) {
+                String borderColorStr = this.borderColor.toString();
+                buttonCode.append(", borderColor: ").append(borderColorStr).append(" ,borderWidth: ").append(this.borderWidth);
+            }
+            buttonCode.append("}}\n");
+            buttonCode.append("   textStyle={{color: ").append(textColor).append(", fontSize: ").append(this.style.getFontSize()).append("}}\n");
+            if (isCircle) {
+                buttonCode.append("circleDiameter={").append(this.width).append("}");
+            }
+            buttonCode.append(">").append(this.character).append("</Button>");
 
-        return buttonCode.toString();
+            return buttonCode.toString();
+        }catch (Exception e){
+            return "<P>The button component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
+        }
     }
 
     public void setTextFills(List<Fills> textFills) {
@@ -110,4 +114,3 @@ public class Button extends FrontendComponent{
         isCircle = circle;
     }
 }
-

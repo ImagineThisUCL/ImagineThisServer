@@ -48,63 +48,69 @@ public class Form extends FrontendComponent{
     }
 
     public String generateCode() throws IOException {
-        StringBuilder code = new StringBuilder();
-        String backgroundColorStr = "";
-        if(this.backgroundColor == null){
-            backgroundColorStr = "\"rgba(0,0,0,0)\"";
-        }else{
-            backgroundColorStr = this.backgroundColor.toString();
-        }
-        if(this.borderColor!=null){
-            String borderColorStr = this.borderColor.toString();
-            code.append("<View style={{borderRadius: " + this.cornerRadius + ", padding: 10, backgroundColor: " + backgroundColorStr +",borderColor: " + borderColorStr + ", borderWidth: " + borderWidth + "}}>\n");
-        }else{
-            code.append("<View style={{borderRadius: " + this.cornerRadius + ", padding: 10, backgroundColor: " + backgroundColorStr +"}}>").append("\n");
-        }
-        int preY = this.positionY;
-        if(this.frontendComponentList.size() > 0) {
-            ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(this.frontendComponentList);
-            for (List<FrontendComponent> curList : inlineComponentList) {
-                if (curList.size() == 1) {
-                    int marginTop = Math.max(curList.get(0).getPositionY() - preY, 0);
-                    if(curList.get(0).getAlign().equals("RIGHT")){
-                        code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + ", justifyContent: \"flex-end\"}}>\n");
-                    }else if(curList.get(0).getAlign().equals("CENTER")){
-                        code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + ", justifyContent: \"center\"}}>\n");
-                    }else{
-                        code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + "}}>\n");
-                    }
-                    code.append(curList.get(0).generateCode()).append("\n");
-                    code.append("</View>\n");
-                    preY = curList.get(0).getPositionY() + curList.get(0).getHeight();
-                } else if (curList.size() > 1) {
-                    int minY = Integer.MAX_VALUE;
-                    int maxY = -1;
-                    for(FrontendComponent component : curList){
-                        if(component.getPositionY() < minY){
-                            minY = component.getPositionY();
+        try {
+            StringBuilder code = new StringBuilder();
+            String backgroundColorStr = "";
+            if (this.backgroundColor == null) {
+                backgroundColorStr = "\"rgba(0,0,0,0)\"";
+            } else {
+                backgroundColorStr = this.backgroundColor.toString();
+            }
+            if (this.borderColor != null) {
+                String borderColorStr = this.borderColor.toString();
+                code.append("<View style={{borderRadius: " + this.cornerRadius + ", padding: 10, backgroundColor: " + backgroundColorStr + ",borderColor: " + borderColorStr + ", borderWidth: " + borderWidth + "}}>\n");
+            } else {
+                code.append("<View style={{borderRadius: " + this.cornerRadius + ", padding: 10, backgroundColor: " + backgroundColorStr + "}}>").append("\n");
+            }
+            int preY = this.positionY;
+            if (this.frontendComponentList.size() > 0) {
+                ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(this.frontendComponentList);
+                for (List<FrontendComponent> curList : inlineComponentList) {
+                    if (curList.size() == 1) {
+                        int marginTop = Math.max(curList.get(0).getPositionY() - preY, 0);
+                        if (curList.get(0).getAlign().equals("RIGHT")) {
+                            code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + ", justifyContent: \"flex-end\"}}>\n");
+                        } else if (curList.get(0).getAlign().equals("CENTER")) {
+                            code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + ", justifyContent: \"center\"}}>\n");
+                        } else {
+                            code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + "}}>\n");
                         }
-                    }
-                    int marginTop = Math.max(minY - preY, 0);
-                    code.append("<View style={{flexDirection: 'row', justifyContent: \"space-between\", marginTop: " + marginTop +"}}>\n");
-                    for (FrontendComponent component : curList) {
-                        int flex = Math.max((int)(((double)component.width)/((double)this.width) * 10) , 1);
-
-                        component.setFlex(flex);
-                        code.append("<View style={{flex: " + flex + "}}>\n");
-                        code.append(component.generateCode()).append("\n");
+                        code.append(curList.get(0).generateCode()).append("\n");
                         code.append("</View>\n");
-                        if(component.getPositionY() + component.getHeight() > maxY){
-                            maxY = component.getPositionY() + component.getHeight();
+                        preY = curList.get(0).getPositionY() + curList.get(0).getHeight();
+                    } else if (curList.size() > 1) {
+                        int minY = Integer.MAX_VALUE;
+                        int maxY = -1;
+                        for (FrontendComponent component : curList) {
+                            if (component.getPositionY() < minY) {
+                                minY = component.getPositionY();
+                            }
                         }
+                        int marginTop = Math.max(minY - preY, 0);
+                        code.append("<View style={{flexDirection: 'row', justifyContent: \"space-between\", marginTop: " + marginTop + "}}>\n");
+                        for (FrontendComponent component : curList) {
+                            int flex = Math.max((int) (((double) component.width) / ((double) this.width) * 10), 1);
+
+                            component.setFlex(flex);
+                            code.append("<View style={{flex: " + flex + "}}>\n");
+                            code.append(component.generateCode()).append("\n");
+                            code.append("</View>\n");
+                            if (component.getPositionY() + component.getHeight() > maxY) {
+                                maxY = component.getPositionY() + component.getHeight();
+                            }
+                        }
+                        code.append("</View>\n");
+                        preY = maxY;
                     }
-                    code.append("</View>\n");
-                    preY = maxY;
                 }
             }
+            code.append("</View>\n");
+            return code.toString();
+        }catch (Exception e){
+            return "<View>\n" +
+                    "    <P>The form component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" +
+                    "</View>";
         }
-        code.append("</View>\n");
-        return code.toString();
     }
 
     public void setContainText(boolean containText) {

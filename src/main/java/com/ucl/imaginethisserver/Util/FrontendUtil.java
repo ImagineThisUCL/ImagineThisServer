@@ -98,5 +98,6 @@ public class FrontendUtil {
         NavBar.NAV_BUTTONS = new ArrayList<>();
         NavBar.NAV_BAR_NAME = null;
         NavBar.BUTTON_MAP = new HashMap<>();
+        NavBar.isError = false;
     }
 }

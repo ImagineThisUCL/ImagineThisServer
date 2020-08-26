@@ -52,9 +52,13 @@ public class FrontendText extends FrontendComponent {
 
 
     public String generateCode(){
-        this.text = this.text.replaceAll("\n","{\"\\\\n\"}");
-        String color = this.color.toString();
-        return "<P style={{fontSize: " + this.getFontSize() +", color: " + color + ", textAlign: \'" + this.textAlign.toLowerCase() + "\'}}>" + this.text + "</P>";
+        try {
+            this.text = this.text.replaceAll("\n", "{\"\\\\n\"}");
+            String color = this.color.toString();
+            return "<P style={{fontSize: " + this.getFontSize() + ", color: " + color + ", textAlign: \'" + this.textAlign.toLowerCase() + "\'}}>" + this.text + "</P>";
+        }catch (Exception e){
+            return "<P>The text code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
+        }
     }
 
     public String toString(){

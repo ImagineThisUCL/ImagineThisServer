@@ -6,7 +6,7 @@ import com.ucl.imaginethisserver.DAO.Style;
 
 import java.util.List;
 
-public class TextBox extends FrontendComponent{
+public class TextBox extends FrontendComponent {
     private String placeholder = null;
     private String label = null;
     private Style style;
@@ -40,23 +40,27 @@ public class TextBox extends FrontendComponent{
     }
 
     public String generateCode() {
-        //default color:  transparent;
-        String containerColor = new FigmaColor(0.f,0.f,0.f,0.f).toString();
-        if(containerFills.size() > 0) {
-            containerColor = this.containerFills.get(0).getColor().toString();
+        try {
+            //default color:  transparent;
+            String containerColor = new FigmaColor(0.f, 0.f, 0.f, 0.f).toString();
+            if (containerFills.size() > 0) {
+                containerColor = this.containerFills.get(0).getColor().toString();
+            }
+            StringBuilder textBoxCode = new StringBuilder();
+            textBoxCode.append("<InputField\n");
+            if (label != null) {
+                textBoxCode.append("label='").append(this.label).append("'\n");
+            }
+            if (placeholder != null) {
+                textBoxCode.append("placeholder='").append(this.placeholder).append("'\n");
+            }
+            textBoxCode.append("inputContainerStyle={{backgroundColor: " + containerColor + "\n" +
+                    "                , borderRadius: " + this.getCornerRadius() + ", borderWidth: 1}}\n");
+            textBoxCode.append("/>");
+            return textBoxCode.toString();
+        } catch (Exception e) {
+            return "<P>The input filed component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n";
         }
-        StringBuilder textBoxCode = new StringBuilder();
-        textBoxCode.append("<InputField\n");
-        if(label != null){
-            textBoxCode.append("label='").append(this.label).append("'\n");
-        }
-        if(placeholder != null){
-            textBoxCode.append("placeholder='").append(this.placeholder).append("'\n");
-        }
-        textBoxCode.append("inputContainerStyle={{backgroundColor: "+ containerColor +"\n" +
-                "                , borderRadius: " + this.getCornerRadius() +", borderWidth: 1}}\n");
-        textBoxCode.append("/>");
-        return textBoxCode.toString();
     }
 
     public void setLabel(String label) {
