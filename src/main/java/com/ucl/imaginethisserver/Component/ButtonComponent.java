@@ -21,8 +21,15 @@ public class ButtonComponent {
                 "        paddingHorizontal: base.padding*2,\n" +
                 "        paddingVertical: base.padding,\n" +
                 "    },\n" +
+                "    circleButton: {\n" +
+                "        marginBottom: base.margin,\n" +
+                "        padding: base.padding,\n" +
+                "        alignItems: \"center\",\n" +
+                "        justifyContent: \"center\",\n" +
+                "    },\n" +
                 "    text: {\n" +
                 "        fontSize: base.font.medium,\n" +
+                "        textAlign: \"center\",\n" +
                 "    },\n" +
                 "    wrapper: {\n" +
                 "        flexDirection: \"row\",\n" +
@@ -31,17 +38,30 @@ public class ButtonComponent {
                 "\n" +
                 "export default class Button extends Component {\n" +
                 "    render() {\n" +
-                "        let buttonStyleList = [styles.button]\n" +
-                "        let textStyleList = [styles.text]\n" +
+                "        const {\n" +
+                "            circleDiameter,\n" +
+                "            style,\n" +
+                "            textStyle,\n" +
+                "            children,\n" +
+                "        } = this.props\n" +
+                "\n" +
+                "        let buttonStyleList = []\n" +
+                "        if (this.props.circleDiameter) {\n" +
+                "            buttonStyleList = [styles.circleButton, {width: circleDiameter}, {height: circleDiameter}, {borderRadius: circleDiameter}, style]\n" +
+                "        } else {\n" +
+                "            buttonStyleList = [styles.button, style]\n" +
+                "        }\n" +
+                "\n" +
+                "        let textStyleList = [styles.text, textStyle]\n" +
                 "\n" +
                 "        return (\n" +
                 "            <View style={styles.wrapper}>\n" +
                 "                <TouchableOpacity \n" +
                 "                    {...this.props} \n" +
-                "                    style={[...buttonStyleList, this.props.style]}>\n" +
+                "                    style={buttonStyleList}>\n" +
                 "                    <Text\n" +
-                "                        style={[...textStyleList, this.props.textStyle]}>\n" +
-                "                        {this.props.children}\n" +
+                "                        style={textStyleList}>\n" +
+                "                        {children}\n" +
                 "                    </Text>\n" +
                 "                </TouchableOpacity>\n" +
                 "            </View>\n" +
@@ -54,6 +74,7 @@ public class ButtonComponent {
                 "    onPress: propTypes.func,\n" +
                 "    style: propTypes.object, // container style\n" +
                 "    textStyle: propTypes.object, // text style\n" +
+                "    circleDiameter: propTypes.number, // create circular button with diameter\n" +
                 "}\n";
     }
 }
