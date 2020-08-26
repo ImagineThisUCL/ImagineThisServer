@@ -41,25 +41,42 @@ public class TextBox extends FrontendComponent {
 
     public String generateCode() {
         try {
-            //default color:  transparent;
+            //default color for background:  transparent;
             String containerColor = new FigmaColor(0.f, 0.f, 0.f, 0.f).toString();
+            //default color for label and text:  black;
+            String labelColor = new FigmaColor(0, 0, 0, 1).toString();
+            String textColor = new FigmaColor(0, 0, 0, 1).toString();
             if (containerFills.size() > 0) {
                 containerColor = this.containerFills.get(0).getColor().toString();
             }
+            if (TextFills.size() > 0) {
+                textColor = this.TextFills.get(0).getColor().toString();
+            }
             StringBuilder textBoxCode = new StringBuilder();
             textBoxCode.append("<InputField\n");
+
             if (label != null) {
-                textBoxCode.append("label='").append(this.label).append("'\n");
+                textBoxCode.append("     label='").append(this.label).append("'\n");
+                textBoxCode.append("     labelStyle={{color: " + labelColor + ", marginBottom: 5}}\n");
             }
             if (placeholder != null) {
-                textBoxCode.append("placeholder='").append(this.placeholder).append("'\n");
+                textBoxCode.append("     placeholder='").append(this.placeholder).append("'\n");
             }
-            textBoxCode.append("inputContainerStyle={{backgroundColor: " + containerColor + "\n" +
-                    "                , borderRadius: " + this.getCornerRadius() + ", borderWidth: 1}}\n");
+
+            textBoxCode.append("     inputStyle={{color: " + textColor + "}}\n");
+            textBoxCode.append(
+                "     inputContainerStyle={{\n" +
+                "           borderWidth: 1,\n" +
+                "           borderRadius: " + this.getCornerRadius() + ",\n" +
+                "           paddingHorizontal: 10,\n" +
+                "           backgroundColor: "+ containerColor +",}}\n"
+                );
             textBoxCode.append("/>");
+
             return textBoxCode.toString();
+
         } catch (Exception e) {
-            return "<P>The input filed component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n";
+            return "<P>The input field component could not be generated, please check your Figma file and refer to our guidelines.</P>\n";
         }
     }
 
