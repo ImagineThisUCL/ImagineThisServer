@@ -47,22 +47,30 @@ public class NavBar extends FrontendComponent{
                 "                },\n" +
                 "                style: {\n" +
                 "                    backgroundColor: \"#D5E6EC\",\n" +
-                "                    paddingBottom: 2\n" +
+                "                    paddingBottom: 2,\n" +
+                "                    paddingTop: 2,\n" +
+                "                    height: 70,\n" +
                 "                },\n" +
                 "            }}>").append("\n");
         for(NavButton navButton : NAV_BUTTONS){
             String imageName = FrontendUtil.downloadImage(navButton.getIconURL().replaceAll("\"",""), FrontendUtil.FOLDER_NAME);
+            System.out.println(imageName);
             imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, ".");
+            String viewName;
+            if (BUTTON_MAP.get(navButton.getText()) != null) {
+                viewName = BUTTON_MAP.get(navButton.getText()).replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
+            } else {
+                viewName = "Placeholder";
+            }
             code.append(" <Tab.Screen\n" +
                     "                name=\"" + navButton.getText() + "\"\n" +
-                    "                component={" + BUTTON_MAP.get(navButton.getText()).replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","") + "}\n" +
+                    "                component={" + viewName + "}\n" +
                     "                options={{\n" +
                     "                    tabBarIcon: () => {\n" +
                     "                        return (\n" +
                     "                            /* Option b with uri */\n" +
                     "                            <Image\n" +
                     "                                source={require(\'" + imageName + "\')}\n" +
-                    "                                style={{width: 24, height: 22}}\n" +
                     "                            />\n" +
                     "                        )\n" +
                     "                    },\n" +
