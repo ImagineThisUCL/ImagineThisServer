@@ -61,7 +61,7 @@ public class Button extends FrontendComponent{
                 String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName().replaceAll(" ", "");
                 buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
             }
-            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", marginTop: base.margin");
+            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", marginTop: base.margin, minWidth: " + this.width);
             if (!isCircle) {
                 buttonCode.append(", borderRadius: ").append(this.cornerRadius);
             }
