@@ -39,7 +39,7 @@ public class ImageButtonComponent {
                 "}\n" +
                 "\n" +
                 "Button.propTypes = {\n" +
-                "    imageSrc: propTypes.node..isRequired,\n" +
+                "    imageSrc: propTypes.node.isRequired,\n" +
                 "    style: propTypes.object, // container styles\n" +
                 "    imageStyle: propTypes.object, // image styles\n" +
                 "}\n";
