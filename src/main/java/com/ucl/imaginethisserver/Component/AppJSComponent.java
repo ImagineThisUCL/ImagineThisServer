@@ -16,7 +16,7 @@ public class AppJSComponent {
         if (navBar != null) {
             importCode.append("import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'\n");
         }
-        importCode.append("import { StyleSheet, Text, SafeAreaView, Image, StatusBar} from 'react-native';\n");
+        importCode.append("import { SafeAreaView, Image } from 'react-native';\n");
         HashSet<String> wireframeNameSet = new HashSet<>(NavBar.BUTTON_MAP.values());
         for (String wireframeName : wireframeNameSet) {
             wireframeName = wireframeName.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
