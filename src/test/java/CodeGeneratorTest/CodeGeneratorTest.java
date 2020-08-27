@@ -20,8 +20,9 @@ import java.util.List;
 public class CodeGeneratorTest {
     public static void main(String[] args) throws IOException {
         String type = "originalToken";
-        String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
+//        String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
 //        String projectID = "NZFfXsPz4Zhkt3zSa6lIyB";
+        String projectID = "ag3BVQVGRatli2UsgUssB1";
         String accessToken = "54950-b9461cc1-f3c2-41f8-9fe7-a8f741083aa7";
         AuthenticateType authType = null;
         if (type.equals("originalToken")) {
@@ -35,14 +36,14 @@ public class CodeGeneratorTest {
         }
         String pageName = "Screens";
         ArrayList<String> nameList = new ArrayList<>();
-        nameList.add("Set Up");
+//        nameList.add("Set Up");
 //        nameList.add("Information to populat messages");
-        nameList.add("Reach out");
+//        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
 //        nameList.add("Start Passive Tracking and Reporting");
-        nameList.add("Report for Sharing");
+//        nameList.add("Report for Sharing");
 //        nameList.add("Wellbeing by Activity");
-        nameList.add("Wellbeing Network");
+//        nameList.add("Wellbeing Network");
 //        nameList.add("Wellbeing by Activity");
 ////        nameList.add("Wellbeing rating 1");
 //        nameList.add("Wellbeing rating 2");
@@ -59,10 +60,16 @@ public class CodeGeneratorTest {
 //        nameList.add("Dementia Support 1");
 //        nameList.add("Dementia Support 2");
 //        nameList.add("Headspace");
-        nameList.add("Home Page: Weekly");
+//        nameList.add("Home Page: Weekly");
 //        nameList.add("Wellbeing rating 2");
 //        nameList.add("Messages Sent");
 //        nameList.add("Outdoor steps v Well-being");
+        nameList.add("Browse");
+        nameList.add("Post");
+        nameList.add("Profile");
+        nameList.add("LogIn");
+        nameList.add("Register");
+        nameList.add("Map");
         FrontendUtil.FOLDER_NAME = projectID;
         FrontendUtil.GENERATE_PAGE_LIST = nameList;
         generatePageByName(nameList,
