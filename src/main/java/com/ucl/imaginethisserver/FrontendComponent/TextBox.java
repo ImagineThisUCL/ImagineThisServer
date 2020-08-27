@@ -52,13 +52,14 @@ public class TextBox extends FrontendComponent {
             if (textFills.size() > 0) {
                 textColor = this.textFills.get(0).getColor().toString();
             }
-            if(labelFills.size() > 0){
-                labelColor = labelFills.get(0).getColor().toString();
-            }
+
             StringBuilder textBoxCode = new StringBuilder();
             textBoxCode.append("<InputField\n");
 
             if (label != null) {
+                if(labelFills.size() > 0){
+                    labelColor = labelFills.get(0).getColor().toString();
+                }
                 textBoxCode.append("     label='").append(this.label).append("'\n");
                 textBoxCode.append("     labelStyle={{color: " + labelColor + ", marginBottom: 5}}\n");
             }
@@ -86,5 +87,9 @@ public class TextBox extends FrontendComponent {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public void setLabelFills(List<Fills> labelFills) {
+        this.labelFills = labelFills;
     }
 }

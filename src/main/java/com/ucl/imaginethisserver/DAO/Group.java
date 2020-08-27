@@ -228,6 +228,7 @@ public class Group extends FigmaComponent {
             } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("label")) {
                 Text text = (Text) component;
                 textbox.setLabel(text.getCharacters());
+                textbox.setLabelFills(text.getFills());
             }
 
         }
