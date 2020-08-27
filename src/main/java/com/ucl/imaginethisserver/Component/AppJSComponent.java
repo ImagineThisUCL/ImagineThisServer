@@ -38,7 +38,7 @@ public class AppJSComponent {
         StringBuilder viewCode = new StringBuilder();
         String navBarName = "";
         if (navBar != null) {
-            navBarName = NavBar.NAV_BAR_NAME.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\\\\\[\\\\\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
+            navBarName = "NavigationBar";
             viewCode.append("const Tab = createBottomTabNavigator();").append("\n");
             viewCode.append(navBar.generateCode());
         }
@@ -53,7 +53,7 @@ public class AppJSComponent {
                 "                <Stack.Navigator initialRouteName=\"" + navBarName + "\">\n");
         if (navBar != null && !navBar.isError) {
             viewCode.append("                    <Stack.Screen\n" +
-                    "                        name=\"" + navBarName + "\"\n" +
+                    "                        name=\"NavigationBar\"\n" +
                     "                        component={NavigationBar}\n" +
                     "                        options={{headerShown: false}}/>\n");
         }

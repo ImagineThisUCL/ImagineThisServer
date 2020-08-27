@@ -24,8 +24,14 @@ public class ImageButton extends FrontendComponent {
             imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, "../..");
             imageButtonCode.append("<ImageButton\n");
             if (this.transitionNodeID != null) {
-                String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName().replaceAll(" ", "");
-                imageButtonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
+                String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName();
+                if(NavBar.BUTTON_MAP.containsValue(navigateWireframe)){
+                    navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
+                    imageButtonCode.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
+                }else{
+                    navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
+                    imageButtonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
+                }
             }
             imageButtonCode.append("style={{padding: 10}}\n");
             imageButtonCode.append("imageStyle={{width: ").append(this.getWidth()).append(", height: ").append(this.getHeight()).append("}}\n");

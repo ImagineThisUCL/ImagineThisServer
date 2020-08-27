@@ -8,6 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.ucl.imaginethisserver.FrontendComponent.*;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
+import com.ucl.imaginethisserver.Util.FrontendUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -184,11 +185,15 @@ public class Group extends FigmaComponent {
                         navButton.setIconURL(childComponent.getImageURL());
                     }
                 }
-                NavBar.NAV_BUTTONS.add(navButton);
-                NavBar.BUTTON_MAP.put(navButton.getText(), "Placeholder");
-                if(NavBar.NAV_BAR_NAME == null) {
-                    NavBar.NAV_BAR_NAME = navButton.getText();
+                String transitionNodeID = ((Group) component).transitionNodeID;
+                if(transitionNodeID != null && FrontendUtil.GENERATE_PAGE_LIST.contains(Page.getWireframeByID(transitionNodeID).getName())){
+                    NavBar.BUTTON_MAP.put(navButton.getText(), Page.getWireframeByID(transitionNodeID).getName());
+                }else{
+                    NavBar.BUTTON_MAP.put(navButton.getText(), "Placeholder");
                 }
+                NavBar.NAV_BUTTONS.add(navButton);
+
+
             }
             if(component.getType().equals("RECTANGLE") && component.getName().contains("background")){
                 Rectangle rectangle = (Rectangle) component;

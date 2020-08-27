@@ -19,6 +19,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FrontendUtil {
     private static final AtomicInteger IMAGE_ID = new AtomicInteger(0);
     public static String FOLDER_NAME = "";
+    public static ArrayList<String> GENERATE_PAGE_LIST = new ArrayList<>();
+
     public static ArrayList<List<FrontendComponent>> getInlineComponentList(ArrayList<FrontendComponent> frontendComponentList){
         ArrayList<List<FrontendComponent>> inlineComponentList = new ArrayList<>();
         FrontendComponent preComponent = frontendComponentList.get(0);
@@ -96,8 +98,9 @@ public class FrontendUtil {
         Navigator.hasPlaceholder = false;
 
         NavBar.NAV_BUTTONS = new ArrayList<>();
-        NavBar.NAV_BAR_NAME = null;
         NavBar.BUTTON_MAP = new HashMap<>();
         NavBar.isError = false;
+
+        FrontendUtil.GENERATE_PAGE_LIST = new ArrayList<>();
     }
 }

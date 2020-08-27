@@ -83,7 +83,6 @@ public class WireframeComponent {
                 for (String navText : NavBar.BUTTON_MAP.keySet()) {
                     if (NavBar.BUTTON_MAP.get(navText).equals("Placeholder")) {
                         NavBar.BUTTON_MAP.put(navText, wireframe.getName());
-                        break;
                     }
                 }
                 if (!IS_CONTAIN_NAVBAR) {

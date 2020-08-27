@@ -35,14 +35,14 @@ public class CodeGeneratorTest {
         }
         String pageName = "Screens";
         ArrayList<String> nameList = new ArrayList<>();
-//        nameList.add("Set Up");
-        nameList.add("Information to populat messages");
-//        nameList.add("Reach out");
+        nameList.add("Set Up");
+//        nameList.add("Information to populat messages");
+        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
 //        nameList.add("Start Passive Tracking and Reporting");
-//        nameList.add("Report for Sharing");
+        nameList.add("Report for Sharing");
 //        nameList.add("Wellbeing by Activity");
-//        nameList.add("Wellbeing Network");
+        nameList.add("Wellbeing Network");
 //        nameList.add("Wellbeing by Activity");
 ////        nameList.add("Wellbeing rating 1");
 //        nameList.add("Wellbeing rating 2");
@@ -59,11 +59,12 @@ public class CodeGeneratorTest {
 //        nameList.add("Dementia Support 1");
 //        nameList.add("Dementia Support 2");
 //        nameList.add("Headspace");
-//        nameList.add("Home Page: Weekly");
+        nameList.add("Home Page: Weekly");
 //        nameList.add("Wellbeing rating 2");
 //        nameList.add("Messages Sent");
 //        nameList.add("Outdoor steps v Well-being");
         FrontendUtil.FOLDER_NAME = projectID;
+        FrontendUtil.GENERATE_PAGE_LIST = nameList;
         generatePageByName(nameList,
                 figmaTreeStructure,
                 projectID,

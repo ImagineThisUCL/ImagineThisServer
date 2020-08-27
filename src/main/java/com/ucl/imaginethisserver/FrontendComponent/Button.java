@@ -58,8 +58,14 @@ public class Button extends FrontendComponent{
             StringBuilder buttonCode = new StringBuilder();
             buttonCode.append("<Button\n");
             if (this.transitionNodeID != null) {
-                String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName().replaceAll(" ", "");
-                buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
+                String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName();
+                if(NavBar.BUTTON_MAP.containsValue(navigateWireframe)){
+                    navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
+                    buttonCode.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
+                }else{
+                    navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
+                    buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
+                }
             }
             buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", marginTop: base.margin, minWidth: " + this.width);
             if (!isCircle) {
