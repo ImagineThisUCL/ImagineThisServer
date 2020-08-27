@@ -43,6 +43,7 @@ public class GenerationController {
                 return new GenerateResponse(false, null);
             }
             FrontendUtil.FOLDER_NAME = projectID;
+            FrontendUtil.GENERATE_PAGE_LIST = nameList;
             FigmaAPIUtil.generatePageByName(nameList,
                     figmaTreeStructure,
                     projectID,
