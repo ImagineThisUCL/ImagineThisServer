@@ -1,19 +1,21 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
 
+import com.ucl.imaginethisserver.DAO.Fills;
 import com.ucl.imaginethisserver.Util.FrontendUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 public class NavBar extends FrontendComponent {
 
     public static ArrayList<NavButton> NAV_BUTTONS = new ArrayList<>();
     public static String NAV_BAR_NAME = null;
     public static HashMap<String, String> BUTTON_MAP = new HashMap<>();
-
+    public static List<Fills> containerFills;
     public static boolean isError = false;
 
 
@@ -28,6 +30,10 @@ public class NavBar extends FrontendComponent {
 
     public String generateCode() throws IOException {
         try {
+            String backgroundColor = "\"#D5E6EC\"";
+            if(containerFills.size() > 0){
+                backgroundColor = containerFills.get(0).getColor().toString();
+            }
             NAV_BUTTONS.sort(new Comparator<NavButton>() {
                 @Override
                 public int compare(NavButton o1, NavButton o2) {
@@ -49,7 +55,7 @@ public class NavBar extends FrontendComponent {
                     "                    fontSize: 12,\n" +
                     "                },\n" +
                     "                style: {\n" +
-                    "                    backgroundColor: \"#D5E6EC\",\n" +
+                    "                    backgroundColor: " + backgroundColor +",\n" +
                     "                    paddingBottom: 2,\n" +
                     "                    paddingTop: 2,\n" +
                     "                    height: 65,\n" +

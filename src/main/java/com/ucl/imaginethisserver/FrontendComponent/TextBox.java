@@ -12,7 +12,7 @@ public class TextBox extends FrontendComponent {
     private Style style;
     private List<Fills> containerFills;
     private List<Fills> labelFills;
-    private List<Fills> TextFills;
+    private List<Fills> textFills;
     private double cornerRadius;
 
     public double getCornerRadius() {
@@ -36,7 +36,7 @@ public class TextBox extends FrontendComponent {
     }
 
     public void setTextFills(List<Fills> textFills) {
-        TextFills = textFills;
+        this.textFills = textFills;
     }
 
     public String generateCode() {
@@ -44,13 +44,16 @@ public class TextBox extends FrontendComponent {
             //default color for background:  transparent;
             String containerColor = new FigmaColor(0.f, 0.f, 0.f, 0.f).toString();
             //default color for label and text:  black;
-            String labelColor = new FigmaColor(0, 0, 0, 1).toString();
-            String textColor = new FigmaColor(0, 0, 0, 1).toString();
+            String labelColor = new FigmaColor(0.f, 0.f, 0.f, 1.f).toString();
+            String textColor = new FigmaColor(0.f, 0.f, 0.f, 1.f).toString();
             if (containerFills.size() > 0) {
                 containerColor = this.containerFills.get(0).getColor().toString();
             }
-            if (TextFills.size() > 0) {
-                textColor = this.TextFills.get(0).getColor().toString();
+            if (textFills.size() > 0) {
+                textColor = this.textFills.get(0).getColor().toString();
+            }
+            if(labelFills.size() > 0){
+                labelColor = labelFills.get(0).getColor().toString();
             }
             StringBuilder textBoxCode = new StringBuilder();
             textBoxCode.append("<InputField\n");

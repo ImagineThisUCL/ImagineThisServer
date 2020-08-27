@@ -156,7 +156,7 @@ public class Group extends FigmaComponent {
             Navigator.NAVIGATOR_MAP.put(wireframeName, wireframeName);
         }
         for (FigmaComponent component : this.componentMap.values()) {
-            if ((component.getType().equals("GROUP") || component.getType().equals("RECTANGLE")) && component.getName().toLowerCase().contains("image")) {
+            if ((component.getType().equals("GROUP") || component.getType().equals("RECTANGLE")) && (component.getName().toLowerCase().contains("image")||component.getName().toLowerCase().contains("icon")||component.getName().toLowerCase().contains("picture"))) {
                 imageButton.setImageURL(component.getImageURL());
             }
         }
@@ -180,7 +180,7 @@ public class Group extends FigmaComponent {
                 for (FigmaComponent childComponent : ((Group) component).getComponentMap().values()) {
                     if (childComponent.getType().equals("TEXT")) {
                         navButton.setText(((Text) childComponent).getCharacters());
-                    } else if (childComponent.getName().toLowerCase().contains("icon")) {
+                    } else if (childComponent.getName().toLowerCase().contains("image") || childComponent.getName().toLowerCase().contains("icon") || childComponent.getName().toLowerCase().contains("picture")) {
                         navButton.setIconURL(childComponent.getImageURL());
                     }
                 }
@@ -189,6 +189,10 @@ public class Group extends FigmaComponent {
                 if(NavBar.NAV_BAR_NAME == null) {
                     NavBar.NAV_BAR_NAME = navButton.getText();
                 }
+            }
+            if(component.getType().equals("RECTANGLE") && component.getName().contains("background")){
+                Rectangle rectangle = (Rectangle) component;
+                NavBar.containerFills = rectangle.getFills();
             }
         }
         return navBar;
@@ -256,7 +260,7 @@ public class Group extends FigmaComponent {
                 ImageButton imageButton = ((Group) component).convertImageButton(projectID, accessToken, authenticateType);
                 form.frontendComponentList.add(imageButton);
                 form.setContainImageButton(true);
-            } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && component.getName().toLowerCase().contains("picture")) {
+            } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && (component.getName().toLowerCase().contains("image")||component.getName().toLowerCase().contains("icon")||component.getName().toLowerCase().contains("picture"))) {
                 Image image;
                 if (component.getType().equals("RECTANGLE")) {
                     image = ((Rectangle) component).convertToImage();

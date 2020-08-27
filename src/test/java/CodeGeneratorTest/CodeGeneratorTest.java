@@ -35,9 +35,9 @@ public class CodeGeneratorTest {
         }
         String pageName = "Screens";
         ArrayList<String> nameList = new ArrayList<>();
-        nameList.add("Set Up");
-//        nameList.add("Information to populat messages");
-        nameList.add("Reach out");
+//        nameList.add("Set Up");
+        nameList.add("Information to populat messages");
+//        nameList.add("Reach out");
 //        nameList.add("Care Network Page");
 //        nameList.add("Start Passive Tracking and Reporting");
 //        nameList.add("Report for Sharing");
@@ -46,7 +46,7 @@ public class CodeGeneratorTest {
 //        nameList.add("Wellbeing by Activity");
 ////        nameList.add("Wellbeing rating 1");
 //        nameList.add("Wellbeing rating 2");
-        nameList.add("Weekly Confirm Wellbeing");
+//        nameList.add("Weekly Confirm Wellbeing");
 //        nameList.add("ABUB");
 //        nameList.add("Age Connect");
 //        nameList.add("Friend of Mine");

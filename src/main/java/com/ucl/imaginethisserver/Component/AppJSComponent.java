@@ -35,9 +35,10 @@ public class AppJSComponent {
     }
 
     public static String generateViewCode(NavBar navBar) throws IOException {
-        String navBarName = NavBar.NAV_BAR_NAME.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\\\\\[\\\\\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
         StringBuilder viewCode = new StringBuilder();
+        String navBarName = "";
         if (navBar != null) {
+            navBarName = NavBar.NAV_BAR_NAME.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\\\\\[\\\\\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
             viewCode.append("const Tab = createBottomTabNavigator();").append("\n");
             viewCode.append(navBar.generateCode());
         }
