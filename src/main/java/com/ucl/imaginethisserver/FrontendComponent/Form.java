@@ -92,7 +92,7 @@ public class Form extends FrontendComponent{
                             int flex = Math.max((int) (((double) component.width) / ((double) this.width) * 10), 1);
 
                             component.setFlex(flex);
-                            code.append("<View style={{flex: " + flex + "}}>\n");
+                            code.append("<View style={{flex: " + flex + ", alignItems: \"center\"}}>\n");
                             code.append(component.generateCode()).append("\n");
                             code.append("</View>\n");
                             if (component.getPositionY() + component.getHeight() > maxY) {

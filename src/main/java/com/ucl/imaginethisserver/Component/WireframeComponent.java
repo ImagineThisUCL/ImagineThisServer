@@ -35,13 +35,19 @@ public class WireframeComponent {
         this.backgroundColor = wireframe.getFills().get(0).getColor();
         this.wWidth = wireframe.getAbsoluteBoundingBox().width;
         for (FigmaComponent component : wireframe.getComponentList()) {
+            String compType = component.getType();
+            String compName = component.getName().toLowerCase();
             //If this component is a text
-            if (component.getType().equals("TEXT")) {
+            if (compType.equals("TEXT")) {
                 FrontendText frontendText = ((Text) component).convertToFrontendText();
                 frontendComponentList.add(frontendText);
-            } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && (component.getName().toLowerCase().contains("image") || component.getName().toLowerCase().contains("picture") || component.getName().toLowerCase().contains("icon"))) {
+            } else if (
+                (compType.equals("RECTANGLE") || compType.equals("GROUP")) &&
+                ((compName.contains("image") && !(compName.contains("imagebutton"))) ||
+                compName.contains("picture") ||
+                compName.contains("icon"))) {
                 Image image;
-                if (component.getType().equals("RECTANGLE")) {
+                if (compType.equals("RECTANGLE")) {
                     image = ((Rectangle) component).convertToImage();
                 } else {
                     image = ((Group) component).convertToImage();
@@ -50,13 +56,13 @@ public class WireframeComponent {
                 if (!isContainImage) {
                     isContainImage = true;
                 }
-            } else if (component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("map")) {
+            } else if (compType.equals("RECTANGLE") && compName.contains("map")) {
                 Map map = ((Rectangle) component).convertToMap();
                 frontendComponentList.add(map);
                 if (!isContainMap) {
                     isContainMap = true;
                 }
-            } else if (component.getName().toLowerCase().contains("switch")) {
+            } else if (compName.contains("switch")) {
                 Switch aSwitch = component.convertSwitch();
                 frontendComponentList.add(aSwitch);
                 if (!isContainSwitch) {
@@ -64,19 +70,19 @@ public class WireframeComponent {
                 }
             }
             // if this component is a button
-            else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")) {
+            else if (compType.equals("GROUP") && compName.contains("textbutton")) {
                 Button button = ((Group) component).convertButton();
                 frontendComponentList.add(button);
                 if (!isContainButton) {
                     isContainButton = true;
                 }
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("input")) {
+            } else if (compType.equals("GROUP") && compName.contains("input")) {
                 TextBox textBox = ((Group) component).convertTextBox();
                 frontendComponentList.add(textBox);
                 if (!isContainTextBox) {
                     isContainTextBox = true;
                 }
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("navigation")) {
+            } else if (compType.equals("GROUP") && compName.contains("navigation")) {
                 if (NAV_BAR == null) {
                     NAV_BAR = ((Group) component).convertNavBar(projectID, accessToken, authenticateType);
                 }
@@ -88,7 +94,7 @@ public class WireframeComponent {
                 if (!IS_CONTAIN_NAVBAR) {
                     IS_CONTAIN_NAVBAR = true;
                 }
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("form")) {
+            } else if (compType.equals("GROUP") && ( compName.contains("form")) || compName.contains("card") ) {
                 Form form = ((Group) component).convertForm(projectID, accessToken, authenticateType);
                 if (!isContainForm) {
                     isContainForm = true;
@@ -118,25 +124,25 @@ public class WireframeComponent {
                     isContainSwitch = true;
                 }
                 frontendComponentList.add(form);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")) {
+            } else if (compType.equals("GROUP") && compName.contains("slider")) {
                 Slider slider = ((Group) component).convertSlider();
                 if (!isContainSideBar) {
                     isContainSideBar = true;
                 }
                 frontendComponentList.add(slider);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")) {
+            } else if (compType.equals("GROUP") && compName.contains("imagebutton")) {
                 ImageButton imageButton = ((Group) component).convertImageButton(projectID, accessToken, authenticateType);
                 if (!isContainImageButton) {
                     isContainImageButton = true;
                 }
                 frontendComponentList.add(imageButton);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("chart")) {
+            } else if (compType.equals("GROUP") && compName.contains("chart")) {
                 Chart fixedChart = ((Group) component).convertToFixedChart();
                 if (!isContainChart) {
                     isContainChart = true;
                 }
                 frontendComponentList.add(fixedChart);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("dropdown")) {
+            } else if (compType.equals("GROUP") && compName.contains("dropdown")) {
                 Dropdown dropdown = ((Group) component).convertToDropdown();
                 if (!isContainDropdown) {
                     isContainDropdown = true;
