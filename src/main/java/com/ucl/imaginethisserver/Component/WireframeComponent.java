@@ -14,7 +14,7 @@ public class WireframeComponent {
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
     private boolean isContainText = true, isContainButton, isContainTextBox,
-            isContainForm, isContainSideBar, isContainImageButton,
+            isContainForm, isContainSliderBar, isContainImageButton,
             isContainImage, isContainChart, isContainMap,
             isContainSwitch, isContainDropdown;
     private double wWidth;
@@ -120,14 +120,14 @@ public class WireframeComponent {
                 if (!isContainSwitch && form.isContainSwitch()) {
                     isContainSwitch = true;
                 }
-                if(!isContainSideBar && form.isContainSlider()){
-                    isContainSideBar = true;
+                if(!isContainSliderBar && form.isContainSlider()){
+                    isContainSliderBar = true;
                 }
                 frontendComponentList.add(form);
             } else if (compType.equals("GROUP") && compName.contains("slider")) {
                 Slider slider = ((Group) component).convertSlider();
-                if (!isContainSideBar) {
-                    isContainSideBar = true;
+                if (!isContainSliderBar) {
+                    isContainSliderBar = true;
                 }
                 frontendComponentList.add(slider);
             } else if (compType.equals("GROUP") && compName.contains("imagebutton")) {
@@ -187,7 +187,7 @@ public class WireframeComponent {
             CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD, folderName);
         }
 
-        if (isContainSideBar) {
+        if (isContainSliderBar) {
             importCode.append("import CustomSlider from \"../reusables/CustomSlider\"").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.SLIDER, folderName);
         }

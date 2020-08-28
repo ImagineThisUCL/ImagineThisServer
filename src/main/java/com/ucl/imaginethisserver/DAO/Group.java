@@ -311,6 +311,14 @@ public class Group extends FigmaComponent {
                         form.setBorderWidth(vector.getStrokeWeight());
                         break;
                 }
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
+                Slider slider = ((Group) component).convertSlider();
+                form.frontendComponentList.add(slider);
+                form.setContainSlider(true);
+            }else{
+                Image image = component.convertToImage();
+                form.frontendComponentList.add(image);
+                form.setContainImage(true);
             }
         }
         form.sortComponentByY();
