@@ -1,4 +1,5 @@
-# ImagineThisServer
+# Imagine This Server
+[![CircleCI](https://circleci.com/gh/ImagineThisUCL/ImagineThisServer.svg?style=shield&circle-token=13c4c39d3b96704a63bebcd85ae60c7036be3371)](https://app.circleci.com/pipelines/github/ImagineThisUCL)
 
 ## How to run
 We are using [Intellij IDEA](https://www.jetbrains.com/idea/) to implement the backend and haven't tested it yet on other IDE. You might want to install that and get this project running correctly before you run the ImaginThisWeb project. Press run or use "Run - Run - ImaginethisserverApplication" to start this project. After that you may go back to run ImaginThisWeb project. 
