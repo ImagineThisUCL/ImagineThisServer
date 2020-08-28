@@ -91,7 +91,7 @@ public class WireframeComponent {
                 if (!IS_CONTAIN_NAVBAR) {
                     IS_CONTAIN_NAVBAR = true;
                 }
-            } else if (compType.equals("GROUP") && ( compName.contains("form")) || compName.contains("card") ) {
+            } else if (compType.equals("GROUP") && ( compName.contains("form") || compName.contains("card"))) {
                 Form form = ((Group) component).convertForm(projectID, accessToken, authenticateType);
                 if (!isContainForm) {
                     isContainForm = true;

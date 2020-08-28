@@ -85,6 +85,7 @@ public class Group extends FigmaComponent {
                     FigmaComponent figmaComponent = new Gson().fromJson(jsonChild, FigmaComponent.class);
                     imageURL = imageJson.get(figmaComponent.getId()).toString();
                     figmaComponent.setImageURL(imageURL);
+                    figmaComponent.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(figmaComponent.getId(), figmaComponent);
                     break;
             }
@@ -267,12 +268,7 @@ public class Group extends FigmaComponent {
                 form.frontendComponentList.add(imageButton);
                 form.setContainImageButton(true);
             } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && (component.getName().toLowerCase().contains("image")||component.getName().toLowerCase().contains("icon")||component.getName().toLowerCase().contains("picture"))) {
-                Image image;
-                if (component.getType().equals("RECTANGLE")) {
-                    image = ((Rectangle) component).convertToImage();
-                } else {
-                    image = ((Group) component).convertToImage();
-                }
+                Image image = component.convertToImage();
                 form.frontendComponentList.add(image);
                 form.setContainImage(true);
             } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("chart")) {

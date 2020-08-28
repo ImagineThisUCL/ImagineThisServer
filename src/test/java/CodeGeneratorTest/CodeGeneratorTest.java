@@ -75,7 +75,8 @@ public class CodeGeneratorTest {
 //        nameList.add("LogIn");
 //        nameList.add("Register");
 //        nameList.add("Map");
-        nameList.add("Offer");
+//        nameList.add("Offer");
+        nameList.add("Detail");
         FrontendUtil.FOLDER_NAME = projectID;
         FrontendUtil.GENERATE_PAGE_LIST = nameList;
         generatePageByName(nameList,
