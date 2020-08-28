@@ -30,7 +30,7 @@ public class NavBar extends FrontendComponent {
     public String generateCode() throws IOException {
         try {
             String backgroundColor = "\"#D5E6EC\"";
-            if(containerFills!= null && containerFills.size() > 0){
+            if(containerFills != null && containerFills.size() > 0){
                 backgroundColor = containerFills.get(0).getColor().toString();
             }
             NAV_BUTTONS.sort(new Comparator<NavButton>() {
@@ -91,7 +91,6 @@ public class NavBar extends FrontendComponent {
             return code.toString();
         } catch (Exception e) {
             this.isError = true;
-//            e.printStackTrace();
             return "<View>\n" +
                     "    <P>The navigation bar code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" +
                     "</View>\n";

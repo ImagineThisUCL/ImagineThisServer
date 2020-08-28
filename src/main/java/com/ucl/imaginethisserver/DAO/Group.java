@@ -285,13 +285,7 @@ public class Group extends FigmaComponent {
                 Dropdown dropdown = ((Group) component).convertToDropdown();
                 form.frontendComponentList.add(dropdown);
                 form.setContainDropdown(true);
-            } else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
-                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
-                Slider slider = ((Group) component).convertSlider();
-                form.frontendComponentList.add(slider);
-                form.setContainSlider(true);
-            }
-            else if ((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")) {
+            } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().contains("background")) {
                 switch (component.getType()) {
                     case "RECTANGLE":
                         Rectangle rectangle = (Rectangle) component;
@@ -335,15 +329,19 @@ public class Group extends FigmaComponent {
         slider.setPositionY(this.getPositionY());
         slider.setAlign(this.getAlign());
         for (FigmaComponent component : this.componentMap.values()) {
-            if (component.getType().equals("TEXT") && component.getName().toLowerCase().equals("cur_value")) {
+            if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("cur_value")) {
                 int cur_value = Integer.parseInt(((Text) component).getCharacters());
                 slider.setCur_value(cur_value);
-            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().equals("min_value")) {
+            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("min_value")) {
                 int min_value = Integer.parseInt(((Text) component).getCharacters());
                 slider.setMin_value(min_value);
-            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().equals("max_value")) {
+            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("max_value")) {
                 int max_value = Integer.parseInt(((Text) component).getCharacters());
                 slider.setMax_value(max_value);
+            } else if (component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("background")) {
+                Rectangle rectangle = (Rectangle) component;
+                slider.setBackgroundColor(rectangle.getFills().get(0).getColor());
+                slider.setBorderRadius(rectangle.getCornerRadius());
             }
         }
         return slider;
