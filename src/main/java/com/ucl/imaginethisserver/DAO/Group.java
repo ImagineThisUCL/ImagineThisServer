@@ -338,10 +338,6 @@ public class Group extends FigmaComponent {
             } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("max_value")) {
                 int max_value = Integer.parseInt(((Text) component).getCharacters());
                 slider.setMax_value(max_value);
-            } else if (component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("background")) {
-                Rectangle rectangle = (Rectangle) component;
-                slider.setBackgroundColor(rectangle.getFills().get(0).getColor());
-                slider.setBorderRadius(rectangle.getCornerRadius());
             }
         }
         return slider;
