@@ -317,6 +317,14 @@ public class Group extends FigmaComponent {
                         form.setBorderWidth(vector.getStrokeWeight());
                         break;
                 }
+            }else if((component.getType().equals("GROUP") && component.getName().toLowerCase().contains("form"))){
+                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+                Form nestForm = ((Group)component).convertForm(projectID,accessToken,authenticateType);
+                form.frontendComponentList.add(nestForm);
+            }else{
+                Image image = component.convertToImage();
+                form.frontendComponentList.add(image);
+                form.setContainImage(true);
             }
         }
         form.sortComponentByY();
