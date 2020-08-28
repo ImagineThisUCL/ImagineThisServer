@@ -285,7 +285,13 @@ public class Group extends FigmaComponent {
                 Dropdown dropdown = ((Group) component).convertToDropdown();
                 form.frontendComponentList.add(dropdown);
                 form.setContainDropdown(true);
-            } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")) {
+            } else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
+                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+                Slider slider = ((Group) component).convertSlider();
+                form.frontendComponentList.add(slider);
+                form.setContainSlider(true);
+            }
+            else if ((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")) {
                 switch (component.getType()) {
                     case "RECTANGLE":
                         Rectangle rectangle = (Rectangle) component;
@@ -338,10 +344,6 @@ public class Group extends FigmaComponent {
             } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().equals("max_value")) {
                 int max_value = Integer.parseInt(((Text) component).getCharacters());
                 slider.setMax_value(max_value);
-            } else if (component.getType().equals("RECTANGLE") && component.getName().toLowerCase().equals("background")) {
-                Rectangle rectangle = (Rectangle) component;
-                slider.setBackgroundColor(rectangle.getFills().get(0).getColor());
-                slider.setBorderRadius(rectangle.getCornerRadius());
             }
         }
         return slider;
@@ -382,14 +384,5 @@ public class Group extends FigmaComponent {
         return dropdown;
     }
 
-    public Image convertToImage() {
-        Image image = new Image();
-        image.setWidth(this.getWidth());
-        image.setHeight(this.getHeight());
-        image.setPositionX(this.getPositionX());
-        image.setPositionY(this.getPositionY());
-        image.setImageURL(this.getImageURL());
-        return image;
-    }
 
 }

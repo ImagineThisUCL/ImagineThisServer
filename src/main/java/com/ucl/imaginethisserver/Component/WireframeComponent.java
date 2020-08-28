@@ -41,11 +41,8 @@ public class WireframeComponent {
                 frontendComponentList.add(frontendText);
             } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && (component.getName().toLowerCase().contains("image") || component.getName().toLowerCase().contains("picture") || component.getName().toLowerCase().contains("icon"))) {
                 Image image;
-                if (component.getType().equals("RECTANGLE")) {
-                    image = ((Rectangle) component).convertToImage();
-                } else {
-                    image = ((Group) component).convertToImage();
-                }
+                image = component.convertToImage();
+
                 frontendComponentList.add(image);
                 if (!isContainImage) {
                     isContainImage = true;
@@ -117,6 +114,9 @@ public class WireframeComponent {
                 if (!isContainSwitch && form.isContainSwitch()) {
                     isContainSwitch = true;
                 }
+                if(!isContainSideBar && form.isContainSlider()){
+                    isContainSideBar = true;
+                }
                 frontendComponentList.add(form);
             } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")) {
                 Slider slider = ((Group) component).convertSlider();
@@ -142,6 +142,12 @@ public class WireframeComponent {
                     isContainDropdown = true;
                 }
                 frontendComponentList.add(dropdown);
+            }else{
+                Image image = component.convertToImage();
+                frontendComponentList.add(image);
+                if (!isContainImage) {
+                    isContainImage = true;
+                }
             }
         }
     }

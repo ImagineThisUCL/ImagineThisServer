@@ -17,7 +17,7 @@ public class Form extends FrontendComponent{
     private double borderWidth;
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainImageButton, isContainImage, isContainChart,
-            isContainDropdown, isContainSwitch;
+            isContainDropdown, isContainSwitch, isContainSlider;
     public FigmaColor getBackgroundColor() {
         return backgroundColor;
     }
@@ -90,7 +90,6 @@ public class Form extends FrontendComponent{
                         code.append("<View style={{flexDirection: 'row', justifyContent: \"space-between\", marginTop: " + marginTop + "}}>\n");
                         for (FrontendComponent component : curList) {
                             int flex = Math.max((int) (((double) component.width) / ((double) this.width) * 10), 1);
-
                             component.setFlex(flex);
                             code.append("<View style={{flex: " + flex + "}}>\n");
                             code.append(component.generateCode()).append("\n");
@@ -179,5 +178,13 @@ public class Form extends FrontendComponent{
     }
     public boolean isContainSwitch() {
         return isContainSwitch;
+    }
+
+    public void setContainSlider(boolean containSlider) {
+        isContainSlider = containSlider;
+    }
+
+    public boolean isContainSlider() {
+        return isContainSlider;
     }
 }

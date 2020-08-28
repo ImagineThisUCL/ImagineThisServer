@@ -20,9 +20,9 @@ import java.util.List;
 public class CodeGeneratorTest {
     public static void main(String[] args) throws IOException {
         String type = "originalToken";
-//        String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
+        String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
 //        String projectID = "NZFfXsPz4Zhkt3zSa6lIyB";
-        String projectID = "ag3BVQVGRatli2UsgUssB1";
+//        String projectID = "ag3BVQVGRatli2UsgUssB1";
         String accessToken = "54950-b9461cc1-f3c2-41f8-9fe7-a8f741083aa7";
         AuthenticateType authType = null;
         if (type.equals("originalToken")) {
@@ -45,7 +45,9 @@ public class CodeGeneratorTest {
 //        nameList.add("Wellbeing by Activity");
 //        nameList.add("Wellbeing Network");
 //        nameList.add("Wellbeing by Activity");
-////        nameList.add("Wellbeing rating 1");
+//        nameList.add("Wellbeing rating");
+
+//        nameList.add("Wellbeing rating 1");
 //        nameList.add("Wellbeing rating 2");
 //        nameList.add("Weekly Confirm Wellbeing");
 //        nameList.add("ABUB");
@@ -64,9 +66,12 @@ public class CodeGeneratorTest {
 //        nameList.add("Wellbeing rating 2");
 //        nameList.add("Messages Sent");
 //        nameList.add("Outdoor steps v Well-being");
-        nameList.add("Browse");
-        nameList.add("Post");
-        nameList.add("Profile");
+        nameList.add("Auto Populated Mesage 1");
+
+        //Voj's project
+//        nameList.add("Browse");
+//        nameList.add("Post");
+//        nameList.add("Profile");
 //        nameList.add("LogIn");
 //        nameList.add("Register");
 //        nameList.add("Map");

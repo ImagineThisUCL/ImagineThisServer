@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ucl.imaginethisserver.FrontendComponent.Image;
 import com.ucl.imaginethisserver.FrontendComponent.Switch;
 
 public class FigmaComponent {
@@ -91,6 +92,17 @@ public class FigmaComponent {
         aSwitch.setHeight(this.getHeight());
         aSwitch.setAlign(this.getAlign());
         return aSwitch;
+    }
+
+    public Image convertToImage(){
+        Image image = new Image();
+        image.setWidth(this.getWidth());
+        image.setHeight(this.getHeight());
+        image.setPositionX(this.getPositionX());
+        image.setPositionY(this.getPositionY());
+        image.setAlign(this.getAlign());
+        image.setImageURL(this.getImageURL());
+        return image;
     }
 
     public void setType(String type) {

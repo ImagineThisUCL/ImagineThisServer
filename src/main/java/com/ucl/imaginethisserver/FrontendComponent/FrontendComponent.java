@@ -63,7 +63,7 @@ public abstract class FrontendComponent {
          }
          if(this.positionX < a_component.positionX){
              if(this.positionX + this.width < a_component.positionX){
-                 if((this.positionY + this.height > a_component.positionY && this.positionY <= a_component.positionY)||(a_component.positionY + a_component.height > this.height && a_component.positionY <= this.positionY)){
+                 if((this.positionY + this.height > a_component.positionY && this.positionY <= a_component.positionY)||(a_component.positionY + a_component.height > this.positionY && a_component.positionY <= this.positionY)){
                      return true;
                  }else{
                      return false;
@@ -74,7 +74,7 @@ public abstract class FrontendComponent {
              }
          }else {
              if(a_component.positionX + a_component.width < this.positionX){
-                 if((this.positionY + this.height > a_component.positionY && this.positionY <= a_component.positionY)||(a_component.positionY + a_component.height > this.height && a_component.positionY <= this.positionY)){
+                 if((this.positionY + this.height > a_component.positionY && this.positionY <= a_component.positionY)||(a_component.positionY + a_component.height > this.positionY && a_component.positionY <= this.positionY)){
                      return true;
                  }else{
                      return false;

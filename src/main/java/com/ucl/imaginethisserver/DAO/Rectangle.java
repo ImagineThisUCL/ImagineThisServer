@@ -58,16 +58,7 @@ public class Rectangle extends FigmaComponent {
         return strokes;
     }
 
-    public Image convertToImage(){
-        Image image = new Image();
-        image.setWidth(this.getWidth());
-        image.setHeight(this.getHeight());
-        image.setPositionX(this.getPositionX());
-        image.setPositionY(this.getPositionY());
-        image.setAlign(this.getAlign());
-        image.setImageURL(this.getImageURL());
-        return image;
-    }
+
     public Map convertToMap(){
         Map image = new Map();
         image.setWidth(this.getWidth());
