@@ -106,9 +106,10 @@ public class Form extends FrontendComponent{
             code.append("</View>\n");
             return code.toString();
         }catch (Exception e){
+            e.printStackTrace();
             return "<View>\n" +
                     "    <P>The form component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" +
-                    "</View>";
+                    "</View>\n";
         }
     }
 

@@ -20,9 +20,9 @@ import java.util.List;
 public class CodeGeneratorTest {
     public static void main(String[] args) throws IOException {
         String type = "originalToken";
-        String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
+//        String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
 //        String projectID = "NZFfXsPz4Zhkt3zSa6lIyB";
-//        String projectID = "ag3BVQVGRatli2UsgUssB1";
+        String projectID = "ag3BVQVGRatli2UsgUssB1";
         String accessToken = "54950-b9461cc1-f3c2-41f8-9fe7-a8f741083aa7";
         AuthenticateType authType = null;
         if (type.equals("originalToken")) {
@@ -50,7 +50,7 @@ public class CodeGeneratorTest {
 //        nameList.add("Wellbeing rating 1");
 //        nameList.add("Wellbeing rating 2");
 //        nameList.add("Weekly Confirm Wellbeing");
-        nameList.add("ABUB");
+//        nameList.add("ABUB");
 //        nameList.add("Age Connect");
 //        nameList.add("Friend of Mine");
 //        nameList.add("Torfaen");
@@ -75,6 +75,7 @@ public class CodeGeneratorTest {
 //        nameList.add("LogIn");
 //        nameList.add("Register");
 //        nameList.add("Map");
+        nameList.add("Offer");
         FrontendUtil.FOLDER_NAME = projectID;
         FrontendUtil.GENERATE_PAGE_LIST = nameList;
         generatePageByName(nameList,

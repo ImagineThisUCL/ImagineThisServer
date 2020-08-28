@@ -312,6 +312,7 @@ public class Group extends FigmaComponent {
                         break;
                 }
             }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
+                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
                 Slider slider = ((Group) component).convertSlider();
                 form.frontendComponentList.add(slider);
                 form.setContainSlider(true);
