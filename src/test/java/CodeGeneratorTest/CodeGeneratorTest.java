@@ -50,7 +50,7 @@ public class CodeGeneratorTest {
 //        nameList.add("Wellbeing rating 1");
 //        nameList.add("Wellbeing rating 2");
 //        nameList.add("Weekly Confirm Wellbeing");
-//        nameList.add("ABUB");
+        nameList.add("ABUB");
 //        nameList.add("Age Connect");
 //        nameList.add("Friend of Mine");
 //        nameList.add("Torfaen");
@@ -66,7 +66,7 @@ public class CodeGeneratorTest {
 //        nameList.add("Wellbeing rating 2");
 //        nameList.add("Messages Sent");
 //        nameList.add("Outdoor steps v Well-being");
-        nameList.add("Auto Populated Mesage 1");
+//        nameList.add("Auto Populated Mesage 1");
 
         //Voj's project
 //        nameList.add("Browse");
