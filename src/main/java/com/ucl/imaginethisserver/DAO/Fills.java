@@ -5,7 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
 import java.util.List;
-
+/**
+ *  Object that represents the Fills, no matter which component it is applied to.
+ *  Contains most of the common values of the Fills type.
+*/
 public class Fills {
     @Expose()
     private String blendMode;

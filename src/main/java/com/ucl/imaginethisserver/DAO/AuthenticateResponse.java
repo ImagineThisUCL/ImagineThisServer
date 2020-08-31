@@ -3,7 +3,9 @@ package com.ucl.imaginethisserver.DAO;
 import com.google.gson.annotations.Expose;
 
 import java.util.List;
-
+/**
+ *  Function that manipulate the Figma Project on the API level, without any parsing yet
+*/
 public class AuthenticateResponse {
     @Expose()
     private String projectName;

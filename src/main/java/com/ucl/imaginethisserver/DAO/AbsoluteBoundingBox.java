@@ -1,7 +1,9 @@
 package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.annotations.Expose;
-
+/**
+ *  Object that defines the size and the positioning of a visual object within the Figma file
+ */
 public class AbsoluteBoundingBox {
     @Expose()
     public double width;

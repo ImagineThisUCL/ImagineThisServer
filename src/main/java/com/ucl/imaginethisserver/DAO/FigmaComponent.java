@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ucl.imaginethisserver.FrontendComponent.Image;
 import com.ucl.imaginethisserver.FrontendComponent.Switch;
-
+/**
+ *  An Java object representing all FigmaComponent,
+ *  contains most of the useful common value of all Figma Component
+*/
 public class FigmaComponent {
     private String id;
     private String name;
@@ -84,6 +87,9 @@ public class FigmaComponent {
         return align;
     }
 
+    /**
+     *  Function used to convert a common Figma component into a Switch component on the frontend.
+    */
     public Switch convertSwitch(){
         Switch aSwitch = new Switch();
         aSwitch.setPositionX(this.getPositionX());
@@ -94,6 +100,9 @@ public class FigmaComponent {
         return aSwitch;
     }
 
+    /**
+     *  Function used to convert a common Figma component into an Image on the frontend.
+    */
     public Image convertToImage(){
         Image image = new Image();
         image.setWidth(this.getWidth());

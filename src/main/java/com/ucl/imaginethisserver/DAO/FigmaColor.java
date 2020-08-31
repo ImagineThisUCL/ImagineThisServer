@@ -2,6 +2,11 @@ package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.annotations.Expose;
 
+
+/**
+ *  Object used to represent rgba colors passed from Figma API in Java
+ *  Containing a function that converts this object into Frontend code
+*/
 public class FigmaColor {
     @Expose()
     private float r;
@@ -19,6 +24,10 @@ public class FigmaColor {
         this.a = a;
     }
 
+    /**
+     * Function that converts this object into String that cam be used
+     * directly on the frontend code.
+    */
     public String toString(){
        return "\"rgba("+(int)(r * 255) +","+(int)(g * 255) +","+(int)(b * 255)+","+a+")\"";
     }
