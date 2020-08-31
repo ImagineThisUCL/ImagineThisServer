@@ -29,6 +29,10 @@ public class Group extends FigmaComponent {
         return this.componentMap;
     }
 
+    /**
+     * Load all the components inside the group. Convert all json data retrieved from Figma API to corresponding Java object.
+     * @throws IOException
+     */
     public void loadComponent(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         List<String> IDList = new ArrayList<>();
         for (JsonElement pageChild : this.children) {
@@ -85,6 +89,7 @@ public class Group extends FigmaComponent {
                     FigmaComponent figmaComponent = new Gson().fromJson(jsonChild, FigmaComponent.class);
                     imageURL = imageJson.get(figmaComponent.getId()).toString();
                     figmaComponent.setImageURL(imageURL);
+                    figmaComponent.convertRelativePosition(this.wireframeBoundingBox);
                     componentMap.put(figmaComponent.getId(), figmaComponent);
                     break;
             }
@@ -92,6 +97,9 @@ public class Group extends FigmaComponent {
 
     }
 
+    /**
+     * @return When a Figma group is recognized as a Button, then convert it to the Button object.
+     */
     public Button convertButton() {
         Button button = new Button();
         button.setPositionX(this.getPositionX());
@@ -101,8 +109,6 @@ public class Group extends FigmaComponent {
         button.setAlign(this.getAlign());
         if (this.transitionNodeID != null) {
             button.setTransitionNodeID(this.transitionNodeID);
-            String wireframeName = Page.getWireframeByID(this.transitionNodeID).getName();
-            Navigator.NAVIGATOR_MAP.put(wireframeName, wireframeName);
         }
         for (FigmaComponent component : this.componentMap.values()) {
             switch (component.getType()) {
@@ -153,8 +159,6 @@ public class Group extends FigmaComponent {
         imageButton.setAlign(this.getAlign());
         if (this.transitionNodeID != null) {
             imageButton.setTransitionNodeID(this.transitionNodeID);
-            String wireframeName = Page.getWireframeByID(this.transitionNodeID).getName();
-            Navigator.NAVIGATOR_MAP.put(wireframeName, wireframeName);
         }
         for (FigmaComponent component : this.componentMap.values()) {
             if ((component.getType().equals("GROUP") || component.getType().equals("RECTANGLE")) && (component.getName().toLowerCase().contains("image")||component.getName().toLowerCase().contains("icon")||component.getName().toLowerCase().contains("picture"))) {
@@ -267,12 +271,7 @@ public class Group extends FigmaComponent {
                 form.frontendComponentList.add(imageButton);
                 form.setContainImageButton(true);
             } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && (component.getName().toLowerCase().contains("image")||component.getName().toLowerCase().contains("icon")||component.getName().toLowerCase().contains("picture"))) {
-                Image image;
-                if (component.getType().equals("RECTANGLE")) {
-                    image = ((Rectangle) component).convertToImage();
-                } else {
-                    image = ((Group) component).convertToImage();
-                }
+                Image image = component.convertToImage();
                 form.frontendComponentList.add(image);
                 form.setContainImage(true);
             } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("chart")) {
@@ -285,13 +284,7 @@ public class Group extends FigmaComponent {
                 Dropdown dropdown = ((Group) component).convertToDropdown();
                 form.frontendComponentList.add(dropdown);
                 form.setContainDropdown(true);
-            } else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
-                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
-                Slider slider = ((Group) component).convertSlider();
-                form.frontendComponentList.add(slider);
-                form.setContainSlider(true);
-            }
-            else if ((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().equals("background")) {
+            } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().contains("background")) {
                 switch (component.getType()) {
                     case "RECTANGLE":
                         Rectangle rectangle = (Rectangle) component;
@@ -317,7 +310,15 @@ public class Group extends FigmaComponent {
                         form.setBorderWidth(vector.getStrokeWeight());
                         break;
                 }
-            }else if((component.getType().equals("GROUP") && component.getName().toLowerCase().contains("form"))){
+            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
+                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+                Slider slider = ((Group) component).convertSlider();
+                form.frontendComponentList.add(slider);
+                form.setContainSlider(true);
+            // Add recursion to form/card
+            }else if(component.getType().equals("GROUP")
+                    && (component.getName().toLowerCase().contains("form")
+                    || component.getName().toLowerCase().contains("card"))){
                 ((Group) component).loadComponent(projectID, accessToken, authenticateType);
                 Form nestForm = ((Group)component).convertForm(projectID,accessToken,authenticateType);
                 form.frontendComponentList.add(nestForm);
@@ -343,13 +344,13 @@ public class Group extends FigmaComponent {
         slider.setPositionY(this.getPositionY());
         slider.setAlign(this.getAlign());
         for (FigmaComponent component : this.componentMap.values()) {
-            if (component.getType().equals("TEXT") && component.getName().toLowerCase().equals("cur_value")) {
+            if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("cur_value")) {
                 int cur_value = Integer.parseInt(((Text) component).getCharacters());
                 slider.setCur_value(cur_value);
-            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().equals("min_value")) {
+            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("min_value")) {
                 int min_value = Integer.parseInt(((Text) component).getCharacters());
                 slider.setMin_value(min_value);
-            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().equals("max_value")) {
+            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("max_value")) {
                 int max_value = Integer.parseInt(((Text) component).getCharacters());
                 slider.setMax_value(max_value);
             }

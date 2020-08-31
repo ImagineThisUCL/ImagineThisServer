@@ -14,7 +14,7 @@ public class WireframeComponent {
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private static boolean IS_CONTAIN_NAVBAR;
     private boolean isContainText = true, isContainButton, isContainTextBox,
-            isContainForm, isContainSideBar, isContainImageButton,
+            isContainForm, isContainSliderBar, isContainImageButton,
             isContainImage, isContainChart, isContainMap,
             isContainSwitch, isContainDropdown;
     private double wWidth;
@@ -31,15 +31,26 @@ public class WireframeComponent {
         IS_CONTAIN_NAVBAR = isContainNavbar;
     }
 
+    /** Go through all of the direct child components of the current wireframe, convert all of the recognized components to their corresponding React Native component.
+     * All of unrecognized components would be converted to an image.
+     * @param wireframe
+     * @throws IOException
+     */
     public WireframeComponent(Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         this.backgroundColor = wireframe.getFills().get(0).getColor();
         this.wWidth = wireframe.getAbsoluteBoundingBox().width;
         for (FigmaComponent component : wireframe.getComponentList()) {
+            String compType = component.getType();
+            String compName = component.getName().toLowerCase();
             //If this component is a text
-            if (component.getType().equals("TEXT")) {
+            if (compType.equals("TEXT")) {
                 FrontendText frontendText = ((Text) component).convertToFrontendText();
                 frontendComponentList.add(frontendText);
-            } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && (component.getName().toLowerCase().contains("image") || component.getName().toLowerCase().contains("picture") || component.getName().toLowerCase().contains("icon"))) {
+            } else if (
+                (compType.equals("RECTANGLE") || compType.equals("GROUP")) &&
+                ((compName.contains("image") && !(compName.contains("imagebutton"))) ||
+                compName.contains("picture") ||
+                compName.contains("icon"))) {
                 Image image;
                 image = component.convertToImage();
 
@@ -47,13 +58,13 @@ public class WireframeComponent {
                 if (!isContainImage) {
                     isContainImage = true;
                 }
-            } else if (component.getType().equals("RECTANGLE") && component.getName().toLowerCase().contains("map")) {
+            } else if (compType.equals("RECTANGLE") && compName.contains("map")) {
                 Map map = ((Rectangle) component).convertToMap();
                 frontendComponentList.add(map);
                 if (!isContainMap) {
                     isContainMap = true;
                 }
-            } else if (component.getName().toLowerCase().contains("switch")) {
+            } else if (compName.contains("switch")) {
                 Switch aSwitch = component.convertSwitch();
                 frontendComponentList.add(aSwitch);
                 if (!isContainSwitch) {
@@ -61,19 +72,19 @@ public class WireframeComponent {
                 }
             }
             // if this component is a button
-            else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")) {
+            else if (compType.equals("GROUP") && compName.contains("textbutton")) {
                 Button button = ((Group) component).convertButton();
                 frontendComponentList.add(button);
                 if (!isContainButton) {
                     isContainButton = true;
                 }
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("input")) {
+            } else if (compType.equals("GROUP") && compName.contains("input")) {
                 TextBox textBox = ((Group) component).convertTextBox();
                 frontendComponentList.add(textBox);
                 if (!isContainTextBox) {
                     isContainTextBox = true;
                 }
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("navigation")) {
+            } else if (compType.equals("GROUP") && compName.contains("navigation")) {
                 if (NAV_BAR == null) {
                     NAV_BAR = ((Group) component).convertNavBar(projectID, accessToken, authenticateType);
                 }
@@ -85,7 +96,7 @@ public class WireframeComponent {
                 if (!IS_CONTAIN_NAVBAR) {
                     IS_CONTAIN_NAVBAR = true;
                 }
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("form")) {
+            } else if (compType.equals("GROUP") && ( compName.contains("form") || compName.contains("card"))) {
                 Form form = ((Group) component).convertForm(projectID, accessToken, authenticateType);
                 if (!isContainForm) {
                     isContainForm = true;
@@ -114,29 +125,29 @@ public class WireframeComponent {
                 if (!isContainSwitch && form.isContainSwitch()) {
                     isContainSwitch = true;
                 }
-                if(!isContainSideBar && form.isContainSlider()){
-                    isContainSideBar = true;
+                if(!isContainSliderBar && form.isContainSlider()){
+                    isContainSliderBar = true;
                 }
                 frontendComponentList.add(form);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")) {
+            } else if (compType.equals("GROUP") && compName.contains("slider")) {
                 Slider slider = ((Group) component).convertSlider();
-                if (!isContainSideBar) {
-                    isContainSideBar = true;
+                if (!isContainSliderBar) {
+                    isContainSliderBar = true;
                 }
                 frontendComponentList.add(slider);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")) {
+            } else if (compType.equals("GROUP") && compName.contains("imagebutton")) {
                 ImageButton imageButton = ((Group) component).convertImageButton(projectID, accessToken, authenticateType);
                 if (!isContainImageButton) {
                     isContainImageButton = true;
                 }
                 frontendComponentList.add(imageButton);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("chart")) {
+            } else if (compType.equals("GROUP") && compName.contains("chart")) {
                 Chart fixedChart = ((Group) component).convertToFixedChart();
                 if (!isContainChart) {
                     isContainChart = true;
                 }
                 frontendComponentList.add(fixedChart);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("dropdown")) {
+            } else if (compType.equals("GROUP") && compName.contains("dropdown")) {
                 Dropdown dropdown = ((Group) component).convertToDropdown();
                 if (!isContainDropdown) {
                     isContainDropdown = true;
@@ -152,6 +163,10 @@ public class WireframeComponent {
         }
     }
 
+    /**Generate the source code of import section. Which components should be imported are determined by the included reusable components
+     * @return The source code of import section
+     * @throws IOException
+     */
     public String generateImportCode(String folderName) throws IOException {
         StringBuilder importCode = new StringBuilder();
         importCode.append("import { View, ScrollView");
@@ -181,7 +196,7 @@ public class WireframeComponent {
             CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD, folderName);
         }
 
-        if (isContainSideBar) {
+        if (isContainSliderBar) {
             importCode.append("import CustomSlider from \"../reusables/CustomSlider\"").append("\n");
             CodeGenerator.writeReusableComponentCode(ReusableComponent.SLIDER, folderName);
         }
@@ -225,6 +240,7 @@ public class WireframeComponent {
         if (frontendComponentList.size() == 0) {
             return "";
         }
+        //Put all of the components in the same line in one list
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
         int preY = 0;
         for (List<FrontendComponent> curList : inlineComponentList) {
@@ -241,7 +257,9 @@ public class WireframeComponent {
                 viewCode.append("</View>\n");
                 preY = curList.get(0).getPositionY() + curList.get(0).getHeight();
 
-            } else if (curList.size() > 1) {
+            }
+            // If there are multiple components in this line, then align these content using 'space-between'
+            else if (curList.size() > 1) {
                 int minY = Integer.MAX_VALUE;
                 int maxY = -1;
                 for (FrontendComponent component : curList) {

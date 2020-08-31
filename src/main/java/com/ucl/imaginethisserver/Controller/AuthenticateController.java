@@ -18,6 +18,17 @@ import java.util.List;
 @RestController
 public class AuthenticateController {
 
+    /**
+     * The method is used to request figma API to authenticate the current user to get access of target Figma project
+     * @param projectID The figma project ID which the user try to access
+     * @param accessToken The user's personal access token
+     * @param type authenticate type
+     *             - originalToken
+     *             - oauth2Token
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
     @GetMapping("/authToken")
     public AuthenticateResponse getFigmaProject(@RequestParam(value = "projectID") String projectID, @RequestParam(value = "accessToken") String accessToken,

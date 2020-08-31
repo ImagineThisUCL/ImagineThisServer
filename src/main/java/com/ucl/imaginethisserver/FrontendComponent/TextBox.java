@@ -80,6 +80,7 @@ public class TextBox extends FrontendComponent {
             return textBoxCode.toString();
 
         } catch (Exception e) {
+            e.printStackTrace();
             return "<P>The input field component could not be generated, please check your Figma file and refer to our guidelines.</P>\n";
         }
     }

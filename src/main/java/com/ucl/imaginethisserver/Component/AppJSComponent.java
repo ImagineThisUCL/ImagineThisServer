@@ -8,6 +8,11 @@ import java.util.HashSet;
 
 public class AppJSComponent {
 
+    /**This method used to generate [import] section in the app.js
+     * which components should be imported are determined by the components contained in the navigation bar and navigator.
+     * @param navBar
+     * @return
+     */
     public static String generateImportCode(NavBar navBar) {
         StringBuilder importCode = new StringBuilder();
         importCode.append("import React from 'react'\n" +
@@ -16,7 +21,7 @@ public class AppJSComponent {
         if (navBar != null) {
             importCode.append("import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'\n");
         }
-        importCode.append("import { StyleSheet, Text, SafeAreaView, Image, StatusBar} from 'react-native';\n");
+        importCode.append("import { SafeAreaView, Image } from 'react-native';\n");
         HashSet<String> wireframeNameSet = new HashSet<>(NavBar.BUTTON_MAP.values());
         for (String wireframeName : wireframeNameSet) {
             wireframeName = wireframeName.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
@@ -34,6 +39,11 @@ public class AppJSComponent {
         return importCode.toString();
     }
 
+    /** Generate body source code for App.js
+     * @param navBar
+     * @return
+     * @throws IOException
+     */
     public static String generateViewCode(NavBar navBar) throws IOException {
         StringBuilder viewCode = new StringBuilder();
         String navBarName = "";
@@ -57,6 +67,7 @@ public class AppJSComponent {
                     "                        component={NavigationBar}\n" +
                     "                        options={{headerShown: false}}/>\n");
         }
+        // Write the button navigator based on Navigator Map
         for (String wireframeKey : Navigator.NAVIGATOR_MAP.keySet()) {
             String wireframeComponent = Navigator.NAVIGATOR_MAP.get(wireframeKey).replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
             viewCode.append("                    <Stack.Screen\n" + "                        name=\"").append(wireframeKey.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "")).append("\"\n").append("                        component={").append(wireframeComponent).append("}/>\n");

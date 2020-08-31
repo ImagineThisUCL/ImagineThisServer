@@ -9,12 +9,17 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+
 public class Form extends FrontendComponent{
+    /**
+     * All of the frontend components that are included in the current form.
+     */
     public ArrayList<FrontendComponent> frontendComponentList = new ArrayList<>();
     private FigmaColor backgroundColor;
     private FigmaColor borderColor;
     private double cornerRadius;
     private double borderWidth;
+//    If the current form contains the following frontend components.
     private boolean isContainText, isContainButton, isContainTextBox,
             isContainImageButton, isContainImage, isContainChart,
             isContainDropdown, isContainSwitch, isContainSlider;
@@ -58,9 +63,9 @@ public class Form extends FrontendComponent{
             }
             if (this.borderColor != null) {
                 String borderColorStr = this.borderColor.toString();
-                code.append("<View style={{borderRadius: " + this.cornerRadius + ", padding: 10, backgroundColor: " + backgroundColorStr + ",borderColor: " + borderColorStr + ", borderWidth: " + borderWidth + "}}>\n");
+                code.append("<View style={{borderRadius: " + this.cornerRadius + ", padding: 10, flex: 1, backgroundColor: " + backgroundColorStr + ",borderColor: " + borderColorStr + ", borderWidth: " + borderWidth + "}}>\n");
             } else {
-                code.append("<View style={{borderRadius: " + this.cornerRadius + ", padding: 10, backgroundColor: " + backgroundColorStr + "}}>").append("\n");
+                code.append("<View style={{borderRadius: " + this.cornerRadius + ", padding: 10, flex: 1, backgroundColor: " + backgroundColorStr + "}}>").append("\n");
             }
             int preY = this.positionY;
             if (this.frontendComponentList.size() > 0) {
@@ -106,9 +111,10 @@ public class Form extends FrontendComponent{
             code.append("</View>\n");
             return code.toString();
         }catch (Exception e){
+            e.printStackTrace();
             return "<View>\n" +
                     "    <P>The form component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" +
-                    "</View>";
+                    "</View>\n";
         }
     }
 

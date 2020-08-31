@@ -29,6 +29,7 @@ public class ImageButton extends FrontendComponent {
                     navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
                     imageButtonCode.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
                 }else{
+                    Navigator.NAVIGATOR_MAP.put(navigateWireframe,navigateWireframe);
                     navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
                     imageButtonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
                 }
