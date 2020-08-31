@@ -8,14 +8,30 @@ import com.ucl.imaginethisserver.DAO.Style;
 import java.util.List;
 
 public class Button extends FrontendComponent{
+    /**
+     * The text in the current button
+     */
     private String character;
     private Style style;
+    /**
+     * The fills of the text
+     */
     private List<Fills> TextFills;
+
+    /**
+     * The fills for the rectangle.
+     */
     private List<Fills> RecFills;
+    /**
+     * The id of the wireframe that button is try to navigate to.
+     */
     private String transitionNodeID;
     private double cornerRadius;
     private FigmaColor borderColor;
     private double borderWidth;
+    /**
+     * If the shape of the button is a circle.
+     */
     private boolean isCircle = false;
 
     public void setCharacter(String character) {
@@ -63,6 +79,7 @@ public class Button extends FrontendComponent{
                     navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
                     buttonCode.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
                 }else{
+                    Navigator.NAVIGATOR_MAP.put(navigateWireframe,navigateWireframe);
                     navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
                     buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
                 }

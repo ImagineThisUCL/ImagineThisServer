@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
+/**
+ * This class represents the stroke paints applied to the node
+ */
 public class Stroke {
     @Expose()
     String blendMode;

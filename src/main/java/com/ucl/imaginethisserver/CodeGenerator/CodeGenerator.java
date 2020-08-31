@@ -10,8 +10,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * The CodeGenerator class is used to generate React Native code
+ */
 public class CodeGenerator {
 
+    /**
+     * This method is used to create the root folder for the current project. The default path of root folder would OutputStorage/[folderName]
+     * where the default [folderName] is its project ID
+     * @param folderName The root folder name for current generating project. The default value is the [project ID]
+     * @throws IOException
+     */
     public static void generateOutputFolder(String folderName) throws IOException{
         File storageFolder = new File("OutputStorage");
         storageFolder.mkdir();
@@ -19,6 +28,10 @@ public class CodeGenerator {
         outputAppFolder.mkdir();
     }
 
+    /**
+     * This method is used to generate the package.json file
+     * @throws IOException
+     */
     public static void generatePackageFile(String folderName) throws IOException {
         String outputCode = "";
         outputCode = PackageComponent.generateCode();
@@ -29,6 +42,11 @@ public class CodeGenerator {
         writer.close();
     }
 
+    /**
+     * This method is used to generate the React Native source code for any reusable components
+     * @param component The reusable component the user try to generate
+     * @throws IOException
+     */
     public static void writeReusableComponentCode(ReusableComponent component, String folderName) throws IOException {
         String outputCode = "";
         String fileName = "";
@@ -78,6 +96,15 @@ public class CodeGenerator {
 
     }
 
+    /**
+     * This method is used to generate source code for any wireframe.
+     * @param wireframeName The name of current generating wireframe
+     * @param wireframe the wireframe object of current generating wireframe
+     * @param projectID current Figma project ID
+     * @param accessToken user's access token
+     * @param authenticateType the authenticate type
+     * @throws IOException
+     */
     public static void writeWireframeCode(String wireframeName, Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType, String folderName) throws IOException {
         wireframeName = wireframeName.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
         String outputCode = "";
@@ -93,6 +120,10 @@ public class CodeGenerator {
         writer.close();
     }
 
+    /**
+     * This method is used to generate source code for baseStyle.js file, which set some default style values for different components.
+     * @throws IOException
+     */
     public static void writeBaseStyleCode(String folderName) throws IOException {
         String outputCode = BaseStyleComponent.generateCode();
         generateOutputFolder(folderName);
@@ -103,6 +134,11 @@ public class CodeGenerator {
         writer.close();
     }
 
+    /**
+     * This method is used to generate the App.js file. It would only be called if there is a bottom navigation bar or navigators in wireframes.
+     * @param navBar The navBar object, it is null if the all of the wireframes don't contain a navigation bottom bar.
+     * @throws IOException
+     */
     public static void writeAppJSCode(NavBar navBar, String folderName) throws IOException{
         String appJSCode = AppJSComponent.generateCode(navBar);
         generateOutputFolder(folderName);
@@ -112,6 +148,11 @@ public class CodeGenerator {
 
     }
 
+    /**
+     * This method is used to generate source code for placeholder.js. It would be generated when any button in a page try to navigate to a page that doesn't exist.
+     * And then it would navigated to a placeholder page.
+     * @throws IOException
+     */
     public static void writePlaceholderCode(String folderName) throws IOException{
         String placeholderCode = PlaceholderComponent.generateCode();
         generateOutputFolder(folderName);

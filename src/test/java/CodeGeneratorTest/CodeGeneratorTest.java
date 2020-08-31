@@ -69,13 +69,13 @@ public class CodeGeneratorTest {
 //        nameList.add("Auto Populated Mesage 1");
 
         //Voj's project
-//        nameList.add("Browse");
-//        nameList.add("Post");
-//        nameList.add("Profile");
-//        nameList.add("LogIn");
-//        nameList.add("Register");
-//        nameList.add("Map");
-//        nameList.add("Offer");
+        nameList.add("Browse");
+        nameList.add("Post");
+        nameList.add("Profile");
+        nameList.add("LogIn");
+        nameList.add("Register");
+        nameList.add("Map");
+        nameList.add("Offer");
         nameList.add("Detail");
         FrontendUtil.FOLDER_NAME = projectID;
         FrontendUtil.GENERATE_PAGE_LIST = nameList;

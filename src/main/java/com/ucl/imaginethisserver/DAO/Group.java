@@ -29,6 +29,10 @@ public class Group extends FigmaComponent {
         return this.componentMap;
     }
 
+    /**
+     * Load all the components inside the group. Convert all json data retrieved from Figma API to corresponding Java object.
+     * @throws IOException
+     */
     public void loadComponent(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         List<String> IDList = new ArrayList<>();
         for (JsonElement pageChild : this.children) {
@@ -93,6 +97,9 @@ public class Group extends FigmaComponent {
 
     }
 
+    /**
+     * @return When a Figma group is recognized as a Button, then convert it to the Button object.
+     */
     public Button convertButton() {
         Button button = new Button();
         button.setPositionX(this.getPositionX());
@@ -102,8 +109,6 @@ public class Group extends FigmaComponent {
         button.setAlign(this.getAlign());
         if (this.transitionNodeID != null) {
             button.setTransitionNodeID(this.transitionNodeID);
-            String wireframeName = Page.getWireframeByID(this.transitionNodeID).getName();
-            Navigator.NAVIGATOR_MAP.put(wireframeName, wireframeName);
         }
         for (FigmaComponent component : this.componentMap.values()) {
             switch (component.getType()) {
@@ -154,8 +159,6 @@ public class Group extends FigmaComponent {
         imageButton.setAlign(this.getAlign());
         if (this.transitionNodeID != null) {
             imageButton.setTransitionNodeID(this.transitionNodeID);
-            String wireframeName = Page.getWireframeByID(this.transitionNodeID).getName();
-            Navigator.NAVIGATOR_MAP.put(wireframeName, wireframeName);
         }
         for (FigmaComponent component : this.componentMap.values()) {
             if ((component.getType().equals("GROUP") || component.getType().equals("RECTANGLE")) && (component.getName().toLowerCase().contains("image")||component.getName().toLowerCase().contains("icon")||component.getName().toLowerCase().contains("picture"))) {

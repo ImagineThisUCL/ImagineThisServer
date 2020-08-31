@@ -31,6 +31,11 @@ public class WireframeComponent {
         IS_CONTAIN_NAVBAR = isContainNavbar;
     }
 
+    /** Go through all of the direct child components of the current wireframe, convert all of the recognized components to their corresponding React Native component.
+     * All of unrecognized components would be converted to an image.
+     * @param wireframe
+     * @throws IOException
+     */
     public WireframeComponent(Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         this.backgroundColor = wireframe.getFills().get(0).getColor();
         this.wWidth = wireframe.getAbsoluteBoundingBox().width;
@@ -158,6 +163,10 @@ public class WireframeComponent {
         }
     }
 
+    /**Generate the source code of import section. Which components should be imported are determined by the included reusable components
+     * @return The source code of import section
+     * @throws IOException
+     */
     public String generateImportCode(String folderName) throws IOException {
         StringBuilder importCode = new StringBuilder();
         importCode.append("import { View, ScrollView");
@@ -231,6 +240,7 @@ public class WireframeComponent {
         if (frontendComponentList.size() == 0) {
             return "";
         }
+        //Put all of the components in the same line in one list
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
         int preY = 0;
         for (List<FrontendComponent> curList : inlineComponentList) {
@@ -247,7 +257,9 @@ public class WireframeComponent {
                 viewCode.append("</View>\n");
                 preY = curList.get(0).getPositionY() + curList.get(0).getHeight();
 
-            } else if (curList.size() > 1) {
+            }
+            // If there are multiple components in this line, then align these content using 'space-between'
+            else if (curList.size() > 1) {
                 int minY = Integer.MAX_VALUE;
                 int maxY = -1;
                 for (FrontendComponent component : curList) {

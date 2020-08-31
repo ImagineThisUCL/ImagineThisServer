@@ -12,9 +12,19 @@ import java.util.List;
 
 public class NavBar extends FrontendComponent {
 
+    /**
+     * A list of navigation button that the bottom navigation bar contains.
+     */
     public static ArrayList<NavButton> NAV_BUTTONS = new ArrayList<>();
+    /**
+     * The key is the name of the button
+     * The value is the name of the wireframe name that the button corresponding to.
+     */
     public static HashMap<String, String> BUTTON_MAP = new HashMap<>();
     public static List<Fills> containerFills;
+    /**
+     * If there is any exception be thrown during bottom navigation bar source code generation.
+     */
     public static boolean isError = false;
 
 
