@@ -302,7 +302,7 @@ public class WireframeComponent {
 
     /**
      *  Function used to combine import code with the view code
-     *  to generate the content of the whole file. 
+     *  to generate the content of the whole file.
      */
     public String generateCode(String className, String folderName) throws IOException {
         StringBuilder code = new StringBuilder();

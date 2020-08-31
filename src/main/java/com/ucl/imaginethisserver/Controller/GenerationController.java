@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *  Functions used to handle two kinds of authentication of Figma API.
+ */
 @RestController
 public class GenerationController {
     @CrossOrigin(origins = "http://localhost:3000")

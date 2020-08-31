@@ -15,6 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+
+/**
+ *  Functions used to handle two kinds of authentication of Figma API.
+*/
 @RestController
 public class AuthenticateController {
 
