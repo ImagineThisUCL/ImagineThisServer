@@ -1,6 +1,10 @@
 package com.ucl.imaginethisserver.Component;
 
 public class SliderComponent {
+    /**
+     *  Function contains fixed code content of CustomSlider.js
+     *  Used to customize the slider on the frontend.
+     */
     public static String generateCode(){
         return "import React, {\n" +
                 "    Component\n" +

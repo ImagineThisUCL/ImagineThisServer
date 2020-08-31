@@ -12,6 +12,10 @@ import java.io.IOException;
 
 public class CodeGenerator {
 
+    /**
+     *  Function used to generate Output folder according to the standard structure of
+     *  a React Native app.
+    */
     public static void generateOutputFolder(String folderName) throws IOException{
         File storageFolder = new File("OutputStorage");
         storageFolder.mkdir();
@@ -19,6 +23,10 @@ public class CodeGenerator {
         outputAppFolder.mkdir();
     }
 
+    /**
+     * Function used to create and write a fixed package.json file that is required when
+     * running the application
+     */
     public static void generatePackageFile(String folderName) throws IOException {
         String outputCode = "";
         outputCode = PackageComponent.generateCode();
@@ -29,6 +37,10 @@ public class CodeGenerator {
         writer.close();
     }
 
+    /**
+     * Function used to generate fixed reusable codes into the reusable folder,
+     * the code changes according to the accepted name.
+     */
     public static void writeReusableComponentCode(ReusableComponent component, String folderName) throws IOException {
         String outputCode = "";
         String fileName = "";
@@ -78,6 +90,10 @@ public class CodeGenerator {
 
     }
 
+    /**
+     *  Function used to generate view files (files used to show the actual pages within the app).
+     *  The function accepts a name and are called every time a new page view file is required.
+     */
     public static void writeWireframeCode(String wireframeName, Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType, String folderName) throws IOException {
         wireframeName = wireframeName.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
         String outputCode = "";
@@ -93,6 +109,9 @@ public class CodeGenerator {
         writer.close();
     }
 
+    /**
+     *  Function used to create fixed style code file baseStyle.js within the assets folder.
+     */
     public static void writeBaseStyleCode(String folderName) throws IOException {
         String outputCode = BaseStyleComponent.generateCode();
         generateOutputFolder(folderName);
@@ -103,6 +122,10 @@ public class CodeGenerator {
         writer.close();
     }
 
+    /**
+     *  Function used to create App.js under the root folder,
+     *  code of App.js can be created by calling generateCode function of the navBar.
+     */
     public static void writeAppJSCode(NavBar navBar, String folderName) throws IOException{
         String appJSCode = AppJSComponent.generateCode(navBar);
         generateOutputFolder(folderName);
@@ -112,6 +135,11 @@ public class CodeGenerator {
 
     }
 
+    /**
+     *  Function used to create a page called Placeholder.js
+     *  in order to catch links that redirects to pages that does not exist or
+     *  pages that is not generated. Basically a blank page.
+     */
     public static void writePlaceholderCode(String folderName) throws IOException{
         String placeholderCode = PlaceholderComponent.generateCode();
         generateOutputFolder(folderName);

@@ -8,6 +8,11 @@ import java.util.HashSet;
 
 public class AppJSComponent {
 
+    /**
+     *  Function used to add import code into the App.js file,
+     *  The import code will contain regular import code and
+     *  those import used to identify pages that the links will redirect to.
+    */
     public static String generateImportCode(NavBar navBar) {
         StringBuilder importCode = new StringBuilder();
         importCode.append("import React from 'react'\n" +
@@ -34,6 +39,12 @@ public class AppJSComponent {
         return importCode.toString();
     }
 
+    /**
+     *  Function used to generate view code within App.js.
+     *  Mostly identifying the home page and
+     *  defining link relations so that the redirect button within page view code
+     *  can use these links directly.
+     */
     public static String generateViewCode(NavBar navBar) throws IOException {
         StringBuilder viewCode = new StringBuilder();
         String navBarName = "";
@@ -73,6 +84,9 @@ public class AppJSComponent {
 
     }
 
+    /**
+     *  Function that combine Import code and View code together.
+     */
     public static String generateCode(NavBar navBar) throws IOException {
         return generateImportCode(navBar) +
                 generateViewCode(navBar);

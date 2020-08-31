@@ -23,14 +23,26 @@ public class WireframeComponent {
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
 
+    /**
+     *  Return boolean that represents whether a page contains a bottom navigation bar or not.
+    */
     public static boolean IsContainNavBar() {
         return IS_CONTAIN_NAVBAR;
     }
 
+    /**
+     *  Set or change the boolean isContainNavbar of the page.
+     */
     public static void setIsContainNavbar(boolean isContainNavbar) {
         IS_CONTAIN_NAVBAR = isContainNavbar;
     }
 
+    /**
+     *  Function used to recognize a wireframe component,
+     *  whether it is a Text or image or any other frontend components.
+     *  Calling the corresponding convert functions to convert the Component into a Frontend component.
+     *  Setting the corresponding boolean for code generator to add import code accordingly.
+     */
     public WireframeComponent(Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         this.backgroundColor = wireframe.getFills().get(0).getColor();
         this.wWidth = wireframe.getAbsoluteBoundingBox().width;
@@ -158,6 +170,12 @@ public class WireframeComponent {
         }
     }
 
+    /**
+     *  Generate import code: Regular import code that is required for every React Native page
+     *  + Special import code that only shows up when the corresponding boolean is True.
+     *  (For example, the import image code will only be added when the isContainImage boolean
+     *  is turned to True.)
+     */
     public String generateImportCode(String folderName) throws IOException {
         StringBuilder importCode = new StringBuilder();
         importCode.append("import { View, ScrollView");
@@ -219,6 +237,12 @@ public class WireframeComponent {
         return importCode.toString();
     }
 
+    /**
+     *  View code generation, this function handles the <View> Tag wrapping of the code,
+     *  the function generates code that works like a template and
+     *  calling the corresponding generateCode function to generate unique code that
+     *  is converted from data passed from Figma API.
+     */
     public String generateViewCode(String className) throws IOException {
         StringBuilder viewCode = new StringBuilder();
         viewCode.append("class ").append(className).append(" extends Component {");
@@ -276,6 +300,10 @@ public class WireframeComponent {
         return viewCode.toString();
     }
 
+    /**
+     *  Function used to combine import code with the view code
+     *  to generate the content of the whole file. 
+     */
     public String generateCode(String className, String folderName) throws IOException {
         StringBuilder code = new StringBuilder();
         code.append(this.generateImportCode(folderName)).append(this.generateViewCode(className));

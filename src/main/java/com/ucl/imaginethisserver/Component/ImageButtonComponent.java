@@ -1,6 +1,9 @@
 package com.ucl.imaginethisserver.Component;
 
 public class ImageButtonComponent {
+    /**
+     *  Function contains fixed code content of ImageButton.js
+     */
     public static String generateCode(){
         return "import React, {\n" +
                 "    Component\n" +

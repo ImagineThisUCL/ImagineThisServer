@@ -1,6 +1,9 @@
 package com.ucl.imaginethisserver.Component;
 
 public class DropdownComponent {
+    /**
+     *  Function contains fixed code content of Dropdown.js
+     */
     public static String generateCode(){
         return "import React, { Component } from \"react\"\n" +
                 "import { StyleSheet } from \"react-native\"\n" +
