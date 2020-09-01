@@ -3,12 +3,19 @@ package com.ucl.imaginethisserver.DAO;
 import com.google.gson.annotations.Expose;
 
 import java.util.List;
+
 /**
- *  Function that manipulate the Figma Project on the API level, without any parsing yet
-*/
+ * The response that server send to the client side after authentication process.
+ */
 public class AuthenticateResponse {
+    /**
+     * The name of current target Figma project
+     */
     @Expose()
     private String projectName;
+    /**
+     * A list of wireframes that the current target Figma project contains
+     */
     @Expose()
     private List<Wireframe> wireframeList;
 

@@ -34,8 +34,9 @@ public class Group extends FigmaComponent {
     }
 
     /**
-     *  The function loads all Figma Components and handle their basic types and positions.
-    */
+     * Load all the components inside the group. Convert all json data retrieved from Figma API to corresponding Java object.
+     * @throws IOException
+     */
     public void loadComponent(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         List<String> IDList = new ArrayList<>();
         for (JsonElement pageChild : this.children) {
@@ -101,10 +102,10 @@ public class Group extends FigmaComponent {
     }
 
     /**
-     *  Function used to convert a Group component into a Text Button component,
-     *  by dealing with its transitionNodeID, basic shape or button view and
-     *  the text contains within and etc.
-    */
+     * @return When a Figma group is recognized as a Button, then convert it to the Button object.
+     * Deals with its transitionNodeID, basic shape or button view and
+     * the text contains within and etc.
+     */
     public Button convertButton() {
         Button button = new Button();
         button.setPositionX(this.getPositionX());
@@ -114,8 +115,6 @@ public class Group extends FigmaComponent {
         button.setAlign(this.getAlign());
         if (this.transitionNodeID != null) {
             button.setTransitionNodeID(this.transitionNodeID);
-            String wireframeName = Page.getWireframeByID(this.transitionNodeID).getName();
-            Navigator.NAVIGATOR_MAP.put(wireframeName, wireframeName);
         }
         for (FigmaComponent component : this.componentMap.values()) {
             switch (component.getType()) {
@@ -158,7 +157,7 @@ public class Group extends FigmaComponent {
     }
 
     /**
-     *  Function used to convert a Group component into a Image Button component,
+     *  @return Function used to convert a Group component into a Image Button component,
      *  by dealing with its transitionNodeID, image within that function as the button view and
      *  the text contains within and etc.
      */
@@ -171,8 +170,6 @@ public class Group extends FigmaComponent {
         imageButton.setAlign(this.getAlign());
         if (this.transitionNodeID != null) {
             imageButton.setTransitionNodeID(this.transitionNodeID);
-            String wireframeName = Page.getWireframeByID(this.transitionNodeID).getName();
-            Navigator.NAVIGATOR_MAP.put(wireframeName, wireframeName);
         }
         for (FigmaComponent component : this.componentMap.values()) {
             if ((component.getType().equals("GROUP") || component.getType().equals("RECTANGLE")) && (component.getName().toLowerCase().contains("image")||component.getName().toLowerCase().contains("icon")||component.getName().toLowerCase().contains("picture"))) {
@@ -183,7 +180,7 @@ public class Group extends FigmaComponent {
     }
 
     /**
-     *  Function used to convert a Group component into the bottom navigation bar,
+     *  @return Function used to convert a Group component into the bottom navigation bar,
      *  by dealing with its icon button and the background of the bar.
      */
     public NavBar convertNavBar(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
@@ -226,7 +223,7 @@ public class Group extends FigmaComponent {
     }
 
     /**
-     *  Function used to convert a Group component into a input field,
+     *  @return Function used to convert a Group component into a input field,
      *  components like input label, placeholder of the input box etc.
      *  will be handled according to the design Guideline.
      */
@@ -263,7 +260,7 @@ public class Group extends FigmaComponent {
     }
 
     /**
-     *  Function used to convert a Group component into a Form,
+     *  @return Function used to convert a Group component into a Form,
      *  it's like a group type on the frontend side.
      *  Having related frontend components attached together into a form
      *  by wrapping them into a <View> tag.
@@ -349,6 +346,13 @@ public class Group extends FigmaComponent {
                 Slider slider = ((Group) component).convertSlider();
                 form.frontendComponentList.add(slider);
                 form.setContainSlider(true);
+            // Add recursion to form/card
+            }else if(component.getType().equals("GROUP")
+                    && (component.getName().toLowerCase().contains("form")
+                    || component.getName().toLowerCase().contains("card"))){
+                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+                Form nestForm = ((Group)component).convertForm(projectID,accessToken,authenticateType);
+                form.frontendComponentList.add(nestForm);
             }else{
                 Image image = component.convertToImage();
                 form.frontendComponentList.add(image);
@@ -364,7 +368,7 @@ public class Group extends FigmaComponent {
     }
 
     /**
-     *  Function used to convert a Group component into a actual slider
+     *  @return Function used to convert a Group component into a actual slider
      *  with current value, minimum/maximum value within the original Figma File
      *  in the type of text.
      */
@@ -391,7 +395,7 @@ public class Group extends FigmaComponent {
     }
 
     /**
-     *  Function used to convert a Group component into a Fixed chart
+     *  @return Function used to convert a Group component into a Fixed chart
      *  With nothing within the chart can be recognized under the current version.
      *  Only a fixed content chart will be generated at the position of the component.
      */
@@ -407,7 +411,7 @@ public class Group extends FigmaComponent {
     }
 
     /**
-     *  Function used to convert a Group component into a dropdown
+     *  @return Function used to convert a Group component into a dropdown
      *  with rectangle recognized as the container and
      *  the text named 'option' recognized as the first default option.
      */

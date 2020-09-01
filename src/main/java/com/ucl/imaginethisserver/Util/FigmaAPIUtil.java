@@ -25,6 +25,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FigmaAPIUtil {
+    /**
+     * Send a GET request to an figma API
+     * @param figmaAPI The Figma API url address
+     * @param accessToken the user's personal access token
+     * @param authType The type of access token
+     * @return the Json format data returned by the Figma.
+     * @throws IOException
+     */
     public static JsonObject sendGetRequest(URL figmaAPI, String accessToken,AuthenticateType authType) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) figmaAPI.openConnection();
         connection.setRequestMethod("GET");
@@ -50,6 +58,14 @@ public class FigmaAPIUtil {
         }
     }
 
+    /**
+     * Send the GET request to call Figma API to access the information of target Figma project.
+     * @param project_id The target project ID
+     * @param accessToken user's personal access token
+     * @param authType authentication type
+     * @return
+     * @throws IOException
+     */
     public static JsonObject requestFigmaFile(String project_id, String accessToken,AuthenticateType authType) throws IOException {
         URL figmaFileApi = new URL("https://api.figma.com/v1/files/" + project_id);
         return sendGetRequest(figmaFileApi,accessToken,authType);
@@ -69,6 +85,12 @@ public class FigmaAPIUtil {
         return pageList;
     }
 
+    /**
+     * Retrieve the image of Figma components based on their components ID.
+     * @param IDList A list which contains all of the ids of target Figma components.
+     * @return A list of image urls in json format.
+     * @throws IOException
+     */
     public static JsonObject requestImageByIDList(List<String> IDList, String projectID,String accessToken, AuthenticateType authType) throws IOException {
         StringBuilder ids = new StringBuilder();
         for (String id : IDList){
@@ -85,6 +107,16 @@ public class FigmaAPIUtil {
         return new ArrayList<>(Arrays.asList(array));
     }
 
+    /**
+     * Generate the source code for all of target wireframes.
+     * @param names The list of wireframe names the user need to generate
+     * @param figmaTreeStructure the data returned by Figma API
+     * @param projectID target project ID
+     * @param accessToken user's personal access token
+     * @param authType authentication type
+     * @param folderName the output folder name
+     * @throws IOException
+     */
     public static void generatePageByName(List<String> names, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType, String folderName) throws IOException {
         FrontendUtil.refreshStaticVariable();
         String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");

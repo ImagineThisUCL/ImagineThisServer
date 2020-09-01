@@ -8,11 +8,17 @@ import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * A wireframe object contains the information of a Figma wireframe.
+ */
 public class Wireframe {
     @Expose()
     private String id;
     @Expose()
     private String name;
+    /**
+     * The child node of the wireframe in Json data format
+     */
     @Expose(serialize = false)
     private JsonArray children;
     @Expose()
@@ -21,6 +27,10 @@ public class Wireframe {
     private List<Fills> fills;
     @Expose()
     private String imageURL;
+    /**
+     * The key is the id of the figma component
+     * The value is the corresponding FigmaComponent object
+     */
     private Map<String, FigmaComponent> componentMap = new HashMap<>();
     private ArrayList<FigmaComponent> componentList = new ArrayList<>();
 
@@ -108,6 +118,10 @@ public class Wireframe {
         return this.componentMap;
     }
 
+    /**
+     * Sort all of the Figma components in the wireframe, the component which have a smaller Y-axis value (which means the component locates at a higher position in the wireframe) is
+     * in the front of the list.
+     */
     public void sortComponentByY() {
         componentList.sort(new Comparator<FigmaComponent>() {
             @Override

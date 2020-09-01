@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ucl.imaginethisserver.FrontendComponent.Image;
 import com.ucl.imaginethisserver.FrontendComponent.Switch;
+
 /**
- *  An Java object representing all FigmaComponent,
- *  contains most of the useful common value of all Figma Component
-*/
+ * It is the father class for all of recognized Figma component.
+ * representing all FigmaComponent and
+ * contains most of the useful common value of all Figma Component
+ */
 public class FigmaComponent {
     private String id;
     private String name;
@@ -16,7 +18,13 @@ public class FigmaComponent {
     private String imageURL;
     private int height;
     private int width;
+    /**
+     * The position of the Figma component in X axis, the value is relative to the wireframe
+     */
     private int positionX;
+    /**
+     * The position of the Figma component in Y axis, the value is relative to the wireframe
+     */
     private int positionY;
     private String align;
 
@@ -51,6 +59,11 @@ public class FigmaComponent {
         this.imageURL = imageURL;
     }
 
+    /**
+     * This method calculates the relative position (relative to the wireframe that the component belong to) of current Figma component,
+     * and calculates the align attribute (LEFT, RIGHT, CENTER) for the current Figma component.
+     * @param wireframeBoundingbox the position information of the wireframe which the current Figma component belong to.
+     */
     public void convertRelativePosition(AbsoluteBoundingBox wireframeBoundingbox){
         this.height = (int)(this.absoluteBoundingBox.height);
         this.width = (int)(this.absoluteBoundingBox.width);
@@ -101,8 +114,9 @@ public class FigmaComponent {
     }
 
     /**
-     *  Function used to convert a common Figma component into an Image on the frontend.
-    */
+     * Convert the current Figma component object to its corresponding Image Object
+     * @return An Image Object
+     */
     public Image convertToImage(){
         Image image = new Image();
         image.setWidth(this.getWidth());
@@ -130,5 +144,3 @@ public class FigmaComponent {
         this.id = id;
     }
 }
-
-

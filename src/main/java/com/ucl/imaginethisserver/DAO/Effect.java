@@ -10,10 +10,12 @@ public class Effect {
     @Expose()
     String type;
     @Expose()
+    //Radius of the blur effect (applies to shadows as well)
     boolean visiable;
     @Expose()
     double radius;
     @Expose()
+//  The color of the shadow
     FigmaColor color;
     //How far the shadow is projected in the x and y direction
     @Expose()

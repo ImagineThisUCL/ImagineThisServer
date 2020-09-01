@@ -21,6 +21,12 @@ public class FrontendUtil {
     public static String FOLDER_NAME = "";
     public static List<String> GENERATE_PAGE_LIST = new ArrayList<>();
 
+
+    /**
+     * Put all of the front components that are considered in the same line into one sub list.
+     * @param frontendComponentList The list that contains of target all front components.
+     * @return A list of front component list, each sublist contains the components that are considered at the same horizontal line.
+     */
     public static ArrayList<List<FrontendComponent>> getInlineComponentList(ArrayList<FrontendComponent> frontendComponentList){
         ArrayList<List<FrontendComponent>> inlineComponentList = new ArrayList<>();
         FrontendComponent preComponent = frontendComponentList.get(0);
@@ -72,6 +78,13 @@ public class FrontendUtil {
         return inlineComponentList;
     }
 
+    /**
+     * Download the image from Figma server to the local server according to the figma url.
+     * @param imageUrl target image URL
+     * @param folderName target download folder name
+     * @return the name of downlaoded image (in 'png' format)
+     * @throws IOException
+     */
     public static String downloadImage(String imageUrl, String folderName) throws IOException {
         File storageFile = new File("OutputStorage");
         storageFile.mkdir();
@@ -90,6 +103,9 @@ public class FrontendUtil {
         return imageName;
     }
 
+    /**
+     * Set all of the static variable to its initial value. This method would be called at the beginning of every project generation request.
+     */
     public static void refreshStaticVariable(){
         WireframeComponent.NAV_BAR = null;
         WireframeComponent.setIsContainNavbar(false);

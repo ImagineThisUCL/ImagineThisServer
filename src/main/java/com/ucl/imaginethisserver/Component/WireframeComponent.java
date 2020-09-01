@@ -37,11 +37,10 @@ public class WireframeComponent {
         IS_CONTAIN_NAVBAR = isContainNavbar;
     }
 
-    /**
-     *  Function used to recognize a wireframe component,
-     *  whether it is a Text or image or any other frontend components.
-     *  Calling the corresponding convert functions to convert the Component into a Frontend component.
-     *  Setting the corresponding boolean for code generator to add import code accordingly.
+    /** Go through all of the direct child components of the current wireframe, convert all of the recognized components to their corresponding React Native component.
+     * All of unrecognized components would be converted to an image.
+     * @param wireframe
+     * @throws IOException
      */
     public WireframeComponent(Wireframe wireframe, String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         this.backgroundColor = wireframe.getFills().get(0).getColor();
@@ -170,11 +169,13 @@ public class WireframeComponent {
         }
     }
 
-    /**
-     *  Generate import code: Regular import code that is required for every React Native page
-     *  + Special import code that only shows up when the corresponding boolean is True.
-     *  (For example, the import image code will only be added when the isContainImage boolean
-     *  is turned to True.)
+    /**Generate the source code of import section. Which components should be imported are determined by the included reusable components
+     *import code: Regular import code that is required for every React Native page
+     *+ Special import code that only shows up when the corresponding boolean is True.
+     *(For example, the import image code will only be added when the isContainImage boolean
+     *is turned to True.)
+     * @return The source code of import section
+     * @throws IOException
      */
     public String generateImportCode(String folderName) throws IOException {
         StringBuilder importCode = new StringBuilder();
@@ -255,6 +256,7 @@ public class WireframeComponent {
         if (frontendComponentList.size() == 0) {
             return "";
         }
+        //Put all of the components in the same line in one list
         ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(frontendComponentList);
         int preY = 0;
         for (List<FrontendComponent> curList : inlineComponentList) {
@@ -271,7 +273,9 @@ public class WireframeComponent {
                 viewCode.append("</View>\n");
                 preY = curList.get(0).getPositionY() + curList.get(0).getHeight();
 
-            } else if (curList.size() > 1) {
+            }
+            // If there are multiple components in this line, then align these content using 'space-between'
+            else if (curList.size() > 1) {
                 int minY = Integer.MAX_VALUE;
                 int maxY = -1;
                 for (FrontendComponent component : curList) {

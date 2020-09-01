@@ -14,7 +14,8 @@ public class InputFieldComponent {
                 "\n" +
                 "const styles = StyleSheet.create({\n" +
                 "    input: {\n" +
-                "        flexDirection: \"row\"\n" +
+                "        flexDirection: \"row\",\n" +
+                "        minHeight: 40,\n" +
                 "    },\n" +
                 "})\n" +
                 "\n" +

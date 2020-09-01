@@ -27,7 +27,26 @@ import java.util.Map;
  */
 @RestController
 public class GenerationController {
-    @CrossOrigin(origins = "http://localhost:3000")
+    /**
+     * @param payload The json format data which comes from the front-end. The format is
+     *                {
+     *                  "accessToken" : [Figma accessToken used to request the API],
+     *                  "projectID": [Figma project ID used to request the API],
+     *                  "type" : [Request Type], there are two types of request method, which are 'originalToken' and 'oauth2Token',
+     *                           'originalToken': the user authenticate with Figma using his personal [access token] and  [project ID]
+     *                           'oauth2Token': the user authenticate with Figma using OAuth 2.0 protocol.
+     *                  "nameList": the list of wireframes that the user try to generate.
+     *                }
+     *
+     * @param response
+     * @return  A Generate Response Object, which has two fields.
+     *          - isSuccess: a boolean value to indicate if the generation process is successful
+     *          - fileName: the generated zip file name if the it succeed
+     *                      null if it is fail.
+     * @throws IOException
+     */
+    // @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://139.162.245.237")
     @PostMapping("/generatePage")
     public GenerateResponse generatePages(@RequestBody Map<String, Object> payload, HttpServletResponse response) throws IOException {
         String accessToken = payload.get("accessToken").toString();
@@ -61,7 +80,12 @@ public class GenerationController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    /**
+     * This method is used to download the generate file from the server to the client side.
+     * @param fileName the target file name that uesr try to generate.
+     */
+    // @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://139.162.245.237")
     @GetMapping("/downloadFile")
     public ResponseEntity<Resource> downloadFile(@RequestParam (value = "fileName") String fileName,  HttpServletRequest request) throws IOException {
         File file = new File(fileName);
@@ -69,6 +93,7 @@ public class GenerationController {
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
+        //The default name of the generate output file is OutputApp.zip
         headers.setContentDispositionFormData("myfile","OutputApp.zip");
         InputStreamResource resource = null;
         try {

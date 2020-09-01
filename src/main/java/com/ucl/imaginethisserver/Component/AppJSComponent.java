@@ -8,11 +8,11 @@ import java.util.HashSet;
 
 public class AppJSComponent {
 
-    /**
-     *  Function used to add import code into the App.js file,
-     *  The import code will contain regular import code and
-     *  those import used to identify pages that the links will redirect to.
-    */
+    /**This method used to generate [import] section in the app.js
+     * which components should be imported are determined by the components contained in the navigation bar and navigator.
+     * @param navBar
+     * @return
+     */
     public static String generateImportCode(NavBar navBar) {
         StringBuilder importCode = new StringBuilder();
         importCode.append("import React from 'react'\n" +
@@ -39,11 +39,10 @@ public class AppJSComponent {
         return importCode.toString();
     }
 
-    /**
-     *  Function used to generate view code within App.js.
-     *  Mostly identifying the home page and
-     *  defining link relations so that the redirect button within page view code
-     *  can use these links directly.
+    /** Generate body source code for App.js
+     * @param navBar
+     * @return
+     * @throws IOException
      */
     public static String generateViewCode(NavBar navBar) throws IOException {
         StringBuilder viewCode = new StringBuilder();
@@ -68,6 +67,7 @@ public class AppJSComponent {
                     "                        component={NavigationBar}\n" +
                     "                        options={{headerShown: false}}/>\n");
         }
+        // Write the button navigator based on Navigator Map
         for (String wireframeKey : Navigator.NAVIGATOR_MAP.keySet()) {
             String wireframeComponent = Navigator.NAVIGATOR_MAP.get(wireframeKey).replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
             viewCode.append("                    <Stack.Screen\n" + "                        name=\"").append(wireframeKey.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "")).append("\"\n").append("                        component={").append(wireframeComponent).append("}/>\n");

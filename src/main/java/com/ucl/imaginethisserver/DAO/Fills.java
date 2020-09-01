@@ -5,21 +5,40 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
 import java.util.List;
+
 /**
- *  Object that represents the Fills, no matter which component it is applied to.
- *  Contains most of the common values of the Fills type.
-*/
+ * An array of fill paints applied to the node
+ */
 public class Fills {
     @Expose()
     private String blendMode;
+    /**
+     * Type of paint as a string enum
+     * SOLID
+     * GRADIENT_LINEAR
+     * GRADIENT_RADIAL
+     * GRADIENT_ANGULAR
+     * GRADIENT_DIAMOND
+     * IMAGE
+     * EMOJI
+     */
     @Expose()
     private String type;
+    /**
+     * Solid color of the paint
+     */
     @Expose()
     private FigmaColor color;
+    /**
+     * Positions of key points along the gradient axis with the colors anchored there. Colors along the gradient are interpolated smoothly between neighboring gradient stops.
+     */
     @Expose()
     private List<Location> gradientHandlePositions;
     @Expose()
     private List<GradientStop> gradientStops;
+    /**
+     * A reference to an image embedded in this node. To download the image using this reference, use the GET file images endpoint to retrieve the mapping from image references to image URLs
+     */
     @Expose()
     private String imageRef;
 
@@ -69,4 +88,3 @@ class GradientStop{
     @Expose()
     double position;
 }
-

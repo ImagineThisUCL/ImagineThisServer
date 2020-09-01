@@ -3,12 +3,17 @@ package com.ucl.imaginethisserver.DAO;
 import com.google.gson.annotations.Expose;
 
 /**
- *  Object that represents the Fills, no matter which component it is applied to.
- *  Contains most of the common values of the Fills type.
+ * The response that the server send to the client side after generation process
  */
 public class GenerateResponse {
+    /**
+     * If the generation process is succeed
+     */
     @Expose()
     boolean isSuccess;
+    /**
+     * The name of generated zip file if the generation process is successful.
+     */
     @Expose()
     String fileName;
 
