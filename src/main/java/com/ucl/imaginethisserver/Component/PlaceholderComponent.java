@@ -1,6 +1,9 @@
 package com.ucl.imaginethisserver.Component;
 
 public class PlaceholderComponent {
+    /**
+     *  Function contains fixed code content of Placeholder.js
+     */
     public static String generateCode(){
         return "import { View, StyleSheet, Text } from \"react-native\"\n" +
                 "import React, { Component } from \"react\"\n" +

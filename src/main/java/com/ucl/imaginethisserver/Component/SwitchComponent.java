@@ -1,6 +1,10 @@
 package com.ucl.imaginethisserver.Component;
 
 public class SwitchComponent {
+    /**
+     *  Function contains fixed code content of Toggle.js.
+     *  Used to customize the style of the toggle/switch on the frontend.
+     */
     public static String generateCode(){
         return "import React, { Component } from \"react\"\n" +
                 "import propTypes from 'prop-types'\n" +

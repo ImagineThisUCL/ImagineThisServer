@@ -4,6 +4,9 @@ import com.ucl.imaginethisserver.Util.FrontendUtil;
 
 import java.io.IOException;
 
+/**
+ *  Frontend Component Image that contains the URL of the actual image within.
+*/
 public class Image extends FrontendComponent {
     private String imageURL;
 

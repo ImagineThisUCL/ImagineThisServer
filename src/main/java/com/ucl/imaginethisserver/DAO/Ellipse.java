@@ -2,6 +2,12 @@ package com.ucl.imaginethisserver.DAO;
 
 import java.util.List;
 
+/**
+ *  A object used to store data about this specific component passed from Figma API,
+ *  basically represents a circle shape, which is A Type called 'Ellipse' on Figma side.
+ *  The object is used to store all usable styles:
+ *  Fills(color or background), Strokes(boundary/border) etc.
+ */
 public class Ellipse extends FigmaComponent{
     private List<Fills> fills;
     private List<Stroke> strokes;

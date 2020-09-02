@@ -16,7 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ *  The object Group represents the Group Type on the Figma side.
+ *  The object contains children component of the Group,
+ *  the transitionNodeID that it links to (if there is any), and other values necessary.
+*/
 public class Group extends FigmaComponent {
     JsonArray children;
     @Expose()
@@ -99,6 +103,8 @@ public class Group extends FigmaComponent {
 
     /**
      * @return When a Figma group is recognized as a Button, then convert it to the Button object.
+     * Deals with its transitionNodeID, basic shape or button view and
+     * the text contains within and etc.
      */
     public Button convertButton() {
         Button button = new Button();
@@ -150,6 +156,11 @@ public class Group extends FigmaComponent {
         return button;
     }
 
+    /**
+     *  @return Function used to convert a Group component into a Image Button component,
+     *  by dealing with its transitionNodeID, image within that function as the button view and
+     *  the text contains within and etc.
+     */
     public ImageButton convertImageButton(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         ImageButton imageButton = new ImageButton();
         imageButton.setPositionX(this.getPositionX());
@@ -168,6 +179,10 @@ public class Group extends FigmaComponent {
         return imageButton;
     }
 
+    /**
+     *  @return Function used to convert a Group component into the bottom navigation bar,
+     *  by dealing with its icon button and the background of the bar.
+     */
     public NavBar convertNavBar(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         NavBar navBar = new NavBar();
         navBar.setHeight(this.getHeight());
@@ -207,6 +222,11 @@ public class Group extends FigmaComponent {
         return navBar;
     }
 
+    /**
+     *  @return Function used to convert a Group component into a input field,
+     *  components like input label, placeholder of the input box etc.
+     *  will be handled according to the design Guideline.
+     */
     public TextBox convertTextBox() {
         TextBox textbox = new TextBox();
         textbox.setPositionX(this.getPositionX());
@@ -239,6 +259,17 @@ public class Group extends FigmaComponent {
         return textbox;
     }
 
+    /**
+     *  @return Function used to convert a Group component into a Form,
+     *  it's like a group type on the frontend side.
+     *  Having related frontend components attached together into a form
+     *  by wrapping them into a <View> tag.
+     *
+     *  In order to make the form recognize the component,
+     *  the Figma components need to be converted within the form,
+     *  all booleans along with the related variables of the component
+     *  should be converted within the form.
+     */
     public Form convertForm(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
         Form form = new Form();
         form.setHeight(this.getHeight());
@@ -336,6 +367,11 @@ public class Group extends FigmaComponent {
         this.wireframeBoundingBox = wireframeBoundingBox;
     }
 
+    /**
+     *  @return Function used to convert a Group component into a actual slider
+     *  with current value, minimum/maximum value within the original Figma File
+     *  in the type of text.
+     */
     public Slider convertSlider() {
         Slider slider = new Slider();
         slider.setHeight(this.getHeight());
@@ -358,6 +394,11 @@ public class Group extends FigmaComponent {
         return slider;
     }
 
+    /**
+     *  @return Function used to convert a Group component into a Fixed chart
+     *  With nothing within the chart can be recognized under the current version.
+     *  Only a fixed content chart will be generated at the position of the component.
+     */
     public Chart convertToFixedChart() {
         Chart fixedChart = new Chart();
         fixedChart.setHeight(this.getHeight());
@@ -369,6 +410,11 @@ public class Group extends FigmaComponent {
         return fixedChart;
     }
 
+    /**
+     *  @return Function used to convert a Group component into a dropdown
+     *  with rectangle recognized as the container and
+     *  the text named 'option' recognized as the first default option.
+     */
     public Dropdown convertToDropdown() {
         Dropdown dropdown = new Dropdown();
         dropdown.setHeight(this.getHeight());

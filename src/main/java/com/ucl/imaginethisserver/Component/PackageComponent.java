@@ -1,6 +1,9 @@
 package com.ucl.imaginethisserver.Component;
 
 public class PackageComponent {
+    /**
+     *  Function contains fixed code content of package.json
+     */
     public static String generateCode(){
         return "{\n" +
                 "  \"main\": \"node_modules/expo/AppEntry.js\",\n" +

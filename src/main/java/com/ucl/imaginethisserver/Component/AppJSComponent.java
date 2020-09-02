@@ -84,6 +84,9 @@ public class AppJSComponent {
 
     }
 
+    /**
+     *  Function that combine Import code and View code together.
+     */
     public static String generateCode(NavBar navBar) throws IOException {
         return generateImportCode(navBar) +
                 generateViewCode(navBar);

@@ -1,6 +1,10 @@
 package com.ucl.imaginethisserver.Component;
 
 public class FixedChartComponent {
+    /**
+     *  Function contains fixed code content of Data required within the chart of the frontend
+     *  You can change these data directly by editing the generated file.
+     */
     public static String generateCode(){
         return "const LINE_CHART_DATA = {\n" +
                 "            labels: [\"Jan.\", \"Feb.\", \"Mar.\", \"Apr.\", \"May\", \"Jun.\"],\n" +

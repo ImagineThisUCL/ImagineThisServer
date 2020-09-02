@@ -7,6 +7,8 @@ import com.ucl.imaginethisserver.FrontendComponent.Switch;
 
 /**
  * It is the father class for all of recognized Figma component.
+ * representing all FigmaComponent and
+ * contains most of the useful common value of all Figma Component
  */
 public class FigmaComponent {
     private String id;
@@ -98,6 +100,9 @@ public class FigmaComponent {
         return align;
     }
 
+    /**
+     *  Function used to convert a common Figma component into a Switch component on the frontend.
+    */
     public Switch convertSwitch(){
         Switch aSwitch = new Switch();
         aSwitch.setPositionX(this.getPositionX());
@@ -139,5 +144,3 @@ public class FigmaComponent {
         this.id = id;
     }
 }
-
-

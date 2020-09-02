@@ -1,6 +1,9 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
 public class Chart extends FrontendComponent {
+    /**
+     * In case the chart needs to show its name, not used yet.
+     */
     private String title;
 
     public void setTitle(String title) {

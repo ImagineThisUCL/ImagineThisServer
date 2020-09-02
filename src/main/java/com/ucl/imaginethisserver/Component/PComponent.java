@@ -1,6 +1,11 @@
 package com.ucl.imaginethisserver.Component;
 
 public class PComponent {
+    /**
+     *  Function contains fixed code content of P.js.
+     *  This files stores basic styles that can be referred to directly
+     *  from the frontend page files within the view folder.
+     */
     public static String generateCode(){
         return "import React, { Component } from \"react\"\n" +
                 "import { StyleSheet, Text } from \"react-native\"\n" +

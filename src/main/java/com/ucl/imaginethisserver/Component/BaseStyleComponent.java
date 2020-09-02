@@ -1,6 +1,9 @@
 package com.ucl.imaginethisserver.Component;
 
 public class BaseStyleComponent {
+    /**
+     *  Function contains fixed code content of baseStyle.js
+    */
     public static String generateCode(){
         return "import { Dimensions } from \"react-native\"\n" +
                 "\n" +

@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CodeGeneratorTest {
+    /**
+     *  Main function that accepts project and access token to connect to Figma API
+     *  The function accepts a nameList which specifies the names of the wireframe
+     *  that needs to be converted into frontend code.
+    */
     public static void main(String[] args) throws IOException {
         String type = "originalToken";
 //        String projectID = "YpBnZ4aEB2YgGpiOQfxQCU";
@@ -86,6 +91,13 @@ public class CodeGeneratorTest {
                 authType, FrontendUtil.FOLDER_NAME);
     }
 
+    /**
+     * Function generatePageByName accepts a list of wireframe names
+     * and other necessary values needed in generating frontend code.
+     * For each page it convert passed Figma API data into backend java object,
+     * sorting them according to their vertical positioning
+     * and call the CodeGenerator to generate the code.
+    */
     public static void generatePageByName(List<String> names, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType, String folderName) throws IOException {
         String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"", "");
         List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);

@@ -5,6 +5,12 @@ import com.ucl.imaginethisserver.FrontendComponent.Map;
 
 import java.util.List;
 
+/**
+ *  A object used to store data about this specific component passed from Figma API,
+ *  basically represents a rectangle shape, which is A Type called 'Rectangle' on Figma side.
+ *  The object is used to store all usable styles:
+ *  fills(color or background), corner radius(cornerRadius) etc.
+ */
 public class Rectangle extends FigmaComponent {
     private List<Fills> fills;
     private double cornerRadius;
@@ -58,7 +64,11 @@ public class Rectangle extends FigmaComponent {
         return strokes;
     }
 
-
+    /**
+     *  Function that converts a Figma Rectangle component into
+     *  a frontend Map component,
+     *  the map will inherit the basic size and position of the Rectangle
+    */
     public Map convertToMap(){
         Map image = new Map();
         image.setWidth(this.getWidth());

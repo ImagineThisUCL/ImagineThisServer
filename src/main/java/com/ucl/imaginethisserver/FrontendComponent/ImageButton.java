@@ -5,6 +5,10 @@ import com.ucl.imaginethisserver.Util.FrontendUtil;
 
 import java.io.IOException;
 
+/**
+ *  Image button that contains the image of the button's view and
+ *  the transitionNodeID of the button, basically the redirect link of it.
+*/
 public class ImageButton extends FrontendComponent {
     private String imageURL;
     private String transitionNodeID;

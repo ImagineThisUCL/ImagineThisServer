@@ -88,4 +88,3 @@ class GradientStop{
     @Expose()
     double position;
 }
-

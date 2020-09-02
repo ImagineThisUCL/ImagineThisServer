@@ -1,6 +1,9 @@
 package com.ucl.imaginethisserver.Component;
 
 public class GoogleMapComponent {
+    /**
+     *  Function contains fixed code content of GoogleMap.js
+     */
     public static String generateCode(){
         return "import { View, StyleSheet} from \"react-native\"\n" +
                 "import React, { Component } from \"react\"\n" +

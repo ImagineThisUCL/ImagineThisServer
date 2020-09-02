@@ -6,8 +6,13 @@ import com.ucl.imaginethisserver.DAO.Style;
 import java.util.List;
 
 public class Dropdown extends FrontendComponent {
+    /**
+     * First default option of the dropdown.
+     */
     private String option;
-
+    /**
+     * Style of the container or the option text within the dropdown
+     */
     private double cornerRadius;
     private List<Fills> TextFills;
     private List<Fills> containerFills;
