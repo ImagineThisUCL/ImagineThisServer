@@ -1,7 +1,10 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
 import com.ucl.imaginethisserver.DAO.FigmaColor;
-
+/**
+ *  Frontend Component Slider that contains
+ *  the minimum value, the maximum value and current value of the slider.
+*/
 public class Slider extends FrontendComponent {
     private int min_value;
     private int max_value;

@@ -1,5 +1,7 @@
 package com.ucl.imaginethisserver.FrontendComponent;
-
+/**
+ *  Switch object that only generates switch frontend code with fixed variables
+ */
 public class Switch extends FrontendComponent {
     public String generateCode() {
         try {

@@ -1,7 +1,10 @@
 package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.annotations.Expose;
-
+/**
+ *  The class that represents the Style of the Text component
+ *  including font style, text align etc.
+ */
 public class Style {
     @Expose()
     private String fontFamily;

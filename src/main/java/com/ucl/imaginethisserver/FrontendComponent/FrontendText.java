@@ -1,7 +1,12 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
 import com.ucl.imaginethisserver.DAO.FigmaColor;
-
+/**
+ *  As Figma Component cannot be used to generate code directly
+ *  The figma component Text need to be converted into Frontend Component FrontendText
+ *  in order to be used in code generation, inheriting most of the Text variables
+ *  and modifying some to make it fits the frontend
+*/
 public class FrontendText extends FrontendComponent {
     private String fontSize;
     private String fontWeight;
@@ -51,6 +56,9 @@ public class FrontendText extends FrontendComponent {
     }
 
 
+    /**
+     *  Function used to generate code using the variables contains within the Object
+    */
     public String generateCode(){
         try {
             this.text = this.text.replaceAll("\n", "{\"\\\\n\"}");

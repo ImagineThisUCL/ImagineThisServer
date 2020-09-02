@@ -38,7 +38,9 @@ public class Form extends FrontendComponent{
     public void setCornerRadius(double cornerRadius) {
         this.cornerRadius = cornerRadius;
     }
-
+    /**
+     *  Sort the components within the form to decide their vertical positioning
+    */
     public void sortComponentByY(){
         frontendComponentList.sort(new Comparator<FrontendComponent>() {
             @Override
@@ -51,7 +53,10 @@ public class Form extends FrontendComponent{
             }
         });
     }
-
+    /**
+     *  Function that writes the code of the form,
+     *  what it is doing is basically deciding which kind of View wrap to use.
+    */
     public String generateCode() throws IOException {
         try {
             StringBuilder code = new StringBuilder();

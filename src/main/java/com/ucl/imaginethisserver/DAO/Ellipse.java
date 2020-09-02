@@ -7,7 +7,6 @@ import java.util.List;
  *  basically represents a circle shape, which is A Type called 'Ellipse' on Figma side.
  *  The object is used to store all usable styles:
  *  Fills(color or background), Strokes(boundary/border) etc.
- *  Need to be converted to frontend component before used to convert into the real code.
  */
 public class Ellipse extends FigmaComponent{
     private List<Fills> fills;

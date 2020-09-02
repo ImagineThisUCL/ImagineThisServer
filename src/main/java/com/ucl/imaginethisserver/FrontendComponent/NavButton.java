@@ -1,5 +1,9 @@
 package com.ucl.imaginethisserver.FrontendComponent;
 
+/**
+ *  Navigation Button contains within the navigation bar,
+ *  Works just like a image button.
+*/
 public class NavButton extends FrontendComponent{
     private String text;
     private String iconURL;

@@ -8,6 +8,11 @@ import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ *  The object Page represents a Page on the Figma side.
+ *  The object contains the id of the page, name of the page and
+ *  the wireframes within it listed in the variable children.
+ */
 public class Page {
     @Expose()
     private String id;
@@ -15,7 +20,9 @@ public class Page {
     private String name;
     @Expose()
     private JsonArray children;
-
+    /**
+     * Function that converts the Figma Page into String
+    */
     public String toString() {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
@@ -26,6 +33,11 @@ public class Page {
     private Map<String, Wireframe> wireframeMap = new HashMap<>();
     private static Map<String, Wireframe> wireframeIDMap = new HashMap<>();
 
+
+    /**
+     * Load all the components inside the group. Convert all json data retrieved from Figma API to corresponding Java object.
+     * @throws IOException
+     */
     public void loadWireframes(String projectID, String accessToken, AuthenticateType authType) throws IOException {
         List<String> IDList = new ArrayList<>();
         for (JsonElement pageChild : this.children) {
@@ -50,6 +62,9 @@ public class Page {
         }
     }
 
+    /**
+     * @return Function that returns all wireframes within the Page
+    */
     public List<Wireframe> getWireframeList(){
         List<Wireframe> wireframeList = new ArrayList<>();
         for(Wireframe wireframe : wireframeMap.values()){
@@ -57,9 +72,17 @@ public class Page {
         }
         return wireframeList;
     }
+
+    /**
+     * @return Function that returns a Wireframe according to its ID
+     */
     public static Wireframe getWireframeByID(String id) {
         return wireframeIDMap.get(id);
     }
+
+    /**
+     * @return Function that returns a Wireframe according to its Name
+     */
     public Wireframe getWireframeByName(String name){
         return wireframeMap.get(name);
     }
@@ -76,10 +99,16 @@ public class Page {
         this.id = id;
     }
 
+    /**
+     * @return Function that returns the name of the Page
+     */
     public String getName() {
         return name;
     }
-
+    /**
+     * Function that sets the name of the Page
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }

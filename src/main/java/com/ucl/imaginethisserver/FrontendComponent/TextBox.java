@@ -7,8 +7,18 @@ import com.ucl.imaginethisserver.DAO.Style;
 import java.util.List;
 
 public class TextBox extends FrontendComponent {
+    /**
+     *  Placeholder within the textbox
+    */
     private String placeholder = null;
+    /**
+     *  Label of the textbox,
+     *  shows right above the textbox when generated on the frontend
+     */
     private String label = null;
+    /**
+     *  Other regular variables, fontStyle, Fills of the components, corner radius of the container
+    */
     private Style style;
     private List<Fills> containerFills;
     private List<Fills> labelFills;

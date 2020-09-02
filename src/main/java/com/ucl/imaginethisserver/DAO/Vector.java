@@ -3,7 +3,10 @@ package com.ucl.imaginethisserver.DAO;
 import com.google.gson.annotations.Expose;
 
 import java.util.List;
-
+/**
+ *  A class that represents a Vector component passed from Figma API
+ *  Storing necessary variables within.
+*/
 public class Vector extends FigmaComponent{
     @Expose()
     private String blendMode;
