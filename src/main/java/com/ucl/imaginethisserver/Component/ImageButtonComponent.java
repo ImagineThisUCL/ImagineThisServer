@@ -21,6 +21,12 @@ public class ImageButtonComponent {
                 "    },\n" +
                 "})\n" +
                 "\n" +
+                "/*\n" +
+                " * A clickable ImageButton with animated opacity upon touch\n" +
+                " *\n" +
+                " * (An alternative to IconButton with native animations)\n" +
+                "*/\n" +
+                "\n" +
                 "export default class Button extends Component {\n" +
                 "    render() {\n" +
                 "        return (\n" +

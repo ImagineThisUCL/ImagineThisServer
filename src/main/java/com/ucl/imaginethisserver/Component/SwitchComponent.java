@@ -7,6 +7,10 @@ public class SwitchComponent {
                 "import {Switch } from \"react-native\";\n" +
                 "import { color } from \"react-native-reanimated\";\n" +
                 "\n" +
+                "/*\n" +
+                " * A switch/toggle button using native appearance\n" +
+                "*/\n" +
+                "\n" +
                 "export default class Toggle extends Component {\n" +
                 "    constructor(props) {\n" +
                 "        super(props);\n" +

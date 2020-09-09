@@ -28,10 +28,15 @@ public class SliderComponent {
                 "    },\n" +
                 "})\n" +
                 "\n" +
-                "/* This is an implementation using the @react-native-community/slider \n" +
-                "which has web support in its @next version (^3.0.0-rc.2). The Slider \n" +
-                "from react-native-elements is more customisable and preferred, \n" +
-                "however does not run on the web.  */\n" +
+                "/*\n" +
+                " * A Slider reusable supporting any range of numbers\n" +
+                " *\n" +
+                " * This is an implementation using the @react-native-community/slider \n" +
+                " * which has web support in its @next version (^3.0.0-rc.2). The Slider \n" +
+                " * from react-native-elements is more customisable, however does\n" +
+                " * not run on the web. Feel free to use any of the two \n" +
+                " * (simply swap the import).\n" +
+                "*/\n" +
                 "\n" +
                 "export default class CustomSlider extends Component {\n" +
                 "    state = {\n" +
@@ -67,7 +72,7 @@ public class SliderComponent {
                 "    labelStyle: propTypes.object, // style object for min/max labels\n" +
                 "    valueLabelStyle: propTypes.object, // style object for value label\n" +
                 "    /* \n" +
-                "        For other props please refer to @react-native-community/slider documentation\n" +
+                "     *  For other props please refer to @react-native-community/slider documentation\n" +
                 "    */\n" +
                 "}\n";
     }

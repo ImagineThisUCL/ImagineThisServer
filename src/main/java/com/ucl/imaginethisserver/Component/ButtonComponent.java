@@ -36,6 +36,9 @@ public class ButtonComponent {
                 "    },\n" +
                 "})\n" +
                 "\n" +
+                "/*\n" +
+                " * A classic button with text inside\n" +
+                "*/\n" +
                 "export default class Button extends Component {\n" +
                 "    render() {\n" +
                 "        const {\n" +
