@@ -34,7 +34,7 @@ public class AuthenticateController {
      * @throws IOException
      */
     // @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
-    @CrossOrigin(origins = "http://212.71.234.198/", maxAge = 3600)
+    @CrossOrigin(origins = "http://212.71.245.46/", maxAge = 3600)
     @GetMapping("/authToken")
     public AuthenticateResponse getFigmaProject(@RequestParam(value = "projectID") String projectID, @RequestParam(value = "accessToken") String accessToken,
                                                 @RequestParam(value = "authType") String type, HttpServletResponse response) throws IOException {
