@@ -19,6 +19,10 @@ public class InputFieldComponent {
                 "    },\n" +
                 "})\n" +
                 "\n" +
+                "/*\n" +
+                " * A highly customisable Input Field component\n" +
+                "*/\n" +
+                "\n" +
                 "export default class InputField extends Component {\n" +
                 "    render() {\n" +
                 "\n" +

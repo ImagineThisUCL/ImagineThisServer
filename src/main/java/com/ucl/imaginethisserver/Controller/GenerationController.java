@@ -46,8 +46,8 @@ public class GenerationController {
      * @throws IOException
      */
     // @CrossOrigin(origins = "http://localhost:3000")
-    @CrossOrigin(origins = "http://139.162.245.237")
-    @PostMapping("/generatePage")
+    @CrossOrigin(origins = "http://88.80.186.99")
+    @PostMapping("/api/v1/generatePage")
     public GenerateResponse generatePages(@RequestBody Map<String, Object> payload, HttpServletResponse response) throws IOException {
         String accessToken = payload.get("accessToken").toString();
         String projectID = payload.get("projectID").toString();
@@ -85,8 +85,8 @@ public class GenerationController {
      * @param fileName the target file name that uesr try to generate.
      */
     // @CrossOrigin(origins = "http://localhost:3000")
-    @CrossOrigin(origins = "http://139.162.245.237")
-    @GetMapping("/downloadFile")
+    @CrossOrigin(origins = "http://88.80.186.99")
+    @GetMapping("/api/v1/downloadFile")
     public ResponseEntity<Resource> downloadFile(@RequestParam (value = "fileName") String fileName,  HttpServletRequest request) throws IOException {
         File file = new File(fileName);
         HttpHeaders headers = new HttpHeaders();

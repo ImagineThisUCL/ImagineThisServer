@@ -33,6 +33,12 @@ public class DropdownComponent {
                 "    },\n" +
                 "})\n" +
                 "\n" +
+                "/*\n" +
+                " * A custom implementation of a Dropdown that works together with \n" +
+                " * a modal selector - to make appearance and behaviour consistent\n" +
+                " * across iOS and Android.\n" +
+                "*/\n" +
+                "\n" +
                 "export default class Dropdown extends Component {\n" +
                 "    constructor(props) {\n" +
                 "        super(props)\n" +

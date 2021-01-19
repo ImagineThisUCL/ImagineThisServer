@@ -73,6 +73,12 @@ public class PComponent {
                 "    }\n" +
                 "})\n" +
                 "\n" +
+                "/*\n" +
+                " * Highly flexible text/paragraph component\n" +
+                " *\n" +
+                " * Contains many preset and customisable styles - simply add them as props\n" +
+                "*/\n" +
+                "\n" +
                 "export default class P extends Component {\n" +
                 "    render() {\n" +
                 "        let styleList = [styles.default]\n" +

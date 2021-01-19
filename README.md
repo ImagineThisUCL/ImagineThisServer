@@ -12,3 +12,18 @@ If you are running this project for the first time, Intellij might ask you to se
 You will need to swithch your language using "File - Project Structure - Project Settings - Project" and "File - Project Structure - Modules" to switch the language level into Java 13 preview.
 ### 3. error: package com.google.gson does not exist
 Your might want to Reimport all maven projects and restart your Intellij
+
+
+
+## How to host the backend in your local server
+
+There is a executable JAR file named imageinethisserver-0.0.1-SNAPSHOT.jar in the repository for you to download. You can use the this file to host the backend directly. 
+
+### 1. Make sure you have installed openjdk 1.8 or a higher version in your computer. 
+
+### 2. Go to the directory where the jar file exists via your terminal
+
+### 3. Run command 'java -jar imageinethisserver-0.0.1-SNAPSHOT.jar'
+
+### 4. The backend code should be hosted in the http://localhost:8080 
+

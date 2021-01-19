@@ -26,6 +26,9 @@ public class GoogleMapComponent {
                 "    }\n" +
                 "})\n" +
                 "\n" +
+                "/*\n" +
+                " * A wrapper component for a Google Map\n" +
+                "*/\n" +
                 "\n" +
                 "export default class GoogleMap extends Component {\n" +
                 "    render() {\n" +
