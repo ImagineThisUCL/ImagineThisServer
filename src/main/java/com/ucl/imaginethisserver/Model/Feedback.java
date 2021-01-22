@@ -1,4 +1,4 @@
-package Model;
+package com.ucl.imaginethisserver.Model;
 
 import java.sql.Timestamp;
 import java.util.UUID;
