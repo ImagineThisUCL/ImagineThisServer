@@ -49,7 +49,6 @@
             <version>2.5</version>
         </dependency>
 
-
     </dependencies>
 
     <build>
@@ -72,6 +71,28 @@
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+
+            <!-- Calculate test coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.6</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <!-- Attach to Maven test phase -->
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
