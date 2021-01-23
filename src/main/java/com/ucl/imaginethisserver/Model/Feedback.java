@@ -24,6 +24,15 @@ public class Feedback {
         this.text = text;
     }
 
+    public Feedback(UUID feedbackID, UUID userID, String projectID, String userName, Timestamp timestamp, String text) {
+        this.feedbackID = feedbackID;
+        this.userID = userID;
+        this.projectID = projectID;
+        this.userName = userName;
+        this.timestamp = timestamp;
+        this.text = text;
+    }
+
     public UUID getFeedbackID() {
         return feedbackID;
     }
