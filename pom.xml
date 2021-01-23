@@ -94,6 +94,14 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Manage Docker containers -->
+            <!-- To build Docker container run docker:build Maven goal -->
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.34.1</version>
+            </plugin>
         </plugins>
     </build>
 
