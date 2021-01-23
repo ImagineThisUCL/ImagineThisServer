@@ -12,6 +12,7 @@ public class Vote {
     private int vote;
 
     public Vote(UUID userID, int vote) {
+        assert vote == -1 || vote == 1 : "value of parameter 'vote' must be -1 or 1";
         this.userID = userID;
         this.vote = vote;
     }
