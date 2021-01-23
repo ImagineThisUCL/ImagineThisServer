@@ -1,6 +1,7 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
 import com.ucl.imaginethisserver.Model.Feedback;
+import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public boolean voteFeedback(String projectID, UUID feedbackID) {
+    public boolean voteFeedback(String projectID, UUID feedbackID, Vote vote) {
         return false;
     }
 }
