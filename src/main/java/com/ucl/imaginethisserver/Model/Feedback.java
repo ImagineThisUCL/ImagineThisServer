@@ -1,16 +1,26 @@
 package com.ucl.imaginethisserver.Model;
 
+import com.google.gson.annotations.Expose;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
 public class Feedback {
+    @Expose
     private final UUID feedbackID;
+    @Expose
     private final UUID userID;
+    @Expose
     private final String projectID;
+    @Expose
     private int upvotes;
+    @Expose
     private int downvotes;
+    @Expose
     private String userName;
+    @Expose
     private Timestamp timestamp;
+    @Expose
     private String text;
 
     public Feedback(UUID feedbackID, String projectID, int upvotes, int downvotes, UUID userID, String userName, Timestamp timestamp, String text) {
