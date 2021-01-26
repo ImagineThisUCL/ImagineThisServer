@@ -1,12 +1,14 @@
 package com.ucl.imaginethisserver.Model;
 
 import com.google.gson.annotations.Expose;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.UUID;
 
 public class Vote {
 
     @Expose
+    @ApiModelProperty(example = "e348649c-2e03-49f3-a09a-95302510b07a")
     private final UUID userID;
     /**
      * vote can be either up vote or down vote
