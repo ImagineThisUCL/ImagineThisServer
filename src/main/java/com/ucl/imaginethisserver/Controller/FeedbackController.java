@@ -32,14 +32,14 @@ public class FeedbackController {
 
     @GetMapping("/projects/{project-id}/feedback/{feedback-id}")
     public ResponseEntity<Feedback> getFeedbackByID(@PathVariable("project-id") String projectID,
-                                    @PathVariable("feedback-id") UUID feedbackID) {
+                                                    @PathVariable("feedback-id") UUID feedbackID) {
         Feedback feedback = feedbackService.getFeedbackByID(projectID, feedbackID);
         return new ResponseEntity<>(feedback, HttpStatus.OK);
     }
 
     @PostMapping("/projects/{project-id}/feedback")
     public ResponseEntity<Map<String, Boolean>> addNewFeedback(@PathVariable("project-id") String projectID,
-                                              @RequestBody Feedback feedback) {
+                                                               @RequestBody Feedback feedback) {
         Boolean result = feedbackService.addNewFeedback(projectID, feedback);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
@@ -48,8 +48,8 @@ public class FeedbackController {
 
     @PostMapping("/projects/{project-id}/feedback/{feedback-id}/vote")
     public ResponseEntity<Map<String, Boolean>> voteFeedback(@PathVariable("project-id") String projectID,
-                                @PathVariable("feedback-id") UUID feedbackID,
-                                @RequestBody Vote vote) {
+                                                             @PathVariable("feedback-id") UUID feedbackID,
+                                                             @RequestBody Vote vote) {
         Boolean result = feedbackService.voteFeedback(projectID, feedbackID, vote);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
