@@ -1,19 +1,33 @@
 package com.ucl.imaginethisserver.Model;
 
-import java.sql.Timestamp;
+import com.google.gson.annotations.Expose;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.UUID;
 
 public class Feedback {
+    @Expose
+    @ApiModelProperty(example = "cb791e97-a402-4174-95ea-dab2c3f06b25")
     private final UUID feedbackID;
+    @Expose
+    @ApiModelProperty(example = "bd96ccc0-eeff-48e8-8b4e-652675dbc9a2")
     private final UUID userID;
+    @Expose
+    @ApiModelProperty(example = "MgWqYTZMdjG26oA1CxbWaE")
     private final String projectID;
+    @Expose
     private int upvotes;
+    @Expose
     private int downvotes;
+    @Expose
     private String userName;
-    private Timestamp timestamp;
+    @Expose
+    @ApiModelProperty(example = "1611660815823")
+    private long timestamp;
+    @Expose
     private String text;
 
-    public Feedback(UUID feedbackID, String projectID, int upvotes, int downvotes, UUID userID, String userName, Timestamp timestamp, String text) {
+    public Feedback(UUID feedbackID, String projectID, int upvotes, int downvotes, UUID userID, String userName, long timestamp, String text) {
         this.feedbackID = feedbackID;
         this.projectID = projectID;
         this.upvotes = upvotes;
@@ -24,7 +38,7 @@ public class Feedback {
         this.text = text;
     }
 
-    public Feedback(UUID feedbackID, String projectID, UUID userID, String userName, Timestamp timestamp, String text) {
+    public Feedback(UUID feedbackID, String projectID, UUID userID, String userName, long timestamp, String text) {
         this(feedbackID, projectID, 0, 0, userID, userName, timestamp, text);
     }
 
@@ -52,7 +66,7 @@ public class Feedback {
         return userName;
     }
 
-    public Timestamp getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
@@ -72,7 +86,7 @@ public class Feedback {
         this.userName = userName;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 

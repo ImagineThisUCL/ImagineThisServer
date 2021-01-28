@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class AuthenticateController {
      * @throws IOException
      */
     // @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+    @ApiIgnore
     @CrossOrigin(origins = "http://88.80.186.99", maxAge = 3600)
     @GetMapping("/api/v1/authToken")
     public AuthenticateResponse getFigmaProject(@RequestParam(value = "projectID") String projectID, @RequestParam(value = "accessToken") String accessToken,
