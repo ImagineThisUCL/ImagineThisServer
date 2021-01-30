@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.DAO.DAOImpl;
 
+import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
 import com.ucl.imaginethisserver.DAO.FeedbackDAO;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
@@ -37,6 +38,9 @@ public class MockFeedbackRepo implements FeedbackDAO {
             if (f.getProjectID().equals(projectID)) {
                 result.add(f);
             }
+        }
+        if (result.size() == 0) {
+            throw new ProjectNotFoundException("Project Not Found");
         }
         return result;
     }

@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.Controller;
 
+import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
@@ -8,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -27,8 +25,7 @@ public class FeedbackController {
     @GetMapping("/projects/{project-id}/feedback")
     public ResponseEntity<List<Feedback>> getAllFeedbacks(@PathVariable("project-id") String projectID) {
         List<Feedback> feedbacks = feedbackService.getAllFeedbacks(projectID);
-
-        return new ResponseEntity<>(feedbacks, HttpStatus.OK);
+        return ResponseEntity.ok(feedbacks);
     }
 
     @GetMapping("/projects/{project-id}/feedback/{feedback-id}")
