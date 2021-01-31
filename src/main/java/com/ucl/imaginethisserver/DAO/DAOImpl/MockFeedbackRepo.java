@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Repository
+//@Repository
 public class MockFeedbackRepo implements FeedbackDAO {
     private final List<Feedback> feedbacks = new ArrayList<>();
 

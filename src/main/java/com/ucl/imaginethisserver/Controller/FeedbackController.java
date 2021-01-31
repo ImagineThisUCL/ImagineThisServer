@@ -1,7 +1,7 @@
 package com.ucl.imaginethisserver.Controller;
 
 import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
-import com.ucl.imaginethisserver.Model.Feedback;
+import com.ucl.imaginethisserver.Entity.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
