@@ -8,13 +8,13 @@ import java.util.UUID;
 public class Feedback {
     @Expose
     @ApiModelProperty(example = "cb791e97-a402-4174-95ea-dab2c3f06b25")
-    private final UUID feedbackID;
+    private UUID feedbackID;
     @Expose
     @ApiModelProperty(example = "bd96ccc0-eeff-48e8-8b4e-652675dbc9a2")
-    private final UUID userID;
+    private UUID userID;
     @Expose
     @ApiModelProperty(example = "MgWqYTZMdjG26oA1CxbWaE")
-    private final String projectID;
+    private String projectID;
     @Expose
     private int upvotes;
     @Expose
@@ -26,6 +26,10 @@ public class Feedback {
     private long timestamp;
     @Expose
     private String text;
+
+    public Feedback() {
+
+    }
 
     public Feedback(UUID feedbackID, String projectID, int upvotes, int downvotes, UUID userID, String userName, long timestamp, String text) {
         this.feedbackID = feedbackID;

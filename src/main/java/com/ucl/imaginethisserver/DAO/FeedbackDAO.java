@@ -1,18 +1,38 @@
 package com.ucl.imaginethisserver.DAO;
 
 import com.ucl.imaginethisserver.Model.Feedback;
+import com.ucl.imaginethisserver.Model.TypeHandler.UUIDTypeHandler;
 import com.ucl.imaginethisserver.Model.Vote;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.UUID;
 
+@Mapper
 public interface FeedbackDAO {
     /**
      * This method gets all feedbacks for a given project from DB
      * @param projectID ID of the project
      * @return a list of feedbacks
      */
-    List<Feedback> getAllFeedbacks(String projectID);
+    @Select("SELECT f.feedback_id, project_id, f.user_id,\n" +
+            "SUM(case when v.vote >= 0 then v.vote end) upvotes,\n" +
+            "SUM(case when v.vote < 0 then v.vote end) downvotes, user_name, f_timestamp, feedback_text\n" +
+            "FROM feedback f\n" +
+            "LEFT JOIN votes v on f.feedback_id = v.feedback_id\n" +
+            "WHERE project_id = #{projectID}\n" +
+            "GROUP BY f.feedback_id")
+    @Results(id = "feedbackResultMap", value = {
+            @Result(property = "feedbackID", column = "feedback_id", typeHandler = UUIDTypeHandler.class),
+            @Result(property = "userID", column = "user_id", typeHandler = UUIDTypeHandler.class),
+            @Result(property = "projectID", column = "project_id"),
+            @Result(property = "upvotes", column = "upvotes"),
+            @Result(property = "downvotes", column = "downvotes"),
+            @Result(property = "userName", column = "user_name"),
+            @Result(property = "timestamp", column = "f_timestamp"),
+            @Result(property = "text", column = "feedback_text")
+    })
+    List<Feedback> getAllFeedbacks(@Param("projectID") String projectID);
 
     /**
      * This method get a specific feedback for a given project from DB
@@ -20,6 +40,7 @@ public interface FeedbackDAO {
      * @param feedbackID ID of the feedback
      * @return the specified feedback
      */
+//    @Select("SELECT * FROM feedback WHERE project_id = #{projectID} AND feedback_id = #{feedbackID}")
     Feedback getFeedbackByID(String projectID, UUID feedbackID);
 
     /**
