@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
+import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
 import com.ucl.imaginethisserver.DAO.FeedbackDAO;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
@@ -16,9 +17,19 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Resource
     private FeedbackDAO feedbackDAO;
 
+    private List<String> projectIDList;
+
     @Override
     public List<Feedback> getAllFeedbacks(String projectID) {
-        return feedbackDAO.getAllFeedbacks(projectID);
+        // TODO: add cache server
+        if (projectID == null) {
+            projectIDList = feedbackDAO.getAllProjectID();
+        }
+        if (projectIDList.contains(projectID)) {
+            return feedbackDAO.getAllFeedbacks(projectID);
+        } else {
+            throw new ProjectNotFoundException("Project Not Found");
+        }
     }
 
     @Override

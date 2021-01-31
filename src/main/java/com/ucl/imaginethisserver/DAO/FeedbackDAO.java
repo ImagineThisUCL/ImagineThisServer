@@ -32,6 +32,10 @@ public interface FeedbackDAO {
     })
     List<Feedback> getAllFeedbacks(@Param("projectID") String projectID);
 
+    @Select("SELECT project_id FROM feedback GROUP BY project_id")
+    @Result(property = "projectID", column = "project_id")
+    List<String> getAllProjectID();
+
     /**
      * This method get a specific feedback for a given project from DB
      * @param projectID ID of the project
@@ -50,8 +54,8 @@ public interface FeedbackDAO {
      */
     @Insert("INSERT INTO feedback" +
             "(feedback_id, project_id, user_id, user_name, feedback_text, f_timestamp)\n" +
-            "VALUES (#{feedback.feedbackID}::VARCHAR, #{projectID}, " +
-            "#{feedback.userID}::VARCHAR, #{feedback.userName}, #{feedback.text}, #{feedback.timestamp})")
+            "VALUES (#{feedback.feedbackID}, #{projectID}, " +
+            "#{feedback.userID}, #{feedback.userName}, #{feedback.text}, #{feedback.timestamp})")
     boolean addNewFeedback(String projectID, Feedback feedback);
 
     /**
@@ -61,5 +65,7 @@ public interface FeedbackDAO {
      * @param vote a vote object, can be either up vote or down vote
      * @return bool value which indicates the operation status
      */
+    @Insert("INSERT INTO votes(vote_id, feedback_id, user_id, vote, v_timestamp)\n" +
+            "VALUES (#{vote.voteID}, #{feedbackID}, #{vote.userID}, #{vote.vote}, #{vote.timestamp})")
     boolean voteFeedback(String projectID, UUID feedbackID, Vote vote);
 }
