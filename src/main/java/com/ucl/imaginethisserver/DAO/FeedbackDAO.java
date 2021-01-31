@@ -26,8 +26,6 @@ public interface FeedbackDAO {
             @Result(property = "feedbackID", column = "feedback_id", typeHandler = UUIDTypeHandler.class),
             @Result(property = "userID", column = "user_id", typeHandler = UUIDTypeHandler.class),
             @Result(property = "projectID", column = "project_id"),
-            @Result(property = "upvotes", column = "upvotes"),
-            @Result(property = "downvotes", column = "downvotes"),
             @Result(property = "userName", column = "user_name"),
             @Result(property = "timestamp", column = "f_timestamp"),
             @Result(property = "text", column = "feedback_text")
@@ -40,7 +38,8 @@ public interface FeedbackDAO {
      * @param feedbackID ID of the feedback
      * @return the specified feedback
      */
-//    @Select("SELECT * FROM feedback WHERE project_id = #{projectID} AND feedback_id = #{feedbackID}")
+    @Select("SELECT * FROM feedback WHERE project_id = #{projectID} AND feedback_id = #{feedbackID}")
+    @ResultMap(value = "feedbackResultMap")
     Feedback getFeedbackByID(String projectID, UUID feedbackID);
 
     /**
