@@ -22,8 +22,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public List<Feedback> getAllFeedbacks(String projectID) {
         // TODO: add cache server
-        if (projectID == null) {
+        if (projectIDList == null) {
             projectIDList = feedbackDAO.getAllProjectID();
+            System.out.println(projectIDList.size());
         }
         if (projectIDList.contains(projectID)) {
             return feedbackDAO.getAllFeedbacks(projectID);

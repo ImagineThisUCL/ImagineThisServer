@@ -18,7 +18,7 @@ public interface FeedbackDAO {
     @Select("SELECT f.feedback_id, project_id, f.user_id,\n" +
             "SUM(case when v.vote >= 0 then v.vote end) upvotes,\n" +
             "SUM(case when v.vote < 0 then v.vote end) downvotes, user_name, f_timestamp, feedback_text\n" +
-            "FROM feedback f\n" +
+            "FROM feedbacks f\n" +
             "LEFT JOIN votes v on f.feedback_id = v.feedback_id\n" +
             "WHERE project_id = #{projectID}\n" +
             "GROUP BY f.feedback_id")
@@ -32,7 +32,7 @@ public interface FeedbackDAO {
     })
     List<Feedback> getAllFeedbacks(@Param("projectID") String projectID);
 
-    @Select("SELECT project_id FROM feedback GROUP BY project_id")
+    @Select("SELECT project_id FROM projects")
     @Result(property = "projectID", column = "project_id")
     List<String> getAllProjectID();
 
@@ -42,7 +42,7 @@ public interface FeedbackDAO {
      * @param feedbackID ID of the feedback
      * @return the specified feedback
      */
-    @Select("SELECT * FROM feedback WHERE project_id = #{projectID} AND feedback_id = #{feedbackID}::VARCHAR")
+    @Select("SELECT * FROM feedbacks WHERE project_id = #{projectID} AND feedback_id = #{feedbackID}")
     @ResultMap(value = "feedbackResultMap")
     Feedback getFeedbackByID(String projectID, UUID feedbackID);
 
@@ -52,7 +52,7 @@ public interface FeedbackDAO {
      * @param feedback feedback object
      * @return bool value which indicates the operation status
      */
-    @Insert("INSERT INTO feedback" +
+    @Insert("INSERT INTO feedbacks" +
             "(feedback_id, project_id, user_id, user_name, feedback_text, f_timestamp)\n" +
             "VALUES (#{feedback.feedbackID}, #{projectID}, " +
             "#{feedback.userID}, #{feedback.userName}, #{feedback.text}, #{feedback.timestamp})")
