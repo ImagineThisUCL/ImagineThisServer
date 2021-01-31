@@ -4,21 +4,17 @@ import com.ucl.imaginethisserver.DAO.FeedbackDAO;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
 
-    private final FeedbackDAO feedbackDAO;
-
-    @Autowired
-    public FeedbackServiceImpl(FeedbackDAO feedbackDAO) {
-        this.feedbackDAO = feedbackDAO;
-    }
+    @Resource
+    private FeedbackDAO feedbackDAO;
 
     @Override
     public List<Feedback> getAllFeedbacks(String projectID) {

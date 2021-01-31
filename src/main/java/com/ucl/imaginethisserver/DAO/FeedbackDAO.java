@@ -38,7 +38,7 @@ public interface FeedbackDAO {
      * @param feedbackID ID of the feedback
      * @return the specified feedback
      */
-    @Select("SELECT * FROM feedback WHERE project_id = #{projectID} AND feedback_id = #{feedbackID}")
+    @Select("SELECT * FROM feedback WHERE project_id = #{projectID} AND feedback_id = #{feedbackID}::VARCHAR")
     @ResultMap(value = "feedbackResultMap")
     Feedback getFeedbackByID(String projectID, UUID feedbackID);
 
@@ -48,6 +48,10 @@ public interface FeedbackDAO {
      * @param feedback feedback object
      * @return bool value which indicates the operation status
      */
+    @Insert("INSERT INTO feedback" +
+            "(feedback_id, project_id, user_id, user_name, feedback_text, f_timestamp)\n" +
+            "VALUES (#{feedback.feedbackID}::VARCHAR, #{projectID}, " +
+            "#{feedback.userID}::VARCHAR, #{feedback.userName}, #{feedback.text}, #{feedback.timestamp})")
     boolean addNewFeedback(String projectID, Feedback feedback);
 
     /**
