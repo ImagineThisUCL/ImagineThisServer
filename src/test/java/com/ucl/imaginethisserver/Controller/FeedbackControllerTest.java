@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.Controller;
 
+import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Service.FeedbackService;
@@ -38,6 +39,8 @@ class FeedbackControllerTest {
 
     private List<Feedback> mockFeedbackList;
 
+    private String realProjectID = "MgWqYTZMdjG26oA1CxbWaE";
+
 
     @BeforeEach
     void setUp() {
@@ -47,13 +50,15 @@ class FeedbackControllerTest {
                 , "John Dow", 1610955210, "Great prototype!"));
     }
 
+    /*
+    * The following tests will test the getAllFeedbacks method
+    * */
     @Test
     void givenFeedbacks_whenGetAllFeedbacks_thenReturnJsonArray() throws Exception{
-        String projectID = "MgWqYTZMdjG26oA1CxbWaE";
 
-        given(service.getAllFeedbacks(projectID)).willReturn(mockFeedbackList);
+        given(service.getAllFeedbacks(realProjectID)).willReturn(mockFeedbackList);
 
-        mockMvc.perform(get("/api/v1/projects/" + projectID + "/feedback")
+        mockMvc.perform(get("/api/v1/projects/" + realProjectID + "/feedback")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -63,9 +68,26 @@ class FeedbackControllerTest {
     @Test
     void givenInvalidProjectID_whenGetAllFeedbacks_thenReturnErrorNotFound() throws Exception {
         String projectID = "invalidProjectID";
-        given(service.getAllFeedbacks(projectID)).willThrow(new ProjectNotFoundException("Project Not Found"));
+        given(service.getAllFeedbacks(projectID)).willThrow(new NotFoundException());
 
         mockMvc.perform(get("/api/v1/projects/" + projectID + "/feedback")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void givenInvalidProjectIDOrFeedbackID_whenGetFeedbackByID_thenReturnErrorNotFound() throws Exception {
+        String projectID = "invalidProjectID";
+        UUID feedbackID = UUID.randomUUID();
+
+        given(service.getFeedbackByID(projectID, feedbackID)).willThrow(new NotFoundException());
+        given(service.getFeedbackByID(realProjectID, feedbackID)).willThrow(new NotFoundException());
+        // both project id and feedback id are invalid
+        mockMvc.perform(get("/api/v1/projects/" + projectID + "/feedback/" + feedbackID)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
+        // only feedback id is invalid
+        mockMvc.perform(get("/api/v1/projects/" + realProjectID + "/feedback/" + feedbackID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
