@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
+import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
 import com.ucl.imaginethisserver.DAO.FeedbackDAO;
 import com.ucl.imaginethisserver.Model.Feedback;
@@ -22,11 +23,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public List<Feedback> getAllFeedbacks(String projectID) {
         // TODO: add cache server
-        if (projectIDList == null) {
-            projectIDList = feedbackDAO.getAllProjectID();
-            System.out.println(projectIDList.size());
-        }
-        if (projectIDList.contains(projectID)) {
+        if (projectExist(projectID)) {
             return feedbackDAO.getAllFeedbacks(projectID);
         } else {
             throw new ProjectNotFoundException("Project Not Found");
@@ -35,7 +32,23 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public Feedback getFeedbackByID(String projectID, UUID feedbackID) {
-        return feedbackDAO.getFeedbackByID(projectID, feedbackID);
+        List<Feedback> feedbackList;
+        if (projectExist(projectID)) {
+            projectIDList = feedbackDAO.getAllProjectID();
+            feedbackList = feedbackDAO.getAllFeedbacks(projectID);
+            // check if feedback exist
+            for (Feedback f :
+                    feedbackList) {
+                if (f.getFeedbackID().equals(feedbackID)) {
+                    return f;
+                } else {
+                    throw new NotFoundException("Feedback Not Found");
+                }
+            }
+        } else {
+            throw new ProjectNotFoundException("Project Not Found");
+        }
+        return null;
     }
 
     @Override
@@ -46,5 +59,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public boolean voteFeedback(String projectID, UUID feedbackID, Vote vote) {
         return feedbackDAO.voteFeedback(projectID, feedbackID, vote);
+    }
+
+    private boolean projectExist(String projectID) {
+        if (projectIDList == null) {
+            projectIDList = feedbackDAO.getAllProjectID();
+        }
+        return projectIDList.contains(projectID);
     }
 }
