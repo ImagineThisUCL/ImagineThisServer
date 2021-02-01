@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +47,7 @@ public class GenerationController {
      * @throws IOException
      */
     // @CrossOrigin(origins = "http://localhost:3000")
+    @ApiIgnore
     @CrossOrigin(origins = "http://88.80.186.99")
     @PostMapping("/api/v1/generatePage")
     public GenerateResponse generatePages(@RequestBody Map<String, Object> payload, HttpServletResponse response) throws IOException {
@@ -85,6 +87,7 @@ public class GenerationController {
      * @param fileName the target file name that uesr try to generate.
      */
     // @CrossOrigin(origins = "http://localhost:3000")
+    @ApiIgnore
     @CrossOrigin(origins = "http://88.80.186.99")
     @GetMapping("/api/v1/downloadFile")
     public ResponseEntity<Resource> downloadFile(@RequestParam (value = "fileName") String fileName,  HttpServletRequest request) throws IOException {
