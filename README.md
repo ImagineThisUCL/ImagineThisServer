@@ -17,15 +17,13 @@ Your might want to Reimport all maven projects and restart your Intellij
 
 ## How to host the backend in your local server
 
-There is a executable JAR file named imageinethisserver-0.0.1-SNAPSHOT.jar in the repository for you to download. You can use the this file to host the backend directly. 
+Perform the following steps to run the ImagineThis server locally:
 
-### 1. Make sure you have installed openjdk 1.8 or a higher version in your computer. 
+### 1. Build the backend by running `mvn install`
 
-### 2. Go to the directory where the jar file exists via your terminal
+### 2. Run `java -jar target/imageinethisserver-0.0.1-SNAPSHOT.jar`
 
-### 3. Run command 'java -jar imageinethisserver-0.0.1-SNAPSHOT.jar'
-
-### 4. The backend code should be hosted in the http://localhost:8080 
+### 3. The backend code should be hosted in the http://localhost:8080 
 
 
 
