@@ -60,35 +60,36 @@ public interface FeedbackDAO {
 
     /**
      * This method will vote on an existing feedback for the given project and update to DB
-     * @param projectID ID of the project
      * @param feedbackID ID of the feedback
      * @param vote a vote object, can be either up vote or down vote
      * @return bool value which indicates the operation status
      */
     @Insert("INSERT INTO votes(vote_id, feedback_id, user_id, vote, v_timestamp)\n" +
             "VALUES (#{vote.voteID}, #{feedbackID}, #{vote.userID}, #{vote.vote}, #{vote.timestamp})")
-    boolean voteFeedback(String projectID, UUID feedbackID, Vote vote);
+    boolean addVoteByID(UUID feedbackID, Vote vote);
+
 
     /**
-     * This method will change the value of existing vote and update to DB
-     * @param projectID ID of the project
-     * @param feedbackID ID of the feedback
-     * @param vote a vote object, can be either up vote or down vote
-     * @return bool value which indicates the operation status
-     */
-    @Insert("UPDATE votes\n" + "SET vote=#{vote.vote}\n" +
-            "WHERE feedback_id=#{feedbackID} and user_id=#{vote.userID}")
-    boolean changeVoteFeedback(String projectID, UUID feedbackID, Vote vote);
-
-    /**
-     * This method get vote for a given project, feedback and user
-     * @param projectID ID of the project
+     * This method get vote for given feedback and user
      * @param feedbackID ID of the feedback
      * @param userID ID of the user
      * @return the specified vote
      */
-    @Select("SELECT * FROM votes WHERE project_id = #{projectID} AND feedback_id = #{feedbackID} AND user_id = #{userID}")
-    @ResultMap(value = "voteResultMap")
-    Vote getVoteByID(String projectID, UUID feedbackID, UUID userID);
+    @Select("SELECT * FROM votes WHERE feedback_id = #{feedbackID} AND user_id = #{userID}")
+    @Results(id = "voteResultMap", value = {
+            @Result(property = "voteID", column = "vote_id", typeHandler = UUIDTypeHandler.class),
+            @Result(property = "userID", column = "user_id", typeHandler = UUIDTypeHandler.class),
+            @Result(property = "vote", column = "vote"),
+            @Result(property = "timestamp", column = "timestamp")
+    })
+    Vote getVoteByFeedbackandUser(UUID feedbackID, UUID userID);
+
+    /**
+     * This method deletes vote for a given project, feedback and user
+     * @param voteID of the vote
+     * @return bool value which indicates the operation status
+     */
+    @Delete("DELETE FROM votes WHERE vote_id = #{voteID}")
+    boolean deleteVoteByID(UUID voteID);
 
 }

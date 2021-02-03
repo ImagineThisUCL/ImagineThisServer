@@ -67,20 +67,41 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 
     @Override
-    public boolean voteFeedback(String projectID, UUID feedbackID, Vote vote) {
-        Vote previousVoteByUser = feedbackDAO.getVoteByID(projectID, feedbackID, vote.getUserID());
+    public boolean voteFeedback(UUID feedbackID, Vote vote, String ops) {
 
-        if(previousVoteByUser==null){
+        if(ops.equals("add")){
             //if user has not voted before, set this vote
-            return feedbackDAO.voteFeedback(projectID, feedbackID, vote);
-        }else if (previousVoteByUser.getVote()!=vote.getVote()){
-           //if user has voted but different vote, replace the existing vote with new vote
-            return feedbackDAO.changeVoteFeedback(projectID, feedbackID, vote);
+            return addVote(feedbackID, vote);
+        }else if (ops.equals("update")){
+            Vote previousVote = feedbackDAO.getVoteByFeedbackandUser(feedbackID, vote.getUserID());
+            //if user has voted but different vote, delete the existing vote and add new vote
+            return updateVote(feedbackID, previousVote, vote);
+        }else if(ops.equals("remove")){
+            Vote previousVote = feedbackDAO.getVoteByFeedbackandUser(feedbackID, vote.getUserID());
+            //if user has voted, remove the existing vote and do not add new vote.
+            return deleteVote(previousVote);
         }else{
-            //if user has voted same before.
-            throw new UpdateException("Duplicate Vote");
+            throw new UpdateException("Operation Not Found");
         }
     }
+
+    public boolean deleteVote(Vote vote) {
+        return feedbackDAO.deleteVoteByID(vote.getVoteID());
+    }
+
+    public boolean addVote(UUID feedbackID, Vote vote) {
+        return feedbackDAO.addVoteByID(feedbackID, vote);
+    }
+
+    public boolean updateVote(UUID feedbackID, Vote prev_vote, Vote new_vote) {
+        boolean delete_ops = deleteVote(prev_vote);
+        if(delete_ops){
+            return feedbackDAO.addVoteByID(feedbackID, new_vote);
+        }else{
+            throw new UpdateException("Update Failed");
+        }
+    }
+
 
     private boolean projectExist(String projectID) {
         if (projectIDList == null) {

@@ -18,11 +18,16 @@ public class Vote {
     @Expose
     private int vote;
 
-    public Vote(UUID userID, int vote) {
+    @Expose
+    @ApiModelProperty(example = "1611660815823")
+    private long timestamp;
+
+    public Vote(UUID userID, int vote, long timestamp) {
         assert vote == -1 || vote == 1 : "value of parameter 'vote' must be -1 or 1";
         this.voteID = UUID.randomUUID();
         this.userID = userID;
         this.vote = vote;
+        this.timestamp = timestamp;
     }
 
     public UUID getVoteID() {
@@ -40,4 +45,6 @@ public class Vote {
     public void setVote(int vote) {
         this.vote = vote;
     }
+
+    public long getTimestamp() { return timestamp; }
 }
