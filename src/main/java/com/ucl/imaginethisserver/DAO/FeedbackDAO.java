@@ -78,12 +78,16 @@ public interface FeedbackDAO {
     @Select("SELECT * FROM votes WHERE feedback_id = #{feedbackID} AND user_id = #{userID}")
     @Results(id = "voteResultMap", value = {
             @Result(property = "voteID", column = "vote_id", typeHandler = UUIDTypeHandler.class),
+            @Result(property = "feedbackID", column = "feedback_id", typeHandler = UUIDTypeHandler.class),
             @Result(property = "userID", column = "user_id", typeHandler = UUIDTypeHandler.class),
             @Result(property = "vote", column = "vote"),
-            @Result(property = "timestamp", column = "timestamp")
+            @Result(property = "timestamp", column = "v_timestamp")
     })
     Vote getVoteByFeedbackandUser(UUID feedbackID, UUID userID);
 
+    @Select("SELECT * FROM votes WHERE user_id = #{userID}")
+    @ResultMap(value = "voteResultMap")
+    List<Vote> getVotesByUserID(@Param(value = "userID") UUID userID);
     /**
      * This method deletes vote for a given project, feedback and user
      * @param voteID of the vote

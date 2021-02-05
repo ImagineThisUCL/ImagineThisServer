@@ -39,4 +39,11 @@ public interface FeedbackService {
      * @return bool value which indicates the operation status
      */
     boolean voteFeedback(UUID feedbackID, Vote vote);
+
+    /**
+     * This method will query all votes that the user votes on
+     * @param userID ID of the user
+     * @return A list contains all votes that the given user made
+     */
+    List<Vote> getVotesByUserID(UUID userID);
 }

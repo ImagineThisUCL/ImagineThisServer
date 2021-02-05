@@ -86,6 +86,16 @@ public class FeedbackServiceImpl implements FeedbackService {
         return feedbackDAO.addVoteByID(feedbackID, vote);
     }
 
+    @Override
+    public List<Vote> getVotesByUserID(UUID userID) {
+        try {
+            return feedbackDAO.getVotesByUserID(userID);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new InternalError();
+        }
+    }
+
     public boolean deleteVote(Vote vote) {
         return feedbackDAO.deleteVoteByID(vote.getVoteID());
     }

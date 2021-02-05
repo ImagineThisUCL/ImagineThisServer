@@ -44,7 +44,7 @@ public class FeedbackController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("feedback/{feedback-id}/vote/ops")
+    @PostMapping("/feedback/{feedback-id}/vote")
     public ResponseEntity<Map<String, Boolean>> voteFeedback(@PathVariable("feedback-id") UUID feedbackID,
                                                              @RequestBody Vote vote) {
         Boolean result = feedbackService.voteFeedback(feedbackID, vote);
@@ -52,4 +52,16 @@ public class FeedbackController {
         response.put("success", result);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/users/{user-id}/votes")
+    @ResponseBody
+    public List<Vote> getVotesByUserID(@PathVariable("user-id") UUID userID) {
+        return feedbackService.getVotesByUserID(userID);
+    }
+
+//    @PostMapping("feedback/{feedback-id}/{vote-id}")
+//    public ResponseEntity<Map<String, Boolean>> deleteFeedback(@PathVariable("feedback-id") UUID feedbackID,
+//                                                               @PathVariable("vote-id") UUID voteID) {
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 }

@@ -10,6 +10,9 @@ public class Vote {
     private UUID voteID;
 
     @Expose
+    private final UUID feedbackID;
+
+    @Expose
     @ApiModelProperty(example = "e348649c-2e03-49f3-a09a-95302510b07a")
     private final UUID userID;
     /**
@@ -23,8 +26,10 @@ public class Vote {
     @ApiModelProperty(example = "1611660815823")
     private long timestamp;
 
-    public Vote(UUID userID, int vote, long timestamp) {
+    public Vote(UUID voteID, UUID userID, UUID feedbackID, int vote, long timestamp) {
         assert vote == -1 || vote == 1 : "value of parameter 'vote' must be -1 or 1";
+        this.voteID = voteID;
+        this.feedbackID = feedbackID;
         this.userID = userID;
         this.vote = vote;
         this.timestamp = timestamp;
@@ -51,4 +56,8 @@ public class Vote {
     }
 
     public long getTimestamp() { return timestamp; }
+
+    public UUID getFeedbackID() {
+        return feedbackID;
+    }
 }
