@@ -36,8 +36,7 @@ public interface FeedbackService {
      * This method will add/update/remove vote on an existing feedback for the given project
      * @param feedbackID ID of the feedback
      * @param vote a vote object, can be either up vote or down vote
-     * @param ops add/update/delete
      * @return bool value which indicates the operation status
      */
-    boolean voteFeedback(UUID feedbackID, Vote vote, String ops);
+    boolean voteFeedback(UUID feedbackID, Vote vote);
 }

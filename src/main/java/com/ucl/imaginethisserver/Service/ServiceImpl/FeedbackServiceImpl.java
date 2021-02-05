@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
+import com.ucl.imaginethisserver.CustomExceptions.InternalError;
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
 import com.ucl.imaginethisserver.CustomExceptions.FeedbackNotFoundException;
@@ -9,6 +10,8 @@ import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
 import org.apache.ibatis.jdbc.Null;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,6 +20,7 @@ import java.util.UUID;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
+    Logger logger = LoggerFactory.getLogger(FeedbackServiceImpl.class);
 
     @Resource
     private FeedbackDAO feedbackDAO;
@@ -67,22 +71,19 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 
     @Override
-    public boolean voteFeedback(UUID feedbackID, Vote vote, String ops) {
-
-        if(ops.equals("add")){
-            //if user has not voted before, set this vote
-            return addVote(feedbackID, vote);
-        }else if (ops.equals("update")){
-            Vote previousVote = feedbackDAO.getVoteByFeedbackandUser(feedbackID, vote.getUserID());
-            //if user has voted but different vote, delete the existing vote and add new vote
-            return updateVote(feedbackID, previousVote, vote);
-        }else if(ops.equals("remove")){
-            Vote previousVote = feedbackDAO.getVoteByFeedbackandUser(feedbackID, vote.getUserID());
-            //if user has voted, remove the existing vote and do not add new vote.
-            return deleteVote(previousVote);
-        }else{
-            throw new UpdateException("Operation Not Found");
+    public boolean voteFeedback(UUID feedbackID, Vote vote) {
+        if (vote.getVoteID() == null) {
+            vote.setVoteID(UUID.randomUUID());
         }
+        try {
+            feedbackDAO.addVoteByID(feedbackID, vote);
+        } catch (Exception e) {
+            // log out error message
+            logger.error(e.getMessage());
+            // throw new runtime exception to make Spring return 500 error
+            throw new InternalError();
+        }
+        return feedbackDAO.addVoteByID(feedbackID, vote);
     }
 
     public boolean deleteVote(Vote vote) {
