@@ -43,7 +43,7 @@ public class FeedbackController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/feedback/{feedback-id}/vote")
+    @PostMapping("/feedbacks/{feedback-id}/vote")
     public ResponseEntity<Map<String, Object>> voteFeedback(@PathVariable("feedback-id") UUID feedbackID,
                                                              @RequestBody Vote vote) {
         UUID result = feedbackService.voteFeedback(feedbackID, vote);
@@ -53,7 +53,7 @@ public class FeedbackController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/feedback/{feedback-id}/vote/{vote-id}")
+    @DeleteMapping("/feedbacks/{feedback-id}/vote/{vote-id}")
     public ResponseEntity<Map<String, Boolean>> DeleteVote(@PathVariable("feedback-id") UUID feedbackID,
                                                            @PathVariable("vote-id") UUID voteID) {
         Boolean result = feedbackService.deleteVote(voteID);
