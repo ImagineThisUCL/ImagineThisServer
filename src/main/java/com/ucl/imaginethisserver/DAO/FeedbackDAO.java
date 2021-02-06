@@ -94,6 +94,6 @@ public interface FeedbackDAO {
      * @return bool value which indicates the operation status
      */
     @Delete("DELETE FROM votes WHERE vote_id = #{voteID}")
-    boolean deleteVoteByID(UUID voteID);
+    boolean deleteVoteByID(@Param(value = "voteID") UUID voteID);
 
 }
