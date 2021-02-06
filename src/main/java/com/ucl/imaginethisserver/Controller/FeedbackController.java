@@ -31,7 +31,6 @@ public class FeedbackController {
     @ResponseBody
     public Feedback getFeedbackByID(@PathVariable("project-id") String projectID,
                                     @PathVariable("feedback-id") UUID feedbackID) {
-        System.out.println("getFeedbackByID Controller");
         return feedbackService.getFeedbackByID(projectID, feedbackID);
     }
 

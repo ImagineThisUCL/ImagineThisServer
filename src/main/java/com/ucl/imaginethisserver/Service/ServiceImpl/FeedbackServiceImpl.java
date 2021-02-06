@@ -39,7 +39,6 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public Feedback getFeedbackByID(String projectID, UUID feedbackID) {
-
         List<Feedback> feedbackList;
         if (projectExist(projectID)) {
             projectIDList = feedbackDAO.getAllProjectID();
@@ -47,14 +46,14 @@ public class FeedbackServiceImpl implements FeedbackService {
             // check if feedback exist
             for (Feedback f :
                     feedbackList) {
-                if (f.getFeedbackID().equals(feedbackID)) {
-                    return f;
-                } else {
-                    throw new NotFoundException("Feedback Not Found");
+                if (f.getFeedbackID().toString().equals(feedbackID.toString())) {
+                    logger.info("Feedback " + feedbackID + " found.");
+                    return feedbackDAO.getFeedbackByID(projectID, feedbackID);
                 }
             }
+            logger.error("Feedback " + feedbackID + " not found.", new NotFoundException("Feedback Not Found"));
         } else {
-            throw new ProjectNotFoundException("Project Not Found");
+            logger.error("Project " + projectID + " not found.", new NotFoundException("Project Not Found"));
         }
         return null;
     }
@@ -71,19 +70,23 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 
     @Override
-    public boolean voteFeedback(UUID feedbackID, Vote vote) {
+    public UUID voteFeedback(UUID feedbackID, Vote vote) {
+        UUID uuid = UUID.randomUUID();
         if (vote.getVoteID() == null) {
-            vote.setVoteID(UUID.randomUUID());
+            logger.info("Generating random voteID: " + uuid);
+            vote.setVoteID(uuid);
+        } else {
+            uuid = vote.getVoteID();
         }
         try {
             feedbackDAO.addVoteByID(feedbackID, vote);
+            return uuid;
         } catch (Exception e) {
             // log out error message
             logger.error(e.getMessage());
             // throw new runtime exception to make Spring return 500 error
             throw new InternalError();
         }
-        return feedbackDAO.addVoteByID(feedbackID, vote);
     }
 
     @Override
@@ -96,23 +99,15 @@ public class FeedbackServiceImpl implements FeedbackService {
         }
     }
 
-    public boolean deleteVote(Vote vote) {
-        return feedbackDAO.deleteVoteByID(vote.getVoteID());
-    }
-
-    public boolean addVote(UUID feedbackID, Vote vote) {
-        return feedbackDAO.addVoteByID(feedbackID, vote);
-    }
-
-    public boolean updateVote(UUID feedbackID, Vote prev_vote, Vote new_vote) {
-        boolean delete_ops = deleteVote(prev_vote);
-        if(delete_ops){
-            return feedbackDAO.addVoteByID(feedbackID, new_vote);
-        }else{
-            throw new UpdateException("Update Failed");
+    @Override
+    public boolean deleteVote(UUID voteID) {
+        try {
+            return feedbackDAO.deleteVoteByID(voteID);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new InternalError();
         }
     }
-
 
     private boolean projectExist(String projectID) {
         if (projectIDList == null) {
