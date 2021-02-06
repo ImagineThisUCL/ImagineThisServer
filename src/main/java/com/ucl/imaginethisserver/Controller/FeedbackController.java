@@ -1,6 +1,5 @@
 package com.ucl.imaginethisserver.Controller;
 
-import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
@@ -23,16 +22,17 @@ public class FeedbackController {
     }
 
     @GetMapping("/projects/{project-id}/feedback")
-    public ResponseEntity<List<Feedback>> getAllFeedbacks(@PathVariable("project-id") String projectID) {
-        List<Feedback> feedbacks = feedbackService.getAllFeedbacks(projectID);
-        return ResponseEntity.ok(feedbacks);
+    @ResponseBody
+    public List<Feedback> getAllFeedbacks(@PathVariable("project-id") String projectID) {
+        return feedbackService.getAllFeedbacks(projectID);
     }
 
     @GetMapping("/projects/{project-id}/feedback/{feedback-id}")
-    public ResponseEntity<Feedback> getFeedbackByID(@PathVariable("project-id") String projectID,
-                                                    @PathVariable("feedback-id") UUID feedbackID) {
-        Feedback feedback = feedbackService.getFeedbackByID(projectID, feedbackID);
-        return new ResponseEntity<>(feedback, HttpStatus.OK);
+    @ResponseBody
+    public Feedback getFeedbackByID(@PathVariable("project-id") String projectID,
+                                    @PathVariable("feedback-id") UUID feedbackID) {
+        System.out.println("getFeedbackByID Controller");
+        return feedbackService.getFeedbackByID(projectID, feedbackID);
     }
 
     @PostMapping("/projects/{project-id}/feedback")
@@ -45,9 +45,19 @@ public class FeedbackController {
     }
 
     @PostMapping("/feedback/{feedback-id}/vote")
-    public ResponseEntity<Map<String, Boolean>> voteFeedback(@PathVariable("feedback-id") UUID feedbackID,
+    public ResponseEntity<Map<String, Object>> voteFeedback(@PathVariable("feedback-id") UUID feedbackID,
                                                              @RequestBody Vote vote) {
-        Boolean result = feedbackService.voteFeedback(feedbackID, vote);
+        UUID result = feedbackService.voteFeedback(feedbackID, vote);
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("vote-id", result);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/feedback/{feedback-id}/vote/{vote-id}")
+    public ResponseEntity<Map<String, Boolean>> DeleteVote(@PathVariable("feedback-id") UUID feedbackID,
+                                                           @PathVariable("vote-id") UUID voteID) {
+        Boolean result = feedbackService.deleteVote(voteID);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -58,10 +68,4 @@ public class FeedbackController {
     public List<Vote> getVotesByUserID(@PathVariable("user-id") UUID userID) {
         return feedbackService.getVotesByUserID(userID);
     }
-
-//    @PostMapping("feedback/{feedback-id}/{vote-id}")
-//    public ResponseEntity<Map<String, Boolean>> deleteFeedback(@PathVariable("feedback-id") UUID feedbackID,
-//                                                               @PathVariable("vote-id") UUID voteID) {
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
 }
