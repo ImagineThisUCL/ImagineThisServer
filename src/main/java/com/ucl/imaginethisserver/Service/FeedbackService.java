@@ -36,9 +36,9 @@ public interface FeedbackService {
      * This method will add/update/remove vote on an existing feedback for the given project
      * @param feedbackID ID of the feedback
      * @param vote a vote object, can be either up vote or down vote
-     * @return bool value which indicates the operation status
+     * @return UUID of the newly generated vote
      */
-    boolean voteFeedback(UUID feedbackID, Vote vote);
+    UUID voteFeedback(UUID feedbackID, Vote vote);
 
     /**
      * This method will query all votes that the user votes on
@@ -46,4 +46,6 @@ public interface FeedbackService {
      * @return A list contains all votes that the given user made
      */
     List<Vote> getVotesByUserID(UUID userID);
+
+    boolean deleteVote(UUID voteID);
 }
