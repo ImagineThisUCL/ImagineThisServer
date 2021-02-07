@@ -1,10 +1,7 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
+import com.ucl.imaginethisserver.CustomExceptions.*;
 import com.ucl.imaginethisserver.CustomExceptions.InternalError;
-import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
-import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
-import com.ucl.imaginethisserver.CustomExceptions.FeedbackNotFoundException;
-import com.ucl.imaginethisserver.CustomExceptions.UpdateException;
 import com.ucl.imaginethisserver.DAO.FeedbackDAO;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
@@ -98,7 +95,6 @@ public class FeedbackServiceImpl implements FeedbackService {
             // throw new runtime exception to make Spring return 500 error
             throw new InternalError();
         }
-        return feedbackDAO.addVoteByID(feedbackID, vote);
     }
 
     @Override
