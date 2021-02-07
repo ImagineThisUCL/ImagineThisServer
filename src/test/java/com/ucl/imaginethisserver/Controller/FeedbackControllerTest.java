@@ -39,15 +39,23 @@ class FeedbackControllerTest {
 
     private List<Feedback> mockFeedbackList;
 
-    private String realProjectID = "MgWqYTZMdjG26oA1CxbWaE";
+    private String mockProjectID = "MgWqYTZMdjG26oA1CxbWaE";
+
+    private UUID mockFeedbackID = UUID.fromString("250a8d14-55d9-4cb1-93e2-29cd4ebda98b");
+
+    private UUID mockUserID = UUID.fromString("f2366a7b-c2ca-40d5-939a-2f649411d257");
+
+    private String mockUserName = "John Dow";
+
+    private Feedback mockFeedback= new Feedback(mockFeedbackID,
+            mockProjectID, mockUserID, mockUserName, 1610955210, "Great prototype!");
+
 
 
     @BeforeEach
     void setUp() {
         mockFeedbackList = new ArrayList<>();
-        mockFeedbackList.add(new Feedback(UUID.fromString("250a8d14-55d9-4cb1-93e2-29cd4ebda98b")
-                , "MgWqYTZMdjG26oA1CxbWaE", UUID.fromString("f2366a7b-c2ca-40d5-939a-2f649411d257")
-                , "John Dow", 1610955210, "Great prototype!"));
+        mockFeedbackList.add(mockFeedback);
     }
 
     /*
@@ -56,9 +64,9 @@ class FeedbackControllerTest {
     @Test
     void givenFeedbacks_whenGetAllFeedbacks_thenReturnJsonArray() throws Exception{
 
-        given(service.getAllFeedbacks(realProjectID)).willReturn(mockFeedbackList);
+        given(service.getAllFeedbacks(mockProjectID)).willReturn(mockFeedbackList);
 
-        mockMvc.perform(get("/api/v1/projects/" + realProjectID + "/feedback")
+        mockMvc.perform(get("/api/v1/projects/" + mockProjectID + "/feedback")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -81,15 +89,27 @@ class FeedbackControllerTest {
         UUID feedbackID = UUID.randomUUID();
 
         given(service.getFeedbackByID(projectID, feedbackID)).willThrow(new NotFoundException());
-        given(service.getFeedbackByID(realProjectID, feedbackID)).willThrow(new NotFoundException());
+        given(service.getFeedbackByID(mockProjectID, feedbackID)).willThrow(new NotFoundException());
         // both project id and feedback id are invalid
         mockMvc.perform(get("/api/v1/projects/" + projectID + "/feedback/" + feedbackID)
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound());
         // only feedback id is invalid
-        mockMvc.perform(get("/api/v1/projects/" + realProjectID + "/feedback/" + feedbackID)
+        mockMvc.perform(get("/api/v1/projects/" + mockProjectID + "/feedback/" + feedbackID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void givenValidProjectIDAndFeedbackID_whenGetFeedbackByID_thenReturnSpecificFeedback() throws Exception {
+        given(service.getFeedbackByID(mockProjectID, mockFeedbackID)).willReturn(mockFeedback);
+
+        mockMvc.perform(get("/api/v1/projects/" + mockProjectID + "/feedback/" + mockFeedbackID)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.feedbackID", is(mockFeedbackID.toString())))
+                .andExpect(jsonPath("$.projectID", is(mockProjectID)))
+                .andExpect(jsonPath("$.userID", is(mockUserID.toString())));
     }
 
     @Test

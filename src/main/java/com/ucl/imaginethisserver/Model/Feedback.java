@@ -78,6 +78,14 @@ public class Feedback {
         return text;
     }
 
+    public void setFeedbackID(UUID feedbackID) {
+        this.feedbackID = feedbackID;
+    }
+
+    public void setProjectID(String projectID) {
+        this.projectID = projectID;
+    }
+
     public void setUpvotes(int upvotes) {
         this.upvotes = upvotes;
     }

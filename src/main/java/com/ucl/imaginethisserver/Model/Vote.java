@@ -57,6 +57,10 @@ public class Vote {
 
     public long getTimestamp() { return timestamp; }
 
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public UUID getFeedbackID() {
         return feedbackID;
     }
