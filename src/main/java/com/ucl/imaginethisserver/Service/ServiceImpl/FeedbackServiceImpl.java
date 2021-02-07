@@ -1,11 +1,15 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
-import com.ucl.imaginethisserver.CustomExceptions.*;
 import com.ucl.imaginethisserver.CustomExceptions.InternalError;
+import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
+import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
+import com.ucl.imaginethisserver.CustomExceptions.FeedbackNotFoundException;
+import com.ucl.imaginethisserver.CustomExceptions.UpdateException;
 import com.ucl.imaginethisserver.DAO.FeedbackDAO;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
+import org.apache.ibatis.jdbc.Null;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -57,12 +61,6 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public boolean addNewFeedback(String projectID, Feedback feedback) {
-        // check if feedback-id exist
-        if (feedback.getFeedbackID() == null) {
-            UUID uuid = UUID.randomUUID();
-            logger.info("Generating random feedback ID " + uuid.toString());
-            feedback.setFeedbackID(uuid);
-        }
         boolean success = feedbackDAO.addNewFeedback(projectID, feedback);
         if(success){
             return success;
@@ -100,6 +98,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             // throw new runtime exception to make Spring return 500 error
             throw new InternalError();
         }
+        return feedbackDAO.addVoteByID(feedbackID, vote);
     }
 
     @Override
@@ -121,6 +120,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             throw new InternalError();
         }
     }
+
 
     private boolean projectExist(String projectID) {
         if (projectIDList == null) {
