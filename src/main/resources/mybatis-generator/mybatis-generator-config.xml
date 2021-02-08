@@ -5,9 +5,9 @@
 
 <generatorConfiguration>
     <properties resource="application.properties"/>
-    <classPathEntry location="C:\Users\47629\.m2\repository\org\postgresql\postgresql\42.2.18.jre7\postgresql-42.2.18.jre7.jar" />
-
-    <context id="ImagineThis" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+<!--    <classPathEntry location="C:\Users\47629\.m2\repository\org\postgresql\postgresql\42.2.18.jre7\postgresql-42.2.18.jre7.jar" />-->
+<!--targetRuntime="MyBatis3Simple"-->
+    <context id="ImagineThis" defaultModelType="flat">
         <property name="autoDelimitKeywords" value="true" />
 
         <property name="javaFileEncoding" value="utf-8" />
@@ -17,7 +17,7 @@
         <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
 
         <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
-        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        <plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin" />
 
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
 
@@ -32,7 +32,7 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="com.ucl.imaginethisserver.Entity" targetProject="${mybatis.project}" >
+        <javaModelGenerator targetPackage="com.ucl.imaginethisserver.Model" targetProject="${mybatis.project}" >
             <property name="enableSubPackages" value="false"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -45,24 +45,16 @@
             <property name="enableSubPackages" value="false" />
         </javaClientGenerator>
 
-        <table tableName="feedback" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
-            <property name="feedback_id" value="false"/>
-            <property name="project_id" value="false"/>
-            <property name="user_id" value="false"/>
-            <property name="user_name" value="false"/>
-            <property name="feedback_text" value="false"/>
-            <property name="f_timestamp" value="false"/>
-            <generatedKey column="feedback_id" sqlStatement="Mysql" identity="true" />
-            <domainObjectRenamingRule searchString="^f_" replaceString=""/>
+        <table tableName="projects" domainObjectName="Project">
         </table>
-        <table tableName="votes" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
-            <property name="vote_id" value="false"/>
-            <property name="feedback_id" value="false"/>
-            <property name="user_id" value="false"/>
-            <property name="vote" value="false"/>
-            <property name="v_timestamp" value="false"/>
-            <generatedKey column="vote_id" sqlStatement="Mysql" identity="true" />
-            <domainObjectRenamingRule searchString="^v_" replaceString=""/>
+        <table tableName="users" domainObjectName="User">
+
+        </table>
+        <table tableName="feedbacks" domainObjectName="Feedback">
+            <columnOverride column="f_timestamp" property="timestamp"/>
+        </table>
+        <table tableName="votes" domainObjectName="Vote">
+            <columnOverride column="v_timestamp" property="timestamp"/>
         </table>
     </context>
 </generatorConfiguration>
