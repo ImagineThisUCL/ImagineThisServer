@@ -1,37 +1,86 @@
 package com.ucl.imaginethisserver.Model;
 
-import com.google.gson.annotations.Expose;
-import io.swagger.annotations.ApiModelProperty;
-
-import java.util.UUID;
+import javax.annotation.Generated;
 
 public class Vote {
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.vote_id")
+    private Object voteId;
 
-    @Expose
-    @ApiModelProperty(example = "e348649c-2e03-49f3-a09a-95302510b07a")
-    private final UUID userID;
-    /**
-     * vote can be either up vote or down vote
-     * 1 indicates up vote and -1 indicates down vote
-     */
-    @Expose
-    private int vote;
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.feedback_id")
+    private Object feedbackId;
 
-    public Vote(UUID userID, int vote) {
-        assert vote == -1 || vote == 1 : "value of parameter 'vote' must be -1 or 1";
-        this.userID = userID;
-        this.vote = vote;
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.user_id")
+    private Object userId;
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.vote")
+    private Integer vote;
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.v_timestamp")
+    private Long timestamp;
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.vote_id")
+    public Object getVoteId() {
+        return voteId;
     }
 
-    public UUID getUserID() {
-        return userID;
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.vote_id")
+    public void setVoteId(Object voteId) {
+        this.voteId = voteId;
     }
 
-    public int getVote() {
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.feedback_id")
+    public Object getFeedbackId() {
+        return feedbackId;
+    }
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.feedback_id")
+    public void setFeedbackId(Object feedbackId) {
+        this.feedbackId = feedbackId;
+    }
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.user_id")
+    public Object getUserId() {
+        return userId;
+    }
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.user_id")
+    public void setUserId(Object userId) {
+        this.userId = userId;
+    }
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.vote")
+    public Integer getVote() {
         return vote;
     }
 
-    public void setVote(int vote) {
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.vote")
+    public void setVote(Integer vote) {
         this.vote = vote;
+    }
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.v_timestamp")
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.v_timestamp")
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    @Override
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source Table: votes")
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", voteId=").append(voteId);
+        sb.append(", feedbackId=").append(feedbackId);
+        sb.append(", userId=").append(userId);
+        sb.append(", vote=").append(vote);
+        sb.append(", timestamp=").append(timestamp);
+        sb.append("]");
+        return sb.toString();
     }
 }

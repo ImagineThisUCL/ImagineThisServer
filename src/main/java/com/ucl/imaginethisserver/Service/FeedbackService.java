@@ -1,7 +1,8 @@
 package com.ucl.imaginethisserver.Service;
 
-import com.ucl.imaginethisserver.Entity.Feedback;
+import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
+import org.apache.ibatis.javassist.NotFoundException;
 
 import java.util.List;
 import java.util.UUID;

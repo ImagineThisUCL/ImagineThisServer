@@ -1,9 +1,12 @@
 package com.ucl.imaginethisserver.Controller;
 
 import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
-import com.ucl.imaginethisserver.Entity.Feedback;
+import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
+import org.apache.ibatis.javassist.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import java.util.*;
 public class FeedbackController {
     private final FeedbackService feedbackService;
 
+    Logger logger = LoggerFactory.getLogger(FeedbackController.class);
     @Autowired
     public FeedbackController(FeedbackService feedbackService) {
         this.feedbackService = feedbackService;
