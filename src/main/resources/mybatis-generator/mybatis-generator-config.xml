@@ -46,14 +46,25 @@
         </javaClientGenerator>
 
         <table tableName="projects" domainObjectName="Project">
-        </table>
-        <table tableName="users" domainObjectName="User">
 
         </table>
+        <table tableName="users" domainObjectName="User">
+            <columnOverride column="user_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
+        </table>
         <table tableName="feedbacks" domainObjectName="Feedback">
+            <columnOverride column="feedback_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
+            <columnOverride column="user_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
+
             <columnOverride column="f_timestamp" property="timestamp"/>
         </table>
         <table tableName="votes" domainObjectName="Vote">
+            <columnOverride column="vote_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
+            <columnOverride column="feedback_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
             <columnOverride column="v_timestamp" property="timestamp"/>
         </table>
     </context>
