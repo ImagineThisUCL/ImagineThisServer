@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
+import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.DAO.FeedbackDao;
 import com.ucl.imaginethisserver.DAO.FeedbackDto;
@@ -15,6 +16,8 @@ import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.dynamic.sql.render.RenderingStrategy;
 import org.mybatis.dynamic.sql.render.TableAliasCalculator;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
+    private final Logger logger = LoggerFactory.getLogger(FeedbackServiceImpl.class);
 
     private final FeedbackMapper feedbackMapper;
 
@@ -71,23 +75,6 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public List<FeedbackDto> getFeedbacksWithVotes(String projectID) {
-//        SelectStatementProvider provider = (SelectStatementProvider) SqlBuilder
-//                .select(
-//                        FeedbackDynamicSqlSupport.feedbackId,
-//                        FeedbackDynamicSqlSupport.projectId,
-//                        FeedbackDynamicSqlSupport.userId,
-//                        new UpvoteCount().as("upvotes"),
-//                        FeedbackDynamicSqlSupport.userName,
-//                        FeedbackDynamicSqlSupport.timestamp,
-//                        FeedbackDynamicSqlSupport.text
-//                )
-//                .from(FeedbackDynamicSqlSupport.feedback)
-//                .leftJoin(VoteDynamicSqlSupport.vote)
-//                .on(FeedbackDynamicSqlSupport.feedbackId, equalTo(VoteDynamicSqlSupport.feedbackId))
-//                .where(FeedbackDynamicSqlSupport.projectId, isEqualToWhenPresent(projectID))
-//                .groupBy(FeedbackDynamicSqlSupport.feedbackId)
-//                .build()
-//                .render(RenderingStrategy.MYBATIS3);
         return feedbackDao.getAllFeedbacksWithVotes(projectID);
     }
 
@@ -107,11 +94,22 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public boolean addNewFeedback(String projectID, Feedback feedback) {
-        return false;
+        feedback.setProjectId(projectID);
+        int result = feedbackMapper.insert(feedback);
+        if (result != 0) {
+            return true;
+        } else {
+            logger.error("Error adding new feedback!");
+            throw new InternalServerErrorException();
+        }
     }
 
     @Override
     public boolean voteFeedback(String projectID, UUID feedbackID, Vote vote) {
+        if (vote.getVoteValue() != 1 && vote.getVoteValue() != -1) {
+            logger.error("Vote value can only be 1 or -1");
+            throw new InternalServerErrorException();
+        }
         return false;
     }
 }

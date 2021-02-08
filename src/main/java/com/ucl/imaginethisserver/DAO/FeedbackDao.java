@@ -25,7 +25,6 @@ public interface FeedbackDao {
             @Result(column="user_id", property="userId", typeHandler=UUIDTypeHandler.class, jdbcType=JdbcType.OTHER),
             @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
             @Result(column="feedback_text", property="text", jdbcType=JdbcType.VARCHAR),
-            @Result(column="upvotes", property="upvotes", jdbcType=JdbcType.INTEGER),
             @Result(column="f_timestamp", property="timestamp", jdbcType=JdbcType.BIGINT)
     })
     List<FeedbackDto> getAllFeedbacksWithVotes(@Param("projectID") String projectID);
