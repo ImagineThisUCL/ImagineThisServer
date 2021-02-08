@@ -71,9 +71,20 @@ public class FeedbackServiceImpl implements FeedbackService {
     public UUID voteFeedback(UUID feedbackID, Vote vote) {
         UUID uuid = UUID.randomUUID();
         // check vote value
+
         if (vote.getVote() != 1 && vote.getVote() != -1) {
-            logger.error("Invalid request: the value of vote can only be 1 or -1");
-            throw new BadRequestException();
+            if (vote.getVote() == 0) {
+                logger.info("Attempting to delete vote...");
+                if (vote.getVoteID() == null) {
+                    logger.error("Vote ID noy provided!");
+                    throw new InternalError();
+                }
+                deleteVote(vote.getVoteID());
+                return null;
+            } else {
+                logger.error("Invalid request: the value of vote can only be 1 or -1");
+                throw new BadRequestException();
+            }
         }
         // auto generating timestamp and vite ID if not provided
         if (vote.getVoteID() == null) {
@@ -87,7 +98,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             vote.setTimestamp(System.currentTimeMillis());
         }
         try {
-            feedbackDAO.addVoteByID(feedbackID, vote);
+            feedbackDAO.voteFeedback(feedbackID, vote);
             return uuid;
         } catch (Exception e) {
             // log out error message
