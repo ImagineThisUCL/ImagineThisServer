@@ -16,8 +16,8 @@ public interface FeedbackDAO {
      * @return a list of feedbacks
      */
     @Select("SELECT f.feedback_id, project_id, f.user_id,\n" +
-            "SUM(case when v.vote >= 0 then v.vote end) upvotes,\n" +
-            "SUM(case when v.vote < 0 then v.vote end) downvotes, user_name, f_timestamp, feedback_text\n" +
+            "COUNT(case when v.vote > 0 then v.vote end) upvotes,\n" +
+            "COUNT(case when v.vote < 0 then v.vote end) downvotes, user_name, f_timestamp, feedback_text\n" +
             "FROM feedbacks f\n" +
             "LEFT JOIN votes v on f.feedback_id = v.feedback_id\n" +
             "WHERE project_id = #{projectID}\n" +
@@ -105,5 +105,11 @@ public interface FeedbackDAO {
      */
     @Update("UPDATE votes SET vote = #{value} WHERE vote_id = #{voteID}")
     boolean updateVoteByID(@Param(value = "voteID") UUID voteID, @Param(value = "value") int value);
+
+    @Insert("INSERT INTO votes (vote_id, feedback_id, user_id, vote, v_timestamp) " +
+            "VALUES (#{vote.voteID}, #{feedbackID}, #{vote.userID}, #{vote.vote}, #{vote.timestamp}) " +
+            "ON CONFLICT (vote_id) DO " +
+            "UPDATE SET vote = #{vote.vote} WHERE votes.vote_id = #{vote.voteID}")
+    boolean voteFeedback(UUID feedbackID, Vote vote);
 
 }
