@@ -88,6 +88,7 @@ public interface FeedbackDAO {
     @Select("SELECT * FROM votes WHERE user_id = #{userID}")
     @ResultMap(value = "voteResultMap")
     List<Vote> getVotesByUserID(@Param(value = "userID") UUID userID);
+
     /**
      * This method deletes vote for a given project, feedback and user
      * @param voteID of the vote
@@ -95,5 +96,14 @@ public interface FeedbackDAO {
      */
     @Delete("DELETE FROM votes WHERE vote_id = #{voteID}")
     boolean deleteVoteByID(@Param(value = "voteID") UUID voteID);
+
+    /**
+     * This method updates vote for a feedback and value
+     * @param voteID of the vote
+     * @param value of the vote
+     * @return bool value which indicates the operation status
+     */
+    @Update("UPDATE votes SET vote = #{value} WHERE vote_id = #{voteID}")
+    boolean updateVoteByID(@Param(value = "voteID") UUID voteID, @Param(value = "value") int value);
 
 }

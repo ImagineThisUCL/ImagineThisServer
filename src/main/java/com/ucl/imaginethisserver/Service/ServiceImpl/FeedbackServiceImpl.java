@@ -117,6 +117,17 @@ public class FeedbackServiceImpl implements FeedbackService {
         }
     }
 
+    @Override
+    public boolean updateVote(UUID voteID, int value) {
+        try {
+            return feedbackDAO.updateVoteByID(voteID, value);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new InternalError();
+        }
+    }
+
+
 
     private boolean projectExist(String projectID) {
         if (projectIDList == null) {

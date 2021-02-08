@@ -48,4 +48,6 @@ public interface FeedbackService {
     List<Vote> getVotesByUserID(UUID userID);
 
     boolean deleteVote(UUID voteID);
+
+    boolean updateVote(UUID voteID, int value);
 }
