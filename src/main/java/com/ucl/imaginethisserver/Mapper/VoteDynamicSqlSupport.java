@@ -18,6 +18,9 @@ public final class VoteDynamicSqlSupport {
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.user_id")
     public static final SqlColumn<Object> userId = vote.userId;
 
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.vote")
+    public static final SqlColumn<Integer> voteValue = vote.voteValue;
+
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.v_timestamp")
     public static final SqlColumn<Long> timestamp = vote.timestamp;
 
@@ -29,7 +32,7 @@ public final class VoteDynamicSqlSupport {
 
         public final SqlColumn<Object> userId = column("user_id", JDBCType.OTHER);
 
-        public final SqlColumn<Integer> vote = column("vote", JDBCType.INTEGER);
+        public final SqlColumn<Integer> voteValue = column("vote", JDBCType.INTEGER);
 
         public final SqlColumn<Long> timestamp = column("v_timestamp", JDBCType.BIGINT);
 

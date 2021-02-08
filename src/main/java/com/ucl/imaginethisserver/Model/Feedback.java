@@ -16,7 +16,7 @@ public class Feedback {
     private String userName;
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.feedback_text")
-    private String feedbackText;
+    private String text;
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.f_timestamp")
     private Long timestamp;
@@ -62,13 +62,13 @@ public class Feedback {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.feedback_text")
-    public String getFeedbackText() {
-        return feedbackText;
+    public String getText() {
+        return text;
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.feedback_text")
-    public void setFeedbackText(String feedbackText) {
-        this.feedbackText = feedbackText == null ? null : feedbackText.trim();
+    public void setText(String text) {
+        this.text = text == null ? null : text.trim();
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.f_timestamp")
@@ -92,7 +92,7 @@ public class Feedback {
         sb.append(", projectId=").append(projectId);
         sb.append(", userId=").append(userId);
         sb.append(", userName=").append(userName);
-        sb.append(", feedbackText=").append(feedbackText);
+        sb.append(", text=").append(text);
         sb.append(", timestamp=").append(timestamp);
         sb.append("]");
         return sb.toString();

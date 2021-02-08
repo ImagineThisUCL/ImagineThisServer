@@ -1,11 +1,16 @@
 package com.ucl.imaginethisserver.Controller;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ucl.imaginethisserver.Model.Project;
 import com.ucl.imaginethisserver.Service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -19,8 +24,14 @@ public class ProjectController {
     }
 
     @GetMapping("/projects")
-    @ResponseBody
     public List<Project> getAllProjects() {
         return projectService.getAllProjects();
+    }
+
+    @GetMapping("/projects/{project-id}")
+    public ResponseEntity<Map<String, String>> getProjectNameByID(@PathVariable("project-id") String projectID) {
+        Map<String, String> m = new HashMap<>();
+        m.put("projectName", projectService.getProjectNameByID(projectID));
+        return ResponseEntity.ok(m);
     }
 }

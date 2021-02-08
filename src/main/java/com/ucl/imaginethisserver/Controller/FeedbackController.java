@@ -1,6 +1,7 @@
 package com.ucl.imaginethisserver.Controller;
 
 import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
+import com.ucl.imaginethisserver.DAO.FeedbackDto;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
@@ -29,6 +30,12 @@ public class FeedbackController {
     @GetMapping("/projects/{project-id}/feedback")
     public ResponseEntity<List<Feedback>> getAllFeedbacks(@PathVariable("project-id") String projectID) {
         List<Feedback> feedbacks = feedbackService.getAllFeedbacks(projectID);
+        return ResponseEntity.ok(feedbacks);
+    }
+
+    @GetMapping("/projects/{project-id}/feedback-detail")
+    public ResponseEntity<List<FeedbackDto>> getFeedbacksWithVotes(@PathVariable("project-id") String projectID) {
+        List<FeedbackDto> feedbacks = feedbackService.getFeedbacksWithVotes(projectID);
         return ResponseEntity.ok(feedbacks);
     }
 

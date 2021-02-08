@@ -13,7 +13,7 @@ public class Vote {
     private Object userId;
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.vote")
-    private Integer vote;
+    private Integer voteValue;
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.v_timestamp")
     private Long timestamp;
@@ -49,13 +49,13 @@ public class Vote {
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.vote")
-    public Integer getVote() {
-        return vote;
+    public Integer getVoteValue() {
+        return voteValue;
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.vote")
-    public void setVote(Integer vote) {
-        this.vote = vote;
+    public void setVoteValue(Integer voteValue) {
+        this.voteValue = voteValue;
     }
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: votes.v_timestamp")
@@ -78,7 +78,7 @@ public class Vote {
         sb.append(", voteId=").append(voteId);
         sb.append(", feedbackId=").append(feedbackId);
         sb.append(", userId=").append(userId);
-        sb.append(", vote=").append(vote);
+        sb.append(", voteValue=").append(voteValue);
         sb.append(", timestamp=").append(timestamp);
         sb.append("]");
         return sb.toString();

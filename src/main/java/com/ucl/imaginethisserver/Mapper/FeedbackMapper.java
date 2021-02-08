@@ -32,13 +32,11 @@ import org.mybatis.dynamic.sql.update.UpdateModel;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
 import org.mybatis.dynamic.sql.util.mybatis3.MyBatis3Utils;
-import org.springframework.stereotype.Repository;
 
-@Repository
 @Mapper
 public interface FeedbackMapper {
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source Table: feedbacks")
-    BasicColumn[] selectList = BasicColumn.columnList(feedbackId, projectId, userId, userName, feedbackText, timestamp);
+    BasicColumn[] selectList = BasicColumn.columnList(feedbackId, projectId, userId, userName, text, timestamp);
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source Table: feedbacks")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
@@ -68,7 +66,7 @@ public interface FeedbackMapper {
         @Result(column="project_id", property="projectId", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_id", property="userId", typeHandler=UUIDTypeHandler.class, jdbcType=JdbcType.OTHER),
         @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
-        @Result(column="feedback_text", property="feedbackText", jdbcType=JdbcType.VARCHAR),
+        @Result(column="feedback_text", property="text", jdbcType=JdbcType.VARCHAR),
         @Result(column="f_timestamp", property="timestamp", jdbcType=JdbcType.BIGINT)
     })
     List<Feedback> selectMany(SelectStatementProvider selectStatement);
@@ -101,7 +99,7 @@ public interface FeedbackMapper {
             .map(projectId).toProperty("projectId")
             .map(userId).toProperty("userId")
             .map(userName).toProperty("userName")
-            .map(feedbackText).toProperty("feedbackText")
+            .map(text).toProperty("text")
             .map(timestamp).toProperty("timestamp")
         );
     }
@@ -113,7 +111,7 @@ public interface FeedbackMapper {
             .map(projectId).toProperty("projectId")
             .map(userId).toProperty("userId")
             .map(userName).toProperty("userName")
-            .map(feedbackText).toProperty("feedbackText")
+            .map(text).toProperty("text")
             .map(timestamp).toProperty("timestamp")
         );
     }
@@ -125,7 +123,7 @@ public interface FeedbackMapper {
             .map(projectId).toPropertyWhenPresent("projectId", record::getProjectId)
             .map(userId).toPropertyWhenPresent("userId", record::getUserId)
             .map(userName).toPropertyWhenPresent("userName", record::getUserName)
-            .map(feedbackText).toPropertyWhenPresent("feedbackText", record::getFeedbackText)
+            .map(text).toPropertyWhenPresent("text", record::getText)
             .map(timestamp).toPropertyWhenPresent("timestamp", record::getTimestamp)
         );
     }
@@ -163,7 +161,7 @@ public interface FeedbackMapper {
                 .set(projectId).equalTo(record::getProjectId)
                 .set(userId).equalTo(record::getUserId)
                 .set(userName).equalTo(record::getUserName)
-                .set(feedbackText).equalTo(record::getFeedbackText)
+                .set(text).equalTo(record::getText)
                 .set(timestamp).equalTo(record::getTimestamp);
     }
 
@@ -173,7 +171,7 @@ public interface FeedbackMapper {
                 .set(projectId).equalToWhenPresent(record::getProjectId)
                 .set(userId).equalToWhenPresent(record::getUserId)
                 .set(userName).equalToWhenPresent(record::getUserName)
-                .set(feedbackText).equalToWhenPresent(record::getFeedbackText)
+                .set(text).equalToWhenPresent(record::getText)
                 .set(timestamp).equalToWhenPresent(record::getTimestamp);
     }
 
@@ -183,7 +181,7 @@ public interface FeedbackMapper {
             c.set(projectId).equalTo(record::getProjectId)
             .set(userId).equalTo(record::getUserId)
             .set(userName).equalTo(record::getUserName)
-            .set(feedbackText).equalTo(record::getFeedbackText)
+            .set(text).equalTo(record::getText)
             .set(timestamp).equalTo(record::getTimestamp)
             .where(feedbackId, isEqualTo(record::getFeedbackId))
         );
@@ -195,7 +193,7 @@ public interface FeedbackMapper {
             c.set(projectId).equalToWhenPresent(record::getProjectId)
             .set(userId).equalToWhenPresent(record::getUserId)
             .set(userName).equalToWhenPresent(record::getUserName)
-            .set(feedbackText).equalToWhenPresent(record::getFeedbackText)
+            .set(text).equalToWhenPresent(record::getText)
             .set(timestamp).equalToWhenPresent(record::getTimestamp)
             .where(feedbackId, isEqualTo(record::getFeedbackId))
         );

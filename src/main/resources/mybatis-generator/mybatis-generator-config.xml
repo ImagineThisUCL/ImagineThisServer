@@ -5,9 +5,9 @@
 
 <generatorConfiguration>
     <properties resource="application.properties"/>
-<!--    <classPathEntry location="C:\Users\47629\.m2\repository\org\postgresql\postgresql\42.2.18.jre7\postgresql-42.2.18.jre7.jar" />-->
+    <classPathEntry location="C:\Users\47629\.m2\repository\org\postgresql\postgresql\42.2.18.jre7\postgresql-42.2.18.jre7.jar" />
 <!--targetRuntime="MyBatis3Simple"-->
-    <context id="ImagineThis" defaultModelType="flat">
+    <context id="ImagineThis">
         <property name="autoDelimitKeywords" value="true" />
 
         <property name="javaFileEncoding" value="utf-8" />
@@ -52,13 +52,14 @@
             <columnOverride column="user_id"
                             typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
         </table>
-        <table tableName="feedbacks" domainObjectName="Feedback">
+        <table tableName="feedbacks" domainObjectName="Feedback" enableSelectByExample="true">
             <columnOverride column="feedback_id"
                             typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
             <columnOverride column="user_id"
                             typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
 
             <columnOverride column="f_timestamp" property="timestamp"/>
+            <columnOverride column="feedback_text" property="text"/>
         </table>
         <table tableName="votes" domainObjectName="Vote">
             <columnOverride column="vote_id"
@@ -66,6 +67,7 @@
             <columnOverride column="feedback_id"
                             typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
             <columnOverride column="v_timestamp" property="timestamp"/>
+            <columnOverride column="vote" property="voteValue"/>
         </table>
     </context>
 </generatorConfiguration>

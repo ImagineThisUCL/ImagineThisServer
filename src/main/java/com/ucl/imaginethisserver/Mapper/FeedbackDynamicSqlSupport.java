@@ -22,7 +22,7 @@ public final class FeedbackDynamicSqlSupport {
     public static final SqlColumn<String> userName = feedback.userName;
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.feedback_text")
-    public static final SqlColumn<String> feedbackText = feedback.feedbackText;
+    public static final SqlColumn<String> text = feedback.text;
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.f_timestamp")
     public static final SqlColumn<Long> timestamp = feedback.timestamp;
@@ -37,7 +37,7 @@ public final class FeedbackDynamicSqlSupport {
 
         public final SqlColumn<String> userName = column("user_name", JDBCType.VARCHAR);
 
-        public final SqlColumn<String> feedbackText = column("feedback_text", JDBCType.VARCHAR);
+        public final SqlColumn<String> text = column("feedback_text", JDBCType.VARCHAR);
 
         public final SqlColumn<Long> timestamp = column("f_timestamp", JDBCType.BIGINT);
 

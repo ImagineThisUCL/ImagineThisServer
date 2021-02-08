@@ -36,7 +36,7 @@ import org.mybatis.dynamic.sql.util.mybatis3.MyBatis3Utils;
 @Mapper
 public interface VoteMapper {
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source Table: votes")
-    BasicColumn[] selectList = BasicColumn.columnList(voteId, feedbackId, userId, vote.vote, timestamp);
+    BasicColumn[] selectList = BasicColumn.columnList(voteId, feedbackId, userId, voteValue, timestamp);
 
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source Table: votes")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
@@ -65,7 +65,7 @@ public interface VoteMapper {
         @Result(column="vote_id", property="voteId", typeHandler=UUIDTypeHandler.class, jdbcType=JdbcType.OTHER, id=true),
         @Result(column="feedback_id", property="feedbackId", typeHandler=UUIDTypeHandler.class, jdbcType=JdbcType.OTHER),
         @Result(column="user_id", property="userId", jdbcType=JdbcType.OTHER),
-        @Result(column="vote", property="vote", jdbcType=JdbcType.INTEGER),
+        @Result(column="vote", property="voteValue", jdbcType=JdbcType.INTEGER),
         @Result(column="v_timestamp", property="timestamp", jdbcType=JdbcType.BIGINT)
     })
     List<Vote> selectMany(SelectStatementProvider selectStatement);
@@ -97,7 +97,7 @@ public interface VoteMapper {
             c.map(voteId).toProperty("voteId")
             .map(feedbackId).toProperty("feedbackId")
             .map(userId).toProperty("userId")
-            .map(vote.vote).toProperty("vote")
+            .map(voteValue).toProperty("voteValue")
             .map(timestamp).toProperty("timestamp")
         );
     }
@@ -108,7 +108,7 @@ public interface VoteMapper {
             c.map(voteId).toProperty("voteId")
             .map(feedbackId).toProperty("feedbackId")
             .map(userId).toProperty("userId")
-            .map(vote.vote).toProperty("vote")
+            .map(voteValue).toProperty("voteValue")
             .map(timestamp).toProperty("timestamp")
         );
     }
@@ -119,7 +119,7 @@ public interface VoteMapper {
             c.map(voteId).toPropertyWhenPresent("voteId", record::getVoteId)
             .map(feedbackId).toPropertyWhenPresent("feedbackId", record::getFeedbackId)
             .map(userId).toPropertyWhenPresent("userId", record::getUserId)
-            .map(vote.vote).toPropertyWhenPresent("vote", record::getVote)
+            .map(voteValue).toPropertyWhenPresent("voteValue", record::getVoteValue)
             .map(timestamp).toPropertyWhenPresent("timestamp", record::getTimestamp)
         );
     }
@@ -156,7 +156,7 @@ public interface VoteMapper {
         return dsl.set(voteId).equalTo(record::getVoteId)
                 .set(feedbackId).equalTo(record::getFeedbackId)
                 .set(userId).equalTo(record::getUserId)
-                .set(vote.vote).equalTo(record::getVote)
+                .set(voteValue).equalTo(record::getVoteValue)
                 .set(timestamp).equalTo(record::getTimestamp);
     }
 
@@ -165,7 +165,7 @@ public interface VoteMapper {
         return dsl.set(voteId).equalToWhenPresent(record::getVoteId)
                 .set(feedbackId).equalToWhenPresent(record::getFeedbackId)
                 .set(userId).equalToWhenPresent(record::getUserId)
-                .set(vote.vote).equalToWhenPresent(record::getVote)
+                .set(voteValue).equalToWhenPresent(record::getVoteValue)
                 .set(timestamp).equalToWhenPresent(record::getTimestamp);
     }
 
@@ -174,7 +174,7 @@ public interface VoteMapper {
         return update(c ->
             c.set(feedbackId).equalTo(record::getFeedbackId)
             .set(userId).equalTo(record::getUserId)
-            .set(vote.vote).equalTo(record::getVote)
+            .set(voteValue).equalTo(record::getVoteValue)
             .set(timestamp).equalTo(record::getTimestamp)
             .where(voteId, isEqualTo(record::getVoteId))
         );
@@ -185,7 +185,7 @@ public interface VoteMapper {
         return update(c ->
             c.set(feedbackId).equalToWhenPresent(record::getFeedbackId)
             .set(userId).equalToWhenPresent(record::getUserId)
-            .set(vote.vote).equalToWhenPresent(record::getVote)
+            .set(voteValue).equalToWhenPresent(record::getVoteValue)
             .set(timestamp).equalToWhenPresent(record::getTimestamp)
             .where(voteId, isEqualTo(record::getVoteId))
         );

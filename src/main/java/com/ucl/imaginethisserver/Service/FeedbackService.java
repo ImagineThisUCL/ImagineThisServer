@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.Service;
 
+import com.ucl.imaginethisserver.DAO.FeedbackDto;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
 import org.apache.ibatis.javassist.NotFoundException;
@@ -15,6 +16,8 @@ public interface FeedbackService {
      * @return a list of feedbacks
      */
     List<Feedback> getAllFeedbacks(String projectID);
+
+    List<FeedbackDto> getFeedbacksWithVotes(String projectID);
 
     /**
      * This method get a specific feedback for a given project
