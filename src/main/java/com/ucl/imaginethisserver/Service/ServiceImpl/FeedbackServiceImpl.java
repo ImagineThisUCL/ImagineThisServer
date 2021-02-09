@@ -9,7 +9,6 @@ import com.ucl.imaginethisserver.Mapper.VoteDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Mapper.FeedbackMapper;
-import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
 
 import org.slf4j.Logger;
@@ -67,20 +66,72 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public boolean addNewFeedback(String projectID, Feedback feedback) {
-        if (feedback.getProjectId() == null) {
-            feedback.setProjectId(projectID);
+        // create new feedback object
+        Feedback newFeedback = new Feedback();
+        if (projectID != null) {
+            newFeedback.setProjectId(projectID);
         }
         if (feedback.getFeedbackId() == null) {
             UUID uuid = UUID.randomUUID();
             logger.info("Generating new UUID for feedback: " + uuid);
-            feedback.setFeedbackId(uuid);
+            newFeedback.setFeedbackId(uuid);
         }
-        int result = feedbackMapper.insert(feedback);
+        if (feedback.getTimestamp() == null) {
+            logger.info("Generating new timestamp");
+            newFeedback.setTimestamp(System.currentTimeMillis());
+        }
+        // get payload from request body
+        newFeedback.setUserId(UUID.fromString(feedback.getUserId().toString()));
+        newFeedback.setUserName(feedback.getUserName());
+        newFeedback.setText(feedback.getText());
+        int result = feedbackMapper.insert(newFeedback);
         if (result != 0) {
             return true;
         } else {
             logger.error("Error adding new feedback!");
             throw new InternalServerErrorException();
+        }
+    }
+
+    @Override
+    public boolean updateFeedback(String projectID, UUID feedbackID, Feedback feedback) {
+        if (feedback.getText().equals("")) {
+            logger.error("Error Updating feedback: " + feedbackID + ", feedback text not provided");
+            throw new InternalServerErrorException();
+        }
+        int result = feedbackMapper.update(c -> c
+                .set(FeedbackDynamicSqlSupport.text).equalTo(feedback.getText())
+                .set(FeedbackDynamicSqlSupport.timestamp).equalTo(System.currentTimeMillis())
+                .where(FeedbackDynamicSqlSupport.feedbackId, isEqualTo(feedbackID))
+                .and(FeedbackDynamicSqlSupport.projectId, isEqualTo(projectID))
+        );
+        if (result == 1) {
+            return true;
+        } else {
+            logger.warn("Update feedback failed.");
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteFeedback(String projectID, UUID feedbackID) {
+        // check if feedback ID provided
+        if (feedbackID == null) {
+            logger.error("Error Deleting feedback: feedback ID not provided");
+            throw new InternalServerErrorException();
+        }
+        // first delete associated votes
+        int voteDeletion = voteMapper.delete(c -> c
+                .where(VoteDynamicSqlSupport.feedbackId, isEqualTo(feedbackID))
+        );
+        // then delete feedback
+        int feedbackDeletion = feedbackMapper.deleteByPrimaryKey(feedbackID);
+        if (feedbackDeletion == 1) {
+            return true;
+        } else {
+            logger.warn("Delete feedback failed. vote deletion: " + voteDeletion +
+                    ", feedback deletion: " + feedbackDeletion);
+            return false;
         }
     }
 }

@@ -36,4 +36,8 @@ public interface FeedbackService {
      * @return bool value which indicates the operation status
      */
     boolean addNewFeedback(String projectID, Feedback feedback);
+
+    boolean updateFeedback(String projectID, UUID feedbackID, Feedback feedback);
+
+    boolean deleteFeedback(String projectID, UUID feedbackID);
 }

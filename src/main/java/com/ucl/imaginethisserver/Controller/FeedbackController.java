@@ -30,16 +30,35 @@ public class FeedbackController {
     @GetMapping("/projects/{project-id}/feedback")
     @ResponseBody
     public List<FeedbackDto> getFeedbacksWithVotes(@PathVariable("project-id") String projectID) {
-        List<FeedbackDto> feedbacks = feedbackService.getFeedbacksWithVotes(projectID);
-        return feedbacks;
+        return feedbackService.getFeedbacksWithVotes(projectID);
     }
 
     @GetMapping("/projects/{project-id}/feedback/{feedback-id}")
     @ResponseBody
     public Feedback getFeedbackByID(@PathVariable("project-id") String projectID,
-                                                    @PathVariable("feedback-id") UUID feedbackID) {
-        Feedback feedback = feedbackService.getFeedbackByID(projectID, feedbackID);
-        return feedback;
+                                    @PathVariable("feedback-id") UUID feedbackID) {
+        return feedbackService.getFeedbackByID(projectID, feedbackID);
+    }
+
+    @PatchMapping("/projects/{project-id}/feedback/{feedback-id}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Boolean>> updateFeedback(@PathVariable("project-id") String projectID,
+                                                               @PathVariable("feedback-id") UUID feedbackID,
+                                                               @RequestBody Feedback feedback) {
+        boolean result = feedbackService.updateFeedback(projectID, feedbackID, feedback);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("success", result);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/projects/{project-id}/feedback/{feedback-id}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Boolean>> deleteFeedback(@PathVariable("project-id") String projectID,
+                                                               @PathVariable("feedback-id") UUID feedbackID) {
+        boolean result = feedbackService.deleteFeedback(projectID, feedbackID);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("success", result);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/projects/{project-id}/feedback")

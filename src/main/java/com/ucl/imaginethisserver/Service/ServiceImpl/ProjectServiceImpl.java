@@ -23,7 +23,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectMapper projectMapper;
 
-    private Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
     @Autowired
     public ProjectServiceImpl(ProjectMapper projectMapper) {
@@ -34,8 +34,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> getAllProjects() {
         // select all projects and return as project list
-//        SelectStatementProvider provider = SqlBuilder.select(ProjectMapper.selectList)
-//                .from(ProjectDynamicSqlSupport.project)
         return projectMapper.select(c -> c);
     }
 

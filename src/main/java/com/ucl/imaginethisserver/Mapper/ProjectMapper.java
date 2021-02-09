@@ -31,8 +31,10 @@ import org.mybatis.dynamic.sql.update.UpdateModel;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
 import org.mybatis.dynamic.sql.util.mybatis3.MyBatis3Utils;
+import org.springframework.stereotype.Repository;
 
 @Mapper
+@Repository
 public interface ProjectMapper {
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source Table: projects")
     BasicColumn[] selectList = BasicColumn.columnList(projectId, projectName);
