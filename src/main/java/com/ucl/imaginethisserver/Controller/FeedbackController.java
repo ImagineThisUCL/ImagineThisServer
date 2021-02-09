@@ -53,7 +53,7 @@ public class FeedbackController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/feedbacks/{feedback-id}/vote/{vote-id}")
+    @DeleteMapping("/vote/{vote-id}")
     public ResponseEntity<Map<String, Boolean>> DeleteVote(@PathVariable("vote-id") UUID voteID) {
         Boolean result = feedbackService.deleteVote(voteID);
         Map<String, Boolean> response = new HashMap<>();
@@ -61,18 +61,18 @@ public class FeedbackController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/feedbacks/{feedback-id}/vote/{vote-id}/value/{value}")
-    public ResponseEntity<Map<String, Boolean>> UpdateVote(@PathVariable("vote-id") UUID voteID,
-                                                           @PathVariable("value") int value) {
-        Boolean result = feedbackService.updateVote(voteID, value);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("success", result);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @PutMapping("/vote/{vote-id}/value/{value}")
+//    public ResponseEntity<Map<String, Boolean>> UpdateVote(@PathVariable("vote-id") UUID voteID,
+//                                                           @PathVariable("value") int value) {
+//        Boolean result = feedbackService.updateVote(voteID, value);
+//        Map<String, Boolean> response = new HashMap<>();
+//        response.put("success", result);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
-    @GetMapping("/users/{user-id}/votes")
+    @GetMapping("/feedback/{feedback-id}/votes")
     @ResponseBody
-    public List<Vote> getVotesByUserID(@PathVariable("user-id") UUID userID) {
-        return feedbackService.getVotesByUserID(userID);
+    public List<Vote> getVotesByID(@PathVariable("feedback-id") UUID feedbackID) {
+        return feedbackService.getVotesByID(feedbackID);
     }
 }

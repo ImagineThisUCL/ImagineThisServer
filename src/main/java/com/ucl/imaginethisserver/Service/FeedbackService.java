@@ -41,13 +41,12 @@ public interface FeedbackService {
     UUID voteFeedback(UUID feedbackID, Vote vote);
 
     /**
-     * This method will query all votes that the user votes on
-     * @param userID ID of the user
+     * This method will query all votes that on a specific feedback
+     * @param feedbackID ID of the feedback
      * @return A list contains all votes that the given user made
      */
-    List<Vote> getVotesByUserID(UUID userID);
+    List<Vote> getVotesByID(UUID feedbackID);
 
     boolean deleteVote(UUID voteID);
 
-    boolean updateVote(UUID voteID, int value);
 }

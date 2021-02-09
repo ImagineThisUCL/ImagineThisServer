@@ -85,9 +85,9 @@ public interface FeedbackDAO {
     })
     Vote getVoteByFeedbackandUser(UUID feedbackID, UUID userID);
 
-    @Select("SELECT * FROM votes WHERE user_id = #{userID}")
+    @Select("SELECT * FROM votes WHERE feedback_id = #{feedbackID}")
     @ResultMap(value = "voteResultMap")
-    List<Vote> getVotesByUserID(@Param(value = "userID") UUID userID);
+    List<Vote> getVotesByID(@Param(value = "feedbackID") UUID feedbackID);
 
     /**
      * This method deletes vote for a given project, feedback and user
@@ -97,14 +97,14 @@ public interface FeedbackDAO {
     @Delete("DELETE FROM votes WHERE vote_id = #{voteID}")
     boolean deleteVoteByID(@Param(value = "voteID") UUID voteID);
 
-    /**
-     * This method updates vote for a feedback and value
-     * @param voteID of the vote
-     * @param value of the vote
-     * @return bool value which indicates the operation status
-     */
-    @Update("UPDATE votes SET vote = #{value} WHERE vote_id = #{voteID}")
-    boolean updateVoteByID(@Param(value = "voteID") UUID voteID, @Param(value = "value") int value);
+//    /**
+//     * This method updates vote for a feedback and value
+//     * @param voteID of the vote
+//     * @param value of the vote
+//     * @return bool value which indicates the operation status
+//     */
+//    @Update("UPDATE votes SET vote = #{value} WHERE vote_id = #{voteID}")
+//    boolean updateVoteByID(@Param(value = "voteID") UUID voteID, @Param(value = "value") int value);
 
     @Insert("INSERT INTO votes (vote_id, feedback_id, user_id, vote, v_timestamp) " +
             "VALUES (#{vote.voteID}, #{feedbackID}, #{vote.userID}, #{vote.vote}, #{vote.timestamp}) " +

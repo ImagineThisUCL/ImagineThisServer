@@ -2,7 +2,9 @@ package com.ucl.imaginethisserver.Controller;
 
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ucl.imaginethisserver.Model.Feedback;
+import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FeedbackController.class)
@@ -45,11 +47,15 @@ class FeedbackControllerTest {
 
     private UUID mockUserID = UUID.fromString("f2366a7b-c2ca-40d5-939a-2f649411d257");
 
+    private UUID mockVoteID = UUID.fromString("f2366a7b-c2ca-40d5-939a-2f649411d258");
+
     private String mockUserName = "John Dow";
 
-    private Feedback mockFeedback= new Feedback(mockFeedbackID,
+    private Feedback mockFeedback = new Feedback(mockFeedbackID,
             mockProjectID, mockUserID, mockUserName, 1610955210, "Great prototype!");
 
+    private Vote mockVote = new Vote(mockVoteID,
+            mockUserID, mockFeedbackID, 1, 1610955210);
 
 
     @BeforeEach
@@ -113,10 +119,35 @@ class FeedbackControllerTest {
     }
 
     @Test
-    void addNewFeedback() {
+    void addNewFeedback() throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+        String requestJson= mapper.writeValueAsString(mockFeedback);
+
+        mockMvc.perform(post("/api/v1/projects/" + mockProjectID + "/feedback")
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andExpect(status().isOk());
+
     }
 
     @Test
-    void voteFeedback() {
+    void voteFeedback() throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+        String requestJson= mapper.writeValueAsString(mockVote);
+
+        mockMvc.perform(post("/api/v1/feedbacks/" + mockFeedbackID + "/vote")
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    void DeleteVote() throws Exception {
+
+        mockMvc.perform(delete("/api/v1/vote/" + mockVoteID)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
     }
 }

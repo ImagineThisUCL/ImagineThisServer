@@ -108,10 +108,11 @@ public class FeedbackServiceImpl implements FeedbackService {
         }
     }
 
+
     @Override
-    public List<Vote> getVotesByUserID(UUID userID) {
+    public List<Vote> getVotesByID(UUID feedbackID) {
         try {
-            return feedbackDAO.getVotesByUserID(userID);
+            return feedbackDAO.getVotesByID(feedbackID);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new InternalError();
@@ -127,18 +128,6 @@ public class FeedbackServiceImpl implements FeedbackService {
             throw new InternalError();
         }
     }
-
-    @Override
-    public boolean updateVote(UUID voteID, int value) {
-        try {
-            return feedbackDAO.updateVoteByID(voteID, value);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new InternalError();
-        }
-    }
-
-
 
     private boolean projectExist(String projectID) {
         if (projectIDList == null) {
