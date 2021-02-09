@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Mapper
+@Repository
 public interface FeedbackDao {
     @Select("SELECT f.feedback_id, project_id, f.user_id,\n" +
             "COUNT(case when v.vote > 0 then v.vote end) upvotes,\n" +

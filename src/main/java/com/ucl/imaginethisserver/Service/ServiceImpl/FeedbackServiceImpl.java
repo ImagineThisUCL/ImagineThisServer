@@ -41,33 +41,8 @@ public class FeedbackServiceImpl implements FeedbackService {
         this.feedbackDao = feedbackDao;
     }
 
-    public static class UpvoteCount implements BasicColumn {
-        private String alias;
-        public UpvoteCount() {
-            super();
-        }
-        @Override
-        public Optional<String> alias() {
-            return Optional.ofNullable(alias);
-        }
-
-        @Override
-        public BasicColumn as(String s) {
-            UpvoteCount upvoteCount = new UpvoteCount();
-            upvoteCount.alias = s;
-            return upvoteCount;
-        }
-
-        @Override
-        public String renderWithTableAlias(TableAliasCalculator tableAliasCalculator) {
-            return "count(case when vote > 0 then vote end)";
-        }
-    }
-
     @Override
     public List<Feedback> getAllFeedbacks(String projectID) {
-
-
         return feedbackMapper.select(c -> c
                 .where(FeedbackDynamicSqlSupport.projectId, isEqualToWhenPresent(projectID))
         );
@@ -94,7 +69,14 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public boolean addNewFeedback(String projectID, Feedback feedback) {
-        feedback.setProjectId(projectID);
+        if (feedback.getProjectId() == null) {
+            feedback.setProjectId(projectID);
+        }
+        if (feedback.getFeedbackId() == null) {
+            UUID uuid = UUID.randomUUID();
+            logger.info("Generating new UUID for feedback: " + uuid);
+            feedback.setFeedbackId(uuid);
+        }
         int result = feedbackMapper.insert(feedback);
         if (result != 0) {
             return true;
