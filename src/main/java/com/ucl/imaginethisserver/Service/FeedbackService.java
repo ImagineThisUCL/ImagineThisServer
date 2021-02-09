@@ -49,7 +49,7 @@ public interface FeedbackService {
      */
     boolean voteFeedback(String projectID, UUID feedbackID, Vote vote);
 
-    boolean updateVoteForFeedback(String projectID, UUID feedbackID, Vote vote);
+    boolean updateVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote);
 
-    boolean deleteVoteForFeedback(String projectID, UUID feedbackID, Vote vote);
+    boolean deleteVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote);
 }

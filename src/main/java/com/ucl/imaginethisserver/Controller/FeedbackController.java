@@ -29,13 +29,6 @@ public class FeedbackController {
 
     @GetMapping("/projects/{project-id}/feedback")
     @ResponseBody
-    public List<Feedback> getAllFeedbacks(@PathVariable("project-id") String projectID) {
-        List<Feedback> feedbacks = feedbackService.getAllFeedbacks(projectID);
-        return feedbacks;
-    }
-
-    @GetMapping("/projects/{project-id}/feedback-detail")
-    @ResponseBody
     public List<FeedbackDto> getFeedbacksWithVotes(@PathVariable("project-id") String projectID) {
         List<FeedbackDto> feedbacks = feedbackService.getFeedbacksWithVotes(projectID);
         return feedbacks;
@@ -74,21 +67,23 @@ public class FeedbackController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/projects/{project-id}/feedback/{feedback-id}/vote")
+    @PatchMapping("/projects/{project-id}/feedback/{feedback-id}/vote/{vote-id}")
     public ResponseEntity<Map<String, Boolean>> updateVoteForFeedback(@PathVariable("project-id") String projectID,
                                                                       @PathVariable("feedback-id") UUID feedbackID,
+                                                                      @PathVariable("vote-id") UUID voteID,
                                                                       @RequestBody Vote vote) {
-        boolean result = feedbackService.updateVoteForFeedback(projectID, feedbackID, vote);
+        boolean result = feedbackService.updateVoteForFeedback(projectID, feedbackID, voteID, vote);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/projects/{project-id}/feedback/{feedback-id}/vote")
+    @DeleteMapping("/projects/{project-id}/feedback/{feedback-id}/vote/{vote-id}")
     public ResponseEntity<Map<String, Boolean>> deleteVoteForFeedback(@PathVariable("project-id") String projectID,
                                                                       @PathVariable("feedback-id") UUID feedbackID,
+                                                                      @PathVariable("vote-id") UUID voteID,
                                                                       @RequestBody Vote vote) {
-        boolean result = feedbackService.deleteVoteForFeedback(projectID, feedbackID, vote);
+        boolean result = feedbackService.deleteVoteForFeedback(projectID, feedbackID, voteID, vote);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
         return new ResponseEntity<>(response, HttpStatus.OK);

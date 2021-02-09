@@ -102,23 +102,31 @@ public class FeedbackServiceImpl implements FeedbackService {
             logger.error("Vote value can only be 1 or -1");
             throw new InternalServerErrorException();
         }
-        return false;
+        if (vote.getUserId() == null) {
+            logger.error("Error creating new vote: UserID not provided.");
+            throw new InternalServerErrorException();
+        }
+        Vote newVote = new Vote();
+        UUID voteID = UUID.randomUUID();
+        logger.info("Generating new vote for feedback " + feedbackID);
+        newVote.setVoteId(voteID);
+        newVote.setFeedbackId(feedbackID);
+        newVote.setUserId(vote.getUserId());
+        newVote.setTimestamp(System.currentTimeMillis());
+        int result = voteMapper.insert(newVote);
+        return result != 0;
     }
 
     @Override
-    public boolean updateVoteForFeedback(String projectID, UUID feedbackID, Vote vote) {
+    public boolean updateVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote) {
         if (vote.getVoteValue() != 1 && vote.getVoteValue() != -1) {
             logger.error("Vote value can only be 1 or -1");
-            throw new InternalServerErrorException();
-        }
-        if (vote.getVoteId() == null) {
-            logger.error("Vote ID not provided.");
             throw new InternalServerErrorException();
         }
         int result = voteMapper.update(c -> c
                 .set(VoteDynamicSqlSupport.voteValue).equalTo(vote.getVoteValue())
                 .where(VoteDynamicSqlSupport.feedbackId, isEqualTo(feedbackID))
-                .and(VoteDynamicSqlSupport.userId, isEqualTo(UUID.fromString(vote.getUserId().toString()))));
+                .and(VoteDynamicSqlSupport.voteId, isEqualTo(voteID)));
         if (result == 1) {
             return true;
         } else {
@@ -128,12 +136,8 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public boolean deleteVoteForFeedback(String projectID, UUID feedbackID, Vote vote) {
-        if (vote.getVoteId() == null) {
-            logger.error("Vote ID not provided.");
-            throw new InternalServerErrorException();
-        }
-        int result = voteMapper.deleteByPrimaryKey(vote.getVoteId());
+    public boolean deleteVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote) {
+        int result = voteMapper.deleteByPrimaryKey(voteID);
         if (result == 1) {
             return true;
         } else {
