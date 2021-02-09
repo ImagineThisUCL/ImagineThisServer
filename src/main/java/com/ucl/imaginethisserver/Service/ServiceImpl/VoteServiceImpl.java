@@ -68,6 +68,7 @@ public class VoteServiceImpl implements VoteService {
         }
         int result = voteMapper.update(c -> c
                 .set(VoteDynamicSqlSupport.voteValue).equalTo(vote.getVoteValue())
+                .set(VoteDynamicSqlSupport.timestamp).equalTo(System.currentTimeMillis())
                 .where(VoteDynamicSqlSupport.feedbackId, isEqualTo(feedbackID))
                 .and(VoteDynamicSqlSupport.voteId, isEqualTo(voteID)));
         if (result == 1) {
