@@ -67,7 +67,7 @@ public class FeedbackController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PatchMapping("/projects/{project-id}/feedback/{feedback-id}/vote/{vote-id}")
+    @PutMapping("/projects/{project-id}/feedback/{feedback-id}/vote/{vote-id}")
     public ResponseEntity<Map<String, Boolean>> updateVoteForFeedback(@PathVariable("project-id") String projectID,
                                                                       @PathVariable("feedback-id") UUID feedbackID,
                                                                       @PathVariable("vote-id") UUID voteID,
