@@ -5,6 +5,7 @@ import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.DAO.FeedbackDao;
 import com.ucl.imaginethisserver.DAO.FeedbackDto;
 import com.ucl.imaginethisserver.Mapper.FeedbackDynamicSqlSupport;
+import com.ucl.imaginethisserver.Mapper.VoteDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Mapper.FeedbackMapper;
@@ -84,6 +85,18 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
+    public List<Vote> getVotesForFeedback(String projectID, UUID feedbackID) {
+        List<Vote> votes = voteMapper.select(c -> c
+        .where(VoteDynamicSqlSupport.feedbackId, isEqualTo(feedbackID)));
+        if (votes.size() > 0) {
+            return votes;
+        } else {
+            logger.error("Cannot get Votes for Feedback " + feedbackID);
+            throw new InternalServerErrorException();
+        }
+    }
+
+    @Override
     public boolean voteFeedback(String projectID, UUID feedbackID, Vote vote) {
         if (vote.getVoteValue() != 1 && vote.getVoteValue() != -1) {
             logger.error("Vote value can only be 1 or -1");
@@ -102,7 +115,10 @@ public class FeedbackServiceImpl implements FeedbackService {
             logger.error("Vote ID not provided.");
             throw new InternalServerErrorException();
         }
-        int result = voteMapper.updateByPrimaryKey(vote);
+        int result = voteMapper.update(c -> c
+                .set(VoteDynamicSqlSupport.voteValue).equalTo(vote.getVoteValue())
+                .where(VoteDynamicSqlSupport.feedbackId, isEqualTo(feedbackID))
+                .and(VoteDynamicSqlSupport.userId, isEqualTo(UUID.fromString(vote.getUserId().toString()))));
         if (result == 1) {
             return true;
         } else {

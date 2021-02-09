@@ -37,6 +37,9 @@ public interface FeedbackService {
      */
     boolean addNewFeedback(String projectID, Feedback feedback);
 
+
+    List<Vote> getVotesForFeedback(String projectID, UUID feedbackID);
+
     /**
      * This method will vote on an existing feedback for the given project
      * @param projectID ID of the project

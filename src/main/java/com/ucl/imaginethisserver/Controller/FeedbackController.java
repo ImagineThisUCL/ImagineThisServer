@@ -58,6 +58,12 @@ public class FeedbackController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/projects/{project-id}/feedback/{feedback-id}/vote")
+    public List<Vote> getVotesForFeedback(@PathVariable("project-id") String projectID,
+                                                                   @PathVariable("feedback-id") UUID feedbackID) {
+        return feedbackService.getVotesForFeedback(projectID, feedbackID);
+    }
+
     @PostMapping("/projects/{project-id}/feedback/{feedback-id}/vote")
     public ResponseEntity<Map<String, Boolean>> voteFeedback(@PathVariable("project-id") String projectID,
                                                              @PathVariable("feedback-id") UUID feedbackID,
