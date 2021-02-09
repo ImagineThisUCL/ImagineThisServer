@@ -37,15 +37,4 @@ public class GsonConfig {
             return JsonParser.parseString(json.value());
         }
     }
-
-//    private GsonHttpMessageConverter customGsonHttpMessageConverter() {
-//        Gson gson = new GsonBuilder()
-//                .excludeFieldsWithoutExposeAnnotation()
-//                .create();
-//
-//        GsonHttpMessageConverter gsonMessageConverter = new GsonHttpMessageConverter();
-//        gsonMessageConverter.setGson(gson);
-//
-//        return gsonMessageConverter;
-//    }
 }
