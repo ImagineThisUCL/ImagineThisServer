@@ -72,13 +72,19 @@ public class FeedbackController {
     public ResponseEntity<Map<String, Boolean>> updateVoteForFeedback(@PathVariable("project-id") String projectID,
                                                                       @PathVariable("feedback-id") UUID feedbackID,
                                                                       @RequestBody Vote vote) {
-        return null;
+        boolean result = feedbackService.updateVoteForFeedback(projectID, feedbackID, vote);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("success", result);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/projects/{project-id}/feedback/{feedback-id}/vote")
     public ResponseEntity<Map<String, Boolean>> deleteVoteForFeedback(@PathVariable("project-id") String projectID,
                                                                       @PathVariable("feedback-id") UUID feedbackID,
                                                                       @RequestBody Vote vote) {
-        return null;
+        boolean result = feedbackService.deleteVoteForFeedback(projectID, feedbackID, vote);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("success", result);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

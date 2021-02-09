@@ -32,8 +32,10 @@ import org.mybatis.dynamic.sql.update.UpdateModel;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
 import org.mybatis.dynamic.sql.util.mybatis3.MyBatis3Utils;
+import org.springframework.stereotype.Repository;
 
 @Mapper
+@Repository
 public interface VoteMapper {
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source Table: votes")
     BasicColumn[] selectList = BasicColumn.columnList(voteId, feedbackId, userId, voteValue, timestamp);

@@ -4,6 +4,8 @@ import com.ucl.imaginethisserver.DAO.FeedbackDto;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
 import org.apache.ibatis.javassist.NotFoundException;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,4 +45,8 @@ public interface FeedbackService {
      * @return bool value which indicates the operation status
      */
     boolean voteFeedback(String projectID, UUID feedbackID, Vote vote);
+
+    boolean updateVoteForFeedback(String projectID, UUID feedbackID, Vote vote);
+
+    boolean deleteVoteForFeedback(String projectID, UUID feedbackID, Vote vote);
 }

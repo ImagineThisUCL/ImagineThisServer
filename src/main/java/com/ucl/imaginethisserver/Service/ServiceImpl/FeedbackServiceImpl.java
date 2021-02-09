@@ -5,24 +5,18 @@ import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.DAO.FeedbackDao;
 import com.ucl.imaginethisserver.DAO.FeedbackDto;
 import com.ucl.imaginethisserver.Mapper.FeedbackDynamicSqlSupport;
-import com.ucl.imaginethisserver.Mapper.VoteDynamicSqlSupport;
+import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Mapper.FeedbackMapper;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
 
-import org.mybatis.dynamic.sql.BasicColumn;
-import org.mybatis.dynamic.sql.SqlBuilder;
-import org.mybatis.dynamic.sql.render.RenderingStrategy;
-import org.mybatis.dynamic.sql.render.TableAliasCalculator;
-import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
@@ -33,11 +27,14 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     private final FeedbackMapper feedbackMapper;
 
+    private final VoteMapper voteMapper;
+
     private final FeedbackDao feedbackDao;
 
     @Autowired
-    public FeedbackServiceImpl(FeedbackMapper feedbackMapper, FeedbackDao feedbackDao) {
+    public FeedbackServiceImpl(FeedbackMapper feedbackMapper, VoteMapper voteMapper, FeedbackDao feedbackDao) {
         this.feedbackMapper = feedbackMapper;
+        this.voteMapper = voteMapper;
         this.feedbackDao = feedbackDao;
     }
 
@@ -93,5 +90,39 @@ public class FeedbackServiceImpl implements FeedbackService {
             throw new InternalServerErrorException();
         }
         return false;
+    }
+
+    @Override
+    public boolean updateVoteForFeedback(String projectID, UUID feedbackID, Vote vote) {
+        if (vote.getVoteValue() != 1 && vote.getVoteValue() != -1) {
+            logger.error("Vote value can only be 1 or -1");
+            throw new InternalServerErrorException();
+        }
+        if (vote.getVoteId() == null) {
+            logger.error("Vote ID not provided.");
+            throw new InternalServerErrorException();
+        }
+        int result = voteMapper.updateByPrimaryKey(vote);
+        if (result == 1) {
+            return true;
+        } else {
+            logger.warn("Update vote failed.");
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteVoteForFeedback(String projectID, UUID feedbackID, Vote vote) {
+        if (vote.getVoteId() == null) {
+            logger.error("Vote ID not provided.");
+            throw new InternalServerErrorException();
+        }
+        int result = voteMapper.deleteByPrimaryKey(vote.getVoteId());
+        if (result == 1) {
+            return true;
+        } else {
+            logger.warn("Delete vote failed.");
+            return false;
+        }
     }
 }
