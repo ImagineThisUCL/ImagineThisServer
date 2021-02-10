@@ -1,8 +1,11 @@
 package com.ucl.imaginethisserver.Service;
 
+import com.ucl.imaginethisserver.DAO.FeedbackDao;
+import com.ucl.imaginethisserver.Mapper.FeedbackMapper;
+import com.ucl.imaginethisserver.Mapper.ProjectMapper;
+import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
-import com.ucl.imaginethisserver.DAO.DAOImpl.MockFeedbackRepo;
 import com.ucl.imaginethisserver.Service.ServiceImpl.FeedbackServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FeedbackServiceImplTest {
 
-    static MockFeedbackRepo mockFeedback;
+    static FeedbackDao mockFeedbackDao;
     static Feedback testFeedback;
     static List<Feedback> testFeedbacks;
     static FeedbackServiceImpl feedbackService;
@@ -30,19 +33,25 @@ public class FeedbackServiceImplTest {
 
     @BeforeAll
     static void mockDAO() {
-        mockFeedback = mock(MockFeedbackRepo.class);
+        mockFeedbackDao = mock(FeedbackDao.class);
 
         // Prepare random feedbacks
-        testFeedback = new Feedback(FEEDBACK_ID, FEEDBACK_PROJECT_ID, FEEDBACK_USER_ID, FEEDBACK_USERNAME, FEEDBACK_TIMESTAMP, FEEDBACK_TEXT);
+        testFeedback = new Feedback();
+        testFeedback.setFeedbackId(FEEDBACK_ID);
+        testFeedback.setProjectId(FEEDBACK_PROJECT_ID);
+        testFeedback.setUserId(FEEDBACK_USER_ID);
+        testFeedback.setUserName(FEEDBACK_USERNAME);
+        testFeedback.setText(FEEDBACK_TEXT);
+        testFeedback.setTimestamp(FEEDBACK_TIMESTAMP);
         testFeedbacks = new ArrayList<>();
         testFeedbacks.add(testFeedback);
 
         // Stub method calls
-        when(mockFeedback.getAllFeedbacks("test")).thenReturn(testFeedbacks);
-        when(mockFeedback.getFeedbackByID("test", FEEDBACK_ID)).thenReturn(testFeedback);
+        when(mockFeedbackDao.getAllFeedbacks("test")).thenReturn(testFeedbacks);
+        when(mockFeedbackDao.getFeedbackByID("test", FEEDBACK_ID)).thenReturn(testFeedback);
 
         // Create FeedbackService with mocked DAO
-        feedbackService = new FeedbackServiceImpl(mockFeedback);
+        feedbackService = new FeedbackServiceImpl(mockFeedbackDao);
     }
 
     @Test
@@ -52,10 +61,11 @@ public class FeedbackServiceImplTest {
         assertEquals(1, resultList.size());
         // Check content
         Feedback resultFeedback = resultList.get(0);
+        assertEquals(resultFeedback.getFeedbackId(), FEEDBACK_ID);
         assertEquals(resultFeedback.getText(), FEEDBACK_TEXT);
         assertEquals(resultFeedback.getUserName(), FEEDBACK_USERNAME);
-        assertEquals(resultFeedback.getProjectID(), FEEDBACK_PROJECT_ID);
-        assertEquals(resultFeedback.getUserID(), FEEDBACK_USER_ID);
+        assertEquals(resultFeedback.getProjectId(), FEEDBACK_PROJECT_ID);
+        assertEquals(resultFeedback.getUserId(), FEEDBACK_USER_ID);
         assertEquals(resultFeedback.getTimestamp(), FEEDBACK_TIMESTAMP);
     }
 
@@ -63,35 +73,11 @@ public class FeedbackServiceImplTest {
     void getFeedbackByIDTest() {
         Feedback resultFeedback = feedbackService.getFeedbackByID("test", FEEDBACK_ID);
         // Check content
-        assertEquals(resultFeedback.getFeedbackID(), FEEDBACK_ID);
+        assertEquals(resultFeedback.getFeedbackId(), FEEDBACK_ID);
         assertEquals(resultFeedback.getText(), FEEDBACK_TEXT);
         assertEquals(resultFeedback.getUserName(), FEEDBACK_USERNAME);
-        assertEquals(resultFeedback.getProjectID(), FEEDBACK_PROJECT_ID);
-        assertEquals(resultFeedback.getUserID(), FEEDBACK_USER_ID);
+        assertEquals(resultFeedback.getProjectId(), FEEDBACK_PROJECT_ID);
+        assertEquals(resultFeedback.getUserId(), FEEDBACK_USER_ID);
         assertEquals(resultFeedback.getTimestamp(), FEEDBACK_TIMESTAMP);
     }
-
-    @Test
-    void addNewFeedbackTest() {
-        // Check method addNewFeedback is called on DAO class
-        feedbackService.addNewFeedback(FEEDBACK_PROJECT_ID, testFeedback);
-        verify(mockFeedback).addNewFeedback(FEEDBACK_PROJECT_ID, testFeedback);
-    }
-
-    @Test
-    void voteFeedbackTest() {
-        // Check method voteFeedback is called on DAO class
-        Vote testVote = new Vote(UUID.randomUUID(), 1);
-        feedbackService.voteFeedback(FEEDBACK_PROJECT_ID, FEEDBACK_ID, testVote);
-        verify(mockFeedback).voteFeedback(FEEDBACK_PROJECT_ID, FEEDBACK_ID, testVote);
-    }
-
-    @Test
-    void voteIncorrectValueTest() {
-        // Check incorrect vote value is captured
-        assertThrows(AssertionError.class, () -> new Vote(UUID.randomUUID(), 0));
-        assertThrows(AssertionError.class, () -> new Vote(UUID.randomUUID(), -2));
-        assertThrows(AssertionError.class, () -> new Vote(UUID.randomUUID(), 2));
-    }
-
 }
