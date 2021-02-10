@@ -1,10 +1,12 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
 import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
+import com.ucl.imaginethisserver.DAO.VoteDao;
 import com.ucl.imaginethisserver.Mapper.VoteDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.VoteService;
+import org.apache.ibatis.javassist.tools.web.BadHttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +22,21 @@ public class VoteServiceImpl implements VoteService {
 
     private final Logger logger = LoggerFactory.getLogger(VoteServiceImpl.class);
 
-    private final VoteMapper voteMapper;
+    private final VoteDao voteDao;
 
     @Autowired
-    public VoteServiceImpl(VoteMapper voteMapper) {
-        this.voteMapper = voteMapper;
+    public VoteServiceImpl(VoteDao voteDao) {
+        this.voteDao = voteDao;
     }
 
     @Override
     public List<Vote> getVotesForFeedback(String projectID, UUID feedbackID) {
-        List<Vote> votes = voteMapper.select(c -> c
-                .where(VoteDynamicSqlSupport.feedbackId, isEqualTo(feedbackID)));
+        // check feedback id
+        if (feedbackID == null) {
+            logger.error("Error getting vote for feedback: feedback ID not provided");
+            throw new InternalServerErrorException();
+        }
+        List<Vote> votes = voteDao.getVotesForFeedback(projectID, feedbackID);
         if (votes.size() > 0) {
             return votes;
         } else {
@@ -49,44 +55,24 @@ public class VoteServiceImpl implements VoteService {
             logger.error("Error creating new vote: UserID not provided.");
             throw new InternalServerErrorException();
         }
-        Vote newVote = new Vote();
-        UUID voteID = UUID.randomUUID();
-        logger.info("Generating new vote for feedback " + feedbackID);
-        newVote.setVoteId(voteID);
-        newVote.setFeedbackId(feedbackID);
-        newVote.setUserId(vote.getUserId());
-        newVote.setTimestamp(System.currentTimeMillis());
-        int result = voteMapper.insert(newVote);
-        return result != 0;
+        return voteDao.voteFeedback(projectID, feedbackID, vote);
     }
 
     @Override
     public boolean updateVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote) {
+        if (feedbackID == null || voteID == null) {
+            logger.error("Error updating vote. Feedback ID or vote ID not provided.");
+            throw new InternalServerErrorException();
+        }
         if (vote.getVoteValue() != 1 && vote.getVoteValue() != -1) {
             logger.error("Vote value can only be 1 or -1");
             throw new InternalServerErrorException();
         }
-        int result = voteMapper.update(c -> c
-                .set(VoteDynamicSqlSupport.voteValue).equalTo(vote.getVoteValue())
-                .set(VoteDynamicSqlSupport.timestamp).equalTo(System.currentTimeMillis())
-                .where(VoteDynamicSqlSupport.feedbackId, isEqualTo(feedbackID))
-                .and(VoteDynamicSqlSupport.voteId, isEqualTo(voteID)));
-        if (result == 1) {
-            return true;
-        } else {
-            logger.warn("Update vote failed.");
-            return false;
-        }
+        return voteDao.updateVoteForFeedback(projectID, feedbackID, voteID, vote);
     }
 
     @Override
     public boolean deleteVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote) {
-        int result = voteMapper.deleteByPrimaryKey(voteID);
-        if (result == 1) {
-            return true;
-        } else {
-            logger.warn("Delete vote failed.");
-            return false;
-        }
+        return voteDao.deleteVoteForFeedback(projectID, feedbackID, voteID, vote);
     }
 }

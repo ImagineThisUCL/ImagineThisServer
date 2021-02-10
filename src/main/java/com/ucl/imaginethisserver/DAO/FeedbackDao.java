@@ -8,27 +8,58 @@ import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.UUID;
 
-@Mapper
 @Repository
 public interface FeedbackDao {
-    @Select("SELECT f.feedback_id, project_id, f.user_id,\n" +
-            "COUNT(case when v.vote > 0 then v.vote end) upvotes,\n" +
-            "COUNT(case when v.vote < 0 then v.vote end) downvotes, user_name, f_timestamp, feedback_text\n" +
-            "FROM feedbacks f\n" +
-            "LEFT JOIN votes v on f.feedback_id = v.feedback_id\n" +
-            "WHERE project_id = #{projectID}\n" +
-            "GROUP BY f.feedback_id")
-    @Results(id = "FeedbackDtoResult", value = {
-            @Result(column="feedback_id", property="feedbackId", typeHandler= UUIDTypeHandler.class, jdbcType= JdbcType.OTHER, id=true),
-            @Result(column="project_id", property="projectId", jdbcType=JdbcType.VARCHAR),
-            @Result(column="user_id", property="userId", typeHandler=UUIDTypeHandler.class, jdbcType=JdbcType.OTHER),
-            @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
-            @Result(column="feedback_text", property="text", jdbcType=JdbcType.VARCHAR),
-            @Result(column="f_timestamp", property="timestamp", jdbcType=JdbcType.BIGINT)
-    })
-    List<FeedbackDto> getAllFeedbacksWithVotes(@Param("projectID") String projectID);
+    /**
+     * This method will return all feedbacks with upvotes and downvotes for a given project
+     * @param projectID ID of the project
+     * @return a list of feedbacksDto
+     */
+    List<FeedbackDto> getAllFeedbacksWithVotes(String projectID);
+
+    /**
+     * This method will return all feedbacks for a given project
+     * @param projectID ID of the project
+     * @return a list of feedbacks
+     */
+    List<Feedback> getAllFeedbacks(String projectID);
+
+    /**
+     * This method get a specific feedback for a given project
+     * @param projectID ID of the project
+     * @param feedbackID ID of the feedback
+     * @return the specified feedback
+     */
+    Feedback getFeedbackByID(String projectID, UUID feedbackID);
+
+    /**
+     * This method adds a new feedback for the given project
+     * @param projectID ID of the project
+     * @param feedback feedback object
+     * @return int value which indicates the database operation status
+     */
+    int addNewFeedback(String projectID, Feedback feedback);
+
+    /**
+     * This method will update the feedback text with the given feedback ID
+     * @param projectID ID of the project
+     * @param feedbackID ID of the feedback
+     * @param feedback feedback object which includes new value
+     * @return int value which indicates the database operation status
+     */
+    int updateFeedback(String projectID, UUID feedbackID, Feedback feedback);
+
+    /**
+     * This method will delete the feedback record with the given feedback ID
+     * @param projectID ID of the project
+     * @param feedbackID ID of the feedback
+     * @return int value which indicates the database operation status
+     */
+    int deleteFeedback(String projectID, UUID feedbackID);
 }
 
 

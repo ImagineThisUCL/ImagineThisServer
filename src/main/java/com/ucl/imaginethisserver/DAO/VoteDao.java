@@ -1,11 +1,11 @@
-package com.ucl.imaginethisserver.Service;
+package com.ucl.imaginethisserver.DAO;
 
 import com.ucl.imaginethisserver.Model.Vote;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface VoteService {
+public interface VoteDao {
     /**
      * This method will get all votes for the given feedback
      * @param projectID ID of the project

@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,24 +27,16 @@ import static org.mybatis.dynamic.sql.SqlBuilder.*;
 public class FeedbackServiceImpl implements FeedbackService {
     private final Logger logger = LoggerFactory.getLogger(FeedbackServiceImpl.class);
 
-    private final FeedbackMapper feedbackMapper;
-
-    private final VoteMapper voteMapper;
-
     private final FeedbackDao feedbackDao;
 
     @Autowired
-    public FeedbackServiceImpl(FeedbackMapper feedbackMapper, VoteMapper voteMapper, FeedbackDao feedbackDao) {
-        this.feedbackMapper = feedbackMapper;
-        this.voteMapper = voteMapper;
+    public FeedbackServiceImpl(FeedbackDao feedbackDao) {
         this.feedbackDao = feedbackDao;
     }
 
     @Override
     public List<Feedback> getAllFeedbacks(String projectID) {
-        return feedbackMapper.select(c -> c
-                .where(FeedbackDynamicSqlSupport.projectId, isEqualToWhenPresent(projectID))
-        );
+        return feedbackDao.getAllFeedbacks(projectID);
     }
 
     @Override
@@ -52,12 +46,9 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public Feedback getFeedbackByID(String projectID, UUID feedbackID){
-        List<Feedback> resultList = feedbackMapper.select(c -> c
-                .where(FeedbackDynamicSqlSupport.projectId, isEqualToWhenPresent(projectID))
-                .and(FeedbackDynamicSqlSupport.feedbackId, isEqualToWhenPresent(feedbackID))
-        );
-        if (resultList.size() == 1) {
-            return resultList.get(0);
+        Feedback result = feedbackDao.getFeedbackByID(projectID, feedbackID);
+        if (result != null) {
+            return result;
         } else {
             // throw not found exception
             throw new NotFoundException("Feedback Not Found!");
@@ -84,7 +75,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         newFeedback.setUserId(UUID.fromString(feedback.getUserId().toString()));
         newFeedback.setUserName(feedback.getUserName());
         newFeedback.setText(feedback.getText());
-        int result = feedbackMapper.insert(newFeedback);
+        int result = feedbackDao.addNewFeedback(projectID, newFeedback);
         if (result != 0) {
             return true;
         } else {
@@ -99,12 +90,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             logger.error("Error Updating feedback: " + feedbackID + ", feedback text not provided");
             throw new InternalServerErrorException();
         }
-        int result = feedbackMapper.update(c -> c
-                .set(FeedbackDynamicSqlSupport.text).equalTo(feedback.getText())
-                .set(FeedbackDynamicSqlSupport.timestamp).equalTo(System.currentTimeMillis())
-                .where(FeedbackDynamicSqlSupport.feedbackId, isEqualTo(feedbackID))
-                .and(FeedbackDynamicSqlSupport.projectId, isEqualTo(projectID))
-        );
+        int result = feedbackDao.updateFeedback(projectID, feedbackID, feedback);
         if (result == 1) {
             return true;
         } else {
@@ -120,18 +106,6 @@ public class FeedbackServiceImpl implements FeedbackService {
             logger.error("Error Deleting feedback: feedback ID not provided");
             throw new InternalServerErrorException();
         }
-        // first delete associated votes
-        int voteDeletion = voteMapper.delete(c -> c
-                .where(VoteDynamicSqlSupport.feedbackId, isEqualTo(feedbackID))
-        );
-        // then delete feedback
-        int feedbackDeletion = feedbackMapper.deleteByPrimaryKey(feedbackID);
-        if (feedbackDeletion == 1) {
-            return true;
-        } else {
-            logger.warn("Delete feedback failed. vote deletion: " + voteDeletion +
-                    ", feedback deletion: " + feedbackDeletion);
-            return false;
-        }
+        return feedbackDao.deleteFeedback(projectID, feedbackID) == 1;
     }
 }

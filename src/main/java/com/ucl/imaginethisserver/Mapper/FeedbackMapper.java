@@ -3,20 +3,15 @@ package com.ucl.imaginethisserver.Mapper;
 import static com.ucl.imaginethisserver.Mapper.FeedbackDynamicSqlSupport.*;
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
+import com.ucl.imaginethisserver.DAO.FeedbackDto;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Generated;
-import org.apache.ibatis.annotations.DeleteProvider;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.UpdateProvider;
+
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 import org.mybatis.dynamic.sql.BasicColumn;
 import org.mybatis.dynamic.sql.delete.DeleteDSLCompleter;
@@ -200,4 +195,21 @@ public interface FeedbackMapper {
             .where(feedbackId, isEqualTo(record::getFeedbackId))
         );
     }
+
+    @Select("SELECT f.feedback_id, project_id, f.user_id,\n" +
+            "COUNT(case when v.vote > 0 then v.vote end) upvotes,\n" +
+            "COUNT(case when v.vote < 0 then v.vote end) downvotes, user_name, f_timestamp, feedback_text\n" +
+            "FROM feedbacks f\n" +
+            "LEFT JOIN votes v on f.feedback_id = v.feedback_id\n" +
+            "WHERE project_id = #{projectID}\n" +
+            "GROUP BY f.feedback_id")
+    @Results(id = "FeedbackDtoResult", value = {
+            @Result(column="feedback_id", property="feedbackId", typeHandler= UUIDTypeHandler.class, jdbcType= JdbcType.OTHER, id=true),
+            @Result(column="project_id", property="projectId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="user_id", property="userId", typeHandler=UUIDTypeHandler.class, jdbcType=JdbcType.OTHER),
+            @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="feedback_text", property="text", jdbcType=JdbcType.VARCHAR),
+            @Result(column="f_timestamp", property="timestamp", jdbcType=JdbcType.BIGINT)
+    })
+    List<FeedbackDto> getAllFeedbacksWithVotes(@Param("projectID") String projectID);
 }

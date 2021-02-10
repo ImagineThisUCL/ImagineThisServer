@@ -2,49 +2,40 @@ package com.ucl.imaginethisserver.Service.ServiceImpl;
 
 import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
-import com.ucl.imaginethisserver.Mapper.ProjectDynamicSqlSupport;
-import com.ucl.imaginethisserver.Mapper.ProjectMapper;
+import com.ucl.imaginethisserver.DAO.ProjectDao;
 import com.ucl.imaginethisserver.Model.Project;
 import com.ucl.imaginethisserver.Service.ProjectService;
-import org.mybatis.dynamic.sql.SqlBuilder;
-import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
-import static org.mybatis.dynamic.sql.SqlBuilder.isEqualToWhenPresent;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
-    private final ProjectMapper projectMapper;
+    private final ProjectDao projectDao;
 
     private final Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
     @Autowired
-    public ProjectServiceImpl(ProjectMapper projectMapper) {
-        this.projectMapper = projectMapper;
+    public ProjectServiceImpl(ProjectDao projectDao) {
+        this.projectDao = projectDao;
     }
 
 
     @Override
     public List<Project> getAllProjects() {
         // select all projects and return as project list
-        return projectMapper.select(c -> c);
+        return projectDao.getAllProjects();
     }
 
     @Override
     public String getProjectNameByID(String id) {
-        Optional<Project> optional = projectMapper.selectOne(c -> c
-        .where(ProjectDynamicSqlSupport.projectId, isEqualToWhenPresent(id)));
-        if (optional.isPresent()) {
-            return optional.get().getProjectName();
+        Project project = projectDao.getProjectByID(id);
+        if (project != null) {
+            return project.getProjectName();
         } else {
             logger.error("Project with ID: " + id + " not exist.");
             throw new NotFoundException("Project Not Found");
@@ -53,8 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public boolean addProject(Project project) {
-        int result = projectMapper.insert(project);
-        return result != 0;
+        return projectDao.addProject(project);
     }
 
     @Override
@@ -63,10 +53,6 @@ public class ProjectServiceImpl implements ProjectService {
             logger.error("Error updating project. Project ID not provided");
             throw new InternalServerErrorException();
         }
-        int result = projectMapper.update(c -> c
-                .set(ProjectDynamicSqlSupport.projectName).equalTo(project.getProjectName())
-                .where(ProjectDynamicSqlSupport.projectId, isEqualTo(projectID))
-        );
-        return result != 0;
+        return projectDao.updateProject(projectID, project);
     }
 }
