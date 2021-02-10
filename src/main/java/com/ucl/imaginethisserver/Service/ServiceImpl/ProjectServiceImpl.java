@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
+import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.Mapper.ProjectDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.ProjectMapper;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualToWhenPresent;
 
 @Service
@@ -47,5 +49,24 @@ public class ProjectServiceImpl implements ProjectService {
             logger.error("Project with ID: " + id + " not exist.");
             throw new NotFoundException("Project Not Found");
         }
+    }
+
+    @Override
+    public boolean addProject(Project project) {
+        int result = projectMapper.insert(project);
+        return result != 0;
+    }
+
+    @Override
+    public boolean updateProject(String projectID, Project project) {
+        if (projectID == null) {
+            logger.error("Error updating project. Project ID not provided");
+            throw new InternalServerErrorException();
+        }
+        int result = projectMapper.update(c -> c
+                .set(ProjectDynamicSqlSupport.projectName).equalTo(project.getProjectName())
+                .where(ProjectDynamicSqlSupport.projectId, isEqualTo(projectID))
+        );
+        return result != 0;
     }
 }

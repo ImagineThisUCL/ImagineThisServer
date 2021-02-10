@@ -17,7 +17,23 @@ public interface VoteService {
      */
     boolean voteFeedback(String projectID, UUID feedbackID, Vote vote);
 
+    /**
+     * This method will update the vote detail
+     * @param projectID ID of the project
+     * @param feedbackID ID of the feedback
+     * @param voteID ID of the vote
+     * @param vote payload of vote which includes new vote value
+     * @return bool value which indicates the operation status
+     */
     boolean updateVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote);
 
+    /**
+     * This method will delete the vote with vote ID specified
+     * @param projectID ID of the project
+     * @param feedbackID ID of the feedback
+     * @param voteID ID of the vote
+     * @param vote payload of vote which includes new vote value
+     * @return bool value which indicates the operation status
+     */
     boolean deleteVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote);
 }
