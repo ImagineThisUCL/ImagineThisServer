@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="application.properties"/>
+    <classPathEntry location="C:\Users\47629\.m2\repository\org\postgresql\postgresql\42.2.18.jre7\postgresql-42.2.18.jre7.jar" />
+<!--targetRuntime="MyBatis3Simple"-->
+    <context id="ImagineThis">
+        <property name="autoDelimitKeywords" value="true" />
+
+        <property name="javaFileEncoding" value="utf-8" />
+
+        <property name="beginningDelimiter" value="`" />
+        <property name="endingDelimiter" value="`" />
+        <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+
+        <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+        <plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin" />
+
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+
+        <commentGenerator >
+            <property name="suppressAllComments" value="false"/>
+            <property name="suppressDate" value="true" />
+        </commentGenerator>
+
+        <jdbcConnection driverClass="${spring.datasource.driver-class-name}" connectionURL="${spring.datasource.url}" userId="${spring.datasource.username}" password="${spring.datasource.password}" />
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.ucl.imaginethisserver.Model" targetProject="${mybatis.project}" >
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mapper" targetProject="${mybatis.resources}" >
+            <property name="enableSubPackages" value="false" />
+        </sqlMapGenerator>
+
+        <javaClientGenerator targetPackage="com.ucl.imaginethisserver.Mapper" targetProject="${mybatis.project}" type="XMLMAPPER" >
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+
+        <table tableName="projects" domainObjectName="Project">
+
+        </table>
+        <table tableName="users" domainObjectName="User">
+            <columnOverride column="user_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
+        </table>
+        <table tableName="feedbacks" domainObjectName="Feedback" enableSelectByExample="true">
+            <columnOverride column="feedback_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
+            <columnOverride column="user_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
+
+            <columnOverride column="f_timestamp" property="timestamp"/>
+            <columnOverride column="feedback_text" property="text"/>
+        </table>
+        <table tableName="votes" domainObjectName="Vote">
+            <columnOverride column="vote_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
+            <columnOverride column="feedback_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
+            <columnOverride column="v_timestamp" property="timestamp"/>
+            <columnOverride column="vote" property="voteValue"/>
+        </table>
+    </context>
+</generatorConfiguration>

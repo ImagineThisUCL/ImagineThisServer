@@ -1,96 +1,100 @@
 package com.ucl.imaginethisserver.Model;
 
-import com.google.gson.annotations.Expose;
-import io.swagger.annotations.ApiModelProperty;
-
-import java.util.UUID;
+import javax.annotation.Generated;
 
 public class Feedback {
-    @Expose
-    @ApiModelProperty(example = "cb791e97-a402-4174-95ea-dab2c3f06b25")
-    private final UUID feedbackID;
-    @Expose
-    @ApiModelProperty(example = "bd96ccc0-eeff-48e8-8b4e-652675dbc9a2")
-    private final UUID userID;
-    @Expose
-    @ApiModelProperty(example = "MgWqYTZMdjG26oA1CxbWaE")
-    private final String projectID;
-    @Expose
-    private int upvotes;
-    @Expose
-    private int downvotes;
-    @Expose
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.feedback_id")
+    private Object feedbackId;
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.project_id")
+    private String projectId;
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.user_id")
+    private Object userId;
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.user_name")
     private String userName;
-    @Expose
-    @ApiModelProperty(example = "1611660815823")
-    private long timestamp;
-    @Expose
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.feedback_text")
     private String text;
 
-    public Feedback(UUID feedbackID, String projectID, int upvotes, int downvotes, UUID userID, String userName, long timestamp, String text) {
-        this.feedbackID = feedbackID;
-        this.projectID = projectID;
-        this.upvotes = upvotes;
-        this.downvotes = downvotes;
-        this.userID = userID;
-        this.userName = userName;
-        this.timestamp = timestamp;
-        this.text = text;
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.f_timestamp")
+    private Long timestamp;
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.feedback_id")
+    public Object getFeedbackId() {
+        return feedbackId;
     }
 
-    public Feedback(UUID feedbackID, String projectID, UUID userID, String userName, long timestamp, String text) {
-        this(feedbackID, projectID, 0, 0, userID, userName, timestamp, text);
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.feedback_id")
+    public void setFeedbackId(Object feedbackId) {
+        this.feedbackId = feedbackId;
     }
 
-    public UUID getFeedbackID() {
-        return feedbackID;
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.project_id")
+    public String getProjectId() {
+        return projectId;
     }
 
-    public UUID getUserID() {
-        return userID;
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.project_id")
+    public void setProjectId(String projectId) {
+        this.projectId = projectId == null ? null : projectId.trim();
     }
 
-    public String getProjectID() {
-        return projectID;
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.user_id")
+    public Object getUserId() {
+        return userId;
     }
 
-    public int getUpvotes() {
-        return upvotes;
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.user_id")
+    public void setUserId(Object userId) {
+        this.userId = userId;
     }
 
-    public int getDownvotes() {
-        return downvotes;
-    }
-
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.user_name")
     public String getUserName() {
         return userName;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.user_name")
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
     }
 
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.feedback_text")
     public String getText() {
         return text;
     }
 
-    public void setUpvotes(int upvotes) {
-        this.upvotes = upvotes;
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.feedback_text")
+    public void setText(String text) {
+        this.text = text == null ? null : text.trim();
     }
 
-    public void setDownvotes(int downvotes) {
-        this.downvotes = downvotes;
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.f_timestamp")
+    public Long getTimestamp() {
+        return timestamp;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setTimestamp(long timestamp) {
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: feedbacks.f_timestamp")
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    @Override
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source Table: feedbacks")
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", feedbackId=").append(feedbackId);
+        sb.append(", projectId=").append(projectId);
+        sb.append(", userId=").append(userId);
+        sb.append(", userName=").append(userName);
+        sb.append(", text=").append(text);
+        sb.append(", timestamp=").append(timestamp);
+        sb.append("]");
+        return sb.toString();
     }
 }

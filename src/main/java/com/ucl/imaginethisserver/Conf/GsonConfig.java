@@ -1,8 +1,11 @@
 package com.ucl.imaginethisserver.Conf;
 
 import com.google.gson.*;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import springfox.documentation.spring.web.json.Json;
 
 import java.lang.reflect.Type;
@@ -18,6 +21,13 @@ public class GsonConfig {
         return new GsonBuilder()
                 .registerTypeAdapter(Json.class, new SwaggerJsonTypeAdapter())
                 .create();
+    }
+
+    @Bean
+    public HttpMessageConverters httpMessageConverters() {
+        GsonHttpMessageConverter gsonHttpMessageConverter = new GsonHttpMessageConverter();
+        gsonHttpMessageConverter.setGson(gson());
+        return new HttpMessageConverters(gsonHttpMessageConverter);
     }
 
     public static class SwaggerJsonTypeAdapter implements JsonSerializer<Json> {
