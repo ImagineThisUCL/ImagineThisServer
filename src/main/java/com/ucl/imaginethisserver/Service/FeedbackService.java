@@ -19,6 +19,11 @@ public interface FeedbackService {
      */
     List<Feedback> getAllFeedbacks(String projectID);
 
+    /**
+     * This method will return all feedbacks with upvotes and downvotes as additional fields for a given project
+     * @param projectID ID of the project
+     * @return a list of feedbackDto
+     */
     List<FeedbackDto> getFeedbacksWithVotes(String projectID);
 
     /**
@@ -37,7 +42,20 @@ public interface FeedbackService {
      */
     boolean addNewFeedback(String projectID, Feedback feedback);
 
+    /**
+     * This method will update the feedback text with the given feedback ID
+     * @param projectID ID of the project
+     * @param feedbackID ID of the feedback
+     * @param feedback feedback payload with new feedback text
+     * @return bool value which indicates the operation status
+     */
     boolean updateFeedback(String projectID, UUID feedbackID, Feedback feedback);
 
+    /**
+     * This method will delete the feedback record with the given feedback ID
+     * @param projectID ID of the project
+     * @param feedbackID ID of the feedback
+     * @return bool value which indicates the operation status
+     */
     boolean deleteFeedback(String projectID, UUID feedbackID);
 }
