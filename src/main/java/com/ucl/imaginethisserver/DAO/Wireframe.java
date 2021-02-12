@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -147,7 +148,8 @@ public class Wireframe {
     }
 
     public String getName() {
-        return name;
+        // Need to capitalize wireframes because they will be converted to JavaScript React classes
+        return StringUtils.capitalize(name);
     }
 
     public JsonArray getChildren() {

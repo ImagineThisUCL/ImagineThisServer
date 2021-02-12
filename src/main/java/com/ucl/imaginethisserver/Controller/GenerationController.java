@@ -54,7 +54,7 @@ public class GenerationController {
         String accessToken = payload.get("accessToken").toString();
         String projectID = payload.get("projectID").toString();
         String type = payload.get("authType").toString();
-        List<String> nameList = FigmaAPIUtil.convertJsonToList(payload.get("pageList").toString());
+        List<String> nameList = FigmaAPIUtil.processPagesList((List<String>) payload.get("pageList"));
         AuthenticateType authType = null;
         if (type.equals("originalToken")) {
             authType = AuthenticateType.ORIGINAL_TOKEN;
