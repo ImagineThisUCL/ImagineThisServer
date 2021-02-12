@@ -16,6 +16,20 @@ import java.io.IOException;
 public class CodeGenerator {
 
     /**
+     * Helper method for writing files
+     * @param filePath - Path to the target file
+     * @param text - Text to be written to the target file
+     * @throws IOException
+     */
+    public static void writeFile(String filePath, String text) throws IOException {
+        System.out.println("Writing file " + filePath);
+        File file = new File(filePath);
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writer.write(text);
+        writer.close();
+    }
+
+    /**
      * This method is used to create the root folder for the current project. The default path of root folder would OutputStorage/[folderName]
      * where the default [folderName] is its project ID
      * @param folderName The root folder name for current generating project. The default value is the [project ID]
@@ -32,14 +46,17 @@ public class CodeGenerator {
      * This method is used to generate the package.json file
      * @throws IOException
      */
-    public static void generatePackageFile(String folderName) throws IOException {
-        String outputCode = "";
-        outputCode = PackageComponent.generateCode();
+    public static void generatePackageFiles(String folderName, String projectName) throws IOException {
+        String folderPath = "OutputStorage/" + folderName;
         generateOutputFolder(folderName);
-        File component_file = new File("OutputStorage/" + folderName + "/package.json");
-        BufferedWriter writer = new BufferedWriter(new FileWriter(component_file, false));
-        writer.append(outputCode);
-        writer.close();
+
+        // Create package.json file
+        String packageJson = PackageComponent.generatePackageJson();
+        writeFile(folderPath + "/package.json", packageJson);
+
+        // Create app.config.js file
+        String appJson = PackageComponent.generateAppJson(projectName);
+        writeFile(folderPath + "/app.config.js", appJson);
     }
 
     /**

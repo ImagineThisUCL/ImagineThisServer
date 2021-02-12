@@ -104,7 +104,7 @@ public class CodeGeneratorTest {
         Page testPage = pageList.get(0);
 
         testPage.loadWireframes(projectID, accessToken, authType);
-        CodeGenerator.generatePackageFile(folderName);
+        CodeGenerator.generatePackageFiles(folderName, projectName);
         for (String name : names) {
             System.out.println("Now Generating: " + name);
             Wireframe setUpWireframe = testPage.getWireframeByName(name);
