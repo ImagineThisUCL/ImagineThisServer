@@ -1,5 +1,11 @@
 package com.ucl.imaginethisserver.Controller;
 
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.core.DockerClientBuilder;
 import com.google.gson.JsonObject;
 import com.ucl.imaginethisserver.DAO.GenerateResponse;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
@@ -63,6 +69,7 @@ public class GenerationController {
         }
         try {
             JsonObject figmaTreeStructure = FigmaAPIUtil.requestFigmaFile(projectID, accessToken, authType);
+            String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"", "");
             if (figmaTreeStructure == null) {
                 return new GenerateResponse(false, null);
             }
@@ -73,6 +80,22 @@ public class GenerationController {
                     projectID,
                     accessToken,
                     authType,FrontendUtil.FOLDER_NAME);
+
+            // Start a Docker container that will publish the Expo app
+            try {
+                System.out.println("Started running a publishing container!!");
+                String mountDirectory = System.getProperty("user.dir") + "/OutputStorage/" + projectID;
+                DockerClient dockerClient = DockerClientBuilder.getInstance().build();
+                CreateContainerResponse container
+                        = dockerClient.createContainerCmd("imaginethis-expo")
+                        .withEnv("PROJECT_NAME=" + projectName)
+                        .withHostConfig(HostConfig.newHostConfig().withBinds(new Bind(mountDirectory, new Volume("/usr/src/app"))))
+                        .exec();
+                dockerClient.startContainerCmd(container.getId()).exec();
+            } catch(Exception e) {
+                System.out.println("Error in publishing app to Expo.");
+            }
+
             return new GenerateResponse(true, "OutputStorage/" + projectID + ".zip");
         } catch (Exception e) {
             e.printStackTrace();

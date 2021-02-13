@@ -160,11 +160,9 @@ public class FigmaAPIUtil {
         if(NavBar.hasPlaceholder() || Navigator.hasPlaceholder){
             CodeGenerator.writePlaceholderCode(folderName);
         }
+
         //Zip the output folder to a zip file so that the user could download
-
         ZipUtil.zipFile("OutputStorage/" + folderName);
-        FileUtils.deleteDirectory(new File("OutputStorage/" + folderName));
     }
-
 
 }
