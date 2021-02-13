@@ -13,6 +13,7 @@ import com.ucl.imaginethisserver.DAO.Wireframe;
 import com.ucl.imaginethisserver.FrontendComponent.NavBar;
 import com.ucl.imaginethisserver.FrontendComponent.Navigator;
 import org.apache.commons.io.FileUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -101,10 +102,18 @@ public class FigmaAPIUtil {
         return sendGetRequest(figmaImageURL, accessToken, authType);
     }
 
-    public static List<String> convertJsonToList(String jsonString){
-        jsonString = jsonString.substring(1,jsonString.length()-1);
-        String[] array = jsonString.split(", ");
-        return new ArrayList<>(Arrays.asList(array));
+    /**
+     * Helper method for processing list of Page names. They must be lowercase,
+     * since they will be implemented as React JavaScript classes that must be lowercase.
+     * @param A list of unsanitized page names.
+     * @return A list of page names.
+     */
+    public static List<String> processPagesList(List<String> pageNamesRaw){
+        ArrayList<String> pageNamesResult = new ArrayList<>();
+        for (String pageName : pageNamesRaw) {
+            pageNamesResult.add(StringUtils.capitalize(pageName));
+        }
+        return pageNamesResult;
     }
 
     /**
@@ -124,7 +133,7 @@ public class FigmaAPIUtil {
         Page testPage = pageList.get(0);
 
         testPage.loadWireframes(projectID, accessToken, authType);
-        CodeGenerator.generatePackageFile(folderName);
+        CodeGenerator.generatePackageFiles(folderName);
         for(String name : names){
             System.out.println("Now Generating: " + name);
             Wireframe setUpWireframe = testPage.getWireframeByName(name);
