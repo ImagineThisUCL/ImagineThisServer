@@ -46,7 +46,7 @@ public class CodeGenerator {
      * This method is used to generate the package.json file
      * @throws IOException
      */
-    public static void generatePackageFiles(String folderName, String projectName) throws IOException {
+    public static void generatePackageFiles(String folderName) throws IOException {
         String folderPath = "OutputStorage/" + folderName;
         generateOutputFolder(folderName);
 
@@ -55,7 +55,7 @@ public class CodeGenerator {
         writeFile(folderPath + "/package.json", packageJson);
 
         // Create app.config.js file
-        String appJson = PackageComponent.generateAppJson(projectName);
+        String appJson = PackageComponent.generateAppJson();
         writeFile(folderPath + "/app.config.js", appJson);
     }
 

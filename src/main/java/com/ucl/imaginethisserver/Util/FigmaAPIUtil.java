@@ -103,8 +103,8 @@ public class FigmaAPIUtil {
     }
 
     /**
-     * Helper method for processing list of Paga names. They must be lowercase,
-     * since they will be implemented as React JavaScript classes, that must be lowercase.
+     * Helper method for processing list of Page names. They must be lowercase,
+     * since they will be implemented as React JavaScript classes that must be lowercase.
      * @param A list of unsanitized page names.
      * @return A list of page names.
      */
@@ -133,7 +133,7 @@ public class FigmaAPIUtil {
         Page testPage = pageList.get(0);
 
         testPage.loadWireframes(projectID, accessToken, authType);
-        CodeGenerator.generatePackageFiles(folderName, projectName);
+        CodeGenerator.generatePackageFiles(folderName);
         for(String name : names){
             System.out.println("Now Generating: " + name);
             Wireframe setUpWireframe = testPage.getWireframeByName(name);

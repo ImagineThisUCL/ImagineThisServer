@@ -12,7 +12,7 @@ public class PackageComponent {
         return new String(Files.readAllBytes(Paths.get(TEMPLATE_FOLDER_PATH,"package.json")));
     }
 
-    public static String generateAppJson(String projectName) throws IOException {
+    public static String generateAppJson() throws IOException {
         return new String(Files.readAllBytes(Paths.get(TEMPLATE_FOLDER_PATH,"app.config.js")));
     }
 }
