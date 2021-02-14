@@ -1,6 +1,7 @@
 package com.ucl.imaginethisserver.DAO.DAOImpl;
 
 import com.ucl.imaginethisserver.DAO.VoteDao;
+import com.ucl.imaginethisserver.Mapper.UserMapper;
 import com.ucl.imaginethisserver.Mapper.VoteDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Vote;
@@ -18,11 +19,14 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 public class VoteDaoImpl implements VoteDao {
     private final VoteMapper voteMapper;
 
+    private final UserMapper userMapper;
+
     private final Logger logger = LoggerFactory.getLogger(VoteDaoImpl.class);
 
     @Autowired
-    public VoteDaoImpl(VoteMapper voteMapper) {
+    public VoteDaoImpl(VoteMapper voteMapper, UserMapper userMapper) {
         this.voteMapper = voteMapper;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -35,12 +39,12 @@ public class VoteDaoImpl implements VoteDao {
     @Override
     public boolean voteFeedback(String projectID, UUID feedbackID, Vote vote) {
         Vote newVote = new Vote();
-        UUID voteID = UUID.randomUUID();
         logger.info("Generating new vote for feedback " + feedbackID);
-        newVote.setVoteId(voteID);
-        newVote.setFeedbackId(feedbackID);
-        newVote.setUserId(vote.getUserId());
+        newVote.setFeedbackId(UUID.fromString(feedbackID.toString()));
         newVote.setTimestamp(System.currentTimeMillis());
+        newVote.setUserId(UUID.fromString(vote.getUserId().toString()));
+        newVote.setVoteId(UUID.fromString(vote.getVoteId().toString()));
+        newVote.setVoteValue(vote.getVoteValue());
         return voteMapper.insert(newVote) != 0;
     }
 

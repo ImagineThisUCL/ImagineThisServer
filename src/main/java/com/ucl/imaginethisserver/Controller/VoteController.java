@@ -34,7 +34,7 @@ public class VoteController {
     public ResponseEntity<Map<String, Boolean>> voteFeedback(@PathVariable("project-id") String projectID,
                                                              @PathVariable("feedback-id") UUID feedbackID,
                                                              @RequestBody Vote vote) {
-        Boolean result = voteService.voteFeedback(projectID, feedbackID, vote);
+        Boolean result = voteService.voteFeedback(projectID, feedbackID, vote) != null;
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
         return new ResponseEntity<>(response, HttpStatus.OK);

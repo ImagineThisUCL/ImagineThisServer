@@ -2,11 +2,8 @@ package com.ucl.imaginethisserver.Service.ServiceImpl;
 
 import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
 import com.ucl.imaginethisserver.DAO.VoteDao;
-import com.ucl.imaginethisserver.Mapper.VoteDynamicSqlSupport;
-import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.VoteService;
-import org.apache.ibatis.javassist.tools.web.BadHttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-
-import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 @Service
 public class VoteServiceImpl implements VoteService {
@@ -46,7 +41,7 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public boolean voteFeedback(String projectID, UUID feedbackID, Vote vote) {
+    public UUID voteFeedback(String projectID, UUID feedbackID, Vote vote) {
         if (vote.getVoteValue() != 1 && vote.getVoteValue() != -1) {
             logger.error("Vote value can only be 1 or -1");
             throw new InternalServerErrorException();
@@ -55,7 +50,20 @@ public class VoteServiceImpl implements VoteService {
             logger.error("Error creating new vote: UserID not provided.");
             throw new InternalServerErrorException();
         }
-        return voteDao.voteFeedback(projectID, feedbackID, vote);
+        // since the vote ID should be returned to the requester, generates the vote ID here if not present
+        if (vote.getVoteId() == null) {
+            UUID uuid = UUID.randomUUID();
+            logger.info("Generating Vote ID: " + uuid);
+            // set the vote ID
+            vote.setVoteId(uuid);
+        }
+        logger.info("Getting feedbackID: " + feedbackID);
+        vote.setFeedbackId(feedbackID);
+        if (voteDao.voteFeedback(projectID, feedbackID, vote)) {
+            return (UUID)vote.getVoteId();
+        } else {
+            return null;
+        }
     }
 
     @Override
