@@ -1,7 +1,6 @@
 package com.ucl.imaginethisserver.DAO.DAOImpl;
 
 import com.ucl.imaginethisserver.DAO.VoteDao;
-import com.ucl.imaginethisserver.Mapper.UserMapper;
 import com.ucl.imaginethisserver.Mapper.VoteDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Vote;
@@ -19,14 +18,11 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 public class VoteDaoImpl implements VoteDao {
     private final VoteMapper voteMapper;
 
-    private final UserMapper userMapper;
-
     private final Logger logger = LoggerFactory.getLogger(VoteDaoImpl.class);
 
     @Autowired
-    public VoteDaoImpl(VoteMapper voteMapper, UserMapper userMapper) {
+    public VoteDaoImpl(VoteMapper voteMapper) {
         this.voteMapper = voteMapper;
-        this.userMapper = userMapper;
     }
 
     @Override

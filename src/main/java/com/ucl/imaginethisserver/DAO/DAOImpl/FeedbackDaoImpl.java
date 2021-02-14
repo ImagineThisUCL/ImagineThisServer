@@ -54,6 +54,8 @@ public class FeedbackDaoImpl implements FeedbackDao {
 
     @Override
     public int addNewFeedback(String projectID, Feedback feedback) {
+        feedback.setFeedbackId(UUID.fromString(feedback.getFeedbackId().toString()));
+        feedback.setUserId(UUID.fromString(feedback.getUserId().toString()));
         return feedbackMapper.insert(feedback);
     }
 
