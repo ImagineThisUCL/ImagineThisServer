@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
             user.setUserId(uuid);
         }
         if (userDao.createUser(user)) {
-            return (UUID)user.getUserId();
+            return UUID.fromString(user.getUserId().toString());
         } else {
             logger.error("Error creating new User. Please check the log");
             throw new InternalServerErrorException();
