@@ -35,12 +35,12 @@ public class VoteDaoImpl implements VoteDao {
     @Override
     public boolean voteFeedback(String projectID, UUID feedbackID, Vote vote) {
         Vote newVote = new Vote();
-        UUID voteID = UUID.randomUUID();
         logger.info("Generating new vote for feedback " + feedbackID);
-        newVote.setVoteId(voteID);
-        newVote.setFeedbackId(feedbackID);
-        newVote.setUserId(vote.getUserId());
+        newVote.setFeedbackId(UUID.fromString(feedbackID.toString()));
         newVote.setTimestamp(System.currentTimeMillis());
+        newVote.setUserId(UUID.fromString(vote.getUserId().toString()));
+        newVote.setVoteId(UUID.fromString(vote.getVoteId().toString()));
+        newVote.setVoteValue(vote.getVoteValue());
         return voteMapper.insert(newVote) != 0;
     }
 
@@ -56,6 +56,8 @@ public class VoteDaoImpl implements VoteDao {
 
     @Override
     public boolean deleteVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote) {
-        return voteMapper.deleteByPrimaryKey(voteID) != 0;
+        logger.info("Deleting vote " + voteID);
+        return voteMapper.delete(c -> c
+            .where(VoteDynamicSqlSupport.voteId, isEqualTo(voteID))) != 0;
     }
 }
