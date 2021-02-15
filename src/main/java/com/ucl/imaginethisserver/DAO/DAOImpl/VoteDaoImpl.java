@@ -56,6 +56,8 @@ public class VoteDaoImpl implements VoteDao {
 
     @Override
     public boolean deleteVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote) {
-        return voteMapper.deleteByPrimaryKey(voteID) != 0;
+        logger.info("Deleting vote " + voteID);
+        return voteMapper.delete(c -> c
+            .where(VoteDynamicSqlSupport.voteId, isEqualTo(voteID))) != 0;
     }
 }
