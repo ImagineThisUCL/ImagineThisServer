@@ -6,43 +6,51 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
 import com.ucl.imaginethisserver.Component.WireframeComponent;
-import com.ucl.imaginethisserver.DAO.FigmaComponent;
-import com.ucl.imaginethisserver.DAO.Group;
-import com.ucl.imaginethisserver.DAO.Page;
-import com.ucl.imaginethisserver.DAO.Wireframe;
+import com.ucl.imaginethisserver.DAO.*;
 import com.ucl.imaginethisserver.FrontendComponent.NavBar;
 import com.ucl.imaginethisserver.FrontendComponent.Navigator;
-import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class FigmaAPIUtil {
-    /**
-     * Send a GET request to an figma API
-     * @param figmaAPI The Figma API url address
-     * @param accessToken the user's personal access token
-     * @param authType The type of access token
-     * @return the Json format data returned by the Figma.
-     * @throws IOException
-     */
-    public static JsonObject sendGetRequest(URL figmaAPI, String accessToken,AuthenticateType authType) throws IOException {
+
+    private String projectID;
+    private Authentication auth;
+    private Logger logger = LoggerFactory.getLogger(FigmaAPIUtil.class);
+    private static final String FIGMA_API = "https://api.figma.com/v1";
+    // Used as optimisation for caching and performing bulk requests
+    private static HashMap<String, String> componentImagesURLCache = new HashMap<>();
+
+    public FigmaAPIUtil(String projectID, Authentication auth) {
+        this.projectID = projectID;
+        this.auth = auth;
+    }
+
+    public JsonObject sendGetRequest(URL figmaAPI) throws IOException {
+        logger.info("Sending GET request to " + figmaAPI.toString());
         HttpURLConnection connection = (HttpURLConnection) figmaAPI.openConnection();
         connection.setRequestMethod("GET");
-        if(authType == AuthenticateType.ORIGINAL_TOKEN){
-            connection.setRequestProperty("X-Figma-Token", accessToken);
-        }else if(authType == AuthenticateType.OAUTH2){
-            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+        // Set authentication headers
+        if (auth.getType() == AuthenticationType.ORIGINAL_TOKEN) {
+            connection.setRequestProperty("X-Figma-Token", auth.getAccessToken());
+        } else if (auth.getType() == AuthenticationType.OAUTH2) {
+            connection.setRequestProperty("Authorization", "Bearer " + auth.getAccessToken());
         }
 
+        // Read and process response
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
@@ -53,38 +61,95 @@ public class FigmaAPIUtil {
             }
             in.close();
             return new Gson().fromJson(response.toString(), JsonObject.class);
+
         } else {
-            System.out.println("Request Failed");
+            logger.error("Figma request failed");
             return null;
         }
     }
 
-    /**
-     * Send the GET request to call Figma API to access the information of target Figma project.
-     * @param project_id The target project ID
-     * @param accessToken user's personal access token
-     * @param authType authentication type
-     * @return
-     * @throws IOException
-     */
-    public static JsonObject requestFigmaFile(String project_id, String accessToken,AuthenticateType authType) throws IOException {
-        URL figmaFileApi = new URL("https://api.figma.com/v1/files/" + project_id);
-        return sendGetRequest(figmaFileApi,accessToken,authType);
+    public JsonObject requestFigmaFile() throws IOException {
+        URL figmaFileApi = new URL(FIGMA_API + "/files/" + projectID);
+        return sendGetRequest(figmaFileApi);
     }
 
+    public FigmaFile getFigmaFile() {
 
+        JsonObject rawFigmaFile;
+        try {
+            rawFigmaFile = requestFigmaFile();
+        } catch (IOException e) { return null; };
 
-    public static List<Page> extractPages(JsonObject figmaTreeStructure){
-        List<Page> pageList = new ArrayList<>();
-        if (figmaTreeStructure != null) {
-            JsonArray pages = figmaTreeStructure.get("document").getAsJsonObject().get("children").getAsJsonArray(); //Get pages
-            for (JsonElement pageJson : pages){
-                Page page = new Gson().fromJson(pageJson, Page.class);
-                pageList.add(page);
+        JsonObject rawFigmaDocument = rawFigmaFile.get("document").getAsJsonObject();
+
+        FigmaFile figmaFile = new FigmaFile(projectID);
+        figmaFile.setProjectName(rawFigmaFile.get("name").getAsString());
+        figmaFile.setLastModified(rawFigmaFile.get("lastModified").getAsString());
+        figmaFile.setVersion(rawFigmaFile.get("version").getAsString());
+
+        for (JsonElement pageJson : rawFigmaDocument.get("children").getAsJsonArray()) {
+            Page page = new Gson().fromJson(pageJson, Page.class);
+            for (JsonElement jsonComponent : page.getChildren()) {
+                // We are interested only in wireframes
+                if (!jsonComponent.getAsJsonObject().get("type").getAsString().equals("FRAME")) continue;
+                Wireframe wireframe = new Gson().fromJson(jsonComponent, Wireframe.class);
+                // Further recursively process components in a wireframe
+                wireframe.setComponents(processJsonComponents(wireframe.getChildren()));
+                page.addWireframe(wireframe);
             }
+            figmaFile.addPage(page);
         }
-        return pageList;
+        return figmaFile;
     }
+
+
+    public List<FigmaComponent> processJsonComponents(JsonArray jsonComponents) {
+        List<FigmaComponent> figmaComponents = new ArrayList<>();
+        // Retrieve URL for individual components. For optimisation do it in bulk.
+        List<String> componentIDs = new ArrayList<>();
+        for (JsonElement jsonChild : jsonComponents) {
+            String id = jsonChild.getAsJsonObject().get("id").toString().replaceAll("\"", "");
+            componentIDs.add(id);
+        }
+        fetchComponentImageURLs(componentIDs);
+
+        // Process all children
+        for (JsonElement jsonChild : jsonComponents) {
+            String type = jsonChild.getAsJsonObject().get("type").getAsString();
+            FigmaComponent component;
+            switch (type) {
+                case "RECTANGLE":
+                    component = new Gson().fromJson(jsonChild, Rectangle.class);
+                    break;
+                case "TEXT":
+                    component = new Gson().fromJson(jsonChild, Text.class);
+                    break;
+                case "VECTOR":
+                    component = new Gson().fromJson(jsonChild, Vector.class);
+                    break;
+                case "ELLIPSE":
+                    component = new Gson().fromJson(jsonChild, Ellipse.class);
+                    break;
+                case "GROUP":
+                case "INSTANCE":
+                    component = new Gson().fromJson(jsonChild, Group.class);
+                    // TODO: See what to do with absoluteBoundingBox
+                    // ((Group) component).setWireframeBoundingBox(this.absoluteBoundingBox);
+                    // Recursively call this function
+                    ((Group) component).setComponents(processJsonComponents(((Group) component).getChildren()));
+                    break;
+                default:
+                    component = new Gson().fromJson(jsonChild, FigmaComponent.class);
+            }
+            component.setImageURL(getComponentImageURL(component.getId()));
+            // TODO: See what to do with absoluteBoundingBox
+            // component.convertRelativePosition(this.absoluteBoundingBox);
+            figmaComponents.add(component);
+        }
+        return figmaComponents;
+    };
+
+
 
     /**
      * Retrieve the image of Figma components based on their components ID.
@@ -92,14 +157,46 @@ public class FigmaAPIUtil {
      * @return A list of image urls in json format.
      * @throws IOException
      */
-    public static JsonObject requestImageByIDList(List<String> IDList, String projectID,String accessToken, AuthenticateType authType) throws IOException {
-        StringBuilder ids = new StringBuilder();
-        for (String id : IDList){
-            ids.append(id).append(",");
+    public void fetchComponentImageURLs(List<String> componentIDs) {
+        // Concatenate into a comma-separated string
+        StringBuilder stringComponentIDs = new StringBuilder();
+        for (String componentID : componentIDs) {
+            stringComponentIDs.append(componentID).append(",");
         }
-        ids.deleteCharAt(ids.length() - 1);
-        URL figmaImageURL  = new URL("https://api.figma.com/v1/images/" + projectID + "?ids=" + ids);
-        return sendGetRequest(figmaImageURL, accessToken, authType);
+        stringComponentIDs.deleteCharAt(stringComponentIDs.length() - 1);
+
+        // Make a request to Figma API
+        JsonObject imageURLs;
+        URL figmaImageURL;
+        try {
+            figmaImageURL  = new URL("https://api.figma.com/v1/images/" + projectID + "?ids=" + stringComponentIDs);
+        } catch (MalformedURLException e) {
+            logger.error("Could not form a URL properly.");
+            return;
+        }
+        try {
+            imageURLs = sendGetRequest(figmaImageURL);
+        } catch (IOException e) {
+            logger.error("Failed request to Figma API images.");
+            return;
+        }
+
+        // Load values into cache
+        for (String componentID : componentIDs) {
+            componentImagesURLCache.put(componentID, imageURLs.get(componentID).getAsString());
+        }
+    }
+
+    public void fetchComponentImageURL(String componentID) {
+        fetchComponentImageURLs(Arrays.asList(componentID));
+    }
+
+    public String getComponentImageURL(String componentID) {
+        // If cache does not hold the value, fetch it and store it into the cache
+        if (!componentImagesURLCache.containsKey(componentID)) {
+            fetchComponentImageURL(componentID);
+        }
+        return componentImagesURLCache.get(componentID);
     }
 
     /**
@@ -118,7 +215,7 @@ public class FigmaAPIUtil {
 
     /**
      * Generate the source code for all of target wireframes.
-     * @param names The list of wireframe names the user need to generate
+     * @param pageList The list of wireframe names the user need to generate
      * @param figmaTreeStructure the data returned by Figma API
      * @param projectID target project ID
      * @param accessToken user's personal access token
@@ -126,43 +223,49 @@ public class FigmaAPIUtil {
      * @param folderName the output folder name
      * @throws IOException
      */
-    public static void generatePageByName(List<String> names, JsonObject figmaTreeStructure, String projectID, String accessToken, AuthenticateType authType, String folderName) throws IOException {
-        FrontendUtil.refreshStaticVariable();
-        String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
-        List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
-        Page testPage = pageList.get(0);
+    public static void generateWireframes(
+            String projectID,
+            Authentication auth,
+            JsonObject figmaTreeStructure,
+            List<String> wireframeNames) throws IOException {
 
-        testPage.loadWireframes(projectID, accessToken, authType);
-        CodeGenerator.generatePackageFiles(folderName);
-        for(String name : names){
-            System.out.println("Now Generating: " + name);
-            Wireframe setUpWireframe = testPage.getWireframeByName(name);
-            setUpWireframe.loadComponent(projectID,accessToken,authType);
-            setUpWireframe.sortComponentByY();
-            for(FigmaComponent component : setUpWireframe.getComponentList()){
-                if(component.getType().equals("GROUP")){
-                    ((Group)component).loadComponent(projectID,accessToken,authType);
-                }
-            }
-            CodeGenerator.writeWireframeCode(setUpWireframe.getName(),setUpWireframe, projectID, accessToken, authType, folderName);
-        }
-        for(String wireframeName : Navigator.NAVIGATOR_MAP.keySet()){
-            if(!names.contains(wireframeName)){
-                Navigator.NAVIGATOR_MAP.put(wireframeName, "Placeholder");
-                Navigator.hasPlaceholder = true;
-            }
-        }
-        if(WireframeComponent.IsContainNavBar()){
-            CodeGenerator.writeAppJSCode(WireframeComponent.NAV_BAR, folderName);
-        }else if(!Navigator.NAVIGATOR_MAP.isEmpty()){
-            CodeGenerator.writeAppJSCode(null, folderName);
-        }
-        if(NavBar.hasPlaceholder() || Navigator.hasPlaceholder){
-            CodeGenerator.writePlaceholderCode(folderName);
-        }
-
-        //Zip the output folder to a zip file so that the user could download
-        ZipUtil.zipFile("OutputStorage/" + folderName);
+//        FrontendUtil.refreshStaticVariable(); // TODO: Do we need this?
+//        String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
+//
+//        // TODO: Traverse all pages, not just the first one
+//        List<Page> pageList = new ArrayList<>();//FigmaAPIUtil.extractPages(figmaTreeStructure);
+//        Page firstPage = pageList.get(0);
+//
+//        firstPage.loadWireframes(projectID, auth);
+//        CodeGenerator.generatePackageFiles(folderName);
+//        for (String wireframeName : wireframeNames) {
+//            logger.info("Generating wireframe: " + wireframeName);
+//            Wireframe currentWireframe = firstPage.getWireframeByName(wireframeName);
+//            List<FigmaComponent> figmaComponents = FigmaAPIUtil.convertJsonComponents(currentWireframe.getChildren());
+//            currentWireframe.setComponents(figmaComponents);
+//            currentWireframe.sortComponentsByY();
+//            CodeGenerator.writeWireframeCode(currentWireframe, projectID, accessToken, authType, folderName);
+//        }
+//
+//
+//        for (String wireframeName : Navigator.NAVIGATOR_MAP.keySet()) {
+//            if (!pageList.contains(wireframeName)) {
+//                Navigator.NAVIGATOR_MAP.put(wireframeName, "Placeholder");
+//                Navigator.hasPlaceholder = true;
+//            }
+//        }
+//        if (WireframeComponent.IsContainNavBar()) {
+//            CodeGenerator.writeAppJSCode(WireframeComponent.NAV_BAR, folderName);
+//        } else if (!Navigator.NAVIGATOR_MAP.isEmpty()) {
+//            CodeGenerator.writeAppJSCode(null, folderName);
+//        }
+//        if (NavBar.hasPlaceholder() || Navigator.hasPlaceholder) {
+//            CodeGenerator.writePlaceholderCode(folderName);
+//        }
+//
+//        //Zip the output folder to a zip file so that the user could download
+//        ZipUtil.zipFile("OutputStorage/" + folderName);
     }
+
 
 }
