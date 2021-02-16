@@ -60,7 +60,7 @@ public class VoteServiceImpl implements VoteService {
         logger.info("Getting feedbackID: " + feedbackID);
         vote.setFeedbackId(feedbackID);
         if (voteDao.voteFeedback(projectID, feedbackID, vote)) {
-            return (UUID)vote.getVoteId();
+            return UUID.fromString(vote.getVoteId().toString());
         } else {
             return null;
         }
