@@ -1,7 +1,5 @@
 package com.ucl.imaginethisserver.Controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.ucl.imaginethisserver.Model.Project;
 import com.ucl.imaginethisserver.Service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/v1")
 public class ProjectController {
     private final ProjectService projectService;

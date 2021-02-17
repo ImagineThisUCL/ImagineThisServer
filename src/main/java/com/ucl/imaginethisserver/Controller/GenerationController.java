@@ -46,9 +46,7 @@ public class GenerationController {
      *                      null if it is fail.
      * @throws IOException
      */
-    // @CrossOrigin(origins = "http://localhost:3000")
     @ApiIgnore
-    @CrossOrigin(origins = "http://88.80.186.99")
     @PostMapping("/api/v1/generatePage")
     public GenerateResponse generatePages(@RequestBody Map<String, Object> payload, HttpServletResponse response) throws IOException {
         String accessToken = payload.get("accessToken").toString();
