@@ -1,11 +1,8 @@
 package com.ucl.imaginethisserver.Controller;
 
-import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
 import com.ucl.imaginethisserver.DAO.FeedbackDto;
 import com.ucl.imaginethisserver.Model.Feedback;
-import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
-import org.apache.ibatis.javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/v1")
 public class FeedbackController {
     private final FeedbackService feedbackService;

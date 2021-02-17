@@ -6,7 +6,6 @@ import com.ucl.imaginethisserver.DAO.Page;
 import com.ucl.imaginethisserver.DAO.Wireframe;
 import com.ucl.imaginethisserver.Util.AuthenticateType;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,9 +33,7 @@ public class AuthenticateController {
      * @return
      * @throws IOException
      */
-    // @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
     @ApiIgnore
-    @CrossOrigin(origins = "http://88.80.186.99", maxAge = 3600)
     @GetMapping("/api/v1/authToken")
     public AuthenticateResponse getFigmaProject(@RequestParam(value = "projectID") String projectID, @RequestParam(value = "accessToken") String accessToken,
                                                 @RequestParam(value = "authType") String type, HttpServletResponse response) throws IOException {
