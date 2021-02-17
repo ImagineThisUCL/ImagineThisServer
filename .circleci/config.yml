@@ -3,6 +3,8 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:11.0-stretch-node-browsers-legacy
+    environment:
+      CORS_ORIGIN: *
     steps:
       - checkout
       - run : mvn test
