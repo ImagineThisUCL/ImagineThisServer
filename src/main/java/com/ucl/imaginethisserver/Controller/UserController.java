@@ -1,6 +1,7 @@
 package com.ucl.imaginethisserver.Controller;
 
 import com.ucl.imaginethisserver.Model.User;
+import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,5 +41,10 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         response.put("success", result);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{user-id}/votes")
+    public List<Vote> getVotesByUserID(@PathVariable("user-id") UUID userId) {
+        return userService.getAllVotesForUser(userId);
     }
 }

@@ -3,12 +3,14 @@ package com.ucl.imaginethisserver.Service.ServiceImpl;
 import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
 import com.ucl.imaginethisserver.DAO.UserDao;
 import com.ucl.imaginethisserver.Model.User;
+import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,6 +22,22 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    @Override
+    public List<Vote> getAllVotesForUser(UUID userID) {
+        // check feedback id
+        if (userID == null) {
+            logger.error("Error getting vote for user: user ID not provided");
+            throw new InternalServerErrorException();
+        }
+        List<Vote> votes = userDao.getAllVotesForUser(userID);
+        if (votes.size() > 0) {
+            return votes;
+        } else {
+            logger.error("Cannot get Votes for Feedback " + userID + ", because there's no record");
+            throw new InternalServerErrorException();
+        }
     }
 
     @Override
