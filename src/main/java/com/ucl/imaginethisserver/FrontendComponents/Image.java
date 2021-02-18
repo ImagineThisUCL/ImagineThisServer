@@ -1,8 +1,6 @@
-package com.ucl.imaginethisserver.FrontendComponent;
+package com.ucl.imaginethisserver.FrontendComponents;
 
 import com.ucl.imaginethisserver.Util.FrontendUtil;
-
-import java.io.IOException;
 
 /**
  *  Frontend Component Image that contains the URL of the actual image within.

@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponent;
+package com.ucl.imaginethisserver.FrontendComponents;
 
 import com.ucl.imaginethisserver.DAO.FigmaColor;
 import com.ucl.imaginethisserver.DAO.Fills;
@@ -7,7 +7,7 @@ import com.ucl.imaginethisserver.DAO.Style;
 
 import java.util.List;
 
-public class Button extends FrontendComponent{
+public class Button extends FrontendComponent {
     /**
      * The text in the current button
      */
@@ -67,20 +67,18 @@ public class Button extends FrontendComponent{
         this.cornerRadius = cornerRadius;
     }
 
-    public String generateCode() {
+    public String generateCode(Page page) {
         try {
             String backgroundColor = this.RecFills.get(0).getColor().toString();
             String textColor = this.TextFills.get(0).getColor().toString();
             StringBuilder buttonCode = new StringBuilder();
             buttonCode.append("<Button\n");
             if (this.transitionNodeID != null) {
-                String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName();
+                String navigateWireframe = page.getWireframeByID(transitionNodeID).getName();
                 if(NavBar.BUTTON_MAP.containsValue(navigateWireframe)){
-                    navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
                     buttonCode.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
                 }else{
                     Navigator.NAVIGATOR_MAP.put(navigateWireframe,navigateWireframe);
-                    navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
                     buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
                 }
             }

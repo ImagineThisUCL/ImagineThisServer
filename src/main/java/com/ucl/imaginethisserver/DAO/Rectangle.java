@@ -1,7 +1,6 @@
 package com.ucl.imaginethisserver.DAO;
 
-import com.ucl.imaginethisserver.FrontendComponent.Image;
-import com.ucl.imaginethisserver.FrontendComponent.Map;
+import com.ucl.imaginethisserver.FrontendComponents.Map;
 
 import java.util.List;
 

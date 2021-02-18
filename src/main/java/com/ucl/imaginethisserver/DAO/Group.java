@@ -1,13 +1,9 @@
 package com.ucl.imaginethisserver.DAO;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
-import com.ucl.imaginethisserver.FrontendComponent.*;
-import com.ucl.imaginethisserver.Util.AuthenticateType;
-import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
+import com.ucl.imaginethisserver.FrontendComponents.*;
+import com.ucl.imaginethisserver.Util.Authentication;
 import com.ucl.imaginethisserver.Util.FrontendUtil;
 
 import java.io.IOException;
@@ -27,78 +23,30 @@ public class Group extends FigmaComponent {
     String blendMode;
     String transitionNodeID;
     private Map<String, FigmaComponent> componentMap = new HashMap<>();
+    private ArrayList<FigmaComponent> componentList = new ArrayList<>();
+
     private AbsoluteBoundingBox wireframeBoundingBox;
 
     public Map<String, FigmaComponent> getComponentMap() {
-        return this.componentMap;
+        return componentMap;
     }
 
-    /**
-     * Load all the components inside the group. Convert all json data retrieved from Figma API to corresponding Java object.
-     * @throws IOException
-     */
-    public void loadComponent(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
-        List<String> IDList = new ArrayList<>();
-        for (JsonElement pageChild : this.children) {
-            String id = pageChild.getAsJsonObject().get("id").toString().replaceAll("\"", "");
-            IDList.add(id);
+    public List<FigmaComponent> getComponentList() {
+        return componentList;
+    }
+
+    public void setComponents(List<FigmaComponent> components) {
+        // Set objects to be empty
+        componentList = new ArrayList<>();
+        componentMap = new HashMap<>();
+        for (FigmaComponent component : components) {
+            componentList.add(component);
+            componentMap.put(component.getId(), component);
         }
-        JsonObject imageJson = FigmaAPIUtil.requestImageByIDList(IDList, projectID, accessToken, authenticateType).get("images").getAsJsonObject();
-        for (JsonElement jsonChild : children) {
-            String type = jsonChild.getAsJsonObject().get("type").toString();
-            type = type.substring(1, type.length() - 1);
-            String imageURL = "";
-            switch (type) {
-                case "RECTANGLE":
-                    Rectangle rectangle = new Gson().fromJson(jsonChild, Rectangle.class);
-                    imageURL = imageJson.get(rectangle.getId()).toString();
-                    rectangle.setImageURL(imageURL);
-                    rectangle.convertRelativePosition(this.wireframeBoundingBox);
-                    componentMap.put(rectangle.getId(), rectangle);
-                    break;
+    }
 
-                case "TEXT":
-                    Text text = new Gson().fromJson(jsonChild, Text.class);
-                    imageURL = imageJson.get(text.getId()).toString();
-                    text.setImageURL(imageURL);
-                    text.convertRelativePosition(this.wireframeBoundingBox);
-                    componentMap.put(text.getId(), text);
-                    break;
-
-                case "VECTOR":
-                    Vector vector = new Gson().fromJson(jsonChild, Vector.class);
-                    imageURL = imageJson.get(vector.getId()).toString();
-                    vector.setImageURL(imageURL);
-                    vector.convertRelativePosition(this.wireframeBoundingBox);
-                    componentMap.put(vector.getId(), vector);
-                    break;
-                case "GROUP":
-                case "INSTANCE":
-                    Group group = new Gson().fromJson(jsonChild, Group.class);
-                    imageURL = imageJson.get(group.getId()).toString();
-                    group.setImageURL(imageURL);
-                    group.setType("GROUP");
-                    group.setWireframeBoundingBox(this.wireframeBoundingBox);
-                    group.convertRelativePosition(this.wireframeBoundingBox);
-                    componentMap.put(group.getId(), group);
-                    break;
-                case "ELLIPSE":
-                    Ellipse ellipse = new Gson().fromJson(jsonChild, Ellipse.class);
-                    imageURL = imageJson.get(ellipse.getId()).toString();
-                    ellipse.setImageURL(imageURL);
-                    ellipse.convertRelativePosition(this.wireframeBoundingBox);
-                    componentMap.put(ellipse.getId(), ellipse);
-                    break;
-                default:
-                    FigmaComponent figmaComponent = new Gson().fromJson(jsonChild, FigmaComponent.class);
-                    imageURL = imageJson.get(figmaComponent.getId()).toString();
-                    figmaComponent.setImageURL(imageURL);
-                    figmaComponent.convertRelativePosition(this.wireframeBoundingBox);
-                    componentMap.put(figmaComponent.getId(), figmaComponent);
-                    break;
-            }
-        }
-
+    public JsonArray getChildren() {
+        return children;
     }
 
     /**
@@ -161,7 +109,7 @@ public class Group extends FigmaComponent {
      *  by dealing with its transitionNodeID, image within that function as the button view and
      *  the text contains within and etc.
      */
-    public ImageButton convertImageButton(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
+    public ImageButton convertImageButton(String projectID, Authentication auth) throws IOException {
         ImageButton imageButton = new ImageButton();
         imageButton.setPositionX(this.getPositionX());
         imageButton.setPositionY(this.getPositionY());
@@ -183,7 +131,11 @@ public class Group extends FigmaComponent {
      *  @return Function used to convert a Group component into the bottom navigation bar,
      *  by dealing with its icon button and the background of the bar.
      */
-    public NavBar convertNavBar(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
+    public NavBar convertNavBar(
+            String projectID,
+            Authentication auth,
+            Page page) throws IOException {
+
         NavBar navBar = new NavBar();
         navBar.setHeight(this.getHeight());
         navBar.setWidth(this.getWidth());
@@ -196,7 +148,6 @@ public class Group extends FigmaComponent {
                 navButton.setHeight(component.getHeight());
                 navButton.setPositionX(component.getPositionX());
                 navButton.setPositionY(component.getPositionY());
-                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
                 for (FigmaComponent childComponent : ((Group) component).getComponentMap().values()) {
                     if (childComponent.getType().equals("TEXT")) {
                         navButton.setText(((Text) childComponent).getCharacters());
@@ -205,16 +156,16 @@ public class Group extends FigmaComponent {
                     }
                 }
                 String transitionNodeID = ((Group) component).transitionNodeID;
-                if(transitionNodeID != null && FrontendUtil.GENERATE_PAGE_LIST.contains(Page.getWireframeByID(transitionNodeID).getName())){
-                    NavBar.BUTTON_MAP.put(navButton.getText(), Page.getWireframeByID(transitionNodeID).getName());
-                }else{
+                if (transitionNodeID != null && FrontendUtil.GENERATE_PAGE_LIST.contains(page.getWireframeByID(transitionNodeID).getName())) {
+                    NavBar.BUTTON_MAP.put(navButton.getText(), page.getWireframeByID(transitionNodeID).getName());
+                } else {
                     NavBar.BUTTON_MAP.put(navButton.getText(), "Placeholder");
                 }
                 NavBar.NAV_BUTTONS.add(navButton);
 
 
             }
-            if(component.getType().equals("RECTANGLE") && component.getName().contains("background")){
+            if (component.getType().equals("RECTANGLE") && component.getName().contains("background")) {
                 Rectangle rectangle = (Rectangle) component;
                 NavBar.containerFills = rectangle.getFills();
             }
@@ -270,7 +221,7 @@ public class Group extends FigmaComponent {
      *  all booleans along with the related variables of the component
      *  should be converted within the form.
      */
-    public Form convertForm(String projectID, String accessToken, AuthenticateType authenticateType) throws IOException {
+    public Form convertForm(String projectID, Authentication auth) throws IOException {
         Form form = new Form();
         form.setHeight(this.getHeight());
         form.setWidth(this.getWidth());
@@ -278,45 +229,42 @@ public class Group extends FigmaComponent {
         form.setPositionY(this.getPositionY());
         form.setAlign(this.getAlign());
         for (FigmaComponent component : this.componentMap.values()) {
-            if (component.getType().equals("TEXT")) {
+            String componentType = component.getType();
+            String componentName = component.getName().toLowerCase();
+            if (componentType.equals("TEXT")) {
                 FrontendText text = ((Text) component).convertToFrontendText();
                 form.frontendComponentList.add(text);
                 form.setContainText(true);
-            } else if (component.getName().toLowerCase().contains("switch")) {
+            } else if (componentName.contains("switch")) {
                 Switch aSwitch = component.convertSwitch();
                 form.frontendComponentList.add(aSwitch);
                 form.setContainSwitch(true);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("input")) {
-                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+            } else if (componentType.equals("GROUP") && componentName.contains("input")) {
                 TextBox textBox = ((Group) component).convertTextBox();
                 form.frontendComponentList.add(textBox);
                 form.setContainTextBox(true);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("textbutton")) {
-                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+            } else if (componentType.equals("GROUP") && componentName.contains("textbutton")) {
                 Button button = ((Group) component).convertButton();
                 form.frontendComponentList.add(button);
                 form.setContainButton(true);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("imagebutton")) {
-                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
-                ImageButton imageButton = ((Group) component).convertImageButton(projectID, accessToken, authenticateType);
+            } else if (componentType.equals("GROUP") && componentName.contains("imagebutton")) {
+                ImageButton imageButton = ((Group) component).convertImageButton(projectID, auth);
                 form.frontendComponentList.add(imageButton);
                 form.setContainImageButton(true);
-            } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("GROUP")) && (component.getName().toLowerCase().contains("image")||component.getName().toLowerCase().contains("icon")||component.getName().toLowerCase().contains("picture"))) {
+            } else if ((componentType.equals("RECTANGLE") || componentType.equals("GROUP")) && (componentName.contains("image") || componentName.contains("icon") || componentName.contains("picture"))) {
                 Image image = component.convertToImage();
                 form.frontendComponentList.add(image);
                 form.setContainImage(true);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("chart")) {
-                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+            } else if (componentType.equals("GROUP") && componentName.contains("chart")) {
                 Chart fixedChart = ((Group) component).convertToFixedChart();
                 form.frontendComponentList.add(fixedChart);
                 form.setContainChart(true);
-            } else if (component.getType().equals("GROUP") && component.getName().toLowerCase().contains("dropdown")) {
-                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+            } else if (componentType.equals("GROUP") && componentName.contains("dropdown")) {
                 Dropdown dropdown = ((Group) component).convertToDropdown();
                 form.frontendComponentList.add(dropdown);
                 form.setContainDropdown(true);
-            } else if ((component.getType().equals("RECTANGLE") || component.getType().equals("VECTOR")) && component.getName().toLowerCase().contains("background")) {
-                switch (component.getType()) {
+            } else if ((componentType.equals("RECTANGLE") || componentType.equals("VECTOR")) && componentName.contains("background")) {
+                switch (componentType) {
                     case "RECTANGLE":
                         Rectangle rectangle = (Rectangle) component;
                         if (rectangle.getFills().size() > 0) {
@@ -341,19 +289,17 @@ public class Group extends FigmaComponent {
                         form.setBorderWidth(vector.getStrokeWeight());
                         break;
                 }
-            }else if(component.getType().equals("GROUP") && component.getName().toLowerCase().contains("slider")){
-                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
+            } else if (componentType.equals("GROUP") && component.getName().toLowerCase().contains("slider")){
                 Slider slider = ((Group) component).convertSlider();
                 form.frontendComponentList.add(slider);
                 form.setContainSlider(true);
             // Add recursion to form/card
-            }else if(component.getType().equals("GROUP")
+            } else if (componentType.equals("GROUP")
                     && (component.getName().toLowerCase().contains("form")
-                    || component.getName().toLowerCase().contains("card"))){
-                ((Group) component).loadComponent(projectID, accessToken, authenticateType);
-                Form nestForm = ((Group)component).convertForm(projectID,accessToken,authenticateType);
+                    || component.getName().toLowerCase().contains("card"))) {
+                Form nestForm = ((Group)component).convertForm(projectID, auth);
                 form.frontendComponentList.add(nestForm);
-            }else{
+            } else {
                 Image image = component.convertToImage();
                 form.frontendComponentList.add(image);
                 form.setContainImage(true);

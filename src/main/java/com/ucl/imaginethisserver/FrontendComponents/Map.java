@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponent;
+package com.ucl.imaginethisserver.FrontendComponents;
 
 public class Map extends FrontendComponent {
     public String generateCode(){

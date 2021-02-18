@@ -1,7 +1,7 @@
 package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.annotations.Expose;
-import com.ucl.imaginethisserver.FrontendComponent.FrontendText;
+import com.ucl.imaginethisserver.FrontendComponents.FrontendText;
 
 import java.util.List;
 /**

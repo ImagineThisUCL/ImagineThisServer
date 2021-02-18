@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponent;
+package com.ucl.imaginethisserver.FrontendComponents;
 
 
 import com.ucl.imaginethisserver.DAO.Fills;

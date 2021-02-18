@@ -2,8 +2,8 @@ package com.ucl.imaginethisserver.DAO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ucl.imaginethisserver.FrontendComponent.Image;
-import com.ucl.imaginethisserver.FrontendComponent.Switch;
+import com.ucl.imaginethisserver.FrontendComponents.Image;
+import com.ucl.imaginethisserver.FrontendComponents.Switch;
 
 /**
  * It is the father class for all of recognized Figma component.
@@ -143,4 +143,5 @@ public class FigmaComponent {
     public void setId(String id) {
         this.id = id;
     }
+
 }

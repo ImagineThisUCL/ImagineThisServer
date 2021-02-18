@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponent;
+package com.ucl.imaginethisserver.FrontendComponents;
 
 import com.ucl.imaginethisserver.DAO.Page;
 import com.ucl.imaginethisserver.Util.FrontendUtil;
@@ -21,20 +21,18 @@ public class ImageButton extends FrontendComponent {
         this.transitionNodeID = transitionNodeID;
     }
 
-    public String generateCode() throws IOException {
+    public String generateCode(Page page) throws IOException {
         try {
             StringBuilder imageButtonCode = new StringBuilder();
             String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"", ""), FrontendUtil.FOLDER_NAME);
             imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, "../..");
             imageButtonCode.append("<ImageButton\n");
             if (this.transitionNodeID != null) {
-                String navigateWireframe = Page.getWireframeByID(transitionNodeID).getName();
+                String navigateWireframe = page.getWireframeByID(transitionNodeID).getName();
                 if(NavBar.BUTTON_MAP.containsValue(navigateWireframe)){
-                    navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
                     imageButtonCode.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
                 }else{
                     Navigator.NAVIGATOR_MAP.put(navigateWireframe,navigateWireframe);
-                    navigateWireframe = navigateWireframe.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]", "");
                     imageButtonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
                 }
             }
