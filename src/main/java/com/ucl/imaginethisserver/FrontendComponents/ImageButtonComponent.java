@@ -21,14 +21,23 @@ public class ImageButtonComponent extends FrontendComponent {
         this.transitionNodeID = transitionNodeID;
     }
 
-    public String generateCode(Page page) throws IOException {
+    @Override
+    public boolean isReusable() { return true; };
+
+    @Override
+    public String generateReusableCode() throws IOException {
+        return readTemplateFile("ImageButton.js");
+    };
+
+    @Override
+    public String generateCode() {
         try {
             StringBuilder imageButtonCode = new StringBuilder();
             String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"", ""), FrontendUtil.FOLDER_NAME);
             imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, "../..");
             imageButtonCode.append("<ImageButton\n");
             if (this.transitionNodeID != null) {
-                String navigateWireframe = page.getWireframeByID(transitionNodeID).getName();
+                String navigateWireframe = ""; // TODO: page.getWireframeByID(transitionNodeID).getName();
                 if(NavBarComponent.BUTTON_MAP.containsValue(navigateWireframe)){
                     imageButtonCode.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
                 }else{

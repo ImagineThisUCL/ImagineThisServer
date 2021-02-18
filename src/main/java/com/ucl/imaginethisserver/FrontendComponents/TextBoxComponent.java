@@ -4,6 +4,7 @@ import com.ucl.imaginethisserver.FigmaComponents.Color;
 import com.ucl.imaginethisserver.FigmaComponents.Fills;
 import com.ucl.imaginethisserver.FigmaComponents.Style;
 
+import java.io.IOException;
 import java.util.List;
 
 public class TextBoxComponent extends FrontendComponent {
@@ -49,6 +50,15 @@ public class TextBoxComponent extends FrontendComponent {
         this.textFills = textFills;
     }
 
+    @Override
+    public boolean isReusable() { return true; };
+
+    @Override
+    public String generateReusableCode() throws IOException {
+        return readTemplateFile("InputField.js");
+    };
+
+    @Override
     public String generateCode() {
         try {
             //default color for background:  transparent;

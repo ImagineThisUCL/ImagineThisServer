@@ -37,7 +37,14 @@ public class NavBarComponent extends FrontendComponent {
         return false;
     }
 
-    public String generateCode() throws IOException {
+    @Override
+    public boolean isReusable() { return false; };
+
+    @Override
+    public String generateReusableCode() { return null; };
+
+    @Override
+    public String generateCode() {
         try {
             String backgroundColor = "\"#D5E6EC\"";
             if(containerFills != null && containerFills.size() > 0){

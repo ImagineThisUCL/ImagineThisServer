@@ -1,6 +1,10 @@
 package com.ucl.imaginethisserver.Component;
 
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
+import com.ucl.imaginethisserver.FrontendComponents.DropdownComponent;
+import com.ucl.imaginethisserver.FrontendComponents.ImageButtonComponent;
+import com.ucl.imaginethisserver.FrontendComponents.SliderComponent;
+import com.ucl.imaginethisserver.FrontendComponents.SwitchComponent;
 import com.ucl.imaginethisserver.Util.CodeGenerator;
 import com.ucl.imaginethisserver.FigmaComponents.*;
 import com.ucl.imaginethisserver.FrontendComponents.*;
@@ -88,53 +92,40 @@ public class WireframeComponent {
 
         importCode.append("import { View, ScrollView");
         if (containsComponent(ImageComponent.class)) { importCode.append(", Image"); };
-        importCode.append(" } from \"react-native\"\n");
+        importCode.append(" } from 'react-native';\n");
 
-        importCode.append("import React, { Component } from \"react\";\n");
-        importCode.append("import base from \"../../assets/baseStyle\";\n");
+        importCode.append("import React, { Component } from 'react';\n");
+        importCode.append("import base from '../../assets/baseStyle.js';\n");
 
-        if (isContainText || isContainChart) {
-            importCode.append("import P from '../reusables/P'").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.P, folderName);
+        if (containsComponent(TextComponent.class) || containsComponent(ChartComponent.class)) {
+            importCode.append("import P from '../reusables/P.js';\n");
         }
-        if (isContainButton) {
-            importCode.append("import Button from '../reusables/Button'").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.BUTTON, folderName);
+        if (containsComponent(ButtonComponent.class)) {
+            importCode.append("import Button from '../reusables/Button.js'\n");
         }
-        if (IS_CONTAIN_NAVBAR) {
-            importCode.append("import { StatusBar } from 'expo-status-bar'").append("\n");
+        if (containsComponent(NavBarComponent.class)) {
+            importCode.append("import { StatusBar } from 'expo-status-bar';\n");
         }
-        if (isContainTextBox) {
-            importCode.append("import InputField from '../reusables/InputField'").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.INPUTFIELD, folderName);
+        if (containsComponent(TextBoxComponent.class)) {
+            importCode.append("import InputField from '../reusables/InputField.js';\n");
         }
-
-        if (isContainSliderBar) {
-            importCode.append("import CustomSlider from \"../reusables/CustomSlider\"").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.SLIDER, folderName);
+        if (containsComponent(SliderComponent.class)) {
+            importCode.append("import CustomSlider from '../reusables/CustomSlider.js';\n");
         }
-        if (isContainImageButton) {
-            importCode.append("import ImageButton from \"../reusables/ImageButton\"").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.IMAGE_BUTTON, folderName);
+        if (containsComponent(ImageButtonComponent.class)) {
+            importCode.append("import ImageButton from '../reusables/ImageButton.js';\n");
         }
-        if (isContainSwitch) {
-            importCode.append("import Toggle from \"../reusables/Toggle\"").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.SWITCH, folderName);
+        if (containsComponent(SwitchComponent.class)) {
+            importCode.append("import Toggle from '../reusables/Toggle.js';\n");
         }
-        if (isContainChart) {
-            importCode.append("import {\n")
-                    .append("  LineChart,\n")
-                    .append("  BarChart,\n")
-                    .append("  PieChart\n")
-                    .append("} from \"react-native-chart-kit\"").append("\n");
+        if (containsComponent(ChartComponent.class)) {
+            importCode.append("import { LineChart, BarChart, PieChart } from 'react-native-chart-kit';\n");
         }
-        if (isContainMap) {
-            importCode.append("import GoogleMap from \"../reusables/GoogleMap\"").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.GOOGLE_MAP, folderName);
+        if (containsComponent(MapComponent.class)) {
+            importCode.append("import GoogleMap from '../reusables/GoogleMap.js';\n");
         }
-        if (isContainDropdown) {
-            importCode.append("import Dropdown from \"../reusables/Dropdown\"").append("\n");
-            CodeGenerator.writeReusableComponentCode(ReusableComponent.DROPDOWN, folderName);
+        if (containsComponent(DropdownComponent.class)) {
+            importCode.append("import Dropdown from '../reusables/Dropdown.js';\n");
         }
         importCode.append("\n");
 

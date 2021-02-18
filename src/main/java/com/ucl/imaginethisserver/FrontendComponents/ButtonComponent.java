@@ -5,6 +5,7 @@ import com.ucl.imaginethisserver.FigmaComponents.Fills;
 import com.ucl.imaginethisserver.FigmaComponents.Page;
 import com.ucl.imaginethisserver.FigmaComponents.Style;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ButtonComponent extends FrontendComponent {
@@ -67,14 +68,24 @@ public class ButtonComponent extends FrontendComponent {
         this.cornerRadius = cornerRadius;
     }
 
-    public String generateCode(Page page) {
+
+    @Override
+    public boolean isReusable() { return true; };
+
+    @Override
+    public String generateReusableCode() throws IOException {
+        return readTemplateFile("Button.js");
+    };
+
+    @Override
+    public String generateCode() {
         try {
             String backgroundColor = this.RecFills.get(0).getColor().toString();
             String textColor = this.TextFills.get(0).getColor().toString();
             StringBuilder buttonCode = new StringBuilder();
             buttonCode.append("<Button\n");
             if (this.transitionNodeID != null) {
-                String navigateWireframe = page.getWireframeByID(transitionNodeID).getName();
+                String navigateWireframe = ""; // TODO: page.getWireframeByID(transitionNodeID).getName();
                 if(NavBarComponent.BUTTON_MAP.containsValue(navigateWireframe)){
                     buttonCode.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
                 }else{

@@ -1,16 +1,17 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
+import java.io.IOException;
+
 public class ChartComponent extends FrontendComponent {
-    /**
-     * In case the chart needs to show its name, not used yet.
-     */
-    private String title;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    @Override
+    public boolean isReusable() { return false; };
 
-    public String generateCode(){
+    @Override
+    public String generateReusableCode() { return null; };
+
+    @Override
+    public String generateCode() {
         try {
             StringBuilder code = new StringBuilder();
             code.append("<View style={{padding: 10, backgroundColor: \"#ffffff\", borderRadius: 10, marginBottom: 10}}>\n" +
@@ -22,7 +23,7 @@ public class ChartComponent extends FrontendComponent {
                     "bezier/>\n" +
                     "</View>\n");
             return code.toString();
-        }catch (Exception e){
+        } catch (Exception e) {
             return "<P>The chart component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
         }
     }

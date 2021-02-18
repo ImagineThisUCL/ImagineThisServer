@@ -1,6 +1,11 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Color;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  *  As Figma Component cannot be used to generate code directly
  *  The figma component Text need to be converted into Frontend Component FrontendText
@@ -14,6 +19,25 @@ public class TextComponent extends FrontendComponent {
     private Color color;
     private String text;
     private String textAlign;
+
+    @Override
+    public boolean isReusable() { return true; };
+
+    @Override
+    public String generateReusableCode() throws IOException {
+        return readTemplateFile("P.js");
+    };
+
+    @Override
+    public String generateCode(){
+        try {
+            this.text = this.text.replaceAll("\n", "{\"\\\\n\"}");
+            String color = this.color.toString();
+            return "<P style={{fontSize: " + this.getFontSize() + ", fontWeight: \'" + this.getFontWeight() + "\', color: " + color + ", textAlign: \'" + this.textAlign.toLowerCase() + "\', flex: 1 }}>" + this.text + "</P>";
+        }catch (Exception e){
+            return "<P>The text code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
+        }
+    }
 
     public String getFontSize() {
         return fontSize;
@@ -55,19 +79,6 @@ public class TextComponent extends FrontendComponent {
         this.text = text;
     }
 
-
-    /**
-     *  Function used to generate code using the variables contains within the Object
-    */
-    public String generateCode(){
-        try {
-            this.text = this.text.replaceAll("\n", "{\"\\\\n\"}");
-            String color = this.color.toString();
-            return "<P style={{fontSize: " + this.getFontSize() + ", fontWeight: \'" + this.getFontWeight() + "\', color: " + color + ", textAlign: \'" + this.textAlign.toLowerCase() + "\', flex: 1 }}>" + this.text + "</P>";
-        }catch (Exception e){
-            return "<P>The text code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
-        }
-    }
 
     public String toString(){
         return this.getHeight() + " " + this.getPositionY();

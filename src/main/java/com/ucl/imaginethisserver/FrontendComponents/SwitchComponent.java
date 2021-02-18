@@ -1,8 +1,21 @@
 package com.ucl.imaginethisserver.FrontendComponents;
+
+import java.io.IOException;
+
 /**
  *  Switch object that only generates switch frontend code with fixed variables
  */
 public class SwitchComponent extends FrontendComponent {
+
+    @Override
+    public boolean isReusable() { return true; };
+
+    @Override
+    public String generateReusableCode() throws IOException {
+        return readTemplateFile("Toggle.js");
+    };
+
+    @Override
     public String generateCode() {
         try {
             StringBuilder code = new StringBuilder();

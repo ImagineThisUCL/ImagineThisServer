@@ -3,6 +3,7 @@ package com.ucl.imaginethisserver.FrontendComponents;
 import com.ucl.imaginethisserver.FigmaComponents.Fills;
 import com.ucl.imaginethisserver.FigmaComponents.Style;
 
+import java.io.IOException;
 import java.util.List;
 
 public class DropdownComponent extends FrontendComponent {
@@ -38,6 +39,16 @@ public class DropdownComponent extends FrontendComponent {
         this.cornerRadius = cornerRadius;
     }
 
+
+    @Override
+    public boolean isReusable() { return true; };
+
+    @Override
+    public String generateReusableCode() throws IOException {
+        return readTemplateFile("Dropdown.js");
+    };
+
+    @Override
     public String generateCode(){
         try {
             StringBuilder code = new StringBuilder();

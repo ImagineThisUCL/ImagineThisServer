@@ -1,5 +1,7 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
+import java.io.IOException;
+
 /**
  *  Frontend Component Slider that contains
  *  the minimum value, the maximum value and current value of the slider.
@@ -9,7 +11,16 @@ public class SliderComponent extends FrontendComponent {
     private int max_value;
     private int cur_value;
 
-    public String generateCode(){
+    @Override
+    public boolean isReusable() { return true; };
+
+    @Override
+    public String generateReusableCode() throws IOException {
+        return readTemplateFile("CustomSlider.js");
+    };
+
+    @Override
+    public String generateCode() {
         try {
                 return  "                    <CustomSlider\n" +
                         "                        minimumTrackTintColor=\"#A4C8FF\"\n" +

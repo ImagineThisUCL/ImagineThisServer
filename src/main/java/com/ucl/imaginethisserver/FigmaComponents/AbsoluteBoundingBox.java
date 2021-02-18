@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.DAO;
+package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.annotations.Expose;
 
