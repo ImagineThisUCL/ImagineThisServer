@@ -53,6 +53,7 @@ public class Wireframe {
         return page;
     };
 
+    public void setName(String name) { this.name = name; };
     public void setPage(Page page) {
         this.page = page;
     };

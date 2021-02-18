@@ -11,7 +11,10 @@ import com.ucl.imaginethisserver.FrontendComponent.NavBar;
 import com.ucl.imaginethisserver.FrontendComponent.Navigator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.context.annotation.Scope;
+import sun.net.www.protocol.http.AuthenticationHeader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,22 +26,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Component
 public class FigmaAPIUtil {
 
-    private String projectID;
-    private Authentication auth;
-    private Logger logger = LoggerFactory.getLogger(FigmaAPIUtil.class);
     private static final String FIGMA_API = "https://api.figma.com/v1";
+
+    private Logger logger = LoggerFactory.getLogger(FigmaAPIUtil.class);
     // Used as optimisation for caching and performing bulk requests
     private static HashMap<String, String> componentImagesURLCache = new HashMap<>();
 
-    public FigmaAPIUtil(String projectID, Authentication auth) {
-        this.projectID = projectID;
-        this.auth = auth;
-    }
-
-    public JsonObject sendGetRequest(URL figmaAPI) throws IOException {
+    /**
+     * Helper method for sending GET requests to Figma API
+     * @param figmaAPI
+     * @return
+     * @throws IOException
+     */
+    public JsonObject sendGetRequest(URL figmaAPI, Authentication auth) throws IOException {
         logger.info("Sending GET request to " + figmaAPI.toString());
         HttpURLConnection connection = (HttpURLConnection) figmaAPI.openConnection();
         connection.setRequestMethod("GET");
@@ -68,86 +73,18 @@ public class FigmaAPIUtil {
         }
     }
 
-    public JsonObject requestFigmaFile() throws IOException {
+
+    /**
+     * Retrieves Figma file from Figma API and returns is as JsonObject
+     * @param projectID
+     * @param auth
+     * @return
+     * @throws IOException
+     */
+    public JsonObject requestFigmaFile(String projectID, Authentication auth) throws IOException {
         URL figmaFileApi = new URL(FIGMA_API + "/files/" + projectID);
-        return sendGetRequest(figmaFileApi);
+        return sendGetRequest(figmaFileApi, auth);
     }
-
-    public FigmaFile getFigmaFile() {
-
-        JsonObject rawFigmaFile;
-        try {
-            rawFigmaFile = requestFigmaFile();
-        } catch (IOException e) { return null; };
-
-        JsonObject rawFigmaDocument = rawFigmaFile.get("document").getAsJsonObject();
-
-        FigmaFile figmaFile = new FigmaFile(projectID);
-        figmaFile.setProjectName(rawFigmaFile.get("name").getAsString());
-        figmaFile.setLastModified(rawFigmaFile.get("lastModified").getAsString());
-        figmaFile.setVersion(rawFigmaFile.get("version").getAsString());
-
-        for (JsonElement pageJson : rawFigmaDocument.get("children").getAsJsonArray()) {
-            Page page = new Gson().fromJson(pageJson, Page.class);
-            for (JsonElement jsonComponent : page.getChildren()) {
-                // We are interested only in wireframes
-                if (!jsonComponent.getAsJsonObject().get("type").getAsString().equals("FRAME")) continue;
-                Wireframe wireframe = new Gson().fromJson(jsonComponent, Wireframe.class);
-                // Further recursively process components in a wireframe
-                wireframe.setComponents(processJsonComponents(wireframe.getChildren()));
-                page.addWireframe(wireframe);
-            }
-            figmaFile.addPage(page);
-        }
-        return figmaFile;
-    }
-
-
-    public List<FigmaComponent> processJsonComponents(JsonArray jsonComponents) {
-        List<FigmaComponent> figmaComponents = new ArrayList<>();
-        // Retrieve URL for individual components. For optimisation do it in bulk.
-        List<String> componentIDs = new ArrayList<>();
-        for (JsonElement jsonChild : jsonComponents) {
-            String id = jsonChild.getAsJsonObject().get("id").toString().replaceAll("\"", "");
-            componentIDs.add(id);
-        }
-        fetchComponentImageURLs(componentIDs);
-
-        // Process all children
-        for (JsonElement jsonChild : jsonComponents) {
-            String type = jsonChild.getAsJsonObject().get("type").getAsString();
-            FigmaComponent component;
-            switch (type) {
-                case "RECTANGLE":
-                    component = new Gson().fromJson(jsonChild, Rectangle.class);
-                    break;
-                case "TEXT":
-                    component = new Gson().fromJson(jsonChild, Text.class);
-                    break;
-                case "VECTOR":
-                    component = new Gson().fromJson(jsonChild, Vector.class);
-                    break;
-                case "ELLIPSE":
-                    component = new Gson().fromJson(jsonChild, Ellipse.class);
-                    break;
-                case "GROUP":
-                case "INSTANCE":
-                    component = new Gson().fromJson(jsonChild, Group.class);
-                    // TODO: See what to do with absoluteBoundingBox
-                    // ((Group) component).setWireframeBoundingBox(this.absoluteBoundingBox);
-                    // Recursively call this function
-                    ((Group) component).setComponents(processJsonComponents(((Group) component).getChildren()));
-                    break;
-                default:
-                    component = new Gson().fromJson(jsonChild, FigmaComponent.class);
-            }
-            component.setImageURL(getComponentImageURL(component.getId()));
-            // TODO: See what to do with absoluteBoundingBox
-            // component.convertRelativePosition(this.absoluteBoundingBox);
-            figmaComponents.add(component);
-        }
-        return figmaComponents;
-    };
 
 
 
@@ -157,7 +94,7 @@ public class FigmaAPIUtil {
      * @return A list of image urls in json format.
      * @throws IOException
      */
-    public void fetchComponentImageURLs(List<String> componentIDs) {
+    public Map<String, String> requestComponentImageURLs(String projectID, Authentication auth, List<String> componentIDs) {
         // Concatenate into a comma-separated string
         StringBuilder stringComponentIDs = new StringBuilder();
         for (String componentID : componentIDs) {
@@ -172,32 +109,36 @@ public class FigmaAPIUtil {
             figmaImageURL  = new URL("https://api.figma.com/v1/images/" + projectID + "?ids=" + stringComponentIDs);
         } catch (MalformedURLException e) {
             logger.error("Could not form a URL properly.");
-            return;
+            return null;
         }
         try {
-            imageURLs = sendGetRequest(figmaImageURL);
+            imageURLs = sendGetRequest(figmaImageURL, auth);
         } catch (IOException e) {
             logger.error("Failed request to Figma API images.");
-            return;
+            return null;
         }
 
-        // Load values into cache
+        // Process response
+        Map<String, String> result = new HashMap<>();
         for (String componentID : componentIDs) {
-            componentImagesURLCache.put(componentID, imageURLs.get(componentID).getAsString());
+            result.put(componentID, imageURLs.get(componentID).getAsString());
         }
+        return result;
     }
 
-    public void fetchComponentImageURL(String componentID) {
-        fetchComponentImageURLs(Arrays.asList(componentID));
+
+    /**
+     *
+     * @param componentID
+     * @return
+     */
+    public String requestComponentImageURL(String projectID, Authentication auth, String componentID) {
+        Map<String, String> result = requestComponentImageURLs(projectID, auth, Arrays.asList(componentID));
+        if (result == null) return null;
+        return result.get(componentID);
     }
 
-    public String getComponentImageURL(String componentID) {
-        // If cache does not hold the value, fetch it and store it into the cache
-        if (!componentImagesURLCache.containsKey(componentID)) {
-            fetchComponentImageURL(componentID);
-        }
-        return componentImagesURLCache.get(componentID);
-    }
+
 
     /**
      * Helper method for processing list of Page names. They must be lowercase,

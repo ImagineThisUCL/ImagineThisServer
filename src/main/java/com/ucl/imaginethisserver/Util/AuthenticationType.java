@@ -1,5 +1,5 @@
 package com.ucl.imaginethisserver.Util;
 
-public enum AuthenticateType {
+public enum AuthenticationType {
     ORIGINAL_TOKEN, OAUTH2
 }

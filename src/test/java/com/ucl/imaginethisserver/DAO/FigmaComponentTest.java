@@ -3,10 +3,16 @@ package com.ucl.imaginethisserver.DAO;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import com.ucl.imaginethisserver.Service.GenerationService;
+import com.ucl.imaginethisserver.Service.ServiceImpl.GenerationServiceImpl;
+import com.ucl.imaginethisserver.Util.Authentication;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,27 +22,30 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
 class FigmaComponentTest {
 
-    static FigmaAPIUtil figmaApiUtil;
+    static FigmaAPIUtil testFigmaApiUtil;
+    static GenerationService testGenerationService;
+
     static final String TEST_PROJECT_ID = "testId";
+    static final Authentication TEST_AUTH = null;
 
     @BeforeAll
     static void setUpMocks() throws FileNotFoundException, IOException {
-        // Spies are partial mocks, good for mocking objects, see https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#spy
-        // In this case it is needed because of the constructor
-        figmaApiUtil = spy(new FigmaAPIUtil(TEST_PROJECT_ID, null));
         JsonReader reader = new JsonReader(new FileReader("src/test/java/resources/exampleFigmaProject.json"));
         JsonObject dataFile = new Gson().fromJson(reader, JsonObject.class);
+
+        testFigmaApiUtil = mock(FigmaAPIUtil.class);
+        testGenerationService = new GenerationServiceImpl(testFigmaApiUtil);
+
         // Mock only the API call, not the processing method
-        doReturn(dataFile).when(figmaApiUtil).requestFigmaFile();
-        doReturn("randomURL").when(figmaApiUtil).getComponentImageURL(any());
-        doNothing().when(figmaApiUtil).fetchComponentImageURLs(any()); // Mock method for pre-fetching values into cache
+        when(testFigmaApiUtil.requestFigmaFile(TEST_PROJECT_ID, TEST_AUTH)).thenReturn(dataFile);
     }
 
     @Test
-    void givenCorrectJSONFile_whenRequested_thenReturnCorrectFigmaFile() {
-        FigmaFile testFigmaFile = figmaApiUtil.getFigmaFile();
+    void givenCorrectJSONFile_whenRequested_thenReturnCorrectFigmaFilePagesAndWireframes() {
+        FigmaFile testFigmaFile = testGenerationService.getFigmaFile(TEST_PROJECT_ID, TEST_AUTH);
         // Firstly, check project high-level attributes
         assertEquals(TEST_PROJECT_ID, testFigmaFile.getProjectID());
         assertEquals("Testing application", testFigmaFile.getProjectName());
@@ -45,11 +54,32 @@ class FigmaComponentTest {
 
         List<Page> pages = testFigmaFile.getPages();
         List<Wireframe> wireframes = testFigmaFile.getWireframes();
-        // Secondly, check there is 1 page inside the project
+        // Secondly, check there is 1 page inside the project with correct name and ID
         assertEquals(1, pages.size());
+        assertEquals("0:1", pages.get(0).getId());
+        assertEquals("Page 1", pages.get(0).getName());
 
-        // Thirdly, check 2 wireframes inside the project
+        // Thirdly, check 2 wireframes inside the project with correct names
         assertEquals(2, wireframes.size());
+        for (Wireframe wireframe : wireframes) {
+            assertThat(wireframe.getId(), anyOf(is("1:2"), is("202:4")));
+            assertThat(wireframe.getName(), anyOf(is("Wireframe1"), is("Wireframe2")));
+        }
+    }
+
+
+    @Test
+    void givenMalformedWireframeName_whenRequested_thenReturnSanitizedName() {
+        Wireframe wireframe = new Wireframe();
+        // Make sure wireframe names are capitalized, because they will form React classes
+        wireframe.setName("wireframe");
+        assertEquals("Wireframe", wireframe.getName());
+        // Make sure any white spaces are removed
+        wireframe.setName("wireframe name");
+        assertEquals("Wireframename", wireframe.getName());
+        // Make sure any special characters are removed
+        wireframe.setName("wireframe*5^8");
+        assertEquals("Wireframe58", wireframe.getName());
     }
 
     @Test
