@@ -92,7 +92,7 @@ public class ButtonComponent extends FrontendComponent {
                     buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
                 }
             }
-            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", marginTop: base.margin, minWidth: " + this.width);
+            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", marginTop: base.margin, minWidth: " + getWidth());
             if (!isCircle) {
                 buttonCode.append(", borderRadius: ").append(this.cornerRadius);
             }
@@ -103,7 +103,7 @@ public class ButtonComponent extends FrontendComponent {
             buttonCode.append("}}\n");
             buttonCode.append("   textStyle={{color: ").append(textColor).append(", fontSize: ").append(this.style.getFontSize()).append("}}\n");
             if (isCircle) {
-                buttonCode.append("circleDiameter={").append(this.width).append("}");
+                buttonCode.append("circleDiameter={").append(getWidth()).append("}");
             }
             buttonCode.append(">").append(this.character).append("</Button>");
 
@@ -122,7 +122,7 @@ public class ButtonComponent extends FrontendComponent {
     }
 
     public String toString(){
-        return this.height + " " + this.getPositionY();
+        return getHeight() + " " + this.getPositionY();
     }
 
     public Color getBorderColor() {

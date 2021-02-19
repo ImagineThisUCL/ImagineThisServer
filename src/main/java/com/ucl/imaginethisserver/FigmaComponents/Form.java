@@ -18,6 +18,7 @@ public class Form extends Group {
      *  all booleans along with the related variables of the component
      *  should be converted within the form.
      */
+    @Override
     public FormComponent convertToFrontendComponent() {
         FormComponent formComponent = new FormComponent();
         formComponent.setHeight(this.getHeight());

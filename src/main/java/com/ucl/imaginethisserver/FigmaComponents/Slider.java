@@ -9,6 +9,7 @@ public class Slider extends Group {
      *  with current value, minimum/maximum value within the original Figma File
      *  in the type of text.
      */
+    @Override
     public SliderComponent convertToFrontendComponent() {
         SliderComponent sliderComponent = new SliderComponent();
         sliderComponent.setHeight(this.getHeight());
@@ -17,15 +18,15 @@ public class Slider extends Group {
         sliderComponent.setPositionY(this.getPositionY());
         sliderComponent.setAlign(this.getAlign());
         for (FigmaComponent component : components) {
-            if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("cur_value")) {
-                int cur_value = Integer.parseInt(((Text) component).getCharacters());
-                sliderComponent.setCur_value(cur_value);
-            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("min_value")) {
-                int min_value = Integer.parseInt(((Text) component).getCharacters());
-                sliderComponent.setMin_value(min_value);
-            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("max_value")) {
-                int max_value = Integer.parseInt(((Text) component).getCharacters());
-                sliderComponent.setMax_value(max_value);
+            if (component instanceof Text && component.getName().contains("cur_value")) {
+                int currentValue = Integer.parseInt(((Text) component).getCharacters());
+                sliderComponent.setCurrentValue(currentValue);
+            } else if (component instanceof Text && component.getName().contains("min_value")) {
+                int minValue = Integer.parseInt(((Text) component).getCharacters());
+                sliderComponent.setMinValue(minValue);
+            } else if (component instanceof Text && component.getName().contains("max_value")) {
+                int maxValue = Integer.parseInt(((Text) component).getCharacters());
+                sliderComponent.setMaxValue(maxValue);
             }
         }
         return sliderComponent;

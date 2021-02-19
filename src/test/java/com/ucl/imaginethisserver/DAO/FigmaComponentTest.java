@@ -1,26 +1,13 @@
 package com.ucl.imaginethisserver.DAO;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
-import com.ucl.imaginethisserver.Service.GenerationService;
-import com.ucl.imaginethisserver.Service.ServiceImpl.GenerationServiceImpl;
-import com.ucl.imaginethisserver.Util.Authentication;
-import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import com.ucl.imaginethisserver.FigmaComponents.AbsoluteBoundingBox;
+import com.ucl.imaginethisserver.FigmaComponents.FigmaComponent;
+import com.ucl.imaginethisserver.FigmaComponents.Rectangle;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
 class FigmaComponentTest {

@@ -16,10 +16,6 @@ public class Text extends FigmaComponent {
     @Expose()
     private String blendMode;
     @Expose()
-    private List<Paint> fills;
-    @Expose()
-    private List<Stroke> strokes;
-    @Expose()
     private Style style;
     @Expose()
     private List<Effect> effects;
@@ -28,14 +24,6 @@ public class Text extends FigmaComponent {
 
     public String getBlendMode() {
         return blendMode;
-    }
-
-    public List<Paint> getFills() {
-        return fills;
-    }
-
-    public List<Stroke> getStrokes() {
-        return strokes;
     }
 
     public Style getStyle() {
@@ -55,25 +43,21 @@ public class Text extends FigmaComponent {
      *  so that after being converted, these information can be used to
      *  generate actual frontend code.
     */
-    public TextComponent convertToFrontendText(){
+    @Override
+    public TextComponent convertToFrontendComponent(){
         TextComponent textComponent = new TextComponent();
-        textComponent.setWidth(this.getWidth());
-        textComponent.setHeight(this.getHeight());
-        textComponent.setPositionX(this.getPositionX());
-        textComponent.setPositionY(this.getPositionY());
-        textComponent.setAlign(this.getAlign());
-        textComponent.setColor(this.getFills().get(0).getColor());
-        textComponent.setText(this.characters);
-        textComponent.setFontFamily(this.style.getFontFamily());
-        textComponent.setFontSize(this.style.getFontSize());
-        textComponent.setFontWeight(this.style.getFontWeight());
-        textComponent.setTextAlign(this.style.getTextAlignHorizontal());
+        textComponent.setWidth(getWidth());
+        textComponent.setHeight(getHeight());
+        textComponent.setPositionX(getPositionX());
+        textComponent.setPositionY(getPositionY());
+        textComponent.setAlign(getAlign());
+        textComponent.setColor(getFills(0).getColor());
+        textComponent.setText(getCharacters());
+        textComponent.setFontFamily(getStyle().getFontFamily());
+        textComponent.setFontSize(getStyle().getFontSize());
+        textComponent.setFontWeight(getStyle().getFontWeight());
+        textComponent.setTextAlign(getStyle().getTextAlignHorizontal());
         return textComponent;
     }
-
-    public FrontendComponent convertToFrontendComponent() {
-        return null;
-    };
-
 
 }

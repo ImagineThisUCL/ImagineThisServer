@@ -11,22 +11,13 @@ import java.util.List;
  *  fills(color or background), corner radius(cornerRadius) etc.
  */
 public class Rectangle extends FigmaComponent {
-    private List<Paint> fills;
-    private double cornerRadius;
     private List<Double> rectangleCornerRadii;
     private Effect effect;
-    private List<Stroke> strokes;
-    private double strokeWeight;
-    private String strokeAlign;
     private String strokeCap;
     private String strokeJoin;
     //Opacity of the node
     private double opacity;
-
-    public double getCornerRadius() {
-        return cornerRadius;
-    }
-
+    
     public Effect getEffect() {
         return effect;
     }
@@ -35,21 +26,11 @@ public class Rectangle extends FigmaComponent {
         return rectangleCornerRadii;
     }
 
-    public double getStrokeWeight() {
-        return strokeWeight;
-    }
 
     public double getOpacity() {
         return opacity;
     }
 
-    public List<Paint> getFills() {
-        return fills;
-    }
-
-    public String getStrokeAlign() {
-        return strokeAlign;
-    }
 
     public String getStrokeCap() {
         return strokeCap;
@@ -59,9 +40,6 @@ public class Rectangle extends FigmaComponent {
         return strokeJoin;
     }
 
-    public List<Stroke> getStrokes() {
-        return strokes;
-    }
 
     @Override
     public RectangleComponent convertToFrontendComponent() {

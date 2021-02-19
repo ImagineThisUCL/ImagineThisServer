@@ -9,6 +9,7 @@ public class Dropdown extends Group {
      *  with rectangle recognized as the container and
      *  the text named 'option' recognized as the first default option.
      */
+    @Override
     public DropdownComponent convertToFrontendComponent() {
         DropdownComponent dropdownComponent = new DropdownComponent();
         dropdownComponent.setHeight(this.getHeight());
@@ -18,13 +19,12 @@ public class Dropdown extends Group {
         dropdownComponent.setAlign(this.getAlign());
 
         for (FigmaComponent component : components) {
-            if (component.getType().equals("RECTANGLE")) {
-                Rectangle rectangle = (Rectangle) component;
-                dropdownComponent.setContainerFills(rectangle.getFills());
-                dropdownComponent.setCornerRadius(rectangle.getCornerRadius());
-            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("option")) {
+            if (component instanceof Rectangle) {
+                dropdownComponent.setContainerFills(component.getFills());
+                dropdownComponent.setCornerRadius(component.getCornerRadius());
+            } else if (component instanceof Text && component.getName().contains("option")) {
                 Text text = (Text) component;
-                dropdownComponent.setOption(text.getCharacters());
+                dropdownComponent.setOption(text.getCharacters()); // TODO: styles
                 dropdownComponent.setStyle(text.getStyle());
                 dropdownComponent.setTextFills(text.getFills());
             }

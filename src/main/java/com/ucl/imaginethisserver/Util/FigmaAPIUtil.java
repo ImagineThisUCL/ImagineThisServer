@@ -1,22 +1,16 @@
 package com.ucl.imaginethisserver.Util;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
-import com.ucl.imaginethisserver.Component.WireframeComponent;
-import com.ucl.imaginethisserver.DAO.*;
-import com.ucl.imaginethisserver.FrontendComponent.NavBar;
-import com.ucl.imaginethisserver.FrontendComponent.Navigator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.context.annotation.Scope;
-import sun.net.www.protocol.http.AuthenticationHeader;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -206,6 +200,32 @@ public class FigmaAPIUtil {
 //
 //        //Zip the output folder to a zip file so that the user could download
 //        ZipUtil.zipFile("OutputStorage/" + folderName);
+    }
+
+
+    /**
+     * Download the image from Figma server to the local server according to the figma url.
+     * @param imageUrl target image URL
+     * @param folderName target download folder name
+     * @return the name of downlaoded image (in 'png' format)
+     * @throws IOException
+     */
+    public static String downloadImage(String imageUrl, String folderName) throws IOException {
+        File storageFile = new File("OutputStorage");
+        storageFile.mkdir();
+        File outputAppFolder = new File("OutputStorage/" + folderName);
+        outputAppFolder.mkdir();
+        File assetsFolder = new File("OutputStorage/" + folderName + "/assets");
+        assetsFolder.mkdir();
+        File imgFolder = new File("OutputStorage/" + folderName + "/assets/img");
+        imgFolder.mkdir();
+
+        URL url = new URL(imageUrl);
+        BufferedImage img = ImageIO.read(url);
+        String imageName = "OutputStorage/" + folderName + "/assets/img/" + IMAGE_ID.incrementAndGet() + ".png";
+        File file = new File(imageName);
+        ImageIO.write(img, "png", file);
+        return imageName;
     }
 
 

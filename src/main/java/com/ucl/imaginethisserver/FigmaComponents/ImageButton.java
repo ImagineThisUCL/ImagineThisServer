@@ -9,6 +9,7 @@ public class ImageButton extends Group {
      *  by dealing with its transitionNodeID, image within that function as the button view and
      *  the text contains within and etc.
      */
+    @Override
     public ImageButtonComponent convertToFrontendComponent() {
         ImageButtonComponent imageButtonComponent = new ImageButtonComponent();
         imageButtonComponent.setPositionX(this.getPositionX());
@@ -16,11 +17,11 @@ public class ImageButton extends Group {
         imageButtonComponent.setWidth(this.getWidth());
         imageButtonComponent.setHeight(this.getHeight());
         imageButtonComponent.setAlign(this.getAlign());
-        if (this.transitionNodeID != null) {
-            imageButtonComponent.setTransitionNodeID(this.transitionNodeID);
+        if (getTransitionNodeID() != null) {
+            imageButtonComponent.setTransitionNodeID(getTransitionNodeID());
         }
         for (FigmaComponent component : components) {
-            if ((component.getType().equals("GROUP") || component.getType().equals("RECTANGLE")) && (component.getName().toLowerCase().contains("image")||component.getName().toLowerCase().contains("icon")||component.getName().toLowerCase().contains("picture"))) {
+            if ((component instanceof Group || component instanceof Rectangle) && (component.getName().contains("image|icon|picture"))) {
                 imageButtonComponent.setImageURL(component.getImageURL());
             }
         }

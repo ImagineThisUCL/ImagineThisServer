@@ -82,8 +82,8 @@ public class CodeGenerator {
         for (Wireframe wireframe : figmaFile.getWireframes()) {
             String wireframeName = wireframe.getName();
             String outputCode = "";
-            WireframeComponent wireframeComponent = new WireframeComponent(null, null, null);
-            outputCode = wireframeComponent.generateCode(wireframeName, figmaFile.getProjectName());
+            WireframeComponent wireframeComponent = new WireframeComponent(wireframe);
+            outputCode = wireframeComponent.generateCode();
             File cfile = new File("OutputStorage/" + figmaFile.getProjectName() + "/components");
             cfile.mkdir();
             File vfile = new File("OutputStorage/" + figmaFile.getProjectName() + "/components/views");

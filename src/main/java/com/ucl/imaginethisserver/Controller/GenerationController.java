@@ -1,15 +1,9 @@
 package com.ucl.imaginethisserver.Controller;
 
-import com.google.gson.JsonObject;
-import com.ucl.imaginethisserver.DAO.FigmaFile;
-import com.ucl.imaginethisserver.DAO.Page;
-import com.ucl.imaginethisserver.DAO.Wireframe;
+import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
 import com.ucl.imaginethisserver.Service.GenerationService;
 import com.ucl.imaginethisserver.Util.Authentication;
-import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Lookup;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
-import sun.jvm.hotspot.memory.Generation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,7 +34,7 @@ public class GenerationController {
     @Autowired
     public GenerationController(GenerationService generationService) {
         this.generationService = generationService;
-    }
+    };
 
 
     /**
@@ -61,11 +53,11 @@ public class GenerationController {
      */
     @PostMapping("/projects/{project-id}/build")
     public ResponseEntity<Map<String, Boolean>> buildProject(
-            @RequestBody Map<String, Object> payload,
-            @PathVariable("project-id") String projectID) throws IOException {
+            @PathVariable("project-id") String projectID,
+            @RequestParam(value = "accessToken") String accessToken,
+            @RequestParam(value = "authType") String type,
+            @RequestBody Map<String, Object> payload) throws IOException {
 
-        String accessToken = payload.get("accessToken").toString();
-        String type = payload.get("authType").toString();
         Authentication auth = new Authentication(type, accessToken);
         List<String> wireframeList = (List<String>) payload.get("wireframeList");
         Map<String, Boolean> response = new HashMap<>();

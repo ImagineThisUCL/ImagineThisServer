@@ -8,6 +8,7 @@ public class Image extends Group {
      * Convert the current Figma component object to its corresponding Image Object
      * @return An Image Object
      */
+    @Override
     public ImageComponent convertToFrontendComponent() {
         ImageComponent imageComponent = new ImageComponent();
         imageComponent.setWidth(this.getWidth());

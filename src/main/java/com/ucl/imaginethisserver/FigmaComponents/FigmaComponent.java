@@ -24,11 +24,15 @@ abstract public class FigmaComponent {
     @Expose()
     private double strokeWeight;
     @Expose()
+    private String strokeAlign;
+    @Expose()
     private AbsoluteBoundingBox absoluteBoundingBox;
     @Expose()
     private List<Paint> fills;
     @Expose()
     private double cornerRadius;
+    @Expose()
+    private String blendMode;
 
     private String imageURL;
     private int height;
@@ -70,6 +74,10 @@ abstract public class FigmaComponent {
         return imageURL;
     }
 
+    public String getBlendMode() {
+        return blendMode;
+    }
+
     public List<Paint> getFills() { return fills; };
 
     public Paint getFills(int index) { return fills.get(0); };
@@ -81,6 +89,10 @@ abstract public class FigmaComponent {
     public double getStrokeWeight() { return strokeWeight; };
 
     public double getCornerRadius() { return cornerRadius; };
+
+    public String getStrokeAlign() {
+        return strokeAlign;
+    }
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;

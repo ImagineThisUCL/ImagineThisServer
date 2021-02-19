@@ -9,6 +9,7 @@ public class Chart extends Group {
      *  With nothing within the chart can be recognized under the current version.
      *  Only a fixed content chart will be generated at the position of the component.
      */
+    @Override
     public ChartComponent convertToFrontendComponent() {
         ChartComponent fixedChartComponent = new ChartComponent();
         fixedChartComponent.setHeight(this.getHeight());

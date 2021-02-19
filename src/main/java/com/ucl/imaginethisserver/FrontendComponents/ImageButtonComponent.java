@@ -14,7 +14,9 @@ public class ImageButtonComponent extends FrontendComponent {
     private String transitionNodeID;
 
     public String getImageURL() { return imageURL; };
+
     public String getImageName() { return imageURL; };
+
     public String getTransitionNodeID() { return transitionNodeID; };
 
     public void setImageURL(String imageURL) {
@@ -36,24 +38,22 @@ public class ImageButtonComponent extends FrontendComponent {
     @Override
     public String generateCode() {
         try {
-            StringBuilder imageButtonCode = new StringBuilder();
-            String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"", ""), FrontendUtil.FOLDER_NAME);
-            imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, "../..");
-            imageButtonCode.append("<ImageButton\n");
-            if (this.transitionNodeID != null) {
+            StringBuilder code = new StringBuilder();
+            code.append("<ImageButton\n");
+            if (getTransitionNodeID() != null) {
                 String navigateWireframe = ""; // TODO: page.getWireframeByID(transitionNodeID).getName();
                 if(NavBarComponent.BUTTON_MAP.containsValue(navigateWireframe)){
-                    imageButtonCode.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
+                    code.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
                 }else{
                     Navigator.NAVIGATOR_MAP.put(navigateWireframe,navigateWireframe);
-                    imageButtonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
+                    code.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
                 }
             }
-            imageButtonCode.append("style={{padding: 10}}\n");
-            imageButtonCode.append("imageStyle={{width: ").append(this.getWidth()).append(", height: ").append(this.getHeight()).append("}}\n");
-            imageButtonCode.append("imageSrc={require(\'").append(imageName).append("\')}/>");
+            code.append("style={{padding: 10}}\n");
+            code.append("imageStyle={{width: ").append(getWidth()).append(", height: ").append(getHeight()).append("}}\n");
+            code.append("imageSrc={require('").append(getImageName()).append("')}/>");
 
-            return imageButtonCode.toString();
+            return code.toString();
         }catch (Exception e){
             return "<P>The image button component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
         }

@@ -11,14 +11,14 @@ public class FigmaMap extends FigmaComponent {
      */
     @Override
     public MapComponent convertToFrontendComponent() {
-        MapComponent image = new MapComponent();
-        image.setWidth(this.getWidth());
-        image.setHeight(this.getHeight());
-        image.setPositionX(this.getPositionX());
-        image.setPositionY(this.getPositionY());
-        image.setAlign(this.getAlign());
+        MapComponent mapComponent = new MapComponent();
+        mapComponent.setWidth(this.getWidth());
+        mapComponent.setHeight(this.getHeight());
+        mapComponent.setPositionX(this.getPositionX());
+        mapComponent.setPositionY(this.getPositionY());
+        mapComponent.setAlign(this.getAlign());
 
-        return image;
+        return mapComponent;
     }
 
 }

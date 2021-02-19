@@ -4,19 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.ucl.imaginethisserver.CodeGenerator.CodeGenerator;
+import com.ucl.imaginethisserver.FigmaComponents.*;
+import com.ucl.imaginethisserver.Util.CodeGenerator;
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
-import com.ucl.imaginethisserver.DAO.*;
 import com.ucl.imaginethisserver.Service.GenerationService;
 import com.ucl.imaginethisserver.Util.Authentication;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Lookup;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -28,14 +24,13 @@ import java.util.Map;
 public class GenerationServiceImpl implements GenerationService {
 
     private final FigmaAPIUtil figmaAPIUtil;
+    private final CodeGenerator codeGenerator;
     private final Logger logger = LoggerFactory.getLogger(GenerationServiceImpl.class);
 
-    @Value("config.outputStorageFolder")
-    private String outputStorageFolder;
-
     @Autowired
-    public GenerationServiceImpl(FigmaAPIUtil figmaAPIUtil) {
+    public GenerationServiceImpl(FigmaAPIUtil figmaAPIUtil, CodeGenerator codeGenerator) {
         this.figmaAPIUtil = figmaAPIUtil;
+        this.codeGenerator = codeGenerator;
     }
 
 
@@ -57,10 +52,18 @@ public class GenerationServiceImpl implements GenerationService {
             throw new NotFoundException("Project " + projectID + " not found.");
         }
 
-        CodeGenerator codeGenerator = new CodeGenerator(figmaFile);
-
         // Start writing process
-//        codeGenerator.generateOutputFolder();
+        try {
+            codeGenerator.generateOutputFolder(figmaFile);
+            codeGenerator.generatePackageFiles(figmaFile);
+            codeGenerator.generateWireframes(figmaFile);
+//            codeGenerator.generateBaseStyle(figmaFile);
+//            codeGenerator.generateReusableComponents(figmaFile);
+
+        } catch (IOException e) {
+            logger.error("Error during code generation.");
+        }
+
 
         return;
 
@@ -103,13 +106,21 @@ public class GenerationServiceImpl implements GenerationService {
             }
             figmaFile.addPage(page);
         }
+
+        // Special case, add information about whole FigmaFile to Navigation components
+        for (FigmaComponent component : figmaFile.getComponents()) {
+            if (component instanceof Navigation) {
+                ((Navigation) component).setFigmaFile(figmaFile);
+            }
+        }
+
         return figmaFile;
     }
 
 
-    private List<FigmaComponent> processJsonComponents(String projectID, Authentication auth, JsonArray jsonComponents) {
+    public List<FigmaComponent> processJsonComponents(String projectID, Authentication auth, JsonArray jsonComponents) {
         List<FigmaComponent> figmaComponents = new ArrayList<>();
-        // Retrieve URL for individual components. For optimisation do it in bulk.
+        // Retrieve URL for individual components. For optimisation do it in batch.
         List<String> componentIDs = new ArrayList<>();
         for (JsonElement jsonChild : jsonComponents) {
             String id = jsonChild.getAsJsonObject().get("id").toString().replaceAll("\"", "");
@@ -119,48 +130,75 @@ public class GenerationServiceImpl implements GenerationService {
 
         // Process all children
         for (JsonElement jsonChild : jsonComponents) {
+
             String type = jsonChild.getAsJsonObject().get("type").getAsString();
+            String name = jsonChild.getAsJsonObject().get("name").getAsString();
+
+            // Parse individual JSON objects to correct FigmaComponent objects based on heuristics
             FigmaComponent component;
-            switch (type) {
-                case "RECTANGLE":
-                    component = new Gson().fromJson(jsonChild, Rectangle.class);
-                    break;
-                case "TEXT":
-                    component = new Gson().fromJson(jsonChild, Text.class);
-                    break;
-                case "VECTOR":
-                    component = new Gson().fromJson(jsonChild, Vector.class);
-                    break;
-                case "ELLIPSE":
-                    component = new Gson().fromJson(jsonChild, Ellipse.class);
-                    break;
-                case "GROUP":
-                case "INSTANCE":
-                    component = new Gson().fromJson(jsonChild, Group.class);
-                    // TODO: See what to do with absoluteBoundingBox
-                    // ((Group) component).setWireframeBoundingBox(this.absoluteBoundingBox);
-                    // Recursively call this function
-                    ((Group) component).setComponents(processJsonComponents(projectID, auth, ((Group) component).getChildren()));
-                    break;
-                default:
-                    component = new Gson().fromJson(jsonChild, FigmaComponent.class);
+            if (type.equals("TEXT")) {
+                component = new Gson().fromJson(jsonChild, Text.class);
+
+            } else if (type.equals("VECTOR")) {
+                component = new Gson().fromJson(jsonChild, Vector.class);
+
+            } else if (type.equals("ELLIPSE")) {
+                component = new Gson().fromJson(jsonChild, Ellipse.class);
+
+            } else if (name.contains("switch")) {
+                component = new Gson().fromJson(jsonChild, Switch.class);
+
+            } else if (type.equals("RECTANGLE") && name.contains("map")) {
+                component = new Gson().fromJson(jsonChild, FigmaMap.class);
+
+            } else if (type.equals("GROUP") && name.contains("textbutton")) {
+                component = new Gson().fromJson(jsonChild, Button.class);
+
+            } else if (type.equals("GROUP") && name.contains("input")) {
+                component = new Gson().fromJson(jsonChild, TextBox.class);
+
+            } else if (type.equals("GROUP") && name.contains("navigation")) {
+                component = new Gson().fromJson(jsonChild, Navigation.class);
+
+            } else if (type.equals("GROUP") && name.matches("form|card")) {
+                component = new Gson().fromJson(jsonChild, Form.class);
+
+            } else if (type.equals("GROUP") && name.contains("slider")) {
+                component = new Gson().fromJson(jsonChild, Slider.class);
+
+            } else if (type.equals("GROUP") && name.contains("imagebutton")) {
+                component = new Gson().fromJson(jsonChild, ImageButton.class);
+
+            } else if (type.equals("GROUP") && name.contains("chart")) {
+                component = new Gson().fromJson(jsonChild, Chart.class);
+
+            } else if (type.equals("GROUP") && name.contains("dropdown")) {
+                component = new Gson().fromJson(jsonChild, Dropdown.class);
+
+            } else if (type.matches("GROUP|RECTANGLE") && name.matches("image|picture|icon")) {
+                component = new Gson().fromJson(jsonChild, Image.class);
+
+            } else if (type.equals("RECTANGLE")) {
+                component = new Gson().fromJson(jsonChild, Rectangle.class);
+
+            } else {
+                String componentID = jsonChild.getAsJsonObject().get("id").getAsString();
+                logger.warn("Could not recognize an element with ID " + componentID);
+                continue;
             }
-            component.setImageURL(getComponentImageURL(component.getId()));
+
+            // Recursively parse all children components as well
+            if (component instanceof Group) {
+                ((Group) component).setComponents(processJsonComponents(projectID, auth, ((Group) component).getChildren()));
+            }
+
+            component.setImageURL(componentImageURLs.get(component.getId()));
             // TODO: See what to do with absoluteBoundingBox
             // component.convertRelativePosition(this.absoluteBoundingBox);
             figmaComponents.add(component);
         }
+
         return figmaComponents;
     };
-
-    private String getComponentImageURL(String componentID) {
-        return null;
-//        // If cache does not hold the value, fetch it and store it into the cache
-//        if (!componentImagesURLCache.containsKey(componentID)) {
-//            fetchComponentImageURL(componentID);
-//        }
-//        return componentImagesURLCache.get(componentID);
-    }
-
 
 }

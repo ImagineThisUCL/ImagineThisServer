@@ -22,9 +22,7 @@ public class WireframeComponent {
     private Wireframe wireframe;
     private List<FrontendComponent> components = new ArrayList<>();
 
-
     private static boolean IS_CONTAIN_NAVBAR;
-
 
     private double width;
     private Color backgroundColor;
@@ -78,9 +76,10 @@ public class WireframeComponent {
      *  Function used to combine import code with the view code
      *  to generate the content of the whole file.
      */
-    public String generateCode(String className) throws IOException {
+    public String generateCode() throws IOException {
         StringBuilder code = new StringBuilder();
-        code.append(this.generateImportCode()).append(this.generateViewCode(className));
+        code.append(generateImportCode());
+        code.append(generateViewCode());
         return code.toString();
     }
 
@@ -148,9 +147,9 @@ public class WireframeComponent {
      *  calling the corresponding generateCode function to generate unique code that
      *  is converted from data passed from Figma API.
      */
-    public String generateViewCode(String className) {
+    public String generateViewCode() {
         StringBuilder viewCode = new StringBuilder();
-        viewCode.append("class ").append(className).append(" extends Component {");
+        viewCode.append("class ").append(wireframe.getName()).append(" extends Component {");
         viewCode.append("render() {\n");
         viewCode.append("        return (\n" +
                 "            <ScrollView style={{flex: 1, padding: 0, backgroundColor: ").append(backgroundColor.toString()).append("}}>\n");
@@ -197,7 +196,7 @@ public class WireframeComponent {
                 "        )\n" +
                 "    }\n" +
                 "}\n" +
-                "export default ").append(className);
+                "export default ").append(wireframe.getName());
 
         return viewCode.toString();
     }

@@ -1,7 +1,7 @@
 package com.ucl.imaginethisserver.Service;
 
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
-import com.ucl.imaginethisserver.DAO.FigmaFile;
+import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
 import com.ucl.imaginethisserver.Util.Authentication;
 
 import java.util.List;

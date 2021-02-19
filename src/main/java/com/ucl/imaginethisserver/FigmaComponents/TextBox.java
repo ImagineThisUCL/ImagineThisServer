@@ -4,35 +4,32 @@ import com.ucl.imaginethisserver.FrontendComponents.TextBoxComponent;
 
 public class TextBox extends Group {
 
+    @Override
     public TextBoxComponent convertToFrontendComponent() {
         TextBoxComponent textbox = new TextBoxComponent();
-        textbox.setPositionX(this.getPositionX());
-        textbox.setPositionY(this.getPositionY());
-        textbox.setWidth(this.getWidth());
-        textbox.setHeight(this.getHeight());
-        textbox.setAlign(this.getAlign());
+        textbox.setPositionX(getPositionX());
+        textbox.setPositionY(getPositionY());
+        textbox.setWidth(getWidth());
+        textbox.setHeight(getHeight());
+        textbox.setAlign(getAlign());
 
-        for (FigmaComponent component : components) {
-            if (component.getType().equals("RECTANGLE")) {
-                Rectangle rectangle = (Rectangle) component;
-                textbox.setContainerFills(rectangle.getFills());
-                textbox.setCornerRadius(rectangle.getCornerRadius());
-            } else if (component.getType().equals("VECTOR")) {
-                Vector vector = (Vector) component;
-                textbox.setContainerFills(vector.getFills());
-                textbox.setCornerRadius(vector.getCornerRadius());
-            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("placeholder")) {
+        for (FigmaComponent component : getComponents()) {
+            if (component instanceof Rectangle || component instanceof Vector) {
+                textbox.setContainerFills(component.getFills());
+                textbox.setCornerRadius(component.getCornerRadius());
+
+            } else if (component instanceof Text && component.getName().contains("placeholder")) {
                 Text text = (Text) component;
                 textbox.setPlaceholder(text.getCharacters());
                 textbox.setStyle(text.getStyle());
                 textbox.setTextFills(text.getFills());
-            } else if (component.getType().equals("TEXT") && component.getName().toLowerCase().contains("label")) {
+            } else if (component instanceof Text && component.getName().toLowerCase().contains("label")) {
                 Text text = (Text) component;
                 textbox.setLabel(text.getCharacters());
                 textbox.setLabelFills(text.getFills());
             }
-
         }
+
         return textbox;
     }
 
