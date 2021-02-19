@@ -12,10 +12,12 @@ import java.util.List;
  *  the transitionNodeID that it links to (if there is any), and other values necessary.
 */
 abstract public class Group extends FigmaComponent {
-    JsonArray children;
     @Expose()
-    String blendMode;
-    String transitionNodeID;
+    private JsonArray children;
+    @Expose()
+    private String blendMode;
+    @Expose()
+    private String transitionNodeID;
 
     protected List<FigmaComponent> components;
     private AbsoluteBoundingBox wireframeBoundingBox;
@@ -23,6 +25,10 @@ abstract public class Group extends FigmaComponent {
     public List<FigmaComponent> getComponents() {
         return components;
     }
+    public JsonArray getChildren() {
+        return children;
+    };
+    public String getTransitionNodeID() { return transitionNodeID; };
 
     public void setComponents(List<FigmaComponent> figmaComponents) {
         // Set objects to be empty
@@ -32,17 +38,8 @@ abstract public class Group extends FigmaComponent {
         }
     }
 
-    public JsonArray getChildren() {
-        return children;
-    }
-
-
-
-
     public void setWireframeBoundingBox(AbsoluteBoundingBox wireframeBoundingBox) {
         this.wireframeBoundingBox = wireframeBoundingBox;
     }
-
-
 
 }

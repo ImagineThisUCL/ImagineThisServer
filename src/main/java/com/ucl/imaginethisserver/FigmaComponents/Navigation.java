@@ -1,11 +1,19 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
+import com.ucl.imaginethisserver.FrontendComponents.ImageButtonComponent;
 import com.ucl.imaginethisserver.FrontendComponents.NavBarComponent;
-import com.ucl.imaginethisserver.FrontendComponents.NavButtonComponent;
+import com.ucl.imaginethisserver.FrontendComponents.NavigationButtonComponent;
 import com.ucl.imaginethisserver.Util.FrontendUtil;
 
 public class Navigation extends Group {
 
+    // Because Navigation requires knowledge about other wireframes
+    private FigmaFile figmaFile;
+
+    public FigmaFile getFigmaFile() { return figmaFile; };
+    public void setFigmaFile(FigmaFile figmaFile) { this.figmaFile = figmaFile; };
+
+    @Override
     public NavBarComponent convertToFrontendComponent() {
 
 // TODO: didn't understand this code
@@ -20,33 +28,26 @@ public class Navigation extends Group {
         navBarComponent.setWidth(this.getWidth());
         navBarComponent.setPositionX(this.getPositionX());
         navBarComponent.setPositionY(this.getPositionY());
+
         for (FigmaComponent component : components) {
-            if (component.getType().equals("GROUP") && component.getName().contains("button")) {
-                NavButtonComponent navButtonComponent = new NavButtonComponent();
-                navButtonComponent.setWidth(component.getWidth());
-                navButtonComponent.setHeight(component.getHeight());
-                navButtonComponent.setPositionX(component.getPositionX());
-                navButtonComponent.setPositionY(component.getPositionY());
+            if (component instanceof Group && component.getName().contains("button")) {
+                NavigationButtonComponent button = new NavigationButtonComponent();
+                button.setWidth(component.getWidth());
+                button.setHeight(component.getHeight());
+                button.setPositionX(component.getPositionX());
+                button.setPositionY(component.getPositionY());
                 for (FigmaComponent childComponent : ((Group) component).getComponents()) {
-                    if (childComponent.getType().equals("TEXT")) {
-                        navButtonComponent.setText(((Text) childComponent).getCharacters());
-                    } else if (childComponent.getName().toLowerCase().contains("image") || childComponent.getName().toLowerCase().contains("icon") || childComponent.getName().toLowerCase().contains("picture")) {
-                        navButtonComponent.setIconURL(childComponent.getImageURL());
+                    if (childComponent instanceof Text) {
+                        button.setText(((Text) childComponent).getCharacters());
+                    } else if (childComponent.getName().matches("image|icon|picture")) {
+                        button.setImageURL(childComponent.getImageURL());
                     }
                 }
-                String transitionNodeID = ((Group) component).transitionNodeID;
-                if (transitionNodeID != null && FrontendUtil.GENERATE_PAGE_LIST.contains(page.getWireframeByID(transitionNodeID).getName())) {
-                    NavBarComponent.BUTTON_MAP.put(navButtonComponent.getText(), page.getWireframeByID(transitionNodeID).getName());
-                } else {
-                    NavBarComponent.BUTTON_MAP.put(navButtonComponent.getText(), "Placeholder");
-                }
-                NavBarComponent.NAV_BUTTONS.add(navButtonComponent);
+                button.setTransitionNodeID(((Group) component).getTransitionNodeID());
 
-
-            }
-            if (component.getType().equals("RECTANGLE") && component.getName().contains("background")) {
+            } else if (component instanceof Rectangle && component.getName().contains("background")) {
                 Rectangle rectangle = (Rectangle) component;
-                NavBarComponent.containerFills = rectangle.getFills();
+                navBarComponent.setBackgroundColor(rectangle.getFills(0).getColor());
             }
         }
         return navBarComponent;

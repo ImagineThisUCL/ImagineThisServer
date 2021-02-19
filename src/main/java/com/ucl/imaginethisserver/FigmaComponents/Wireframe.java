@@ -19,7 +19,7 @@ public class Wireframe {
     @Expose()
     private AbsoluteBoundingBox absoluteBoundingBox;
     @Expose()
-    private List<Fills> fills;
+    private List<Paint> fills;
     @Expose()
     private Color backgroundColor;
 
@@ -38,7 +38,7 @@ public class Wireframe {
     public JsonArray getChildren() {
         return children;
     };
-    public List<Fills> getFills() {
+    public List<Paint> getFills() {
         return fills;
     };
     public AbsoluteBoundingBox getAbsoluteBoundingBox() {

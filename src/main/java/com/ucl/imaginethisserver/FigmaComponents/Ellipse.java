@@ -1,8 +1,5 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FigmaComponents.FigmaComponent;
-import com.ucl.imaginethisserver.FigmaComponents.Fills;
-import com.ucl.imaginethisserver.FigmaComponents.Stroke;
 import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 
 import java.util.List;
@@ -14,16 +11,16 @@ import java.util.List;
  *  Fills(color or background), Strokes(boundary/border) etc.
  */
 public class Ellipse extends FigmaComponent {
-    private List<Fills> fills;
+    private List<Paint> fills;
     private List<Stroke> strokes;
     private double strokeWeight;
     private String strokeAlign;
 
-    public List<Fills> getFills() {
+    public List<Paint> getFills() {
         return fills;
     }
 
-    public void setFills(List<Fills> fills) {
+    public void setFills(List<Paint> fills) {
         this.fills = fills;
     }
 

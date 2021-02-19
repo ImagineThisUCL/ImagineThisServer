@@ -13,6 +13,10 @@ public class ImageButtonComponent extends FrontendComponent {
     private String imageURL;
     private String transitionNodeID;
 
+    public String getImageURL() { return imageURL; };
+    public String getImageName() { return imageURL; };
+    public String getTransitionNodeID() { return transitionNodeID; };
+
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }

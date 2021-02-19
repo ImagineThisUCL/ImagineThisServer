@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
-import com.ucl.imaginethisserver.FigmaComponents.Fills;
+import com.ucl.imaginethisserver.FigmaComponents.Paint;
 import com.ucl.imaginethisserver.FigmaComponents.Style;
 
 import java.io.IOException;
@@ -15,23 +15,23 @@ public class DropdownComponent extends FrontendComponent {
      * Style of the container or the option text within the dropdown
      */
     private double cornerRadius;
-    private List<Fills> TextFills;
-    private List<Fills> containerFills;
+    private List<Paint> textFills;
+    private List<Paint> containerFills;
     private Style style;
 
     public void setOption(String string) {
         option = string;
     }
 
-    public void setTextFills(List<Fills> textFills) {
-        TextFills = textFills;
+    public void setTextFills(List<Paint> textFills) {
+        this.textFills = textFills;
     }
 
     public void setStyle(Style style) {
         this.style = style;
     }
 
-    public void setContainerFills(List<Fills> conFills) {
+    public void setContainerFills(List<Paint> conFills) {
         containerFills = conFills;
     }
 
@@ -52,7 +52,7 @@ public class DropdownComponent extends FrontendComponent {
     public String generateCode(){
         try {
             StringBuilder code = new StringBuilder();
-            String textColor = this.TextFills.get(0).getColor().toString();
+            String textColor = this.textFills.get(0).getColor().toString();
             String containerColor = this.containerFills.get(0).getColor().toString();
 
             code.append("<Dropdown\n" +

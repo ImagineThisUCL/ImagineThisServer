@@ -1,7 +1,7 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Color;
-import com.ucl.imaginethisserver.FigmaComponents.Fills;
+import com.ucl.imaginethisserver.FigmaComponents.Paint;
 import com.ucl.imaginethisserver.FigmaComponents.Style;
 
 import java.io.IOException;
@@ -21,9 +21,9 @@ public class TextBoxComponent extends FrontendComponent {
      *  Other regular variables, fontStyle, Fills of the components, corner radius of the container
     */
     private Style style;
-    private List<Fills> containerFills;
-    private List<Fills> labelFills;
-    private List<Fills> textFills;
+    private List<Paint> containerFills;
+    private List<Paint> labelFills;
+    private List<Paint> textFills;
     private double cornerRadius;
 
     public double getCornerRadius() {
@@ -42,11 +42,11 @@ public class TextBoxComponent extends FrontendComponent {
         this.style = style;
     }
 
-    public void setContainerFills(List<Fills> conFills) {
+    public void setContainerFills(List<Paint> conFills) {
         containerFills = conFills;
     }
 
-    public void setTextFills(List<Fills> textFills) {
+    public void setTextFills(List<Paint> textFills) {
         this.textFills = textFills;
     }
 
@@ -109,7 +109,7 @@ public class TextBoxComponent extends FrontendComponent {
         this.label = label;
     }
 
-    public void setLabelFills(List<Fills> labelFills) {
+    public void setLabelFills(List<Paint> labelFills) {
         this.labelFills = labelFills;
     }
 }

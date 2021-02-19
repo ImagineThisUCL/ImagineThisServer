@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.Component;
+package com.ucl.imaginethisserver.FrontendComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
 import com.ucl.imaginethisserver.FrontendComponents.DropdownComponent;
@@ -13,6 +13,8 @@ import com.ucl.imaginethisserver.Util.FrontendUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class WireframeComponent {
@@ -22,10 +24,7 @@ public class WireframeComponent {
 
 
     private static boolean IS_CONTAIN_NAVBAR;
-    private boolean isContainText = true, isContainButton, isContainTextBox,
-            isContainForm, isContainSliderBar, isContainImageButton,
-            isContainImage, isContainChart, isContainMap,
-            isContainSwitch, isContainDropdown;
+
 
     private double width;
     private Color backgroundColor;
@@ -44,14 +43,27 @@ public class WireframeComponent {
      */
     public static void setIsContainNavbar(boolean isContainNavbar) {
         IS_CONTAIN_NAVBAR = isContainNavbar;
+    };
+
+    public void setComponents(List<FrontendComponent> frontendComponents) {
+        components = new ArrayList<>();
+        for (FrontendComponent component : frontendComponents) {
+            components.add(component);
+        }
     }
+
+    public WireframeComponent(List<FrontendComponent> frontendComponents) {
+        for (FrontendComponent component : frontendComponents) {
+            components.add(component);
+        }
+    };
 
     /** Go through all of the direct child components of the current wireframe, convert all of the recognized components to their corresponding React Native component.
      * All of unrecognized components would be converted to an image.
      * @param wireframe
      * @throws IOException
      */
-    public WireframeComponent(Wireframe wireframe, String projectID, Authentication auth) throws IOException {
+    public WireframeComponent(Wireframe wireframe) {
         this.wireframe = wireframe;
         this.backgroundColor = wireframe.getBackgroundColor();
         this.width = wireframe.getAbsoluteBoundingBox().width;
@@ -66,17 +78,14 @@ public class WireframeComponent {
      *  Function used to combine import code with the view code
      *  to generate the content of the whole file.
      */
-    public String generateCode(String className, String folderName) throws IOException {
+    public String generateCode(String className) throws IOException {
         StringBuilder code = new StringBuilder();
-        code.append(this.generateImportCode(folderName)).append(this.generateViewCode(className));
+        code.append(this.generateImportCode()).append(this.generateViewCode(className));
         return code.toString();
     }
 
     public <T extends FrontendComponent> boolean containsComponent(Class<T> cls) {
-        for (FrontendComponent component : components) {
-            if (cls.isInstance(component)) return true;
-        }
-        return false;
+        return FrontendComponent.containsComponent(components, cls);
     };
 
     /**Generate the source code of import section. Which components should be imported are determined by the included reusable components
@@ -87,7 +96,7 @@ public class WireframeComponent {
      * @return The source code of import section
      * @throws IOException
      */
-    public String generateImportCode(String folderName) throws IOException {
+    public String generateImportCode() throws IOException {
         StringBuilder importCode = new StringBuilder();
 
         importCode.append("import { View, ScrollView");
@@ -120,6 +129,7 @@ public class WireframeComponent {
         }
         if (containsComponent(ChartComponent.class)) {
             importCode.append("import { LineChart, BarChart, PieChart } from 'react-native-chart-kit';\n");
+            importCode.append("import { LINE_CHART_DATA, LINE_CHART_CONFIG } from 'Chart.js';\n");
         }
         if (containsComponent(MapComponent.class)) {
             importCode.append("import GoogleMap from '../reusables/GoogleMap.js';\n");
@@ -138,57 +148,51 @@ public class WireframeComponent {
      *  calling the corresponding generateCode function to generate unique code that
      *  is converted from data passed from Figma API.
      */
-    public String generateViewCode(String className) throws IOException {
+    public String generateViewCode(String className) {
         StringBuilder viewCode = new StringBuilder();
         viewCode.append("class ").append(className).append(" extends Component {");
         viewCode.append("render() {\n");
-        if (isContainChart) {
-            viewCode.append(FixedChartComponent.generateCode());
-        }
         viewCode.append("        return (\n" +
-                "            <ScrollView style={{flex: 1, padding: 0, backgroundColor: ").append(backgroundColor.toString()).append("}}>").append("\n");
-        if (components.size() == 0) {
-            return "";
-        }
-        //Put all of the components in the same line in one list
-        ArrayList<List<FrontendComponent>> inlineComponentList = FrontendUtil.getInlineComponentList(components);
+                "            <ScrollView style={{flex: 1, padding: 0, backgroundColor: ").append(backgroundColor.toString()).append("}}>\n");
+        if (components.size() == 0) { return ""; };
+        // Put all of the components in the same line in one list
+        List<List<FrontendComponent>> inlineComponentList = FrontendComponent.getInlineComponentList(components);
         int preY = 0;
-        for (List<FrontendComponent> curList : inlineComponentList) {
-            //There is only one component in this line
-            if (curList.size() == 1) {
-                int marginTop = Math.max(curList.get(0).getPositionY() - preY, 0);
-                FrontendComponent curComponent = curList.get(0);
-                int marginLeft = curList.get(0).getPositionX();
-                int marginRight = Integer.max((int) (width - (curComponent.getPositionX() + curComponent.getWidth())), 0);
-                String alignCode = "<View style={{marginTop: " + marginTop + ",marginLeft: " + marginLeft + ", marginRight: " + marginRight + "}}>\n";
-                viewCode.append(alignCode);
-                viewCode.append(curList.get(0).generateCode()).append("\n");
-                // If the component is align to right;
+        for (List<FrontendComponent> line : inlineComponentList) {
+            // There is only one component in this line
+            if (line.size() == 1) {
+                FrontendComponent component = line.get(0);
+                int marginTop = Math.max(component.getPositionY() - preY, 0);
+                int marginLeft = component.getPositionX();
+                int marginRight = Integer.max((int) (width - (component.getPositionX() + component.getWidth())), 0);
+                viewCode.append("<View style={{marginTop: " + marginTop + ",marginLeft: " + marginLeft + ", marginRight: " + marginRight + "}}>\n");
+                viewCode.append(component.generateCode()).append("\n");
                 viewCode.append("</View>\n");
-                preY = curList.get(0).getPositionY() + curList.get(0).getHeight();
-
+                preY = component.getPositionY() + component.getHeight();
             }
+
             // If there are multiple components in this line, then align these content using 'space-between'
-            else if (curList.size() > 1) {
+            else if (line.size() > 1) {
                 int minY = Integer.MAX_VALUE;
                 int maxY = -1;
-                for (FrontendComponent component : curList) {
+                for (FrontendComponent component : line) {
                     if (component.getPositionY() < minY) {
                         minY = component.getPositionY();
                     }
                 }
                 int marginTop = Math.max(minY - preY, 0);
                 viewCode.append("<View style={{flexDirection: \"row\", justifyContent: \"space-between\", marginTop: " + marginTop + "}}>" + "\n");
-                for (FrontendComponent component : curList) {
+                for (FrontendComponent component : line) {
                     viewCode.append(component.generateCode()).append("\n");
                     if (component.getPositionY() + component.getHeight() > maxY) {
                         maxY = component.getPositionY() + component.getHeight();
                     }
                 }
-                viewCode.append(" </View>" + "\n");
+                viewCode.append("</View>\n");
                 preY = maxY;
             }
         }
+
         viewCode.append("            </ScrollView>\n" +
                 "        )\n" +
                 "    }\n" +
@@ -197,6 +201,8 @@ public class WireframeComponent {
 
         return viewCode.toString();
     }
+
+
 
 
 }

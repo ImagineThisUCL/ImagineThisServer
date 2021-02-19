@@ -16,7 +16,7 @@ public class Text extends FigmaComponent {
     @Expose()
     private String blendMode;
     @Expose()
-    private List<Fills> fills;
+    private List<Paint> fills;
     @Expose()
     private List<Stroke> strokes;
     @Expose()
@@ -30,7 +30,7 @@ public class Text extends FigmaComponent {
         return blendMode;
     }
 
-    public List<Fills> getFills() {
+    public List<Paint> getFills() {
         return fills;
     }
 

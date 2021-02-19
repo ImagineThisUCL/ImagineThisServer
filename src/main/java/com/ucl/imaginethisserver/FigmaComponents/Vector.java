@@ -21,7 +21,7 @@ public class Vector extends FigmaComponent {
     @Expose()
     private String strokeJoin;
     @Expose()
-    private List<Fills> fills;
+    private List<Paint> fills;
     @Expose()
     private Effect effect;
     //Opacity of the node
@@ -63,7 +63,7 @@ public class Vector extends FigmaComponent {
         return opacity;
     }
 
-    public List<Fills> getFills() {
+    public List<Paint> getFills() {
         return fills;
     }
 

@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.MapComponent;
+import com.ucl.imaginethisserver.FrontendComponents.RectangleComponent;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  *  fills(color or background), corner radius(cornerRadius) etc.
  */
 public class Rectangle extends FigmaComponent {
-    private List<Fills> fills;
+    private List<Paint> fills;
     private double cornerRadius;
     private List<Double> rectangleCornerRadii;
     private Effect effect;
@@ -43,7 +43,7 @@ public class Rectangle extends FigmaComponent {
         return opacity;
     }
 
-    public List<Fills> getFills() {
+    public List<Paint> getFills() {
         return fills;
     }
 
@@ -63,19 +63,8 @@ public class Rectangle extends FigmaComponent {
         return strokes;
     }
 
-    /**
-     *  Function that converts a Figma Rectangle component into
-     *  a frontend Map component,
-     *  the map will inherit the basic size and position of the Rectangle
-    */
-    public MapComponent convertToFrontendComponent() {
-        MapComponent image = new MapComponent();
-        image.setWidth(this.getWidth());
-        image.setHeight(this.getHeight());
-        image.setPositionX(this.getPositionX());
-        image.setPositionY(this.getPositionY());
-        image.setAlign(this.getAlign());
-
-        return image;
+    @Override
+    public RectangleComponent convertToFrontendComponent() {
+        return new RectangleComponent();
     }
 }

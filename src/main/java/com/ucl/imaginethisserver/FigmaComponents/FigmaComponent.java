@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 
+import java.util.List;
+
 /**
  * It is the father class for all of recognized Figma component.
  * representing all FigmaComponent and
@@ -17,7 +19,17 @@ abstract public class FigmaComponent {
     private String name;
     @Expose()
     private String type;
+    @Expose()
+    private List<Paint> strokes;
+    @Expose()
+    private double strokeWeight;
+    @Expose()
     private AbsoluteBoundingBox absoluteBoundingBox;
+    @Expose()
+    private List<Paint> fills;
+    @Expose()
+    private double cornerRadius;
+
     private String imageURL;
     private int height;
     private int width;
@@ -57,6 +69,18 @@ abstract public class FigmaComponent {
     public String getImageURL() {
         return imageURL;
     }
+
+    public List<Paint> getFills() { return fills; };
+
+    public Paint getFills(int index) { return fills.get(0); };
+
+    public List<Paint> getStrokes() { return strokes; };
+
+    public Paint getStrokes(int index) { return strokes.get(index); };
+
+    public double getStrokeWeight() { return strokeWeight; };
+
+    public double getCornerRadius() { return cornerRadius; };
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;

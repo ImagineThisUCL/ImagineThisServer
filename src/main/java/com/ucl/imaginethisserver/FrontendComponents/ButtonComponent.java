@@ -1,8 +1,7 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Color;
-import com.ucl.imaginethisserver.FigmaComponents.Fills;
-import com.ucl.imaginethisserver.FigmaComponents.Page;
+import com.ucl.imaginethisserver.FigmaComponents.Paint;
 import com.ucl.imaginethisserver.FigmaComponents.Style;
 
 import java.io.IOException;
@@ -17,12 +16,12 @@ public class ButtonComponent extends FrontendComponent {
     /**
      * The fills of the text
      */
-    private List<Fills> TextFills;
+    private List<Paint> textFills;
 
     /**
      * The fills for the rectangle.
      */
-    private List<Fills> RecFills;
+    private List<Paint> recFills;
     /**
      * The id of the wireframe that button is try to navigate to.
      */
@@ -80,8 +79,8 @@ public class ButtonComponent extends FrontendComponent {
     @Override
     public String generateCode() {
         try {
-            String backgroundColor = this.RecFills.get(0).getColor().toString();
-            String textColor = this.TextFills.get(0).getColor().toString();
+            String backgroundColor = this.recFills.get(0).getColor().toString();
+            String textColor = this.textFills.get(0).getColor().toString();
             StringBuilder buttonCode = new StringBuilder();
             buttonCode.append("<Button\n");
             if (this.transitionNodeID != null) {
@@ -109,17 +108,17 @@ public class ButtonComponent extends FrontendComponent {
             buttonCode.append(">").append(this.character).append("</Button>");
 
             return buttonCode.toString();
-        }catch (Exception e){
+        } catch (Exception e) {
             return "<P>The button component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
         }
     }
 
-    public void setTextFills(List<Fills> textFills) {
-        TextFills = textFills;
+    public void setTextFills(List<Paint> textFills) {
+        this.textFills = textFills;
     }
 
-    public void setRecFills(List<Fills> recFills) {
-        RecFills = recFills;
+    public void setRecFills(List<Paint> recFills) {
+        this.recFills = recFills;
     }
 
     public String toString(){

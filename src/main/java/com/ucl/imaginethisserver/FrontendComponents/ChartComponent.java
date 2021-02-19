@@ -5,10 +5,12 @@ import java.io.IOException;
 public class ChartComponent extends FrontendComponent {
 
     @Override
-    public boolean isReusable() { return false; };
+    public boolean isReusable() { return true; };
 
     @Override
-    public String generateReusableCode() { return null; };
+    public String generateReusableCode() throws IOException {
+        return readTemplateFile("Chart.js");
+    };
 
     @Override
     public String generateCode() {

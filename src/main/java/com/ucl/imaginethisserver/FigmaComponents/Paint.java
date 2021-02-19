@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * An array of fill paints applied to the node
  */
-public class Fills {
+public class Paint {
     @Expose()
     private String blendMode;
     /**

@@ -1,6 +1,5 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.DAO.Wireframe;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -28,19 +28,26 @@ public class FigmaFile {
     public void addPage(Page page) { pages.add(page); };
     public List<Page> getPages() { return pages; };
 
-    public List<Wireframe> getWireframes() {
-        List result = new ArrayList<>();
-        for (Page page : pages) {
-            for (Wireframe wireframe : page.getWireframes()) {
-                result.add(wireframe);
-            }
-        }
-        return result;
-    };
 
     public void setProjectName(String name) { this.projectName = name; };
     public void setLastModified(String lastModified) { this.lastModified = lastModified; };
     public void setVersion(String version) { this.version = version; };
+
+    public List<Wireframe> getWireframes() {
+        List wireframes = new ArrayList<>();
+        for (Page page : pages) {
+            wireframes.addAll(page.getWireframes());
+        }
+        return wireframes;
+    };
+
+    public List<FigmaComponent> getComponents() {
+        List<FigmaComponent> figmaComponents = new ArrayList<>();
+        for (Page page : getPages()) {
+            figmaComponents.addAll(page.getComponents());
+        }
+        return figmaComponents;
+    }
 
 
 }
