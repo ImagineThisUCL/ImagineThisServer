@@ -25,6 +25,7 @@ public class WireframeComponent {
     private double width;
     private Color backgroundColor;
     private String backgroundImage;
+    private AbsoluteBoundingBox absoluteBoundingBox;
 
     public List<FrontendComponent> getComponents() { return components; };
 
@@ -49,7 +50,7 @@ public class WireframeComponent {
     public WireframeComponent(Wireframe wireframe) {
         this.wireframe = wireframe;
         this.backgroundColor = wireframe.getBackgroundColor();
-        this.width = wireframe.getAbsoluteBoundingBox().width;
+        this.absoluteBoundingBox = wireframe.getAbsoluteBoundingBox();
         for (FigmaComponent component : wireframe.getComponents()) {
             FrontendComponent frontendComponent = component.convertToFrontendComponent();
             components.add(frontendComponent);
@@ -148,7 +149,7 @@ public class WireframeComponent {
                 FrontendComponent component = line.get(0);
                 int marginTop = Math.max(component.getPositionY() - preY, 0);
                 int marginLeft = component.getPositionX();
-                int marginRight = Integer.max((int) (width - (component.getPositionX() + component.getWidth())), 0);
+                int marginRight = Integer.max((int) (absoluteBoundingBox.width - (component.getPositionX() + component.getWidth())), 0);
                 viewCode.append("<View style={{marginTop: " + marginTop + ",marginLeft: " + marginLeft + ", marginRight: " + marginRight + "}}>\n");
                 viewCode.append(component.generateCode()).append("\n");
                 viewCode.append("</View>\n");

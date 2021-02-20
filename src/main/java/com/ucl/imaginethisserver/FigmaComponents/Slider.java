@@ -17,7 +17,7 @@ public class Slider extends Group {
         sliderComponent.setPositionX(this.getPositionX());
         sliderComponent.setPositionY(this.getPositionY());
         sliderComponent.setAlign(this.getAlign());
-        for (FigmaComponent component : components) {
+        for (FigmaComponent component : getComponents()) {
             if (component instanceof Text && component.getName().contains("cur_value")) {
                 int currentValue = Integer.parseInt(((Text) component).getCharacters());
                 sliderComponent.setCurrentValue(currentValue);

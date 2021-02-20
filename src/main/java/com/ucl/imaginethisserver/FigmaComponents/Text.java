@@ -45,12 +45,16 @@ public class Text extends FigmaComponent {
         textComponent.setPositionX(getPositionX());
         textComponent.setPositionY(getPositionY());
         textComponent.setAlign(getAlign());
-        textComponent.setColor(getFills(0).getColor());
         textComponent.setText(getCharacters());
-        textComponent.setFontFamily(getStyle().getFontFamily());
-        textComponent.setFontSize(getStyle().getFontSize());
-        textComponent.setFontWeight(getStyle().getFontWeight());
-        textComponent.setTextAlign(getStyle().getTextAlignHorizontal());
+        if (getFills(0) != null) {
+            textComponent.setColor(getFills(0).getColor());
+        }
+        if (getStyle() != null) {
+            textComponent.setFontFamily(getStyle().getFontFamily());
+            textComponent.setFontSize(getStyle().getFontSize());
+            textComponent.setFontWeight(getStyle().getFontWeight());
+            textComponent.setTextAlign(getStyle().getTextAlignHorizontal());
+        }
         return textComponent;
     }
 

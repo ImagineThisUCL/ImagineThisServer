@@ -67,14 +67,11 @@ public class ButtonComponent extends FrontendComponent {
         this.cornerRadius = cornerRadius;
     }
 
+    @Override
+    public boolean requiresReusableComponent() { return true; };
 
     @Override
-    public boolean isReusable() { return true; };
-
-    @Override
-    public String generateReusableCode() throws IOException {
-        return readTemplateFile("Button.js");
-    };
+    public String getReusableComponentName() { return "Button.js"; };
 
     @Override
     public String generateCode() {

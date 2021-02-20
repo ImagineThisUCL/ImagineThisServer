@@ -51,12 +51,10 @@ public class TextBoxComponent extends FrontendComponent {
     }
 
     @Override
-    public boolean isReusable() { return true; };
+    public boolean requiresReusableComponent() { return true; };
 
     @Override
-    public String generateReusableCode() throws IOException {
-        return readTemplateFile("InputField.js");
-    };
+    public String getReusableComponentName() { return "InputField.js"; };
 
     @Override
     public String generateCode() {

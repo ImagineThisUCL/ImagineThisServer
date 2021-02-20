@@ -11,12 +11,10 @@ public class NavigationButtonComponent extends ImageButtonComponent {
     public void setText(String text) { this.text = text; };
 
     @Override
-    public boolean isReusable() { return false; };
+    public boolean requiresReusableComponent() { return false; };
 
     @Override
-    public String generateReusableCode() throws IOException {
-        return null;
-    };
+    public String getReusableComponentName() { return null; };
 
     @Override
     public String generateCode() {

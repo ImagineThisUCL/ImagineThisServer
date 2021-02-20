@@ -80,7 +80,10 @@ abstract public class FigmaComponent {
 
     public List<Paint> getFills() { return fills; };
 
-    public Paint getFills(int index) { return fills.get(0); };
+    public Paint getFills(int index) {
+        if (fills == null || fills.size() == 0) return null;
+        else return fills.get(0);
+    };
 
     public List<Paint> getStrokes() { return strokes; };
 

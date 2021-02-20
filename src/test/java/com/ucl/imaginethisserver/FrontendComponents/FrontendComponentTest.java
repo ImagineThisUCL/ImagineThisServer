@@ -1,6 +1,5 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
-import com.ucl.imaginethisserver.FigmaComponents.Text;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -12,16 +11,6 @@ import static org.mockito.Mockito.*;
 class FrontendComponentTest {
 
     @Test
-    void testTextComponentReusableCode() throws IOException {
-        TextComponent spyComponent = spy(new TextComponent());
-        doNothing().when(spyComponent).readTemplateFile(any());
-        assertEquals(true, spyComponent.isReusable());
-
-        String code = spyComponent.generateReusableCode();
-        verify(spyComponent).readTemplateFile("P.js");
-    }
-
-    @Test
     void isSameLine() {
         FrontendComponent a = new ButtonComponent();
         FrontendComponent b = new ButtonComponent();
@@ -30,6 +19,7 @@ class FrontendComponentTest {
         a.setPositionX(10);
         a.setPositionY(10);
         assertTrue(a.isSameLine(a));
+
         b.setWidth(100);
         b.setHeight(100);
         b.setPositionX(150);

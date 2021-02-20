@@ -17,7 +17,7 @@ abstract public class Group extends FigmaComponent {
     @Expose()
     private String transitionNodeID;
 
-    protected List<FigmaComponent> components;
+    private List<FigmaComponent> components = new ArrayList<>();
     private AbsoluteBoundingBox wireframeBoundingBox;
 
     public List<FigmaComponent> getComponents() {

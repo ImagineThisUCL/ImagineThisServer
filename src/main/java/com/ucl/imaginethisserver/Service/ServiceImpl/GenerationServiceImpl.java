@@ -57,8 +57,7 @@ public class GenerationServiceImpl implements GenerationService {
             codeGenerator.generateOutputFolder(figmaFile);
             codeGenerator.generatePackageFiles(figmaFile);
             codeGenerator.generateWireframes(figmaFile);
-//            codeGenerator.generateBaseStyle(figmaFile);
-//            codeGenerator.generateReusableComponents(figmaFile);
+            codeGenerator.generateReusableComponents(figmaFile);
 //            codeGenerator.generateImages(figmaFile);
 
         } catch (IOException e) {

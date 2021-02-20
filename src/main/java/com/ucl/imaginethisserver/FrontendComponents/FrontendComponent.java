@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.FrontendComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Color;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,9 +15,6 @@ import java.util.List;
  * The abstract class to represent a frontend component. All of the frontend components inherit this class.
  */
 public abstract class FrontendComponent {
-
-    @Value("config.templateFilesFolder")
-    private String templateFilesFolder;
 
     private int width;
     private int height;
@@ -109,16 +107,11 @@ public abstract class FrontendComponent {
 
 
     // Denotes whether the component uses a reusable component
-    public abstract boolean isReusable();
+    public abstract boolean requiresReusableComponent();
 
-    public abstract String generateReusableCode() throws IOException;
+    public abstract String getReusableComponentName();
 
     public abstract String generateCode();
-
-    // Helper method for reading reusable template files
-    protected String readTemplateFile(String fileName) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(templateFilesFolder, fileName)));
-    }
 
 
     /**
@@ -127,26 +120,16 @@ public abstract class FrontendComponent {
     * @return
     */
     public boolean isSameLine(FrontendComponent anotherComponent) {
-
-        return this.positionY == anotherComponent.getPositionY();
-//        // If they are the same component.
-//        if(a_component.width == this.width && a_component.height == this.height && a_component.positionY == this.positionY && a_component.positionX == positionX){
-//            return true;
-//        }
-//
-//        if (this.positionX < a_component.positionX) {
-//            if (this.positionX + this.width >= a_component.positionX) { return false; };
-//        } else {
-//            if (a_component.positionX + a_component.width >= this.positionX) { return false; };
-//        }
-//        if((this.positionY + this.height > a_component.positionY && this.positionY <= a_component.positionY) ||
-//            (a_component.positionY + a_component.height > this.positionY && a_component.positionY <= this.positionY)
-//            ){
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
+        FrontendComponent lowerComponent, higherComponent;
+        if (positionY <= anotherComponent.getPositionY()) {
+            lowerComponent = this;
+            higherComponent = anotherComponent;
+        } else {
+            lowerComponent = anotherComponent;
+            higherComponent = this;
+        }
+        // Find out whether lowerComponent reaches higherComponent
+        return lowerComponent.getPositionY() + lowerComponent.getHeight() > higherComponent.getPositionY();
     }
 
     /**

@@ -41,12 +41,10 @@ public class DropdownComponent extends FrontendComponent {
 
 
     @Override
-    public boolean isReusable() { return true; };
+    public boolean requiresReusableComponent() { return true; };
 
     @Override
-    public String generateReusableCode() throws IOException {
-        return readTemplateFile("Dropdown.js");
-    };
+    public String getReusableComponentName() { return "Dropdown.js"; };
 
     @Override
     public String generateCode(){

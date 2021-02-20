@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
+import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -41,9 +42,7 @@ public class Wireframe {
     public List<Paint> getFills() {
         return fills;
     };
-    public AbsoluteBoundingBox getAbsoluteBoundingBox() {
-        return absoluteBoundingBox;
-    };
+    public AbsoluteBoundingBox getAbsoluteBoundingBox() { return absoluteBoundingBox; };
     public List<FigmaComponent> getComponents() {
         return components;
     };
@@ -63,6 +62,7 @@ public class Wireframe {
             components.add(figmaComponent);
         }
     }
+    public void addComponent(FigmaComponent component) { components.add(component); };
 
     /**
      * Sort all of the Figma components in the wireframe, the component which have a smaller Y-axis value (which means the component locates at a higher position in the wireframe) is

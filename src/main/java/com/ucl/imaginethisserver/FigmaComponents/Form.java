@@ -29,7 +29,7 @@ public class Form extends Group {
 
         // Process all children
         List<FrontendComponent> frontendComponents = new ArrayList<>();
-        for (FigmaComponent component : components) {
+        for (FigmaComponent component : getComponents()) {
             frontendComponents.add(component.convertToFrontendComponent());
 
             // Process background of applicable

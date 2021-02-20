@@ -28,12 +28,10 @@ public class ImageButtonComponent extends FrontendComponent {
     }
 
     @Override
-    public boolean isReusable() { return true; };
+    public boolean requiresReusableComponent() { return true; };
 
     @Override
-    public String generateReusableCode() throws IOException {
-        return readTemplateFile("ImageButton.js");
-    };
+    public String getReusableComponentName() { return "ImageButton.js"; };
 
     @Override
     public String generateCode() {

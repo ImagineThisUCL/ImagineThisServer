@@ -29,7 +29,7 @@ public class Navigation extends Group {
         navBarComponent.setPositionX(this.getPositionX());
         navBarComponent.setPositionY(this.getPositionY());
 
-        for (FigmaComponent component : components) {
+        for (FigmaComponent component : getComponents()) {
             if (component instanceof Group && component.getName().contains("button")) {
                 NavigationButtonComponent button = new NavigationButtonComponent();
                 button.setWidth(component.getWidth());

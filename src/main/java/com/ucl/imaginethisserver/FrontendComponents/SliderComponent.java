@@ -18,12 +18,10 @@ public class SliderComponent extends FrontendComponent {
     private int currentValue;
 
     @Override
-    public boolean isReusable() { return true; };
+    public boolean requiresReusableComponent() { return true; };
 
     @Override
-    public String generateReusableCode() throws IOException {
-        return readTemplateFile("CustomSlider.js");
-    };
+    public String getReusableComponentName() { return "CustomSlider.js"; };
 
     @Override
     public String generateCode() {

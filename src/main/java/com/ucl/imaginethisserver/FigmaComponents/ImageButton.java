@@ -20,7 +20,7 @@ public class ImageButton extends Group {
         if (getTransitionNodeID() != null) {
             imageButtonComponent.setTransitionNodeID(getTransitionNodeID());
         }
-        for (FigmaComponent component : components) {
+        for (FigmaComponent component : getComponents()) {
             if ((component instanceof Group || component instanceof Rectangle) && (component.getName().contains("image|icon|picture"))) {
                 imageButtonComponent.setImageURL(component.getImageURL());
             }

@@ -46,10 +46,10 @@ public class NavBarComponent extends GroupComponent {
     }
 
     @Override
-    public boolean isReusable() { return false; };
+    public boolean requiresReusableComponent() { return false; };
 
     @Override
-    public String generateReusableCode() { return null; };
+    public String getReusableComponentName() { return null; };
 
     @Override
     public String generateCode() {

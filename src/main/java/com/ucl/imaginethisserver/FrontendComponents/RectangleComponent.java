@@ -3,10 +3,10 @@ package com.ucl.imaginethisserver.FrontendComponents;
 public class RectangleComponent extends FrontendComponent {
 
     @Override
-    public boolean isReusable() { return false; };
+    public boolean requiresReusableComponent() { return false; };
 
     @Override
-    public String generateReusableCode() { return null; };
+    public String getReusableComponentName() { return null; };
 
     /**
      *  Function that writes the code of the form,

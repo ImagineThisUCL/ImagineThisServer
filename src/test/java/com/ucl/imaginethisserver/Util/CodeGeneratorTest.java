@@ -3,7 +3,7 @@ package com.ucl.imaginethisserver.Util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
+import com.ucl.imaginethisserver.FigmaComponents.*;
 import com.ucl.imaginethisserver.Service.ServiceImpl.GenerationServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +18,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -31,22 +33,14 @@ public class CodeGeneratorTest {
     @Autowired
     private CodeGenerator testCodeGenerator;
 
-
     static final String TEST_PROJECT_ID = "testId";
     static final String TEST_OUTPUT_FOLDER = "testFolderPath";
-    static final FigmaFile testFigmaFile = new FigmaFile(TEST_PROJECT_ID);
-    static JsonObject testDataFile;
-
-
-    // Prepare test suite with expensive operations just once before all tests
-    @BeforeAll
-    static void setupResources() throws FileNotFoundException, IOException {
-        JsonReader reader = new JsonReader(new FileReader("src/test/java/resources/exampleFigmaProject.json"));
-        testDataFile = new Gson().fromJson(reader, JsonObject.class);
-    }
+    static FigmaFile testFigmaFile;
 
     @BeforeEach
     void setUpMocks() throws IOException {
+        // Initialize new empty FigmaFile
+        testFigmaFile = new FigmaFile(TEST_PROJECT_ID);
         // Setup random output dummy folder
         testCodeGenerator.setOutputStorageFolder(TEST_OUTPUT_FOLDER);
     }
@@ -60,22 +54,58 @@ public class CodeGeneratorTest {
         verify(testFileUtil).deleteDirectory(eq(TEST_OUTPUT_FOLDER));
         verify(testFileUtil).makeDirectory(eq(TEST_OUTPUT_FOLDER));
         verify(testFileUtil).makeDirectory(eq(projectFolder));
+        verify(testFileUtil).makeDirectory(eq(projectFolder + "/assets"));
         verify(testFileUtil).makeDirectory(eq(projectFolder + "/components"));
         verify(testFileUtil).makeDirectory(eq(projectFolder + "/components/views"));
+        verify(testFileUtil).makeDirectory(eq(projectFolder + "/components/reusables"));
     }
 
     @Test
     void givenCorrectFigmaFile_whenGeneratingCode_thenCorrectPackageFilesAreCreated() throws IOException {
-        String correctPackageJsonFile = testCodeGenerator.getOutputStorageFolder() + "/" + TEST_PROJECT_ID + "/package.json";
-        String correctAppConfigFile = testCodeGenerator.getOutputStorageFolder() + "/" + TEST_PROJECT_ID + "/app.config.js";
-
         testCodeGenerator.generatePackageFiles(testFigmaFile);
 
-        // Verify that the method writes package.json and app.config.js files
-        verify(testFileUtil).writeFile(eq(correctPackageJsonFile), any());
-        verify(testFileUtil).writeFile(eq(correctAppConfigFile), any());
+        String projectFolder = testCodeGenerator.getOutputStorageFolder() + "/" + TEST_PROJECT_ID;
+        // Verify that correct default files are generated
+        verify(testFileUtil).writeFile(eq(projectFolder + "/package.json"), any());
+        verify(testFileUtil).writeFile(eq(projectFolder + "/app.config.js"), any());
+        verify(testFileUtil).writeFile(eq(projectFolder + "/assets/BaseStyle.js"), any());
     }
 
+    @Test
+    void givenCorrectFigmaFile_whenGeneratingCode_thenCorrectReusableFilesAreCreated() throws IOException {
+        Page testPage = new Page();
+        Wireframe testWireframe = new Wireframe();
+        List<FigmaComponent> testComponents = new ArrayList<>();
+        // Add some random components, some of which need a reusable component
+        testComponents.add(new Button());
+        testComponents.add(new Text());
+        testComponents.add(new Chart());
+        testComponents.add(new Rectangle()); // Does not use reusable component
+        testComponents.add(new Slider());
+        testComponents.add(new Dropdown());
+        testComponents.add(new Image()); // Does not use reusable component
+        testComponents.add(new FigmaMap());
+        testComponents.add(new ImageButton());
+        testComponents.add(new TextBox());
+        testComponents.add(new Switch());
+        testWireframe.setComponents(testComponents);
+        testPage.addWireframe(testWireframe);
+        testFigmaFile.addPage(testPage);
+
+        testCodeGenerator.generateReusableComponents(testFigmaFile);
+
+        String reusablesFolder = testCodeGenerator.getOutputStorageFolder() + "/" + TEST_PROJECT_ID + "/components/reusables";
+        // Verify that correct reusable files are generated
+        verify(testFileUtil).writeFile(eq(reusablesFolder + "/Button.js"), any());
+        verify(testFileUtil).writeFile(eq(reusablesFolder + "/P.js"), any());
+        verify(testFileUtil).writeFile(eq(reusablesFolder + "/Chart.js"), any());
+        verify(testFileUtil).writeFile(eq(reusablesFolder + "/CustomSlider.js"), any());
+        verify(testFileUtil).writeFile(eq(reusablesFolder + "/Dropdown.js"), any());
+        verify(testFileUtil).writeFile(eq(reusablesFolder + "/GoogleMap.js"), any());
+        verify(testFileUtil).writeFile(eq(reusablesFolder + "/ImageButton.js"), any());
+        verify(testFileUtil).writeFile(eq(reusablesFolder + "/InputField.js"), any());
+        verify(testFileUtil).writeFile(eq(reusablesFolder + "/Toggle.js"), any());
+    }
 
 
 }

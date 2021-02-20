@@ -18,7 +18,7 @@ public class Dropdown extends Group {
         dropdownComponent.setPositionY(this.getPositionY());
         dropdownComponent.setAlign(this.getAlign());
 
-        for (FigmaComponent component : components) {
+        for (FigmaComponent component : getComponents()) {
             if (component instanceof Rectangle) {
                 dropdownComponent.setContainerFills(component.getFills());
                 dropdownComponent.setCornerRadius(component.getCornerRadius());

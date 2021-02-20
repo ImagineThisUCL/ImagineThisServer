@@ -8,12 +8,10 @@ import java.io.IOException;
 public class SwitchComponent extends FrontendComponent {
 
     @Override
-    public boolean isReusable() { return true; };
+    public boolean requiresReusableComponent() { return true; };
 
     @Override
-    public String generateReusableCode() throws IOException {
-        return readTemplateFile("Toggle.js");
-    };
+    public String getReusableComponentName() { return "Toggle.js"; };
 
     @Override
     public String generateCode() {

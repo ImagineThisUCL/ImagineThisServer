@@ -5,12 +5,10 @@ import java.io.IOException;
 public class MapComponent extends FrontendComponent {
 
     @Override
-    public boolean isReusable() { return true; };
+    public boolean requiresReusableComponent() { return true; };
 
     @Override
-    public String generateReusableCode() throws IOException {
-        return readTemplateFile("GoogleMap.js");
-    };
+    public String getReusableComponentName() { return "GoogleMap.js"; };
 
     @Override
     public String generateCode(){
