@@ -166,4 +166,11 @@ abstract public class FigmaComponent {
 
     abstract public FrontendComponent convertToFrontendComponent();
 
+    public static <T extends FigmaComponent> boolean containsComponent(List<FigmaComponent> figmaComponents, Class<T> cls) {
+        for (FigmaComponent component : figmaComponents) {
+            if (cls.isInstance(component)) return true;
+        }
+        return false;
+    };
+
 }

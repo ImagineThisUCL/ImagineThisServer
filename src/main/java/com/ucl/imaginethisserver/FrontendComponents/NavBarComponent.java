@@ -13,6 +13,8 @@ import java.util.List;
 
 public class NavBarComponent extends GroupComponent {
 
+    public static final String NAME = "NavigationBar";
+
     private final Logger logger = LoggerFactory.getLogger(CodeGenerator.class);
 
     private Color backgroundColor = new Color(213, 230, 236, 1);

@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.Util;
 
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
+import com.ucl.imaginethisserver.FrontendComponents.AppJSComponent;
 import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 import com.ucl.imaginethisserver.FrontendComponents.NavBarComponent;
 import com.ucl.imaginethisserver.FrontendComponents.WireframeComponent;
@@ -127,15 +128,13 @@ public class CodeGenerator {
 
     /**
      * This method is used to generate the App.js file. It would only be called if there is a bottom navigation bar or navigators in wireframes.
-     * @param navBarComponent The navBar object, it is null if the all of the wireframes don't contain a navigation bottom bar.
+     * @param figmaFile
      * @throws IOException
      */
-    public static void writeAppJSCode(NavBarComponent navBarComponent, String folderName) throws IOException{
-//        String appJSCode = AppJSComponent.generateCode(navBarComponent);
-//        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputStorage/" + folderName + "/App.js", false));
-//        writer.append(appJSCode);
-//        writer.close();
-
+    public void generateAppJSCode(FigmaFile figmaFile) throws IOException {
+        String projectFolder = outputStorageFolder + "/" + figmaFile.getProjectID();
+        String appJSCode = AppJSComponent.generateCode(figmaFile);
+        fileUtil.writeFile(projectFolder + "/App.js", appJSCode);
     }
 
     /**

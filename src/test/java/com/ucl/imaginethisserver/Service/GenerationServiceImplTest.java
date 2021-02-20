@@ -91,6 +91,7 @@ public class GenerationServiceImplTest {
         verify(testCodeGenerator).generateOutputFolder(any());
         verify(testCodeGenerator).generatePackageFiles(any());
         verify(testCodeGenerator).generateWireframes(any());
+        verify(testCodeGenerator).generateAppJSCode(any());
     }
 
 }

@@ -2,6 +2,8 @@ package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Page;
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
+import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
+import com.ucl.imaginethisserver.FrontendComponents.NavBarComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +26,13 @@ public class FigmaFile {
     public String getProjectName() { return projectName; };
     public String getLastModified() { return lastModified; };
     public String getVersion() { return version; };
-
-    public void addPage(Page page) { pages.add(page); };
     public List<Page> getPages() { return pages; };
-
 
     public void setProjectName(String name) { this.projectName = name; };
     public void setLastModified(String lastModified) { this.lastModified = lastModified; };
     public void setVersion(String version) { this.version = version; };
+
+    public void addPage(Page page) { pages.add(page); };
 
     public List<Wireframe> getWireframes() {
         List wireframes = new ArrayList<>();
@@ -49,5 +50,16 @@ public class FigmaFile {
         return figmaComponents;
     }
 
+    public <T extends FigmaComponent> boolean containsComponent(Class<T> cls) {
+        return FigmaComponent.containsComponent(getComponents(), cls);
+    };
 
+    public String getInitialWireframeName() {
+        if (containsComponent(Navigation.class)) return NavBarComponent.NAME;
+        // Return the first wireframe
+        for (Wireframe wireframe : getWireframes()) {
+            return wireframe.getName();
+        }
+        return "";
+    }
 }

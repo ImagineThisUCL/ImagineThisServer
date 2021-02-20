@@ -107,5 +107,13 @@ public class CodeGeneratorTest {
         verify(testFileUtil).writeFile(eq(reusablesFolder + "/Toggle.js"), any());
     }
 
+    @Test
+    void givenCorrectFigmaFile_whenGeneratingCode_thenCorrectAppJSCreated() throws IOException {
+        testCodeGenerator.generateAppJSCode(testFigmaFile);
+        String projectFolder = testCodeGenerator.getOutputStorageFolder() + "/" + TEST_PROJECT_ID;
+        // Verify that correct App.js file is generated
+        verify(testFileUtil).writeFile(eq(projectFolder + "/App.js"), any());
+    }
+
 
 }
