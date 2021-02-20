@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface GenerationService {
 
-    void buildProject(String projectID, Authentication auth, List<String> wireframeList);
+    boolean buildProject(String projectID, Authentication auth, List<String> wireframeList);
 
     java.io.File downloadProject(String projectID) throws NotFoundException;
 

@@ -60,10 +60,12 @@ public class GenerationController {
 
         Authentication auth = new Authentication(type, accessToken);
         List<String> wireframeList = (List<String>) payload.get("wireframeList");
-        Map<String, Boolean> response = new HashMap<>();
 
-        generationService.buildProject(projectID, auth, wireframeList);
-        return null;
+        boolean result = generationService.buildProject(projectID, auth, wireframeList);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("success", result);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**

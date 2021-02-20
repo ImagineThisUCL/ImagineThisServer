@@ -28,10 +28,10 @@ public class CodeGenerator {
     private final Logger logger = LoggerFactory.getLogger(CodeGenerator.class);
     private FileUtil fileUtil;
 
-    @Value("config.outputStorageFolder")
+    @Value("${config.outputStorageFolder}")
     private String outputStorageFolder;
 
-    @Value("config.templateFilesFolder")
+    @Value("${config.templateFilesFolder}")
     private String templateFilesFolder;
 
     @Autowired
@@ -50,8 +50,9 @@ public class CodeGenerator {
      * @param figmaFile
      * @throws IOException
      */
-    public void generateOutputFolder(FigmaFile figmaFile) {
+    public void generateOutputFolder(FigmaFile figmaFile) throws IOException {
         String projectDirectory = outputStorageFolder + "/" + figmaFile.getProjectID();
+        fileUtil.deleteDirectory(outputStorageFolder);
         fileUtil.makeDirectory(outputStorageFolder);
         fileUtil.makeDirectory(projectDirectory);
         fileUtil.makeDirectory(projectDirectory + "/components");
@@ -84,7 +85,7 @@ public class CodeGenerator {
      */
     public void generateWireframes(FigmaFile figmaFile) throws IOException {
 
-        String outputDirectory = outputStorageFolder + "/" + figmaFile.getProjectName();
+        String outputDirectory = outputStorageFolder + "/" + figmaFile.getProjectID();
 
         for (Wireframe wireframe : figmaFile.getWireframes()) {
             String wireframeName = wireframe.getName();

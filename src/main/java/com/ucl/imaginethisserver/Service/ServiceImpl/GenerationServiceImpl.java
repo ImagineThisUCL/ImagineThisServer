@@ -40,7 +40,7 @@ public class GenerationServiceImpl implements GenerationService {
      * @param auth
      * @param wireframeList
      */
-    public void buildProject(String projectID, Authentication auth, List<String> wireframeList) {
+    public boolean buildProject(String projectID, Authentication auth, List<String> wireframeList) {
 
         logger.info("Starting build of project " + projectID);
 
@@ -63,11 +63,9 @@ public class GenerationServiceImpl implements GenerationService {
 
         } catch (IOException e) {
             logger.error("Error during code generation.");
+            return false;
         }
-
-
-        return;
-
+        return true;
     };
 
     public java.io.File downloadProject(String projectID) throws NotFoundException {

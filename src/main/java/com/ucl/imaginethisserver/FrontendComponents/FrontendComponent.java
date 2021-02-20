@@ -172,7 +172,7 @@ public abstract class FrontendComponent {
             }
             // If component is not on any already existing line, add a new one
             if (!lineFound) {
-                linesList.add(Arrays.asList(component));
+                linesList.add(new ArrayList<>(Arrays.asList(component)));
             }
         }
         // Sort all lines

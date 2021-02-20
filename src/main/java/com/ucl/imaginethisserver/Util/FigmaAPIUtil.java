@@ -111,6 +111,7 @@ public class FigmaAPIUtil {
         }
 
         // Process response
+        imageURLs = imageURLs.getAsJsonObject("images");
         Map<String, String> result = new HashMap<>();
         for (String componentID : componentIDs) {
             result.put(componentID, imageURLs.get(componentID).getAsString());

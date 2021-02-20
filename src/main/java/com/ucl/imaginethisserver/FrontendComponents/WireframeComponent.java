@@ -94,7 +94,7 @@ public class WireframeComponent {
             importCode.append("import P from '../reusables/P.js';\n");
         }
         if (containsComponent(ButtonComponent.class)) {
-            importCode.append("import Button from '../reusables/Button.js'\n");
+            importCode.append("import Button from '../reusables/Button.js';\n");
         }
         if (containsComponent(NavBarComponent.class)) {
             importCode.append("import { StatusBar } from 'expo-status-bar';\n");
@@ -134,7 +134,7 @@ public class WireframeComponent {
      */
     public String generateViewCode() {
         StringBuilder viewCode = new StringBuilder();
-        viewCode.append("class ").append(wireframe.getName()).append(" extends Component {");
+        viewCode.append("class ").append(wireframe.getName()).append(" extends Component {\n");
         viewCode.append("render() {\n");
         viewCode.append("        return (\n" +
                 "            <ScrollView style={{flex: 1, padding: 0, backgroundColor: ").append(backgroundColor.toString()).append("}}>\n");

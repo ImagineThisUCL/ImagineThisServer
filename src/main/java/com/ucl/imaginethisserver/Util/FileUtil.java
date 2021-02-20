@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.Util;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,6 +49,14 @@ public class FileUtil {
     public void makeDirectory(String directoryPath) {
         File directory = new File(directoryPath);
         directory.mkdir();
+    }
+
+    /**
+     * Helper method for deleting directories
+     * @param directoryPath
+     */
+    public void deleteDirectory(String directoryPath) throws IOException {
+        FileUtils.deleteDirectory(new File(directoryPath));
     }
 
 }

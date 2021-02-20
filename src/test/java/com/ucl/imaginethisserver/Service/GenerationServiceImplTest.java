@@ -46,6 +46,8 @@ public class GenerationServiceImplTest {
     static final List<String> TEST_WIREFRAME_LIST = Arrays.asList("Wireframe 1", "Wireframe 2");
     static JsonObject testDataFile;
 
+
+    // Prepare test suite with expensive operations just once before all tests
     @BeforeAll
     static void setupResources() throws FileNotFoundException, IOException {
         JsonReader reader = new JsonReader(new FileReader("src/test/java/resources/exampleFigmaProject.json"));
@@ -81,7 +83,6 @@ public class GenerationServiceImplTest {
             assertThat(wireframe.getName(), anyOf(is("Wireframe1"), is("Wireframe2")));
         }
     }
-
 
     @Test
     void givenFigmaFile_whenBuildProjectCalled_thenGenerateAppropriateResources() throws IOException {
