@@ -11,7 +11,11 @@ import com.ucl.imaginethisserver.Service.ServiceImpl.GenerationServiceImpl;
 import com.ucl.imaginethisserver.Util.Authentication;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -25,27 +29,33 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 public class GenerationServiceImplTest {
 
-    static FigmaAPIUtil testFigmaApiUtil;
-    static CodeGenerator testCodeGenerator;
-    static GenerationServiceImpl testGenerationService;
+    @MockBean
+    private FigmaAPIUtil testFigmaApiUtil;
+
+    @MockBean
+    private CodeGenerator testCodeGenerator;
+
+    @Autowired
+    private GenerationServiceImpl testGenerationService;
 
     static final String TEST_PROJECT_ID = "testId";
     static final Authentication TEST_AUTH = null;
     static final List<String> TEST_WIREFRAME_LIST = Arrays.asList("Wireframe 1", "Wireframe 2");
+    static JsonObject testDataFile;
 
     @BeforeAll
-    static void setUpMocks() throws FileNotFoundException, IOException {
+    static void setupResources() throws FileNotFoundException, IOException {
         JsonReader reader = new JsonReader(new FileReader("src/test/java/resources/exampleFigmaProject.json"));
-        JsonObject dataFile = new Gson().fromJson(reader, JsonObject.class);
+        testDataFile = new Gson().fromJson(reader, JsonObject.class);
+    }
 
-        testFigmaApiUtil = mock(FigmaAPIUtil.class);
-        testCodeGenerator = mock(CodeGenerator.class);
-        testGenerationService = new GenerationServiceImpl(testFigmaApiUtil, testCodeGenerator);
-
+    @BeforeEach
+    void setupMocks() throws IOException {
         // Mock only the API call, not the processing method
-        when(testFigmaApiUtil.requestFigmaFile(TEST_PROJECT_ID, TEST_AUTH)).thenReturn(dataFile);
+        when(testFigmaApiUtil.requestFigmaFile(TEST_PROJECT_ID, TEST_AUTH)).thenReturn(testDataFile);
     }
 
     @Test
@@ -75,16 +85,11 @@ public class GenerationServiceImplTest {
 
     @Test
     void givenFigmaFile_whenBuildProjectCalled_thenGenerateAppropriateResources() throws IOException {
-
         testGenerationService.buildProject(TEST_PROJECT_ID, TEST_AUTH, TEST_WIREFRAME_LIST);
-
         // Verify correct components are built
         verify(testCodeGenerator).generateOutputFolder(any());
         verify(testCodeGenerator).generatePackageFiles(any());
         verify(testCodeGenerator).generateWireframes(any());
-
-
     }
-
 
 }

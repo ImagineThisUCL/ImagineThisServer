@@ -8,6 +8,7 @@ import com.ucl.imaginethisserver.FrontendComponents.NavBarComponent;
 import com.ucl.imaginethisserver.FrontendComponents.WireframeComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,7 @@ import java.nio.file.Paths;
 public class CodeGenerator {
 
     private final Logger logger = LoggerFactory.getLogger(CodeGenerator.class);
+    private FileUtil fileUtil;
 
     @Value("config.outputStorageFolder")
     private String outputStorageFolder;
@@ -32,19 +34,15 @@ public class CodeGenerator {
     @Value("config.templateFilesFolder")
     private String templateFilesFolder;
 
-    /**
-     * Helper method for writing files
-     * @param filePath - Path to the target file
-     * @param text - Text to be written to the target file
-     * @throws IOException
-     */
-    public void writeFile(String filePath, String text) throws IOException {
-        logger.info("Writing file " + filePath);
-        File file = new File(filePath);
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        writer.write(text);
-        writer.close();
+    @Autowired
+    public CodeGenerator(FileUtil fileUtil) {
+        this.fileUtil = fileUtil;
     }
+
+    public String getOutputStorageFolder() { return outputStorageFolder; };
+    public String getTemplateFilesFolder() { return templateFilesFolder; };
+    public void setOutputStorageFolder(String folder) { outputStorageFolder = folder; };
+    public void setTemplateFilesFolder(String folder) { templateFilesFolder = folder; };
 
     /**
      * This method is used to create the root folder for the current project. The default path of root folder would OutputStorage/[folderName]
@@ -53,26 +51,29 @@ public class CodeGenerator {
      * @throws IOException
      */
     public void generateOutputFolder(FigmaFile figmaFile) {
-        File storageFolder = new File(outputStorageFolder);
-        storageFolder.mkdir();
-        File outputAppFolder = new File(outputStorageFolder + "/" + figmaFile.getProjectID());
-        outputAppFolder.mkdir();
+        String projectDirectory = outputStorageFolder + "/" + figmaFile.getProjectID();
+        fileUtil.makeDirectory(outputStorageFolder);
+        fileUtil.makeDirectory(projectDirectory);
+        fileUtil.makeDirectory(projectDirectory + "/components");
+        fileUtil.makeDirectory(projectDirectory + "/components/views");
     }
+
+
 
     /**
      * This method is used to generate the package.json file
      * @throws IOException
      */
     public void generatePackageFiles(FigmaFile figmaFile) throws IOException {
-        String folderPath = templateFilesFolder + figmaFile.getProjectID();
+        String projectFolder = outputStorageFolder + "/" + figmaFile.getProjectID();
 
         // Create package.json file
-        String packageJson = new String(Files.readAllBytes(Paths.get(folderPath, "package.json")));
-        writeFile(outputStorageFolder + "/package.json", packageJson);
+        String packageJson = fileUtil.readFile(templateFilesFolder + "/package.json");
+        fileUtil.writeFile(projectFolder + "/package.json", packageJson);
 
         // Create app.config.js file
-        String appJson = new String(Files.readAllBytes(Paths.get(folderPath,"app.config.js")));
-        writeFile(outputStorageFolder + "/app.config.js", appJson);
+        String appJson = fileUtil.readFile(templateFilesFolder + "/app.config.js");
+        fileUtil.writeFile(projectFolder + "/app.config.js", appJson);
     };
 
 
@@ -83,17 +84,13 @@ public class CodeGenerator {
      */
     public void generateWireframes(FigmaFile figmaFile) throws IOException {
 
+        String outputDirectory = outputStorageFolder + "/" + figmaFile.getProjectName();
+
         for (Wireframe wireframe : figmaFile.getWireframes()) {
             String wireframeName = wireframe.getName();
             WireframeComponent wireframeComponent = new WireframeComponent(wireframe);
             String outputCode = wireframeComponent.generateCode();
-            File cfile = new File("OutputStorage/" + figmaFile.getProjectName() + "/components");
-            cfile.mkdir();
-            File vfile = new File("OutputStorage/" + figmaFile.getProjectName() + "/components/views");
-            vfile.mkdir();
-            BufferedWriter writer = new BufferedWriter(new FileWriter( "OutputStorage/" + figmaFile.getProjectName() + "/components/views/" + wireframeName + ".js", false));
-            writer.append(outputCode);
-            writer.close();
+            fileUtil.writeFile(outputDirectory + "/components/views/" + wireframeName + ".js", outputCode);
         }
     }
 
@@ -102,7 +99,7 @@ public class CodeGenerator {
      * @param component The reusable component the user try to generate
      * @throws IOException
      */
-    public static void writeReusableComponentCode(FigmaFile figmaFile, ReusableComponent component) throws IOException {
+    public void writeReusableComponentCode(FigmaFile figmaFile, ReusableComponent component) throws IOException {
         String outputCode = "";
         String fileName = "";
 //        switch (component){
@@ -139,14 +136,12 @@ public class CodeGenerator {
 //                fileName = "Dropdown.js";
 //                break;
 //        }
-        File cfile = new File("OutputStorage/" + figmaFile.getProjectID() + "/components");
-        cfile.mkdir();
-        File vfile = new File("OutputStorage/" + figmaFile.getProjectID() + "/components/reusables");
-        vfile.mkdir();
-        File component_file = new File("OutputStorage/" + figmaFile.getProjectID() + "/components/reusables/" + fileName);
-        BufferedWriter writer = new BufferedWriter(new FileWriter(component_file, false));
-        writer.append(outputCode);
-        writer.close();
+//        makeDirectory("OutputStorage/" + figmaFile.getProjectID() + "/components");
+//        makeDirectory("OutputStorage/" + figmaFile.getProjectID() + "/components/reusables");
+//        File component_file = new File("OutputStorage/" + figmaFile.getProjectID() + "/components/reusables/" + fileName);
+//        BufferedWriter writer = new BufferedWriter(new FileWriter(component_file, false));
+//        writer.append(outputCode);
+//        writer.close();
 
     }
 
@@ -155,12 +150,12 @@ public class CodeGenerator {
      * @throws IOException
      */
     public static void writeBaseStyleCode(String folderName) throws IOException {
-        String outputCode = BaseStyleComponent.generateCode();
-        File file = new File("OutputStorage/" + folderName + "/assets");
-        file.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputStorage/" + folderName + "/assets/baseStyle.js", false));
-        writer.append(outputCode);
-        writer.close();
+//        String outputCode = BaseStyleComponent.generateCode();
+//        File file = new File("OutputStorage/" + folderName + "/assets");
+//        file.mkdir();
+//        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputStorage/" + folderName + "/assets/baseStyle.js", false));
+//        writer.append(outputCode);
+//        writer.close();
     }
 
     /**
@@ -169,10 +164,10 @@ public class CodeGenerator {
      * @throws IOException
      */
     public static void writeAppJSCode(NavBarComponent navBarComponent, String folderName) throws IOException{
-        String appJSCode = AppJSComponent.generateCode(navBarComponent);
-        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputStorage/" + folderName + "/App.js", false));
-        writer.append(appJSCode);
-        writer.close();
+//        String appJSCode = AppJSComponent.generateCode(navBarComponent);
+//        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputStorage/" + folderName + "/App.js", false));
+//        writer.append(appJSCode);
+//        writer.close();
 
     }
 
@@ -182,13 +177,13 @@ public class CodeGenerator {
      * @throws IOException
      */
     public static void writePlaceholderCode(String folderName) throws IOException{
-        String placeholderCode = PlaceholderComponent.generateCode();
-        File cfile = new File("OutputStorage/" + folderName + "/components");
-        cfile.mkdir();
-        File vfile = new File("OutputStorage/" + folderName + "/components/views");
-        vfile.mkdir();
-        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputStorage/" + folderName + "/components/views/Placeholder.js", false));
-        writer.append(placeholderCode);
-        writer.close();
+//        String placeholderCode = PlaceholderComponent.generateCode();
+//        File cfile = new File("OutputStorage/" + folderName + "/components");
+//        cfile.mkdir();
+//        File vfile = new File("OutputStorage/" + folderName + "/components/views");
+//        vfile.mkdir();
+//        BufferedWriter writer = new BufferedWriter(new FileWriter("OutputStorage/" + folderName + "/components/views/Placeholder.js", false));
+//        writer.append(placeholderCode);
+//        writer.close();
     }
 }
