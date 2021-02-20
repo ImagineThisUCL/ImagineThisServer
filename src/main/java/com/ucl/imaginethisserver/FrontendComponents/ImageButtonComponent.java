@@ -1,10 +1,5 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
-import com.ucl.imaginethisserver.FigmaComponents.Page;
-import com.ucl.imaginethisserver.Util.FrontendUtil;
-
-import java.io.IOException;
-
 /**
  *  Image button that contains the image of the button's view and
  *  the transitionNodeID of the button, basically the redirect link of it.

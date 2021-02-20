@@ -1,20 +1,10 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
-import com.ucl.imaginethisserver.FrontendComponents.DropdownComponent;
-import com.ucl.imaginethisserver.FrontendComponents.ImageButtonComponent;
-import com.ucl.imaginethisserver.FrontendComponents.SliderComponent;
-import com.ucl.imaginethisserver.FrontendComponents.SwitchComponent;
-import com.ucl.imaginethisserver.Util.CodeGenerator;
 import com.ucl.imaginethisserver.FigmaComponents.*;
-import com.ucl.imaginethisserver.FrontendComponents.*;
-import com.ucl.imaginethisserver.Util.Authentication;
-import com.ucl.imaginethisserver.Util.FrontendUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 public class WireframeComponent {

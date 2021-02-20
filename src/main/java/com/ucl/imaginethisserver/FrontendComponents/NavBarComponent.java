@@ -2,15 +2,12 @@ package com.ucl.imaginethisserver.FrontendComponents;
 
 
 import com.ucl.imaginethisserver.FigmaComponents.Color;
-import com.ucl.imaginethisserver.FigmaComponents.Group;
 import com.ucl.imaginethisserver.FigmaComponents.Paint;
 import com.ucl.imaginethisserver.Util.CodeGenerator;
-import com.ucl.imaginethisserver.Util.FrontendUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 

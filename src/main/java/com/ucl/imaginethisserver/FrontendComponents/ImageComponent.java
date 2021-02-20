@@ -1,8 +1,5 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
-import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
-import com.ucl.imaginethisserver.Util.FrontendUtil;
-
 /**
  *  Frontend Component Image that contains the URL of the actual image within.
 */
