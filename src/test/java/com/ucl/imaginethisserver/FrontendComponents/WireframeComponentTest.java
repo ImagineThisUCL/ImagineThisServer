@@ -41,7 +41,7 @@ public class WireframeComponentTest {
         frontendComponents.add(d);
 
         WireframeComponent wireframeComponent = new WireframeComponent(frontendComponents);
-        List<List<FrontendComponent>> inlineList = wireframeComponent.getInlineComponentList();
+        List<List<FrontendComponent>> inlineList = FrontendComponent.getInlineComponentList(wireframeComponent.getComponents());
         assertEquals(3, inlineList.size());
         assertEquals(1, inlineList.get(0).size());
         assertEquals(2, inlineList.get(1).size());

@@ -22,26 +22,11 @@ public class WireframeComponent {
     private Wireframe wireframe;
     private List<FrontendComponent> components = new ArrayList<>();
 
-    private static boolean IS_CONTAIN_NAVBAR;
-
     private double width;
     private Color backgroundColor;
     private String backgroundImage;
-    public static NavBarComponent NAV_BAR = null;
 
-    /**
-     *  Return boolean that represents whether a page contains a bottom navigation bar or not.
-    */
-    public static boolean IsContainNavBar() {
-        return IS_CONTAIN_NAVBAR;
-    }
-
-    /**
-     *  Set or change the boolean isContainNavbar of the page.
-     */
-    public static void setIsContainNavbar(boolean isContainNavbar) {
-        IS_CONTAIN_NAVBAR = isContainNavbar;
-    };
+    public List<FrontendComponent> getComponents() { return components; };
 
     public void setComponents(List<FrontendComponent> frontendComponents) {
         components = new ArrayList<>();

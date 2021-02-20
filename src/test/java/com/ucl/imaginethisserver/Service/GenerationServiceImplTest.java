@@ -84,7 +84,6 @@ public class GenerationServiceImplTest {
         verify(testCodeGenerator).generateWireframes(any());
 
 
-
     }
 
 

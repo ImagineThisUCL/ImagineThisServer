@@ -76,14 +76,17 @@ public class CodeGenerator {
     };
 
 
-
+    /**
+     * This method is used for generating code of individual wireframes
+     * @param figmaFile
+     * @throws IOException
+     */
     public void generateWireframes(FigmaFile figmaFile) throws IOException {
 
         for (Wireframe wireframe : figmaFile.getWireframes()) {
             String wireframeName = wireframe.getName();
-            String outputCode = "";
             WireframeComponent wireframeComponent = new WireframeComponent(wireframe);
-            outputCode = wireframeComponent.generateCode();
+            String outputCode = wireframeComponent.generateCode();
             File cfile = new File("OutputStorage/" + figmaFile.getProjectName() + "/components");
             cfile.mkdir();
             File vfile = new File("OutputStorage/" + figmaFile.getProjectName() + "/components/views");

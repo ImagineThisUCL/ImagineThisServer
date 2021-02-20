@@ -14,17 +14,11 @@ import java.util.List;
  */
 public class Text extends FigmaComponent {
     @Expose()
-    private String blendMode;
-    @Expose()
     private Style style;
     @Expose()
     private List<Effect> effects;
     @Expose()
     private String characters;
-
-    public String getBlendMode() {
-        return blendMode;
-    }
 
     public Style getStyle() {
         return style;

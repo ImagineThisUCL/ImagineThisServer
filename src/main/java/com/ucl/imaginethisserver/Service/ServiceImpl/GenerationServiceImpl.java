@@ -59,6 +59,7 @@ public class GenerationServiceImpl implements GenerationService {
             codeGenerator.generateWireframes(figmaFile);
 //            codeGenerator.generateBaseStyle(figmaFile);
 //            codeGenerator.generateReusableComponents(figmaFile);
+//            codeGenerator.generateImages(figmaFile);
 
         } catch (IOException e) {
             logger.error("Error during code generation.");
@@ -111,6 +112,8 @@ public class GenerationServiceImpl implements GenerationService {
         for (FigmaComponent component : figmaFile.getComponents()) {
             if (component instanceof Navigation) {
                 ((Navigation) component).setFigmaFile(figmaFile);
+            } else if (component instanceof Image) {
+                continue; // TODO: Process or download images
             }
         }
 

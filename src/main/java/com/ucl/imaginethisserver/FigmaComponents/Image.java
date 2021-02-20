@@ -11,12 +11,11 @@ public class Image extends Group {
     @Override
     public ImageComponent convertToFrontendComponent() {
         ImageComponent imageComponent = new ImageComponent();
-        imageComponent.setWidth(this.getWidth());
-        imageComponent.setHeight(this.getHeight());
-        imageComponent.setPositionX(this.getPositionX());
-        imageComponent.setPositionY(this.getPositionY());
-        imageComponent.setAlign(this.getAlign());
-        imageComponent.setImageURL(this.getImageURL());
+        imageComponent.setWidth(getWidth());
+        imageComponent.setHeight(getHeight());
+        imageComponent.setPositionX(getPositionX());
+        imageComponent.setPositionY(getPositionY());
+        imageComponent.setAlign(getAlign());
         return imageComponent;
     }
 }

@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
+import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
 import com.ucl.imaginethisserver.Util.FrontendUtil;
 
 /**
@@ -18,14 +19,12 @@ public class ImageComponent extends FrontendComponent {
     @Override
     public String generateCode(){
         try {
-            String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"", ""), FrontendUtil.FOLDER_NAME);
-            imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, "../..");
             return "<Image\n" +
-                    "source={require(\'" + imageName + "\')}\n" +
-                    "style={{width: " + this.width +
-                    ", height: " + this.height + "}}\n" +
+                    "source={require(\'" + imageURL + "\')}\n" +
+                    "style={{width: " + getWidth() +
+                    ", height: " + getHeight() + "}}\n" +
                     "/>";
-        }catch (Exception e){
+        } catch (Exception e) {
             return "<P>The image component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
         }
 

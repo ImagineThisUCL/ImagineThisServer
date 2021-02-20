@@ -15,8 +15,6 @@ abstract public class Group extends FigmaComponent {
     @Expose()
     private JsonArray children;
     @Expose()
-    private String blendMode;
-    @Expose()
     private String transitionNodeID;
 
     protected List<FigmaComponent> components;

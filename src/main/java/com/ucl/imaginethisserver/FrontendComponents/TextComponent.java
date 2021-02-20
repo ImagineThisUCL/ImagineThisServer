@@ -88,7 +88,4 @@ public class TextComponent extends FrontendComponent {
         this.textAlign = textAlign;
     }
 
-    public void setFlex(int flex) {
-        this.flex = flex;
-    }
 }

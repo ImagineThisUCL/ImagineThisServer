@@ -28,8 +28,6 @@ public class FigmaAPIUtil {
     private static final String FIGMA_API = "https://api.figma.com/v1";
 
     private Logger logger = LoggerFactory.getLogger(FigmaAPIUtil.class);
-    // Used as optimisation for caching and performing bulk requests
-    private static HashMap<String, String> componentImagesURLCache = new HashMap<>();
 
     /**
      * Helper method for sending GET requests to Figma API
@@ -140,66 +138,12 @@ public class FigmaAPIUtil {
      * @param A list of unsanitized page names.
      * @return A list of page names.
      */
-    public static List<String> processPagesList(List<String> pageNamesRaw){
+    public List<String> processPagesList(List<String> pageNamesRaw){
         ArrayList<String> pageNamesResult = new ArrayList<>();
         for (String pageName : pageNamesRaw) {
             pageNamesResult.add(StringUtils.capitalize(pageName));
         }
         return pageNamesResult;
-    }
-
-    /**
-     * Generate the source code for all of target wireframes.
-     * @param pageList The list of wireframe names the user need to generate
-     * @param figmaTreeStructure the data returned by Figma API
-     * @param projectID target project ID
-     * @param accessToken user's personal access token
-     * @param authType authentication type
-     * @param folderName the output folder name
-     * @throws IOException
-     */
-    public static void generateWireframes(
-            String projectID,
-            Authentication auth,
-            JsonObject figmaTreeStructure,
-            List<String> wireframeNames) throws IOException {
-
-//        FrontendUtil.refreshStaticVariable(); // TODO: Do we need this?
-//        String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"","");
-//
-//        // TODO: Traverse all pages, not just the first one
-//        List<Page> pageList = new ArrayList<>();//FigmaAPIUtil.extractPages(figmaTreeStructure);
-//        Page firstPage = pageList.get(0);
-//
-//        firstPage.loadWireframes(projectID, auth);
-//        CodeGenerator.generatePackageFiles(folderName);
-//        for (String wireframeName : wireframeNames) {
-//            logger.info("Generating wireframe: " + wireframeName);
-//            Wireframe currentWireframe = firstPage.getWireframeByName(wireframeName);
-//            List<FigmaComponent> figmaComponents = FigmaAPIUtil.convertJsonComponents(currentWireframe.getChildren());
-//            currentWireframe.setComponents(figmaComponents);
-//            currentWireframe.sortComponentsByY();
-//            CodeGenerator.writeWireframeCode(currentWireframe, projectID, accessToken, authType, folderName);
-//        }
-//
-//
-//        for (String wireframeName : Navigator.NAVIGATOR_MAP.keySet()) {
-//            if (!pageList.contains(wireframeName)) {
-//                Navigator.NAVIGATOR_MAP.put(wireframeName, "Placeholder");
-//                Navigator.hasPlaceholder = true;
-//            }
-//        }
-//        if (WireframeComponent.IsContainNavBar()) {
-//            CodeGenerator.writeAppJSCode(WireframeComponent.NAV_BAR, folderName);
-//        } else if (!Navigator.NAVIGATOR_MAP.isEmpty()) {
-//            CodeGenerator.writeAppJSCode(null, folderName);
-//        }
-//        if (NavBar.hasPlaceholder() || Navigator.hasPlaceholder) {
-//            CodeGenerator.writePlaceholderCode(folderName);
-//        }
-//
-//        //Zip the output folder to a zip file so that the user could download
-//        ZipUtil.zipFile("OutputStorage/" + folderName);
     }
 
 
@@ -210,7 +154,7 @@ public class FigmaAPIUtil {
      * @return the name of downlaoded image (in 'png' format)
      * @throws IOException
      */
-    public static String downloadImage(String imageUrl, String folderName) throws IOException {
+    public String downloadImage(String imageUrl, String folderName) throws IOException {
         File storageFile = new File("OutputStorage");
         storageFile.mkdir();
         File outputAppFolder = new File("OutputStorage/" + folderName);
@@ -222,7 +166,7 @@ public class FigmaAPIUtil {
 
         URL url = new URL(imageUrl);
         BufferedImage img = ImageIO.read(url);
-        String imageName = "OutputStorage/" + folderName + "/assets/img/" + IMAGE_ID.incrementAndGet() + ".png";
+        String imageName = "OutputStorage/" + folderName + "/assets/img/" + imageUrl + ".png";
         File file = new File(imageName);
         ImageIO.write(img, "png", file);
         return imageName;
