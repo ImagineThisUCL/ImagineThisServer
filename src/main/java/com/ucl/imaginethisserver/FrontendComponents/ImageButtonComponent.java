@@ -7,12 +7,21 @@ package com.ucl.imaginethisserver.FrontendComponents;
 public class ImageButtonComponent extends FrontendComponent {
     private String imageURL;
     private String transitionNodeID;
+    private String transitionNodeName;
 
     public String getImageURL() { return imageURL; };
 
     public String getImageName() { return imageURL; };
 
     public String getTransitionNodeID() { return transitionNodeID; };
+
+    public String getTransitionNodeName() {
+        return transitionNodeName;
+    }
+
+    public void setTransitionNodeName(String transitionNodeID) {
+        this.transitionNodeName = transitionNodeName;
+    }
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
@@ -34,13 +43,7 @@ public class ImageButtonComponent extends FrontendComponent {
             StringBuilder code = new StringBuilder();
             code.append("<ImageButton\n");
             if (getTransitionNodeID() != null) {
-                String navigateWireframe = ""; // TODO: page.getWireframeByID(transitionNodeID).getName();
-                if(NavBarComponent.BUTTON_MAP.containsValue(navigateWireframe)){
-                    code.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
-                }else{
-                    Navigator.NAVIGATOR_MAP.put(navigateWireframe,navigateWireframe);
-                    code.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
-                }
+                code.append("onPress={() => this.props.navigation.navigate('").append(transitionNodeName).append("')}\n");
             }
             code.append("style={{padding: 10}}\n");
             code.append("imageStyle={{width: ").append(getWidth()).append(", height: ").append(getHeight()).append("}}\n");

@@ -9,7 +9,7 @@ import {
 import Slider from '@react-native-community/slider'
 import propTypes from 'prop-types'
 
-import base from "../../assets/baseStyle"
+import base from "../../assets/BaseStyle.js"
 
 const styles = StyleSheet.create({
     labelsWrapper: {

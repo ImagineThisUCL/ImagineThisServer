@@ -4,6 +4,7 @@ import com.ucl.imaginethisserver.FigmaComponents.Page;
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
 import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 import com.ucl.imaginethisserver.FrontendComponents.NavBarComponent;
+import org.apache.http.impl.conn.Wire;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,13 @@ public class FigmaFile {
         }
         return wireframes;
     };
+
+    public Wireframe getWireframeById(String id) {
+        for (Wireframe wireframe : getWireframes()) {
+            if (wireframe.getId().equals(id)) return wireframe;
+        }
+        return null;
+    }
 
     public List<FigmaComponent> getComponents() {
         List<FigmaComponent> figmaComponents = new ArrayList<>();

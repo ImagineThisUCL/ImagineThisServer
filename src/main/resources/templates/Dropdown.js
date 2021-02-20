@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import ModalSelector from 'react-native-modal-selector'
 import propTypes from 'prop-types'
 
-import base from "../../assets/baseStyle"
+import base from "../../assets/BaseStyle.js"
 
 const styles = StyleSheet.create({
     modalText: {

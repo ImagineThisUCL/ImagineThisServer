@@ -106,15 +106,13 @@ public class GenerationServiceImpl implements GenerationService {
             figmaFile.addPage(page);
         }
 
-        // Special case, add information about whole FigmaFile to Navigation components
+        // Special cases
         for (FigmaComponent component : figmaFile.getComponents()) {
-            if (component instanceof Navigation) {
-                ((Navigation) component).setFigmaFile(figmaFile);
-            } else if (component instanceof Image) {
+            component.setFigmaFile(figmaFile);
+            if (component instanceof Image) {
                 continue; // TODO: Process or download images
             }
         }
-
         return figmaFile;
     }
 

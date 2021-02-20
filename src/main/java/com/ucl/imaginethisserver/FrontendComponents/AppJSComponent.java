@@ -4,11 +4,8 @@ import com.ucl.imaginethisserver.FigmaComponents.FigmaComponent;
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
 import com.ucl.imaginethisserver.FigmaComponents.Navigation;
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
-import com.ucl.imaginethisserver.FrontendComponents.NavBarComponent;
-import com.ucl.imaginethisserver.FrontendComponents.Navigator;
 
 import java.io.IOException;
-import java.util.HashSet;
 
 public class AppJSComponent {
 

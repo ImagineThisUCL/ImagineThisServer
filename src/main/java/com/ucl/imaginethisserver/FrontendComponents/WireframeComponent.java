@@ -79,7 +79,7 @@ public class WireframeComponent {
         importCode.append(" } from 'react-native';\n");
 
         importCode.append("import React, { Component } from 'react';\n");
-        importCode.append("import base from '../../assets/baseStyle.js';\n");
+        importCode.append("import base from '../../assets/BaseStyle.js';\n");
 
         if (containsComponent(TextComponent.class) || containsComponent(ChartComponent.class)) {
             importCode.append("import P from '../reusables/P.js';\n");

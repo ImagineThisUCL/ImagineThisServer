@@ -26,6 +26,7 @@ public class ButtonComponent extends FrontendComponent {
      * The id of the wireframe that button is try to navigate to.
      */
     private String transitionNodeID;
+    private String transitionNodeName;
     private double cornerRadius;
     private Color borderColor;
     private double borderWidth;
@@ -59,6 +60,14 @@ public class ButtonComponent extends FrontendComponent {
         this.transitionNodeID = transitionNodeID;
     }
 
+    public String getTransitionNodeName() {
+        return transitionNodeName;
+    }
+
+    public void setTransitionNodeName(String transitionNodeName) {
+        this.transitionNodeName = transitionNodeName;
+    }
+
     public double getCornerRadius() {
         return cornerRadius;
     }
@@ -80,18 +89,12 @@ public class ButtonComponent extends FrontendComponent {
             String textColor = this.textFills.get(0).getColor().toString();
             StringBuilder buttonCode = new StringBuilder();
             buttonCode.append("<Button\n");
-            if (this.transitionNodeID != null) {
-                String navigateWireframe = ""; // TODO: page.getWireframeByID(transitionNodeID).getName();
-                if(NavBarComponent.BUTTON_MAP.containsValue(navigateWireframe)){
-                    buttonCode.append("onPress={() => this.props.navigation.navigate('NavigationBar', {screen:'" + navigateWireframe + "'})}\n");
-                }else{
-                    Navigator.NAVIGATOR_MAP.put(navigateWireframe,navigateWireframe);
-                    buttonCode.append("onPress={() => this.props.navigation.navigate('").append(navigateWireframe).append("')}\n");
-                }
+            if (transitionNodeID != null) {
+                buttonCode.append("onPress={() => this.props.navigation.navigate('" + transitionNodeName + "')}\n");
             }
             buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", marginTop: base.margin, minWidth: " + getWidth());
             if (!isCircle) {
-                buttonCode.append(", borderRadius: ").append(this.cornerRadius);
+                buttonCode.append(", borderRadius: ").append(cornerRadius);
             }
             if (this.borderColor != null) {
                 String borderColorStr = this.borderColor.toString();

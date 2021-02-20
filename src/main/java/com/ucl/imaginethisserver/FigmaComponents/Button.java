@@ -16,6 +16,8 @@ public class Button extends Group {
 
         if (getTransitionNodeID() != null) {
             buttonComponent.setTransitionNodeID(getTransitionNodeID());
+            Wireframe transitionWireframe = getFigmaFile().getWireframeById(getTransitionNodeID());
+            buttonComponent.setTransitionNodeName(transitionWireframe.getName());
         }
 
         for (FigmaComponent component : getComponents()) {

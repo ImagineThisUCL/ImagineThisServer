@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { Input } from "react-native-elements";
 import propTypes from 'prop-types'
 
-import base from "../../assets/baseStyle"
+import base from "../../assets/BaseStyle.js"
 
 const styles = StyleSheet.create({
     input: {

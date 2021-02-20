@@ -43,6 +43,8 @@ public class CodeGeneratorTest {
         testFigmaFile = new FigmaFile(TEST_PROJECT_ID);
         // Setup random output dummy folder
         testCodeGenerator.setOutputStorageFolder(TEST_OUTPUT_FOLDER);
+        // Mock readFile method, because some operations can be performed with return strings
+        when(testFileUtil.readFile(any())).thenReturn("");
     }
 
     @Test
@@ -51,7 +53,7 @@ public class CodeGeneratorTest {
 
         // Verify output folder is firstly delete, and then correct folders are created
         String projectFolder = TEST_OUTPUT_FOLDER + "/" + TEST_PROJECT_ID;
-        verify(testFileUtil).deleteDirectory(eq(TEST_OUTPUT_FOLDER));
+        verify(testFileUtil).deleteDirectory(eq(projectFolder));
         verify(testFileUtil).makeDirectory(eq(TEST_OUTPUT_FOLDER));
         verify(testFileUtil).makeDirectory(eq(projectFolder));
         verify(testFileUtil).makeDirectory(eq(projectFolder + "/assets"));

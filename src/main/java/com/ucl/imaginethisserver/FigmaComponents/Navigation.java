@@ -5,12 +5,6 @@ import com.ucl.imaginethisserver.FrontendComponents.NavigationButtonComponent;
 
 public class Navigation extends Group {
 
-    // Because Navigation requires knowledge about other wireframes
-    private FigmaFile figmaFile;
-
-    public FigmaFile getFigmaFile() { return figmaFile; };
-    public void setFigmaFile(FigmaFile figmaFile) { this.figmaFile = figmaFile; };
-
     @Override
     public NavBarComponent convertToFrontendComponent() {
 

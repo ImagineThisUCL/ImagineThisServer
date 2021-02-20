@@ -37,6 +37,7 @@ abstract public class FigmaComponent {
     private String imageURL;
     private int height;
     private int width;
+    private FigmaFile figmaFile; // Give each component access to the whole file
     /**
      * The position of the Figma component in X axis, the value is relative to the wireframe
      */
@@ -100,6 +101,9 @@ abstract public class FigmaComponent {
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
+
+    public FigmaFile getFigmaFile() { return figmaFile; };
+    public void setFigmaFile(FigmaFile figmaFile) { this.figmaFile = figmaFile; };
 
     /**
      * This method calculates the relative position (relative to the wireframe that the component belong to) of current Figma component,

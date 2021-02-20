@@ -3,7 +3,7 @@ import React, { Component } from "react"
 import MapView ,{ PROVIDER_GOOGLE }from 'react-native-maps'
 import propTypes from 'prop-types'
 
-import base from "../../assets/baseStyle"
+import base from "../../assets/BaseStyle.js"
 
 const MAP_WIDTH = base.window.width
 const MAP_HEIGHT = base.window.height / 1.4

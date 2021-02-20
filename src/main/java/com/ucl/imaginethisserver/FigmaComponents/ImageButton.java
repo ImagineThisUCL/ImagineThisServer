@@ -19,6 +19,8 @@ public class ImageButton extends Group {
         imageButtonComponent.setAlign(this.getAlign());
         if (getTransitionNodeID() != null) {
             imageButtonComponent.setTransitionNodeID(getTransitionNodeID());
+            Wireframe transitionWireframe = getFigmaFile().getWireframeById(getTransitionNodeID());
+            imageButtonComponent.setTransitionNodeName(transitionWireframe.getName());
         }
         for (FigmaComponent component : getComponents()) {
             if ((component instanceof Group || component instanceof Rectangle) && (component.getName().contains("image|icon|picture"))) {
