@@ -8,10 +8,10 @@ public class ImageComponent extends FrontendComponent {
     private String imageURL;
 
     @Override
-    public boolean requiresReusableComponent() { return false; };
+    public boolean requiresReusableComponent() { return false; }
 
     @Override
-    public String getReusableComponentName() { return null; };
+    public String getReusableComponentName() { return null; }
 
     @Override
     public String generateCode(){

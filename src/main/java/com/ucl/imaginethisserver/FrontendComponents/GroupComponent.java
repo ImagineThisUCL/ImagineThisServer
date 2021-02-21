@@ -18,7 +18,7 @@ public abstract class GroupComponent extends FrontendComponent {
 
     public <T extends FrontendComponent> boolean containsComponent(Class<T> cls) {
         return FrontendComponent.containsComponent(components, cls);
-    };
+    }
 
     /**
      *  Sort the components within the form to decide their vertical positioning

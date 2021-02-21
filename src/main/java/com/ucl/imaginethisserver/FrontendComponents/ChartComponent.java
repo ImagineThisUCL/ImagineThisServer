@@ -1,14 +1,12 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
-import java.io.IOException;
-
 public class ChartComponent extends FrontendComponent {
 
     @Override
-    public boolean requiresReusableComponent() { return true; };
+    public boolean requiresReusableComponent() { return true; }
 
     @Override
-    public String getReusableComponentName() { return "Chart.js"; };
+    public String getReusableComponentName() { return "Chart.js"; }
 
     @Override
     public String generateCode() {

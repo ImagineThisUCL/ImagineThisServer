@@ -10,7 +10,7 @@ public interface GenerationService {
 
     boolean buildProject(String projectID, Authentication auth, List<String> wireframeList);
 
-    java.io.File downloadProject(String projectID) throws NotFoundException;
+    java.io.File downloadProject(String projectID);
 
     FigmaFile getFigmaFile(String projectID, Authentication auth);
 

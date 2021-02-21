@@ -1,12 +1,9 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Color;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import com.ucl.imaginethisserver.FigmaComponents.Paint;
+import com.ucl.imaginethisserver.FigmaComponents.Style;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,28 +23,39 @@ public abstract class FrontendComponent {
     private Color borderColor;
     private double borderWidth;
     private double cornerRadius;
+    private List<Paint> textFills;
+    private List<Paint> containerFills;
+    private Style style;
+
+
+    // Denotes whether the component uses a reusable component
+    public abstract boolean requiresReusableComponent();
+
+    public abstract String getReusableComponentName();
+
+    public abstract String generateCode();
 
     //
     // Getters
     //
-    public int getWidth() { return this.width; }
+    public int getWidth() { return width; }
 
     public int getHeight(){
-     return this.height;
+     return height;
     }
 
     public int getPositionX(){
-     return this.positionX;
+     return positionX;
     }
 
     public int getPositionY(){
-     return this.positionY;
+     return positionY;
     }
 
-    public String getAlign() {return this.align;}
+    public String getAlign() {return align;}
 
     public int getFlex(){
-        return this.flex;
+        return flex;
     }
 
     public Color getBackgroundColor() {
@@ -58,14 +66,22 @@ public abstract class FrontendComponent {
         return borderColor;
     }
 
-    public double getBorderWidth() { return borderWidth; };
+    public double getBorderWidth() { return borderWidth; }
 
     public double getCornerRadius() {
         return cornerRadius;
     }
 
-    public void setCornerRadius(double cornerRadius) {
-        this.cornerRadius = cornerRadius;
+    public Style getStyle() {
+        return style;
+    }
+
+    public List<Paint> getTextFills() {
+        return textFills;
+    }
+
+    public List<Paint> getContainerFills() {
+        return containerFills;
     }
 
     //
@@ -93,6 +109,10 @@ public abstract class FrontendComponent {
         this.flex = flex;
     }
 
+    public void setCornerRadius(double cornerRadius) {
+        this.cornerRadius = cornerRadius;
+    }
+
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
@@ -105,13 +125,17 @@ public abstract class FrontendComponent {
         this.borderWidth = borderWidth;
     }
 
+    public void setTextFills(List<Paint> textFills) {
+        this.textFills = textFills;
+    }
 
-    // Denotes whether the component uses a reusable component
-    public abstract boolean requiresReusableComponent();
+    public void setStyle(Style style) {
+        this.style = style;
+    }
 
-    public abstract String getReusableComponentName();
-
-    public abstract String generateCode();
+    public void setContainerFills(List<Paint> conFills) {
+        containerFills = conFills;
+    }
 
 
     /**
@@ -120,7 +144,8 @@ public abstract class FrontendComponent {
     * @return
     */
     public boolean isSameLine(FrontendComponent anotherComponent) {
-        FrontendComponent lowerComponent, higherComponent;
+        FrontendComponent lowerComponent;
+        FrontendComponent higherComponent;
         if (positionY <= anotherComponent.getPositionY()) {
             lowerComponent = this;
             higherComponent = anotherComponent;
@@ -174,6 +199,6 @@ public abstract class FrontendComponent {
             if (cls.isInstance(component)) return true;
         }
         return false;
-    };
+    }
 
 }

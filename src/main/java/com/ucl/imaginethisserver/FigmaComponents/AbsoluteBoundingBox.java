@@ -11,18 +11,27 @@ import com.google.gson.annotations.Expose;
  */
 public class AbsoluteBoundingBox {
     @Expose()
-    public double width;
+    private double width;
     @Expose()
-    public double height;
+    private double height;
     @Expose()
-    public double x;
+    private double x;
     @Expose()
-    public double y;
+    private double y;
 
-    public AbsoluteBoundingBox(double width, double height, double x, double y){
+    public AbsoluteBoundingBox(double width, double height, double x, double y) {
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
     }
+
+    public double getHeight() { return height; }
+
+    public double getWidth() { return width; }
+
+    public double getX() { return x; }
+
+    public double getY() { return y; }
+
 }

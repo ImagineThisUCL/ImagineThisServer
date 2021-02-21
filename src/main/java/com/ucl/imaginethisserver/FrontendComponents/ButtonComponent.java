@@ -1,92 +1,52 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
-import com.ucl.imaginethisserver.FigmaComponents.Color;
-import com.ucl.imaginethisserver.FigmaComponents.Paint;
-import com.ucl.imaginethisserver.FigmaComponents.Style;
-
-import java.io.IOException;
-import java.util.List;
-
 public class ButtonComponent extends FrontendComponent {
-    /**
-     * The text in the current button
-     */
-    private String character;
-    private Style style;
-    /**
-     * The fills of the text
-     */
-    private List<Paint> textFills;
 
-    /**
-     * The fills for the rectangle.
-     */
-    private List<Paint> recFills;
-    /**
-     * The id of the wireframe that button is try to navigate to.
-     */
+    private String characters;
     private String transitionNodeID;
     private String transitionNodeName;
-    private double cornerRadius;
-    private Color borderColor;
-    private double borderWidth;
-    /**
-     * If the shape of the button is a circle.
-     */
     private boolean isCircle = false;
 
-    public void setCharacter(String character) {
-        this.character = character;
+    public String getCharacters() {
+        return characters;
     }
-
-    public String getCharacter() {
-        return character;
-    }
-
-    public Style getStyle() {
-        return style;
-    }
-
-    public void setStyle(Style style) {
-        this.style = style;
-    }
-
 
     public String getTransitionNodeID() {
         return transitionNodeID;
-    }
-
-    public void setTransitionNodeID(String transitionNodeID) {
-        this.transitionNodeID = transitionNodeID;
     }
 
     public String getTransitionNodeName() {
         return transitionNodeName;
     }
 
+    public void setCircle(boolean isCircle) {
+        this.isCircle = isCircle;
+    }
+
+    public void setTransitionNodeID(String transitionNodeID) {
+        this.transitionNodeID = transitionNodeID;
+    }
+
+    public void setCharacters(String characters) {
+        this.characters = characters;
+    }
+
     public void setTransitionNodeName(String transitionNodeName) {
         this.transitionNodeName = transitionNodeName;
     }
 
-    public double getCornerRadius() {
-        return cornerRadius;
-    }
-
-    public void setCornerRadius(double cornerRadius) {
-        this.cornerRadius = cornerRadius;
-    }
 
     @Override
-    public boolean requiresReusableComponent() { return true; };
+    public boolean requiresReusableComponent() { return true; }
 
     @Override
-    public String getReusableComponentName() { return "Button.js"; };
+    public String getReusableComponentName() { return "Button.js"; }
 
     @Override
     public String generateCode() {
         try {
-            String backgroundColor = this.recFills.get(0).getColor().toString();
-            String textColor = this.textFills.get(0).getColor().toString();
+            String backgroundColor = getContainerFills().get(0).getColor().toString();
+            String textColor = getTextFills().get(0).getColor().toString();
             StringBuilder buttonCode = new StringBuilder();
             buttonCode.append("<Button\n");
             if (transitionNodeID != null) {
@@ -94,18 +54,18 @@ public class ButtonComponent extends FrontendComponent {
             }
             buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", marginTop: base.margin, minWidth: " + getWidth());
             if (!isCircle) {
-                buttonCode.append(", borderRadius: ").append(cornerRadius);
+                buttonCode.append(", borderRadius: ").append(getCornerRadius());
             }
-            if (this.borderColor != null) {
-                String borderColorStr = this.borderColor.toString();
-                buttonCode.append(", borderColor: ").append(borderColorStr).append(" ,borderWidth: ").append(this.borderWidth);
+            if (getBorderColor() != null) {
+                String borderColorStr = getBorderColor().toString();
+                buttonCode.append(", borderColor: ").append(borderColorStr).append(" ,borderWidth: ").append(getBorderWidth());
             }
             buttonCode.append("}}\n");
-            buttonCode.append("   textStyle={{color: ").append(textColor).append(", fontSize: ").append(this.style.getFontSize()).append("}}\n");
+            buttonCode.append("   textStyle={{color: ").append(textColor).append(", fontSize: ").append(getStyle().getFontSize()).append("}}\n");
             if (isCircle) {
                 buttonCode.append("circleDiameter={").append(getWidth()).append("}");
             }
-            buttonCode.append(">").append(this.character).append("</Button>");
+            buttonCode.append(">").append(this.characters).append("</Button>");
 
             return buttonCode.toString();
         } catch (Exception e) {
@@ -113,35 +73,4 @@ public class ButtonComponent extends FrontendComponent {
         }
     }
 
-    public void setTextFills(List<Paint> textFills) {
-        this.textFills = textFills;
-    }
-
-    public void setRecFills(List<Paint> recFills) {
-        this.recFills = recFills;
-    }
-
-    public String toString(){
-        return getHeight() + " " + this.getPositionY();
-    }
-
-    public Color getBorderColor() {
-        return borderColor;
-    }
-
-    public void setBorderColor(Color borderColor) {
-        this.borderColor = borderColor;
-    }
-
-    public double getBorderWidth() {
-        return borderWidth;
-    }
-
-    public void setBorderWidth(double borderWidth) {
-        this.borderWidth = borderWidth;
-    }
-
-    public void setCircle(boolean circle) {
-        isCircle = circle;
-    }
 }

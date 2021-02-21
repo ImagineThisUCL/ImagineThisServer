@@ -2,7 +2,6 @@ package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 
-import java.util.List;
 
 /**
  *  A object used to store data about this specific component passed from Figma API,
@@ -15,6 +14,6 @@ public class Ellipse extends FigmaComponent {
     @Override
     public FrontendComponent convertToFrontendComponent() {
         return null;
-    };
+    }
 
 }

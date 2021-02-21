@@ -33,9 +33,7 @@ public class FileUtil {
     public void writeFile(String filePath, String text) throws IOException {
         logger.info("Writing file " + filePath);
         File file = new File(filePath);
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        writer.write(text);
-        writer.close();
+        FileUtils.writeStringToFile(file, text, "UTF-8");
     };
 
     public String readFile(String filePath) throws IOException {

@@ -42,7 +42,7 @@ public class GenerationServiceImpl implements GenerationService {
      */
     public boolean buildProject(String projectID, Authentication auth, List<String> wireframeList) {
 
-        logger.info("Starting build of project " + projectID);
+        logger.info("Starting build of project {}", projectID);
 
         FigmaFile figmaFile = getFigmaFile(projectID, auth);
 
@@ -59,18 +59,17 @@ public class GenerationServiceImpl implements GenerationService {
             codeGenerator.generateWireframes(figmaFile);
             codeGenerator.generateReusableComponents(figmaFile);
             codeGenerator.generateAppJSCode(figmaFile);
-//            codeGenerator.generateImages(figmaFile);
 
         } catch (IOException e) {
             logger.error("Error during code generation.");
             return false;
         }
         return true;
-    };
+    }
 
-    public java.io.File downloadProject(String projectID) throws NotFoundException {
+    public java.io.File downloadProject(String projectID) {
         return new java.io.File("asdf");
-    };
+    }
 
 
     /**
@@ -84,7 +83,7 @@ public class GenerationServiceImpl implements GenerationService {
         JsonObject rawFigmaFile;
         try {
             rawFigmaFile = figmaAPIUtil.requestFigmaFile(projectID, auth);
-        } catch (IOException e) { return null; };
+        } catch (IOException e) { return null; }
 
         JsonObject rawFigmaDocument = rawFigmaFile.get("document").getAsJsonObject();
 
@@ -182,7 +181,7 @@ public class GenerationServiceImpl implements GenerationService {
 
             } else {
                 String componentID = jsonChild.getAsJsonObject().get("id").getAsString();
-                logger.warn("Could not recognize an element with ID " + componentID);
+                logger.warn("Could not recognize an element with ID {}", componentID);
                 continue;
             }
 
@@ -198,6 +197,6 @@ public class GenerationServiceImpl implements GenerationService {
         }
 
         return figmaComponents;
-    };
+    }
 
 }

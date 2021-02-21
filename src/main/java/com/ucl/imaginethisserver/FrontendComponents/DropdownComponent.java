@@ -1,57 +1,25 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
-import com.ucl.imaginethisserver.FigmaComponents.Paint;
-import com.ucl.imaginethisserver.FigmaComponents.Style;
-
-import java.io.IOException;
-import java.util.List;
-
 public class DropdownComponent extends FrontendComponent {
-    /**
-     * First default option of the dropdown.
-     */
-    private String option;
-    /**
-     * Style of the container or the option text within the dropdown
-     */
-    private double cornerRadius;
-    private List<Paint> textFills;
-    private List<Paint> containerFills;
-    private Style style;
 
+    // First default option of the dropdown.
+    private String option;
     public void setOption(String string) {
         option = string;
     }
 
-    public void setTextFills(List<Paint> textFills) {
-        this.textFills = textFills;
-    }
-
-    public void setStyle(Style style) {
-        this.style = style;
-    }
-
-    public void setContainerFills(List<Paint> conFills) {
-        containerFills = conFills;
-    }
-
-    public void setCornerRadius(double cornerRadius) {
-        this.cornerRadius = cornerRadius;
-    }
-
+    @Override
+    public boolean requiresReusableComponent() { return true; }
 
     @Override
-    public boolean requiresReusableComponent() { return true; };
-
-    @Override
-    public String getReusableComponentName() { return "Dropdown.js"; };
+    public String getReusableComponentName() { return "Dropdown.js"; }
 
     @Override
     public String generateCode(){
         try {
             StringBuilder code = new StringBuilder();
-            String textColor = this.textFills.get(0).getColor().toString();
-            String containerColor = this.containerFills.get(0).getColor().toString();
+            String textColor = getTextFills().get(0).getColor().toString();
+            String containerColor = getContainerFills().get(0).getColor().toString();
 
             code.append("<Dropdown\n" +
                     "items={[\n" +
@@ -60,10 +28,10 @@ public class DropdownComponent extends FrontendComponent {
             code.append("'},\n" +
                     "{key: 'option2', label: 'Placeholder'},\n" +
                     "]}\n");
-            code.append("containerStyle={{borderRadius:").append(this.cornerRadius).append(", backgroundColor: ").append(containerColor).append("}}\n");
-            code.append("textStyle={{fontSize: ").append(this.style.getFontSize()).append(", color: ").append(textColor).append("}}/>\n");
+            code.append("containerStyle={{borderRadius:" + getCornerRadius() + ", backgroundColor: " + containerColor + "}}\n");
+            code.append("textStyle={{fontSize: " + getStyle().getFontSize() + ", color: " + textColor + "}}/>\n");
             return code.toString();
-        }catch (Exception e){
+        } catch (Exception e) {
             return "<P>The drop down component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
         }
     }

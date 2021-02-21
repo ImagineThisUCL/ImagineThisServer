@@ -1,7 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.annotations.Expose;
-import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 import com.ucl.imaginethisserver.FrontendComponents.TextComponent;
 
 import java.util.List;
@@ -24,10 +23,6 @@ public class Text extends FigmaComponent {
         return style;
     }
 
-    public List<Effect> getEffects() {
-        return effects;
-    }
-
     public String getCharacters() {
         return characters;
     }
@@ -46,15 +41,9 @@ public class Text extends FigmaComponent {
         textComponent.setPositionY(getPositionY());
         textComponent.setAlign(getAlign());
         textComponent.setText(getCharacters());
-        if (getFills(0) != null) {
-            textComponent.setColor(getFills(0).getColor());
-        }
-        if (getStyle() != null) {
-            textComponent.setFontFamily(getStyle().getFontFamily());
-            textComponent.setFontSize(getStyle().getFontSize());
-            textComponent.setFontWeight(getStyle().getFontWeight());
-            textComponent.setTextAlign(getStyle().getTextAlignHorizontal());
-        }
+        textComponent.setTextFills(getFills());
+        textComponent.setStyle(getStyle());
+
         return textComponent;
     }
 

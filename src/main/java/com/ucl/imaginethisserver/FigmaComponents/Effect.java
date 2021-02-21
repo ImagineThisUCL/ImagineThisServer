@@ -1,7 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.annotations.Expose;
-import com.ucl.imaginethisserver.FigmaComponents.Color;
 
 public class Effect {
 

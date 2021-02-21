@@ -2,7 +2,6 @@ package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
-import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
 
 import java.util.*;
 
@@ -25,15 +24,15 @@ public class Page {
 
     public String getId() {
         return id;
-    };
+    }
     public String getName() {
         return name;
-    };
-    public String getType() { return type; };
-    public JsonArray getChildren() { return children; };
-    public List<Wireframe> getWireframes() { return wireframes; };
+    }
+    public String getType() { return type; }
+    public JsonArray getChildren() { return children; }
+    public List<Wireframe> getWireframes() { return wireframes; }
 
-    public void addWireframe(Wireframe wireframe) { wireframes.add(wireframe); };
+    public void addWireframe(Wireframe wireframe) { wireframes.add(wireframe); }
 
     /**
      * Function that converts the Figma Page into String
@@ -43,13 +42,6 @@ public class Page {
         builder.setPrettyPrinting();
         Gson gson = builder.create();
         return gson.toJson(this);
-    }
-
-    /**
-     * @return Function that returns a Wireframe according to its ID
-     */
-    public Wireframe getWireframeByID(String id) {
-        return null;
     }
 
     public List<FigmaComponent> getComponents() {

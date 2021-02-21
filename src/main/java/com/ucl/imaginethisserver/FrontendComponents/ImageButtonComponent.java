@@ -9,17 +9,19 @@ public class ImageButtonComponent extends FrontendComponent {
     private String transitionNodeID;
     private String transitionNodeName;
 
-    public String getImageURL() { return imageURL; };
+    public String getImageURL() { return imageURL; }
 
-    public String getImageName() { return imageURL; };
+    public String getImageName() { return imageURL; }
 
-    public String getTransitionNodeID() { return transitionNodeID; };
+    public String getTransitionNodeID() { return transitionNodeID; }
 
     public String getTransitionNodeName() {
         return transitionNodeName;
     }
 
-    public void setTransitionNodeName(String transitionNodeID) {
+
+
+    public void setTransitionNodeName(String transitionNodeName) {
         this.transitionNodeName = transitionNodeName;
     }
 
@@ -31,11 +33,12 @@ public class ImageButtonComponent extends FrontendComponent {
         this.transitionNodeID = transitionNodeID;
     }
 
-    @Override
-    public boolean requiresReusableComponent() { return true; };
 
     @Override
-    public String getReusableComponentName() { return "ImageButton.js"; };
+    public boolean requiresReusableComponent() { return true; }
+
+    @Override
+    public String getReusableComponentName() { return "ImageButton.js"; }
 
     @Override
     public String generateCode() {

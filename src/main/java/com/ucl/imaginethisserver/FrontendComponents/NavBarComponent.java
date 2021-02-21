@@ -1,54 +1,21 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
-
 import com.ucl.imaginethisserver.FigmaComponents.Color;
-import com.ucl.imaginethisserver.FigmaComponents.Paint;
-import com.ucl.imaginethisserver.Util.CodeGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class NavBarComponent extends GroupComponent {
 
     public static final String NAME = "NavigationBar";
-
-    private final Logger logger = LoggerFactory.getLogger(CodeGenerator.class);
-
+    private final Logger logger = LoggerFactory.getLogger(NavBarComponent.class);
     private Color backgroundColor = new Color(213, 230, 236, 1);
 
-    /**
-     * A list of navigation button that the bottom navigation bar contains.
-     */
-    public static List<NavigationButtonComponent> NAV_BUTTONS = new ArrayList<>();
-    /**
-     * The key is the name of the button
-     * The value is the name of the wireframe name that the button corresponding to.
-     */
-    public static HashMap<String, String> BUTTON_MAP = new HashMap<>();
-    public static List<Paint> containerFills;
-    /**
-     * If there is any exception be thrown during bottom navigation bar source code generation.
-     */
-    public static boolean isError = false;
-
-
-    public static boolean hasPlaceholder() {
-        for (String wireframe : BUTTON_MAP.values()) {
-            if (wireframe.equals("Placeholder")) {
-                return true;
-            }
-        }
-        return false;
-    }
+    @Override
+    public boolean requiresReusableComponent() { return false; }
 
     @Override
-    public boolean requiresReusableComponent() { return false; };
-
-    @Override
-    public String getReusableComponentName() { return null; };
+    public String getReusableComponentName() { return null; }
 
     @Override
     public String generateCode() {

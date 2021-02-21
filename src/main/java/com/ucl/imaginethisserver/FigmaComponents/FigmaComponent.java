@@ -34,19 +34,15 @@ abstract public class FigmaComponent {
     @Expose()
     private String blendMode;
 
-    private String imageURL;
     private int height;
     private int width;
-    private FigmaFile figmaFile; // Give each component access to the whole file
-    /**
-     * The position of the Figma component in X axis, the value is relative to the wireframe
-     */
     private int positionX;
-    /**
-     * The position of the Figma component in Y axis, the value is relative to the wireframe
-     */
     private int positionY;
+    private String imageURL;
+    private FigmaFile figmaFile; // Give each component access to the whole file
     private String align;
+
+    public abstract FrontendComponent convertToFrontendComponent();
 
     public String toString() {
         GsonBuilder builder = new GsonBuilder();
@@ -79,52 +75,26 @@ abstract public class FigmaComponent {
         return blendMode;
     }
 
-    public List<Paint> getFills() { return fills; };
+    public List<Paint> getFills() { return fills; }
 
     public Paint getFills(int index) {
-        if (fills == null || fills.size() == 0) return null;
+        if (fills == null || fills.isEmpty()) return null;
         else return fills.get(0);
-    };
+    }
 
-    public List<Paint> getStrokes() { return strokes; };
+    public List<Paint> getStrokes() { return strokes; }
 
-    public Paint getStrokes(int index) { return strokes.get(index); };
+    public Paint getStrokes(int index) { return strokes.get(index); }
 
-    public double getStrokeWeight() { return strokeWeight; };
+    public double getStrokeWeight() { return strokeWeight; }
 
-    public double getCornerRadius() { return cornerRadius; };
+    public double getCornerRadius() { return cornerRadius; }
 
     public String getStrokeAlign() {
         return strokeAlign;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
-
-    public FigmaFile getFigmaFile() { return figmaFile; };
-    public void setFigmaFile(FigmaFile figmaFile) { this.figmaFile = figmaFile; };
-
-    /**
-     * This method calculates the relative position (relative to the wireframe that the component belong to) of current Figma component,
-     * and calculates the align attribute (LEFT, RIGHT, CENTER) for the current Figma component.
-     * @param wireframeBoundingbox the position information of the wireframe which the current Figma component belong to.
-     */
-    public void convertRelativePosition(AbsoluteBoundingBox wireframeBoundingbox){
-        this.height = (int)(this.absoluteBoundingBox.height);
-        this.width = (int)(this.absoluteBoundingBox.width);
-
-        this.positionX = (int)((this.absoluteBoundingBox.x - wireframeBoundingbox.x));
-        this.positionY = (int)((this.absoluteBoundingBox.y - wireframeBoundingbox.y));
-
-        if(this.positionX + this.width < wireframeBoundingbox.width / 2){
-            this.align = "LEFT";
-        }else if(this.positionX > wireframeBoundingbox.width / 2){
-            this.align = "RIGHT";
-        }else{
-            this.align = "CENTER";
-        }
-    }
+    public FigmaFile getFigmaFile() { return figmaFile; }
 
     public int getHeight() {
         return height;
@@ -146,11 +116,12 @@ abstract public class FigmaComponent {
         return align;
     }
 
-    /**
-     *  Function used to convert a common Figma component into a Switch component on the frontend.
-    */
 
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
 
+    public void setFigmaFile(FigmaFile figmaFile) { this.figmaFile = figmaFile; }
 
     public void setType(String type) {
         this.type = type;
@@ -168,13 +139,33 @@ abstract public class FigmaComponent {
         this.id = id;
     }
 
-    abstract public FrontendComponent convertToFrontendComponent();
+
+    /**
+     * This method calculates the relative position (relative to the wireframe that the component belong to) of current Figma component,
+     * and calculates the align attribute (LEFT, RIGHT, CENTER) for the current Figma component.
+     * @param wireframeBoundingbox the position information of the wireframe which the current Figma component belong to.
+     */
+    public void convertRelativePosition(AbsoluteBoundingBox wireframeBoundingbox) {
+        height = (int) (absoluteBoundingBox.getHeight());
+        width = (int) (absoluteBoundingBox.getWidth());
+
+        positionX = (int) (absoluteBoundingBox.getX() - wireframeBoundingbox.getX());
+        positionY = (int) (absoluteBoundingBox.getY() - wireframeBoundingbox.getY());
+
+        if (this.positionX + this.width < wireframeBoundingbox.getWidth() / 2) {
+            align = "LEFT";
+        } else if (this.positionX > wireframeBoundingbox.getWidth() / 2){
+            align = "RIGHT";
+        } else {
+            align = "CENTER";
+        }
+    }
 
     public static <T extends FigmaComponent> boolean containsComponent(List<FigmaComponent> figmaComponents, Class<T> cls) {
         for (FigmaComponent component : figmaComponents) {
             if (cls.isInstance(component)) return true;
         }
         return false;
-    };
+    }
 
 }

@@ -33,7 +33,7 @@ public class AppJSComponent {
      * @return
      * @throws IOException
      */
-    public static String generateViewCode(FigmaFile figmaFile) throws IOException {
+    public static String generateViewCode(FigmaFile figmaFile) {
         StringBuilder viewCode = new StringBuilder();
         String initialRouteName = figmaFile.getInitialWireframeName();
         boolean containsNavigation = false;
@@ -81,7 +81,7 @@ public class AppJSComponent {
     /**
      *  Function that combine Import code and View code together.
      */
-    public static String generateCode(FigmaFile figmaFile) throws IOException {
+    public static String generateCode(FigmaFile figmaFile) {
         StringBuilder code = new StringBuilder();
         code.append(generateImportCode(figmaFile));
         code.append(generateViewCode(figmaFile));

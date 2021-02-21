@@ -34,7 +34,7 @@ public class GenerationController {
     @Autowired
     public GenerationController(GenerationService generationService) {
         this.generationService = generationService;
-    };
+    }
 
 
     /**
@@ -56,7 +56,7 @@ public class GenerationController {
             @PathVariable("project-id") String projectID,
             @RequestParam(value = "accessToken") String accessToken,
             @RequestParam(value = "authType") String type,
-            @RequestBody Map<String, Object> payload) throws IOException {
+            @RequestBody Map<String, Object> payload) {
 
         Authentication auth = new Authentication(type, accessToken);
         List<String> wireframeList = (List<String>) payload.get("wireframeList");
@@ -74,7 +74,7 @@ public class GenerationController {
     @GetMapping("/projects/{project-id}/download")
     public ResponseEntity<Resource> downloadProject(
             @PathVariable("project-id") String projectID,
-            HttpServletRequest request) throws IOException {
+            HttpServletRequest request) {
 
         File file = new File(projectID);
         HttpHeaders headers = new HttpHeaders();

@@ -2,7 +2,6 @@ package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
-import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -30,7 +29,7 @@ public class Wireframe {
 
     public String getId() {
         return id;
-    };
+    }
     public String getName() {
         String wireframeName = name.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
         // Need to capitalize wireframes because they will be converted to JavaScript React classes
@@ -38,23 +37,23 @@ public class Wireframe {
     }
     public JsonArray getChildren() {
         return children;
-    };
+    }
     public List<Paint> getFills() {
         return fills;
-    };
-    public AbsoluteBoundingBox getAbsoluteBoundingBox() { return absoluteBoundingBox; };
+    }
+    public AbsoluteBoundingBox getAbsoluteBoundingBox() { return absoluteBoundingBox; }
     public List<FigmaComponent> getComponents() {
         return components;
-    };
+    }
     public Page getPage() {
         return page;
-    };
-    public Color getBackgroundColor() { return backgroundColor; };
+    }
+    public Color getBackgroundColor() { return backgroundColor; }
 
-    public void setName(String name) { this.name = name; };
+    public void setName(String name) { this.name = name; }
     public void setPage(Page page) {
         this.page = page;
-    };
+    }
     public void setComponents(List<FigmaComponent> figmaComponents) {
         // Initialize list to be empty
         components = new ArrayList<>();
@@ -62,22 +61,16 @@ public class Wireframe {
             components.add(figmaComponent);
         }
     }
-    public void addComponent(FigmaComponent component) { components.add(component); };
+    public void addComponent(FigmaComponent component) { components.add(component); }
 
     /**
      * Sort all of the Figma components in the wireframe, the component which have a smaller Y-axis value (which means the component locates at a higher position in the wireframe) is
      * in the front of the list.
      */
     public void sortComponentsByY() {
-        components.sort(new Comparator<FigmaComponent>() {
-            @Override
-            public int compare(FigmaComponent o1, FigmaComponent o2) {
-                if (o1.getPositionY() > o2.getPositionY()) {
-                    return 1;
-                } else {
-                    return -1;
-                }
-            }
+        components.sort((o1, o2) -> {
+            if (o1.getPositionY() > o2.getPositionY()) return 1;
+            else return -1;
         });
     }
 
@@ -87,6 +80,5 @@ public class Wireframe {
         Gson gson = builder.create();
         return gson.toJson(this);
     }
-
 
 }

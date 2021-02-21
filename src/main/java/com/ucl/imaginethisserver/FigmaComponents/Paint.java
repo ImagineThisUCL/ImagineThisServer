@@ -3,9 +3,7 @@ package com.ucl.imaginethisserver.FigmaComponents;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
-import com.ucl.imaginethisserver.FigmaComponents.Color;
 
-import java.util.List;
 
 /**
  * An array of fill paints applied to the node
@@ -13,27 +11,10 @@ import java.util.List;
 public class Paint {
     @Expose()
     private String blendMode;
-    /**
-     * Type of paint as a string enum
-     * SOLID
-     * GRADIENT_LINEAR
-     * GRADIENT_RADIAL
-     * GRADIENT_ANGULAR
-     * GRADIENT_DIAMOND
-     * IMAGE
-     * EMOJI
-     */
     @Expose()
     private String type;
-    /**
-     * Solid color of the paint
-     */
     @Expose()
     private Color color;
-
-    /**
-     * A reference to an image embedded in this node. To download the image using this reference, use the GET file images endpoint to retrieve the mapping from image references to image URLs
-     */
     @Expose()
     private String imageRef;
 

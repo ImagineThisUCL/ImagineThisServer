@@ -1,6 +1,5 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,10 +11,10 @@ public class FormComponent extends GroupComponent {
     private final Logger logger = LoggerFactory.getLogger(FormComponent.class);
 
     @Override
-    public boolean requiresReusableComponent() { return false; };
+    public boolean requiresReusableComponent() { return false; }
 
     @Override
-    public String getReusableComponentName() { return null; };
+    public String getReusableComponentName() { return null; }
 
     /**
      *  Function that writes the code of the form,
@@ -38,7 +37,7 @@ public class FormComponent extends GroupComponent {
                 code.append("<View style={{borderRadius: " + getCornerRadius() + ", padding: 10, flex: 1, backgroundColor: " + backgroundColorStr + "}}>\n");
             }
             int preY = getPositionY();
-            if (getComponents().size() > 0) {
+            if (!getComponents().isEmpty()) {
                 List<List<FrontendComponent>> inlineComponentList = FrontendComponent.getInlineComponentList(getComponents());
                 for (List<FrontendComponent> curList : inlineComponentList) {
                     if (curList.size() == 1) {

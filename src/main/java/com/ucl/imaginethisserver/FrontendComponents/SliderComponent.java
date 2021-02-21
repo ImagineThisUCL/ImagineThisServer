@@ -1,9 +1,5 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 /**
  *  Frontend Component Slider that contains
@@ -11,17 +7,25 @@ import java.io.IOException;
 */
 public class SliderComponent extends FrontendComponent {
 
-    private final Logger logger = LoggerFactory.getLogger(SliderComponent.class);
-
     private int minValue;
     private int maxValue;
     private int currentValue;
 
-    @Override
-    public boolean requiresReusableComponent() { return true; };
+    public void setCurrentValue(int currentValue) {
+        this.currentValue = currentValue;
+    }
+    public void setMaxValue(int maxValue) {
+        this.maxValue = maxValue;
+    }
+    public void setMinValue(int minValue) {
+        this.minValue = minValue;
+    }
 
     @Override
-    public String getReusableComponentName() { return "CustomSlider.js"; };
+    public boolean requiresReusableComponent() { return true; }
+
+    @Override
+    public String getReusableComponentName() { return "CustomSlider.js"; }
 
     @Override
     public String generateCode() {
@@ -39,17 +43,5 @@ public class SliderComponent extends FrontendComponent {
         }  catch (Exception e) {
             return "<P>The slider component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
         }
-    }
-
-    public void setCurrentValue(int currentValue) {
-        this.currentValue = currentValue;
-    }
-
-    public void setMaxValue(int maxValue) {
-        this.maxValue = maxValue;
-    }
-
-    public void setMinValue(int minValue) {
-        this.minValue = minValue;
     }
 }

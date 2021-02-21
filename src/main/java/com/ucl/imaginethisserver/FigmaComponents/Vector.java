@@ -3,7 +3,6 @@ package com.ucl.imaginethisserver.FigmaComponents;
 import com.google.gson.annotations.Expose;
 import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 
-import java.util.List;
 /**
  *  A class that represents a Vector component passed from Figma API
  *  Storing necessary variables within.
@@ -16,7 +15,7 @@ public class Vector extends FigmaComponent {
     private String strokeJoin;
     @Expose()
     private Effect effect;
-    //Opacity of the node
+    // Opacity of the node
     @Expose()
     private double opacity;
 
@@ -38,5 +37,6 @@ public class Vector extends FigmaComponent {
     }
 
     @Override
-    public FrontendComponent convertToFrontendComponent() { return null; };
+    public FrontendComponent convertToFrontendComponent() { return null; }
+
 }

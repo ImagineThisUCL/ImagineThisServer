@@ -1,6 +1,5 @@
 package com.ucl.imaginethisserver.FrontendComponents;
 
-import java.io.IOException;
 
 /**
  *  Switch object that only generates switch frontend code with fixed variables
@@ -8,10 +7,10 @@ import java.io.IOException;
 public class SwitchComponent extends FrontendComponent {
 
     @Override
-    public boolean requiresReusableComponent() { return true; };
+    public boolean requiresReusableComponent() { return true; }
 
     @Override
-    public String getReusableComponentName() { return "Toggle.js"; };
+    public String getReusableComponentName() { return "Toggle.js"; }
 
     @Override
     public String generateCode() {
@@ -25,7 +24,7 @@ public class SwitchComponent extends FrontendComponent {
                     "//    value={isEnabled}\n" +
                     "/>");
             return code.toString();
-        }catch (Exception e){
+        } catch (Exception e) {
             return "<P>The switch component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
         }
     }

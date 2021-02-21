@@ -12,12 +12,10 @@ public class WireframeComponent {
     private Wireframe wireframe;
     private List<FrontendComponent> components = new ArrayList<>();
 
-    private double width;
     private Color backgroundColor;
-    private String backgroundImage;
     private AbsoluteBoundingBox absoluteBoundingBox;
 
-    public List<FrontendComponent> getComponents() { return components; };
+    public List<FrontendComponent> getComponents() { return components; }
 
     public void setComponents(List<FrontendComponent> frontendComponents) {
         components = new ArrayList<>();
@@ -30,7 +28,7 @@ public class WireframeComponent {
         for (FrontendComponent component : frontendComponents) {
             components.add(component);
         }
-    };
+    }
 
     /** Go through all of the direct child components of the current wireframe, convert all of the recognized components to their corresponding React Native component.
      * All of unrecognized components would be converted to an image.
@@ -45,7 +43,7 @@ public class WireframeComponent {
             FrontendComponent frontendComponent = component.convertToFrontendComponent();
             components.add(frontendComponent);
         }
-    };
+    }
 
 
     /**
@@ -61,7 +59,7 @@ public class WireframeComponent {
 
     public <T extends FrontendComponent> boolean containsComponent(Class<T> cls) {
         return FrontendComponent.containsComponent(components, cls);
-    };
+    }
 
     /**Generate the source code of import section. Which components should be imported are determined by the included reusable components
      *import code: Regular import code that is required for every React Native page
@@ -129,7 +127,7 @@ public class WireframeComponent {
         viewCode.append("render() {\n");
         viewCode.append("        return (\n" +
                 "            <ScrollView style={{flex: 1, padding: 0, backgroundColor: ").append(backgroundColor.toString()).append("}}>\n");
-        if (components.size() == 0) { return ""; };
+        if (components.isEmpty()) { return ""; }
         // Put all of the components in the same line in one list
         List<List<FrontendComponent>> inlineComponentList = FrontendComponent.getInlineComponentList(components);
         int preY = 0;
@@ -139,7 +137,7 @@ public class WireframeComponent {
                 FrontendComponent component = line.get(0);
                 int marginTop = Math.max(component.getPositionY() - preY, 0);
                 int marginLeft = component.getPositionX();
-                int marginRight = Integer.max((int) (absoluteBoundingBox.width - (component.getPositionX() + component.getWidth())), 0);
+                int marginRight = Integer.max((int) (absoluteBoundingBox.getWidth() - (component.getPositionX() + component.getWidth())), 0);
                 viewCode.append("<View style={{marginTop: " + marginTop + ",marginLeft: " + marginLeft + ", marginRight: " + marginRight + "}}>\n");
                 viewCode.append(component.generateCode()).append("\n");
                 viewCode.append("</View>\n");
@@ -176,8 +174,5 @@ public class WireframeComponent {
 
         return viewCode.toString();
     }
-
-
-
 
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -25,6 +26,9 @@ import java.util.Map;
 @Component
 public class FigmaAPIUtil {
 
+    @Value("${config.outputStorageFolder}")
+    private String outputStorageFolder;
+
     private static final String FIGMA_API = "https://api.figma.com/v1";
 
     private Logger logger = LoggerFactory.getLogger(FigmaAPIUtil.class);
@@ -36,7 +40,7 @@ public class FigmaAPIUtil {
      * @throws IOException
      */
     public JsonObject sendGetRequest(URL figmaAPI, Authentication auth) throws IOException {
-        logger.info("Sending GET request to " + figmaAPI.toString());
+        logger.info("Sending GET request to {}", figmaAPI);
         HttpURLConnection connection = (HttpURLConnection) figmaAPI.openConnection();
         connection.setRequestMethod("GET");
 
@@ -52,7 +56,7 @@ public class FigmaAPIUtil {
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
             String inputLine;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
@@ -156,18 +160,18 @@ public class FigmaAPIUtil {
      * @throws IOException
      */
     public String downloadImage(String imageUrl, String folderName) throws IOException {
-        File storageFile = new File("OutputStorage");
+        File storageFile = new File(outputStorageFolder);
         storageFile.mkdir();
-        File outputAppFolder = new File("OutputStorage/" + folderName);
+        File outputAppFolder = new File(outputStorageFolder + folderName);
         outputAppFolder.mkdir();
-        File assetsFolder = new File("OutputStorage/" + folderName + "/assets");
+        File assetsFolder = new File(outputStorageFolder + folderName + "/assets");
         assetsFolder.mkdir();
-        File imgFolder = new File("OutputStorage/" + folderName + "/assets/img");
+        File imgFolder = new File(outputStorageFolder + folderName + "/assets/img");
         imgFolder.mkdir();
 
         URL url = new URL(imageUrl);
         BufferedImage img = ImageIO.read(url);
-        String imageName = "OutputStorage/" + folderName + "/assets/img/" + imageUrl + ".png";
+        String imageName = outputStorageFolder + folderName + "/assets/img/" + imageUrl + ".png";
         File file = new File(imageName);
         ImageIO.write(img, "png", file);
         return imageName;
