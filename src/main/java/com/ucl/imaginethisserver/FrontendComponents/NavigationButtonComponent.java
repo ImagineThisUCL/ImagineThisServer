@@ -10,9 +10,6 @@ public class NavigationButtonComponent extends ImageButtonComponent {
     public void setText(String text) { this.text = text; }
 
     @Override
-    public boolean requiresReusableComponent() { return false; }
-
-    @Override
     public String getReusableComponentName() { return null; }
 
     @Override

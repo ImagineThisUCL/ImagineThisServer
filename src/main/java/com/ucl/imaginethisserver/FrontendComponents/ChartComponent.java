@@ -3,9 +3,6 @@ package com.ucl.imaginethisserver.FrontendComponents;
 public class ChartComponent extends FrontendComponent {
 
     @Override
-    public boolean requiresReusableComponent() { return true; }
-
-    @Override
     public String getReusableComponentName() { return "Chart.js"; }
 
     @Override

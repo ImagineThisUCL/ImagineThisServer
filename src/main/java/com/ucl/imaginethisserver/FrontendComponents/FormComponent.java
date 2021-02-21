@@ -11,9 +11,6 @@ public class FormComponent extends GroupComponent {
     private final Logger logger = LoggerFactory.getLogger(FormComponent.class);
 
     @Override
-    public boolean requiresReusableComponent() { return false; }
-
-    @Override
     public String getReusableComponentName() { return null; }
 
     /**

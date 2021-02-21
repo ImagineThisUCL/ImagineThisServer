@@ -22,9 +22,6 @@ public class SliderComponent extends FrontendComponent {
     }
 
     @Override
-    public boolean requiresReusableComponent() { return true; }
-
-    @Override
     public String getReusableComponentName() { return "CustomSlider.js"; }
 
     @Override

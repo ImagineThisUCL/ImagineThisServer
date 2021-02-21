@@ -27,13 +27,14 @@ public abstract class FrontendComponent {
     private List<Paint> containerFills;
     private Style style;
 
-
-    // Denotes whether the component uses a reusable component
-    public abstract boolean requiresReusableComponent();
+    public abstract String generateCode();
 
     public abstract String getReusableComponentName();
 
-    public abstract String generateCode();
+    // Denotes whether the component uses a reusable component
+    public boolean requiresReusableComponent() {
+        return getReusableComponentName() != null;
+    };
 
     //
     // Getters

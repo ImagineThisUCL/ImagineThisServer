@@ -20,7 +20,6 @@ public class ImageButtonComponent extends FrontendComponent {
     }
 
 
-
     public void setTransitionNodeName(String transitionNodeName) {
         this.transitionNodeName = transitionNodeName;
     }
@@ -33,9 +32,6 @@ public class ImageButtonComponent extends FrontendComponent {
         this.transitionNodeID = transitionNodeID;
     }
 
-
-    @Override
-    public boolean requiresReusableComponent() { return true; }
 
     @Override
     public String getReusableComponentName() { return "ImageButton.js"; }

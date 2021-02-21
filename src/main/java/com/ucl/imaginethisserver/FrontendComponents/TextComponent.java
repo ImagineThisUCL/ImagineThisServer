@@ -16,9 +16,6 @@ public class TextComponent extends FrontendComponent {
     }
 
     @Override
-    public boolean requiresReusableComponent() { return true; }
-
-    @Override
     public String getReusableComponentName() { return "P.js"; }
 
     @Override

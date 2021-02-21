@@ -7,9 +7,6 @@ package com.ucl.imaginethisserver.FrontendComponents;
 public class SwitchComponent extends FrontendComponent {
 
     @Override
-    public boolean requiresReusableComponent() { return true; }
-
-    @Override
     public String getReusableComponentName() { return "Toggle.js"; }
 
     @Override

@@ -35,10 +35,6 @@ public class ButtonComponent extends FrontendComponent {
         this.transitionNodeName = transitionNodeName;
     }
 
-
-    @Override
-    public boolean requiresReusableComponent() { return true; }
-
     @Override
     public String getReusableComponentName() { return "Button.js"; }
 

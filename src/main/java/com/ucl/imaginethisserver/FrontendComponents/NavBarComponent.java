@@ -12,9 +12,6 @@ public class NavBarComponent extends GroupComponent {
     private Color backgroundColor = new Color(213, 230, 236, 1);
 
     @Override
-    public boolean requiresReusableComponent() { return false; }
-
-    @Override
     public String getReusableComponentName() { return null; }
 
     @Override

@@ -17,9 +17,6 @@ public class TextBoxComponent extends FrontendComponent {
     }
 
     @Override
-    public boolean requiresReusableComponent() { return true; }
-
-    @Override
     public String getReusableComponentName() { return "InputField.js"; }
 
     @Override
