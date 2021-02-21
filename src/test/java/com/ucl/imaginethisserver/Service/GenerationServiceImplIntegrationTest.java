@@ -31,17 +31,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class GenerationServiceImplTest {
-
-    @MockBean
-    private FigmaAPIUtil testFigmaApiUtil;
-
-    @MockBean
-    private CodeGenerator testCodeGenerator;
+public class GenerationServiceImplIntegrationTest {
 
     @Autowired
     private GenerationServiceImpl testGenerationService;
 
+    @Autowired
+    private CodeGenerator testCodeGenerator;
+
+    @MockBean
+    private FileUtil testFileUtil;
+
+    @MockBean
+    private FigmaAPIUtil testFigmaApiUtil;
+
+
+    static final String TEST_OUTPUT_FOLDER = "testFolderPath";
     static final String TEST_PROJECT_ID = "testId";
     static final Authentication TEST_AUTH = null;
     static final List<String> TEST_WIREFRAME_LIST = Arrays.asList("Wireframe 1", "Wireframe 2");
@@ -59,43 +64,27 @@ public class GenerationServiceImplTest {
     void setupMocks() throws IOException {
         // Mock only the API call, not the processing method
         when(testFigmaApiUtil.requestFigmaFile(TEST_PROJECT_ID, TEST_AUTH)).thenReturn(testDataFile);
+        // Setup random output dummy folder
+        testCodeGenerator.setOutputStorageFolder(TEST_OUTPUT_FOLDER);
+        // Mock readFile method, because some operations can be performed with return strings
+        when(testFileUtil.readFile(any())).thenReturn("");
     }
 
-    // Make sure that GenerationServiceImpl correctly parses real Figma JSON files
+    // Complete full test of generation service, where based on a real Figma JSON file, all files are generated
     @Test
-    void givenCorrectJSONFile_whenRequested_thenItIsCorrectlyParsed() {
-        FigmaFile testFigmaFile = testGenerationService.getFigmaFile(TEST_PROJECT_ID, TEST_AUTH);
-        // Firstly, check project high-level attributes
-        assertEquals(TEST_PROJECT_ID, testFigmaFile.getProjectID());
-        assertEquals("Testing application", testFigmaFile.getProjectName());
-        assertEquals("2021-02-14T08:52:49Z", testFigmaFile.getLastModified());
-        assertEquals("677374936", testFigmaFile.getVersion());
+    void givenCorrectFigmaJSONFile_whenGeneratingCode_thenCorrectFilesAreCreated() throws IOException {
 
-        List<Page> pages = testFigmaFile.getPages();
-        List<Wireframe> wireframes = testFigmaFile.getWireframes();
-        // Secondly, check there is 1 page inside the project with correct name and ID
-        assertEquals(1, pages.size());
-        assertEquals("0:1", pages.get(0).getId());
-        assertEquals("Page 1", pages.get(0).getName());
-
-        // Thirdly, check 2 wireframes inside the project with correct names
-        assertEquals(2, wireframes.size());
-        for (Wireframe wireframe : wireframes) {
-            assertThat(wireframe.getId(), anyOf(is("1:2"), is("202:4")));
-            assertThat(wireframe.getName(), anyOf(is("Wireframe1"), is("Wireframe2")));
-        }
-    }
-
-    // Make sure that during code generation, generator is called to create appropriate resources
-    @Test
-    void givenFigmaFile_whenBuildProjectCalled_thenGenerateAppropriateResources() throws IOException {
         testGenerationService.buildProject(TEST_PROJECT_ID, TEST_AUTH, TEST_WIREFRAME_LIST);
-        // Verify correct components are built
-        verify(testCodeGenerator).generateOutputFolder(any());
-        verify(testCodeGenerator).generatePackageFiles(any());
-        verify(testCodeGenerator).generateWireframes(any());
-        verify(testCodeGenerator).generateReusableComponents(any());
-        verify(testCodeGenerator).generateAppJSCode(any());
+
+        String projectFolder = TEST_OUTPUT_FOLDER + "/" + TEST_PROJECT_ID;
+        verify(testFileUtil).writeFile(eq(projectFolder + "/package.json"), any());
+        verify(testFileUtil).writeFile(eq(projectFolder + "/app.config.js"), any());
+        verify(testFileUtil).writeFile(eq(projectFolder + "/assets/BaseStyle.js"), any());
+        verify(testFileUtil).writeFile(eq(projectFolder + "/components/views/Wireframe1.js"), any());
+        verify(testFileUtil).writeFile(eq(projectFolder + "/components/views/Wireframe2.js"), any());
+        verify(testFileUtil).writeFile(eq(projectFolder + "/components/reusables/Button.js"), any());
+        verify(testFileUtil).writeFile(eq(projectFolder + "/components/reusables/P.js"), any());
+        verify(testFileUtil).writeFile(eq(projectFolder + "/App.js"), any());
     }
 
 }

@@ -153,4 +153,6 @@ public class CodeGenerator {
 //        writer.append(placeholderCode);
 //        writer.close();
     }
+
+    public void setFileUtil(FileUtil fileUtil) { this.fileUtil = fileUtil; }
 }
