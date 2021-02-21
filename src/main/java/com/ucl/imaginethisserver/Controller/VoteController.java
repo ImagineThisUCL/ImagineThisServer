@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/v1")
 public class VoteController {
 
@@ -31,12 +30,13 @@ public class VoteController {
     }
 
     @PostMapping("/projects/{project-id}/feedback/{feedback-id}/vote")
-    public ResponseEntity<Map<String, Boolean>> voteFeedback(@PathVariable("project-id") String projectID,
+    public ResponseEntity<Map<String, Object>> voteFeedback(@PathVariable("project-id") String projectID,
                                                              @PathVariable("feedback-id") UUID feedbackID,
                                                              @RequestBody Vote vote) {
-        Boolean result = voteService.voteFeedback(projectID, feedbackID, vote);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("success", result);
+        UUID voteId = voteService.voteFeedback(projectID, feedbackID, vote);
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("voteId", voteId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
