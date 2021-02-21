@@ -8,11 +8,12 @@
         <version>2.3.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.ucl</groupId>
     <artifactId>imaginethisserver</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>imaginethisserver</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Platform for converting designs into applications</description>
 
     <properties>
         <java.version>1.8</java.version>
