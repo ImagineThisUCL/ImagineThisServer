@@ -19,6 +19,7 @@ public class GsonConfig {
     @Bean
     public Gson gson() {
         return new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
                 .registerTypeAdapter(Json.class, new SwaggerJsonTypeAdapter())
                 .create();
     }

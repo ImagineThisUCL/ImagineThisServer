@@ -1,22 +1,13 @@
 package com.ucl.imaginethisserver.Util;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.ucl.imaginethisserver.FigmaComponents.*;
-import com.ucl.imaginethisserver.Service.ServiceImpl.GenerationServiceImpl;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +24,16 @@ public class CodeGeneratorTest {
     @Autowired
     private CodeGenerator testCodeGenerator;
 
+    @Value("${config.outputStorageFolder}")
+    private String OUTPUT_STORAGE_FOLDER;
+
     static final String TEST_PROJECT_ID = "testId";
-    static final String TEST_OUTPUT_FOLDER = "testFolderPath";
     static FigmaFile testFigmaFile;
 
     @BeforeEach
     void setUpMocks() throws IOException {
         // Initialize new empty FigmaFile
         testFigmaFile = new FigmaFile(TEST_PROJECT_ID);
-        // Setup random output dummy folder
-        testCodeGenerator.setOutputStorageFolder(TEST_OUTPUT_FOLDER);
         // Mock readFile method, because some operations can be performed with return strings
         when(testFileUtil.readFile(any())).thenReturn("");
     }
@@ -52,9 +43,9 @@ public class CodeGeneratorTest {
         testCodeGenerator.generateOutputFolder(testFigmaFile);
 
         // Verify output folder is firstly delete, and then correct folders are created
-        String projectFolder = TEST_OUTPUT_FOLDER + "/" + TEST_PROJECT_ID;
+        String projectFolder = String.format("%s/%s", OUTPUT_STORAGE_FOLDER, TEST_PROJECT_ID);
         verify(testFileUtil).deleteDirectory(eq(projectFolder));
-        verify(testFileUtil).makeDirectory(eq(TEST_OUTPUT_FOLDER));
+        verify(testFileUtil).makeDirectory(eq(OUTPUT_STORAGE_FOLDER));
         verify(testFileUtil).makeDirectory(eq(projectFolder));
         verify(testFileUtil).makeDirectory(eq(projectFolder + "/assets"));
         verify(testFileUtil).makeDirectory(eq(projectFolder + "/components"));
@@ -66,7 +57,7 @@ public class CodeGeneratorTest {
     void givenCorrectFigmaFile_whenGeneratingCode_thenCorrectPackageFilesAreCreated() throws IOException {
         testCodeGenerator.generatePackageFiles(testFigmaFile);
 
-        String projectFolder = testCodeGenerator.getOutputStorageFolder() + "/" + TEST_PROJECT_ID;
+        String projectFolder = String.format("%s/%s", OUTPUT_STORAGE_FOLDER, TEST_PROJECT_ID);
         // Verify that correct default files are generated
         verify(testFileUtil).writeFile(eq(projectFolder + "/package.json"), any());
         verify(testFileUtil).writeFile(eq(projectFolder + "/app.config.js"), any());
@@ -96,7 +87,7 @@ public class CodeGeneratorTest {
 
         testCodeGenerator.generateReusableComponents(testFigmaFile);
 
-        String reusablesFolder = testCodeGenerator.getOutputStorageFolder() + "/" + TEST_PROJECT_ID + "/components/reusables";
+        String reusablesFolder = String.format("%s/%s/components/reusables", OUTPUT_STORAGE_FOLDER, TEST_PROJECT_ID);
         // Verify that correct reusable files are generated
         verify(testFileUtil).writeFile(eq(reusablesFolder + "/Button.js"), any());
         verify(testFileUtil).writeFile(eq(reusablesFolder + "/P.js"), any());
@@ -112,7 +103,7 @@ public class CodeGeneratorTest {
     @Test
     void givenCorrectFigmaFile_whenGeneratingCode_thenCorrectAppJSCreated() throws IOException {
         testCodeGenerator.generateAppJSCode(testFigmaFile);
-        String projectFolder = testCodeGenerator.getOutputStorageFolder() + "/" + TEST_PROJECT_ID;
+        String projectFolder = String.format("%s/%s", OUTPUT_STORAGE_FOLDER, TEST_PROJECT_ID);
         // Verify that correct App.js file is generated
         verify(testFileUtil).writeFile(eq(projectFolder + "/App.js"), any());
     }

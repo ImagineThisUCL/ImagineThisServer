@@ -57,4 +57,26 @@ public class FileUtil {
         FileUtils.deleteDirectory(new File(directoryPath));
     }
 
+    /**
+     * Helper method for checking whether file exists
+     * @param filePath
+     */
+    public boolean fileExists(String filePath) {
+        File file = new File(filePath);
+        return file.exists() && !file.isDirectory();
+    }
+
+    /**
+     * Helper method for checking whether file exists
+     * @param directoryPath
+     */
+    public boolean directoryExists(String directoryPath) {
+        File file = new File(directoryPath);
+        return file.exists() && file.isDirectory();
+    }
+
+    public void zipDirectory(String directoryPath) {
+        ZipUtil.zipDirectory(directoryPath);
+    }
+
 }

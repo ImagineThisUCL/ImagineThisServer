@@ -1,5 +1,6 @@
 package com.ucl.imaginethisserver.Controller;
 
+import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
 import com.ucl.imaginethisserver.Service.GenerationService;
 import com.ucl.imaginethisserver.Util.Authentication;
@@ -38,18 +39,12 @@ public class GenerationController {
 
 
     /**
-     * @param payload The json format data which comes from the front-end. The format is
-     *                {
-     *                  "accessToken" : [Figma accessToken used to request the API],
-     *                  "type" : [Request Type], there are two types of request method, which are 'originalToken' and 'oauth2Token',
-     *                           'originalToken': the user authenticate with Figma using his personal [access token] and  [project ID]
-     *                           'oauth2Token': the user authenticate with Figma using OAuth 2.0 protocol.
-     *                  "wireframeList": the list of wireframes that the user try to generate.
-     *                }
-     *
-     * @return  A Generate Response Object, which has two fields.
-     *          - success: a boolean value to indicate if the generation process is successful
-     * @throws IOException
+     * Method for building a project
+     * @param projectID
+     * @param accessToken
+     * @param type
+     * @param payload
+     * @return
      */
     @PostMapping("/projects/{project-id}/build")
     public ResponseEntity<Map<String, Boolean>> buildProject(
@@ -69,19 +64,22 @@ public class GenerationController {
     }
 
     /**
-     * This method is used to download the generate file from the server to the client side.
+     * Download project's zip file, a zipped directory with all source code
+     * @param projectID
+     * @return
      */
     @GetMapping("/projects/{project-id}/download")
     public ResponseEntity<Resource> downloadProject(
-            @PathVariable("project-id") String projectID,
-            HttpServletRequest request) {
+            @PathVariable("project-id") String projectID) {
 
-        File file = new File(projectID);
+        File file = generationService.downloadProject(projectID);
+
+        if (projectID == null) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
-        // The default name of the generate output file is OutputApp.zip
         headers.setContentDispositionFormData("myfile","OutputApp.zip");
         InputStreamResource resource = null;
         try {
@@ -97,35 +95,24 @@ public class GenerationController {
                 .body(resource);
     }
 
+
     /**
-     * The method is used to get access of target Figma project wireframes
-     * @param projectID The figma project ID which the user try to access
-     * @param accessToken The user's personal access token
-     * @param type authenticate type
-     *             - originalToken
-     *             - oauth2Token
-     * @param response
+     * Return a list of wireframes of the Figma project
+     * @param projectID
+     * @param accessToken
+     * @param type
      * @return
-     * @throws IOException
      */
     @GetMapping("/projects/{project-id}/wireframes")
     public ResponseEntity<List<Wireframe>> getFigmaProject(
             @PathVariable("project-id") String projectID,
             @RequestParam(value = "accessToken") String accessToken,
-            @RequestParam(value = "authType") String type,
-            HttpServletResponse response) throws IOException {
+            @RequestParam(value = "authType") String type) {
 
-//        Authentication auth = new Authentication(type, accessToken);
-//        JsonObject figmaTreeStructure = FigmaAPIUtil.requestFigmaFile(projectID, auth);
-//        if (figmaTreeStructure == null) {
-//            response.setStatus(500);
-//            return null;
-//        }
-//        String projectName = figmaTreeStructure.get("name").toString().replaceAll("\"", "");
-////        List<Page> pageList = FigmaAPIUtil.extractPages(figmaTreeStructure);
-//        Page firstPage = pageList.get(0);
-//        firstPage.loadWireframes(projectID, auth);
-//        List<Wireframe> responseList = firstPage.getWireframeList();
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        Authentication auth = new Authentication(type, accessToken);
+        FigmaFile figmaFile = generationService.getFigmaFile(projectID, auth);
+        List<Wireframe> wireframes = figmaFile.getWireframes();
+
+        return new ResponseEntity<>(wireframes, HttpStatus.OK);
     }
 }

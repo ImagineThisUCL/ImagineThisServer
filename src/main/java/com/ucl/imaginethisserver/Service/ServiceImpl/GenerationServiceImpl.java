@@ -10,11 +10,14 @@ import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.Service.GenerationService;
 import com.ucl.imaginethisserver.Util.Authentication;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
+import com.ucl.imaginethisserver.Util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,17 +28,21 @@ public class GenerationServiceImpl implements GenerationService {
 
     private final FigmaAPIUtil figmaAPIUtil;
     private final CodeGenerator codeGenerator;
+    private final FileUtil fileUtil;
     private final Logger logger = LoggerFactory.getLogger(GenerationServiceImpl.class);
 
+    @Value("${config.outputStorageFolder}")
+    private String outputStorageFolder;
+
     @Autowired
-    public GenerationServiceImpl(FigmaAPIUtil figmaAPIUtil, CodeGenerator codeGenerator) {
+    public GenerationServiceImpl(FigmaAPIUtil figmaAPIUtil, CodeGenerator codeGenerator, FileUtil fileUtil) {
         this.figmaAPIUtil = figmaAPIUtil;
         this.codeGenerator = codeGenerator;
+        this.fileUtil = fileUtil;
     }
 
 
     /**
-     *
      * @param projectID
      * @param auth
      * @param wireframeList
@@ -64,11 +71,23 @@ public class GenerationServiceImpl implements GenerationService {
             logger.error("Error during code generation.");
             return false;
         }
+
+        // Zip the folder where project's source code resides for downloads
+        String projectFolder = String.format("%s/%s", outputStorageFolder, projectID);
+        fileUtil.zipDirectory(projectFolder);
         return true;
     }
 
-    public java.io.File downloadProject(String projectID) {
-        return new java.io.File("asdf");
+
+    public File downloadProject(String projectID) {
+        String projectFolder = String.format("%s/%s", outputStorageFolder, projectID);
+        String projectZipFile = String.format("%s/%s.zip", outputStorageFolder, projectID);
+
+        // If project has not been converted yet, return nothing
+        if (!fileUtil.directoryExists(projectFolder)) return null;
+        if (!fileUtil.fileExists(projectZipFile)) return null;
+
+        return new File(projectZipFile);
     }
 
 
@@ -103,6 +122,16 @@ public class GenerationServiceImpl implements GenerationService {
                 page.addWireframe(wireframe);
             }
             figmaFile.addPage(page);
+        }
+
+        // Add image URL to wireframes
+        List<String> wireframeIDs = new ArrayList<>();
+        for (Wireframe wireframe : figmaFile.getWireframes()) {
+            wireframeIDs.add(wireframe.getId());
+        }
+        Map<String, String> wireframeImageURLs = figmaAPIUtil.requestComponentImageURLs(projectID, auth, wireframeIDs);
+        for (Wireframe wireframe : figmaFile.getWireframes()) {
+            wireframe.setImageURL(wireframeImageURLs.get(wireframe.getId()));
         }
 
         // Special cases

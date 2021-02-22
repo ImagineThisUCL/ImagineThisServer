@@ -4,9 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import com.ucl.imaginethisserver.Util.CodeGenerator;
-import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
-import com.ucl.imaginethisserver.FigmaComponents.Page;
-import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
 import com.ucl.imaginethisserver.Service.ServiceImpl.GenerationServiceImpl;
 import com.ucl.imaginethisserver.Util.Authentication;
 import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
@@ -15,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -45,8 +43,10 @@ public class GenerationServiceImplIntegrationTest {
     @MockBean
     private FigmaAPIUtil testFigmaApiUtil;
 
+    @Value("${config.outputStorageFolder}")
+    private String OUTPUT_STORAGE_FOLDER;
 
-    static final String TEST_OUTPUT_FOLDER = "testFolderPath";
+
     static final String TEST_PROJECT_ID = "testId";
     static final Authentication TEST_AUTH = null;
     static final List<String> TEST_WIREFRAME_LIST = Arrays.asList("Wireframe 1", "Wireframe 2");
@@ -64,8 +64,6 @@ public class GenerationServiceImplIntegrationTest {
     void setupMocks() throws IOException {
         // Mock only the API call, not the processing method
         when(testFigmaApiUtil.requestFigmaFile(TEST_PROJECT_ID, TEST_AUTH)).thenReturn(testDataFile);
-        // Setup random output dummy folder
-        testCodeGenerator.setOutputStorageFolder(TEST_OUTPUT_FOLDER);
         // Mock readFile method, because some operations can be performed with return strings
         when(testFileUtil.readFile(any())).thenReturn("");
     }
@@ -76,7 +74,7 @@ public class GenerationServiceImplIntegrationTest {
 
         testGenerationService.buildProject(TEST_PROJECT_ID, TEST_AUTH, TEST_WIREFRAME_LIST);
 
-        String projectFolder = TEST_OUTPUT_FOLDER + "/" + TEST_PROJECT_ID;
+        String projectFolder = String.format("%s/%s", OUTPUT_STORAGE_FOLDER, TEST_PROJECT_ID);
         verify(testFileUtil).writeFile(eq(projectFolder + "/package.json"), any());
         verify(testFileUtil).writeFile(eq(projectFolder + "/app.config.js"), any());
         verify(testFileUtil).writeFile(eq(projectFolder + "/assets/BaseStyle.js"), any());
@@ -85,6 +83,9 @@ public class GenerationServiceImplIntegrationTest {
         verify(testFileUtil).writeFile(eq(projectFolder + "/components/reusables/Button.js"), any());
         verify(testFileUtil).writeFile(eq(projectFolder + "/components/reusables/P.js"), any());
         verify(testFileUtil).writeFile(eq(projectFolder + "/App.js"), any());
+
+        // Verify resulting folder is zipped
+        verify(testFileUtil).zipDirectory(eq(projectFolder));
     }
 
 }

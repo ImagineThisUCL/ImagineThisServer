@@ -22,6 +22,8 @@ public class Wireframe {
     private List<Paint> fills;
     @Expose()
     private Color backgroundColor;
+    @Expose(serialize = true, deserialize = false)
+    private String imageURL;
 
     // Parent page, i.e. page in which this wireframe resides
     private Page page;
@@ -49,11 +51,13 @@ public class Wireframe {
         return page;
     }
     public Color getBackgroundColor() { return backgroundColor; }
+    public String getImageURL() { return imageURL; }
 
     public void setName(String name) { this.name = name; }
     public void setPage(Page page) {
         this.page = page;
     }
+    public void setImageURL(String imageURL) { this.imageURL = imageURL; }
     public void setComponents(List<FigmaComponent> figmaComponents) {
         // Initialize list to be empty
         components = new ArrayList<>();

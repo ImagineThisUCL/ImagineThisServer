@@ -40,10 +40,6 @@ public class CodeGenerator {
         this.fileUtil = fileUtil;
     }
 
-    public String getOutputStorageFolder() { return outputStorageFolder; };
-    public String getTemplateFilesFolder() { return templateFilesFolder; };
-    public void setOutputStorageFolder(String folder) { outputStorageFolder = folder; };
-    public void setTemplateFilesFolder(String folder) { templateFilesFolder = folder; };
 
     /**
      * This method is used to create the root folder for the current project. The default path of root folder would OutputStorage/[folderName]
