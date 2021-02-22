@@ -3,6 +3,7 @@ package com.ucl.imaginethisserver.FigmaComponents;
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import org.springframework.util.StringUtils;
+import com.ucl.imaginethisserver.Conf.ExcludeSerialization;
 
 import java.util.*;
 
@@ -14,7 +15,8 @@ public class Wireframe {
     private String id;
     @Expose()
     private String name;
-    @Expose(serialize = false)
+    @Expose()
+    @ExcludeSerialization
     private JsonArray children;
     @Expose()
     private AbsoluteBoundingBox absoluteBoundingBox;
@@ -26,7 +28,9 @@ public class Wireframe {
     private String imageURL;
 
     // Parent page, i.e. page in which this wireframe resides
+    @ExcludeSerialization
     private Page page;
+    @ExcludeSerialization
     private List<FigmaComponent> components;
 
     public String getId() {
