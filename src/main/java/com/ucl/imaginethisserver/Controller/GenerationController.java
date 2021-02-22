@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.Controller;
 
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
+import com.ucl.imaginethisserver.Responses.WireframesResponse;
 import com.ucl.imaginethisserver.Service.GenerationService;
 import com.ucl.imaginethisserver.Util.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,15 +105,16 @@ public class GenerationController {
      * @return
      */
     @GetMapping("/projects/{project-id}/wireframes")
-    public ResponseEntity<List<Wireframe>> getFigmaProject(
+    public ResponseEntity<WireframesResponse> getFigmaProject(
             @PathVariable("project-id") String projectID,
             @RequestParam(value = "accessToken") String accessToken,
             @RequestParam(value = "authType") String type) {
 
         Authentication auth = new Authentication(type, accessToken);
         FigmaFile figmaFile = generationService.getFigmaFile(projectID, auth);
+        String projectName = figmaFile.getProjectName();
         List<Wireframe> wireframes = figmaFile.getWireframes();
-
-        return new ResponseEntity<>(wireframes, HttpStatus.OK);
+        WireframesResponse response = new WireframesResponse(projectID, projectName, wireframes);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -39,6 +39,9 @@ public class GenerationServiceImplTest {
     @MockBean
     private CodeGenerator testCodeGenerator;
 
+    @MockBean
+    private FileUtil testFileUtil;
+
     @Autowired
     private GenerationServiceImpl testGenerationService;
 
@@ -96,6 +99,9 @@ public class GenerationServiceImplTest {
         verify(testCodeGenerator).generateWireframes(any());
         verify(testCodeGenerator).generateReusableComponents(any());
         verify(testCodeGenerator).generateAppJSCode(any());
+
+        // Make sure whole directory is zipped
+        verify(testFileUtil).zipDirectory(any());
     }
 
 }
