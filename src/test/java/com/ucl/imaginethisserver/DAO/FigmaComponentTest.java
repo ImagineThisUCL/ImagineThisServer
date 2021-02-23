@@ -1,8 +1,14 @@
 package com.ucl.imaginethisserver.DAO;
 
+import com.ucl.imaginethisserver.FigmaComponents.AbsoluteBoundingBox;
+import com.ucl.imaginethisserver.FigmaComponents.FigmaComponent;
+import com.ucl.imaginethisserver.FigmaComponents.Rectangle;
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class FigmaComponentTest {
 

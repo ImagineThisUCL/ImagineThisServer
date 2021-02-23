@@ -1,4 +1,4 @@
-const projectName = process.env.PROJECT_NAME;
+const projectName = "imaginethis-app";
 const projectSlug = projectName.toLowerCase().replace(/ /g, "-");
 
 export default {

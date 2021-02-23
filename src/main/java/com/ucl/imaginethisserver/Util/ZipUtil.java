@@ -1,11 +1,14 @@
 package com.ucl.imaginethisserver.Util;
 
+import org.springframework.stereotype.Component;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
 
 public class ZipUtil extends SimpleFileVisitor<Path> {
     private static ZipOutputStream zos;
@@ -33,14 +36,14 @@ public class ZipUtil extends SimpleFileVisitor<Path> {
         return FileVisitResult.CONTINUE;
     }
 
-    public static void zipFile(String directoryName){
+    public static void zipDirectory(String directoryName){
         Path directory = Paths.get(directoryName);
-        try{
+        try {
             String zipFileName = directoryName.concat(".zip");
             zos = new ZipOutputStream(new FileOutputStream(zipFileName));
             Files.walkFileTree(directory, new ZipUtil(directory));
             zos.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e);
         }
     }
