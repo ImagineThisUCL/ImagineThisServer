@@ -4,7 +4,6 @@ import com.google.gson.*;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import springfox.documentation.spring.web.json.Json;
 
@@ -18,7 +17,18 @@ import java.lang.reflect.Type;
 public class GsonConfig {
     @Bean
     public Gson gson() {
+
+        ExclusionStrategy strategy = new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) { return false; }
+            @Override
+            public boolean shouldSkipField(FieldAttributes field) {
+                return field.getAnnotation(ExcludeSerialization.class) != null;
+            }
+        };
+
         return new GsonBuilder()
+                .addSerializationExclusionStrategy(strategy)
                 .registerTypeAdapter(Json.class, new SwaggerJsonTypeAdapter())
                 .create();
     }
