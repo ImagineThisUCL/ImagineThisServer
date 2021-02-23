@@ -13,7 +13,7 @@ import java.util.zip.ZipOutputStream;
 public class ZipUtil extends SimpleFileVisitor<Path> {
     private static ZipOutputStream zos;
 
-    private Path directory;
+    private final Path directory;
 
     public ZipUtil(Path directory){
         this.directory = directory;

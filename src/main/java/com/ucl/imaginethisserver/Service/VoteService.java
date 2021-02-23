@@ -19,9 +19,9 @@ public interface VoteService {
      * @param projectID ID of the project
      * @param feedbackID ID of the feedback
      * @param vote a vote object, can be either up vote or down vote
-     * @return ID if the vote
+     * @return bool value which indicates the operation status
      */
-    UUID voteFeedback(String projectID, UUID feedbackID, Vote vote);
+    boolean voteFeedback(String projectID, UUID feedbackID, Vote vote);
 
     /**
      * This method will update the vote detail

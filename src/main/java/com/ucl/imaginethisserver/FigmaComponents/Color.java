@@ -5,6 +5,7 @@ package com.ucl.imaginethisserver.FigmaComponents;
  *  Object used to represent rgba colors passed from Figma API in Java
  *  Containing a function that converts this object into Frontend code
 */
+
 public class Color {
     private float r;
     private float g;

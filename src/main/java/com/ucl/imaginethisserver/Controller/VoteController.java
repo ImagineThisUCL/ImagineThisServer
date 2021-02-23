@@ -30,14 +30,19 @@ public class VoteController {
     }
 
     @PostMapping("/projects/{project-id}/feedback/{feedback-id}/vote")
-    public ResponseEntity<Map<String, Object>> voteFeedback(@PathVariable("project-id") String projectID,
+    public ResponseEntity<Map<String, Boolean>> voteFeedback(@PathVariable("project-id") String projectID,
                                                              @PathVariable("feedback-id") UUID feedbackID,
                                                              @RequestBody Vote vote) {
-        UUID voteId = voteService.voteFeedback(projectID, feedbackID, vote);
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("voteId", voteId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        boolean result = voteService.voteFeedback(projectID, feedbackID, vote);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("success", result);
+        if(result){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @PatchMapping("/projects/{project-id}/feedback/{feedback-id}/vote/{vote-id}")
@@ -48,7 +53,12 @@ public class VoteController {
         boolean result = voteService.updateVoteForFeedback(projectID, feedbackID, voteID, vote);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(result){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @DeleteMapping("/projects/{project-id}/feedback/{feedback-id}/vote/{vote-id}")
@@ -59,6 +69,11 @@ public class VoteController {
         boolean result = voteService.deleteVoteForFeedback(projectID, feedbackID, voteID, vote);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(result){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
     }
 }
