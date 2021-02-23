@@ -61,7 +61,7 @@ public class AppJSComponent {
                 "\n" +
                 "            <NavigationContainer>\n" +
                 "                <Stack.Navigator initialRouteName=\"" + navBarName + "\">\n");
-        if (navBar != null && !navBar.isError) {
+        if (navBar != null && !NavBar.isError) {
             viewCode.append("                    <Stack.Screen\n" +
                     "                        name=\"NavigationBar\"\n" +
                     "                        component={NavigationBar}\n" +

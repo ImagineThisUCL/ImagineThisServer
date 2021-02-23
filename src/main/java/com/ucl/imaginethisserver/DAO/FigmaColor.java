@@ -9,13 +9,13 @@ import com.google.gson.annotations.Expose;
 */
 public class FigmaColor {
     @Expose()
-    private float r;
+    private final float r;
     @Expose()
-    private float g;
+    private final float g;
     @Expose()
-    private float b;
+    private final float b;
     @Expose()
-    private float a;
+    private final float a;
 
     public FigmaColor(float r, float g, float b, float a){
         this.r = r;

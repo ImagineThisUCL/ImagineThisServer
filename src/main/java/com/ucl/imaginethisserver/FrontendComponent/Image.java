@@ -23,7 +23,7 @@ public class Image extends FrontendComponent {
             String imageName = FrontendUtil.downloadImage(this.imageURL.replaceAll("\"", ""), FrontendUtil.FOLDER_NAME);
             imageName = imageName.replace("OutputStorage/" + FrontendUtil.FOLDER_NAME, "../..");
             return "<Image\n" +
-                    "source={require(\'" + imageName + "\')}\n" +
+                    "source={require('" + imageName + "')}\n" +
                     "style={{width: " + this.width +
                     ", height: " + this.height + "}}\n" +
                     "/>";

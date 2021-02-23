@@ -1,6 +1,8 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
 import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
+import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
+import com.ucl.imaginethisserver.DAO.FeedbackDao;
 import com.ucl.imaginethisserver.DAO.VoteDao;
 import com.ucl.imaginethisserver.Mapper.VoteDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.VoteMapper;
@@ -24,9 +26,12 @@ public class VoteServiceImpl implements VoteService {
 
     private final VoteDao voteDao;
 
+    private final FeedbackDao feedbackDao;
+
     @Autowired
-    public VoteServiceImpl(VoteDao voteDao) {
+    public VoteServiceImpl(VoteDao voteDao, FeedbackDao feedbackDao) {
         this.voteDao = voteDao;
+        this.feedbackDao = feedbackDao;
     }
 
     @Override
@@ -73,6 +78,15 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public boolean deleteVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote) {
-        return voteDao.deleteVoteForFeedback(projectID, feedbackID, voteID, vote);
+        if(feedbackDao.getFeedbackByID(projectID, feedbackID)==null){
+            throw new NotFoundException("ProjectID or FeedbackID not found!");
+        }
+
+        for(Vote temp : voteDao.getVotesForFeedback(projectID, feedbackID)){
+            if(temp.getVoteId().equals(voteID)){
+                return voteDao.deleteVoteForFeedback(projectID, feedbackID, voteID, vote);
+            }
+        }
+        throw new NotFoundException("Feedback not found!");
     }
 }

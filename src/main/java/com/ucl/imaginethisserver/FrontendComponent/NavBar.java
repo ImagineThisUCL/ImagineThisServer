@@ -86,7 +86,7 @@ public class NavBar extends FrontendComponent {
                         "                    tabBarIcon: () => {\n" +
                         "                        return (\n" +
                         "                            <Image\n" +
-                        "                                source={require(\'" + imageName + "\')}\n" +
+                        "                                source={require('" + imageName + "')}\n" +
                         "                                style={{width: 26, height: 26}}\n" +
                         "                                resizeMode=\"contain\"\n" +
                         "                            />\n" +
@@ -100,7 +100,7 @@ public class NavBar extends FrontendComponent {
             code.append("\n");
             return code.toString();
         } catch (Exception e) {
-            this.isError = true;
+            isError = true;
             return "<View>\n" +
                     "    <P>The navigation bar code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" +
                     "</View>\n";

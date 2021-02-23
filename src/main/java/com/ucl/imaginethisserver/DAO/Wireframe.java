@@ -32,8 +32,8 @@ public class Wireframe {
      * The key is the id of the figma component
      * The value is the corresponding FigmaComponent object
      */
-    private Map<String, FigmaComponent> componentMap = new HashMap<>();
-    private ArrayList<FigmaComponent> componentList = new ArrayList<>();
+    private final Map<String, FigmaComponent> componentMap = new HashMap<>();
+    private final ArrayList<FigmaComponent> componentList = new ArrayList<>();
 
     public void loadComponent(String projectID, String accessToken, AuthenticateType authType) throws IOException {
         List<String> IDList = new ArrayList<>();

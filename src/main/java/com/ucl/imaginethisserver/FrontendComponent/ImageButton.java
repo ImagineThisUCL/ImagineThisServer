@@ -40,7 +40,7 @@ public class ImageButton extends FrontendComponent {
             }
             imageButtonCode.append("style={{padding: 10}}\n");
             imageButtonCode.append("imageStyle={{width: ").append(this.getWidth()).append(", height: ").append(this.getHeight()).append("}}\n");
-            imageButtonCode.append("imageSrc={require(\'").append(imageName).append("\')}/>");
+            imageButtonCode.append("imageSrc={require('").append(imageName).append("')}/>");
 
             return imageButtonCode.toString();
         }catch (Exception e){

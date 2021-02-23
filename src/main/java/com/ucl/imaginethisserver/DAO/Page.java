@@ -30,8 +30,8 @@ public class Page {
         return gson.toJson(this);
     }
 
-    private Map<String, Wireframe> wireframeMap = new HashMap<>();
-    private static Map<String, Wireframe> wireframeIDMap = new HashMap<>();
+    private final Map<String, Wireframe> wireframeMap = new HashMap<>();
+    private static final Map<String, Wireframe> wireframeIDMap = new HashMap<>();
 
 
     /**

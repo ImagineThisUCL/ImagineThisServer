@@ -17,9 +17,9 @@ public class WireframeComponent {
             isContainForm, isContainSliderBar, isContainImageButton,
             isContainImage, isContainChart, isContainMap,
             isContainSwitch, isContainDropdown;
-    private double wWidth;
+    private final double wWidth;
 
-    private FigmaColor backgroundColor;
+    private final FigmaColor backgroundColor;
     private String backgroundImage;
     public static NavBar NAV_BAR = null;
 

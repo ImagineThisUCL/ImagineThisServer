@@ -26,7 +26,7 @@ public class Group extends FigmaComponent {
     @Expose()
     String blendMode;
     String transitionNodeID;
-    private Map<String, FigmaComponent> componentMap = new HashMap<>();
+    private final Map<String, FigmaComponent> componentMap = new HashMap<>();
     private AbsoluteBoundingBox wireframeBoundingBox;
 
     public Map<String, FigmaComponent> getComponentMap() {
