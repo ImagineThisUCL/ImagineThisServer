@@ -2,20 +2,15 @@ package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
 
 
 /**
  * An array of fill paints applied to the node
  */
 public class Paint {
-    @Expose()
     private String blendMode;
-    @Expose()
     private String type;
-    @Expose()
     private Color color;
-    @Expose()
     private String imageRef;
 
     public String toString(){

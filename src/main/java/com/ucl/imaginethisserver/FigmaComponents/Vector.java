@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.google.gson.annotations.Expose;
+
 import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 
 /**
@@ -9,14 +9,10 @@ import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 */
 public class Vector extends FigmaComponent {
 
-    @Expose()
     private String strokeCap;
-    @Expose()
     private String strokeJoin;
-    @Expose()
     private Effect effect;
     // Opacity of the node
-    @Expose()
     private double opacity;
 
 

@@ -1,6 +1,5 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.google.gson.annotations.Expose;
 
 /**
  * The class used to store the positioning information of a Figma component, it is contained in every figma component, including 4 fields
@@ -10,13 +9,9 @@ import com.google.gson.annotations.Expose;
  * - y: the coordinate of the component in y-axis [relative to the whole page]
  */
 public class AbsoluteBoundingBox {
-    @Expose()
     private double width;
-    @Expose()
     private double height;
-    @Expose()
     private double x;
-    @Expose()
     private double y;
 
     public AbsoluteBoundingBox(double width, double height, double x, double y) {

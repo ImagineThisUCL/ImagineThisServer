@@ -1,7 +1,7 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.JsonArray;
-import com.google.gson.annotations.Expose;
+import com.ucl.imaginethisserver.Conf.ExcludeSerialization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,8 @@ import java.util.List;
  *  the transitionNodeID that it links to (if there is any), and other values necessary.
 */
 public abstract class Group extends FigmaComponent {
-    @Expose()
+    @ExcludeSerialization
     private JsonArray children;
-    @Expose()
     private String transitionNodeID;
 
     private List<FigmaComponent> components = new ArrayList<>();

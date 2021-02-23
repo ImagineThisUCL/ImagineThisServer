@@ -1,7 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.*;
-import com.google.gson.annotations.Expose;
 import org.springframework.util.StringUtils;
 import com.ucl.imaginethisserver.Conf.ExcludeSerialization;
 
@@ -11,24 +10,16 @@ import java.util.*;
  * A wireframe object contains the information of a Figma wireframe.
  */
 public class Wireframe {
-    @Expose()
     private String id;
-    @Expose()
     private String name;
-    @Expose()
     @ExcludeSerialization
     private JsonArray children;
-    @Expose()
     private AbsoluteBoundingBox absoluteBoundingBox;
-    @Expose()
     private List<Paint> fills;
-    @Expose()
     private Color backgroundColor;
-    @Expose(serialize = true, deserialize = false)
     private String imageURL;
 
     // Parent page, i.e. page in which this wireframe resides
-    @ExcludeSerialization
     private Page page;
     @ExcludeSerialization
     private List<FigmaComponent> components;

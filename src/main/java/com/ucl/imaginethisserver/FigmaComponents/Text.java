@@ -1,6 +1,5 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.google.gson.annotations.Expose;
 import com.ucl.imaginethisserver.FrontendComponents.TextComponent;
 
 import java.util.List;
@@ -12,11 +11,8 @@ import java.util.List;
  *  Need to be converted to frontend component before used to convert into the real code.
  */
 public class Text extends FigmaComponent {
-    @Expose()
     private Style style;
-    @Expose()
     private List<Effect> effects;
-    @Expose()
     private String characters;
 
     public Style getStyle() {

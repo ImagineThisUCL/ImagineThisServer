@@ -1,20 +1,14 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.google.gson.annotations.Expose;
-
 
 /**
  *  Object used to represent rgba colors passed from Figma API in Java
  *  Containing a function that converts this object into Frontend code
 */
 public class Color {
-    @Expose()
     private float r;
-    @Expose()
     private float g;
-    @Expose()
     private float b;
-    @Expose()
     private float a;
 
     public Color(float r, float g, float b, float a){

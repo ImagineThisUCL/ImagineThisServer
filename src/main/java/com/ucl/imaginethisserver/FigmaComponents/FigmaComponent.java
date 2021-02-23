@@ -2,7 +2,6 @@ package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
 import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 
 import java.util.List;
@@ -13,25 +12,15 @@ import java.util.List;
  * contains most of the useful common value of all Figma Component
  */
 abstract public class FigmaComponent {
-    @Expose()
     private String id;
-    @Expose()
     private String name;
-    @Expose()
     private String type;
-    @Expose()
     private List<Paint> strokes;
-    @Expose()
     private double strokeWeight;
-    @Expose()
     private String strokeAlign;
-    @Expose()
     private AbsoluteBoundingBox absoluteBoundingBox;
-    @Expose()
     private List<Paint> fills;
-    @Expose()
     private double cornerRadius;
-    @Expose()
     private String blendMode;
 
     private int height;

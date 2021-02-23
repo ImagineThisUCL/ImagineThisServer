@@ -1,7 +1,7 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.*;
-import com.google.gson.annotations.Expose;
+import com.ucl.imaginethisserver.Conf.ExcludeSerialization;
 
 import java.util.*;
 
@@ -11,13 +11,10 @@ import java.util.*;
  *  the wireframes within it listed in the variable children.
  */
 public class Page {
-    @Expose()
     private String id;
-    @Expose()
     private String name;
-    @Expose()
     private String type;
-    @Expose()
+    @ExcludeSerialization
     private JsonArray children;
 
     private List<Wireframe> wireframes = new ArrayList<>();
