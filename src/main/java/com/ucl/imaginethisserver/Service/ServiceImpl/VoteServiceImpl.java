@@ -1,8 +1,6 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
 import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
-import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
-import com.ucl.imaginethisserver.DAO.FeedbackDao;
 import com.ucl.imaginethisserver.DAO.VoteDao;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.VoteService;
@@ -21,12 +19,9 @@ public class VoteServiceImpl implements VoteService {
 
     private final VoteDao voteDao;
 
-    private final FeedbackDao feedbackDao;
-
     @Autowired
-    public VoteServiceImpl(VoteDao voteDao, FeedbackDao feedbackDao) {
+    public VoteServiceImpl(VoteDao voteDao) {
         this.voteDao = voteDao;
-        this.feedbackDao = feedbackDao;
     }
 
     @Override
@@ -46,7 +41,7 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public boolean voteFeedback(String projectID, UUID feedbackID, Vote vote) {
+    public UUID voteFeedback(String projectID, UUID feedbackID, Vote vote) {
         if (vote.getVoteValue() != 1 && vote.getVoteValue() != -1) {
             logger.error("Vote value can only be 1 or -1");
             throw new InternalServerErrorException();
@@ -65,9 +60,9 @@ public class VoteServiceImpl implements VoteService {
         logger.info("Getting feedbackID: " + feedbackID);
         vote.setFeedbackId(feedbackID);
         if (voteDao.voteFeedback(projectID, feedbackID, vote)) {
-            return true;
+            return UUID.fromString(vote.getVoteId().toString());
         } else {
-            return false;
+            return null;
         }
     }
 
@@ -86,15 +81,6 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public boolean deleteVoteForFeedback(String projectID, UUID feedbackID, UUID voteID, Vote vote) {
-        if(feedbackDao.getFeedbackByID(projectID, feedbackID)==null){
-            throw new NotFoundException("ProjectID or FeedbackID not found!");
-        }
-
-        for(Vote temp : voteDao.getVotesForFeedback(projectID, feedbackID)){
-            if(temp.getVoteId().equals(voteID)){
-                return voteDao.deleteVoteForFeedback(projectID, feedbackID, voteID, vote);
-            }
-        }
-        throw new NotFoundException("Feedback not found!");
+        return voteDao.deleteVoteForFeedback(projectID, feedbackID, voteID, vote);
     }
 }

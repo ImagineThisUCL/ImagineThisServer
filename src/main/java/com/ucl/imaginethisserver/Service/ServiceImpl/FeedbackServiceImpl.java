@@ -2,19 +2,15 @@ package com.ucl.imaginethisserver.Service.ServiceImpl;
 
 import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
-import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
 import com.ucl.imaginethisserver.DAO.FeedbackDao;
 import com.ucl.imaginethisserver.DAO.FeedbackDto;
-import com.ucl.imaginethisserver.DAO.ProjectDao;
 import com.ucl.imaginethisserver.Mapper.FeedbackDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.VoteDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Mapper.FeedbackMapper;
-import com.ucl.imaginethisserver.Model.Project;
 import com.ucl.imaginethisserver.Service.FeedbackService;
 
-import com.ucl.imaginethisserver.Service.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +29,9 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     private final FeedbackDao feedbackDao;
 
-    private final ProjectDao projectDao;
-
     @Autowired
-    public FeedbackServiceImpl(FeedbackDao feedbackDao, ProjectDao projectDao) {
+    public FeedbackServiceImpl(FeedbackDao feedbackDao) {
         this.feedbackDao = feedbackDao;
-        this.projectDao = projectDao;
     }
 
     @Override
@@ -69,12 +62,6 @@ public class FeedbackServiceImpl implements FeedbackService {
         if (projectID != null) {
             newFeedback.setProjectId(projectID);
         }
-
-        if (projectDao.getProjectByID(projectID)==null){
-            logger.error("Error Adding Project : " + projectID + " projectID not found!");
-            throw new NotFoundException("Project Not Found");
-        }
-
         if (feedback.getFeedbackId() == null) {
             UUID uuid = UUID.randomUUID();
             logger.info("Generating new UUID for feedback: " + uuid);
@@ -89,8 +76,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         newFeedback.setUserName(feedback.getUserName());
         newFeedback.setText(feedback.getText());
         int result = feedbackDao.addNewFeedback(projectID, newFeedback);
-
-        if (result == 1) {
+        if (result != 0) {
             return true;
         } else {
             logger.error("Error adding new feedback!");
@@ -104,12 +90,6 @@ public class FeedbackServiceImpl implements FeedbackService {
             logger.error("Error Updating feedback: " + feedbackID + ", feedback text not provided");
             throw new InternalServerErrorException();
         }
-
-        if (feedbackDao.getFeedbackByID(projectID, feedbackID) == null){
-            logger.error("Error Updating feedback: " + projectID + " or "+ feedbackID + " not found");
-            throw new NotFoundException("Project or Feedback Not Found!");
-        }
-
         int result = feedbackDao.updateFeedback(projectID, feedbackID, feedback);
         if (result == 1) {
             return true;
