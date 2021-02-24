@@ -15,9 +15,7 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
@@ -25,13 +23,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.mock;
@@ -39,8 +37,6 @@ import static org.mockito.Mockito.when;
 import org.mockito.ArgumentMatchers;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import java.nio.charset.Charset;
-
 
 @WebMvcTest(FeedbackController.class)
 class FeedbackControllerTest {
@@ -52,20 +48,17 @@ class FeedbackControllerTest {
 
     private List<FeedbackDto> mockFeedbackList;
 
-    private final String mockProjectID = "MgWqYTZMdjG26oA1CxbWaE";
+    private String mockProjectID = "MgWqYTZMdjG26oA1CxbWaE";
 
-    private final UUID mockFeedbackID = UUID.fromString("250a8d14-55d9-4cb1-93e2-29cd4ebda98b");
+    private UUID mockFeedbackID = UUID.fromString("250a8d14-55d9-4cb1-93e2-29cd4ebda98b");
 
-    private final UUID mockUserID = UUID.fromString("f2366a7b-c2ca-40d5-939a-2f649411d257");
+    private UUID mockUserID = UUID.fromString("f2366a7b-c2ca-40d5-939a-2f649411d257");
 
-    private final UUID mockVoteID = UUID.fromString("f2366a7b-c2ca-40d5-939a-2f649411d258");
+    private UUID mockVoteID = UUID.fromString("f2366a7b-c2ca-40d5-939a-2f649411d258");
 
-    private final String mockUserName = "John Dow";
+    private String mockUserName = "John Dow";
 
     private FeedbackDto mockFeedback;
-
-    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
-
 
 
     @BeforeEach
@@ -90,10 +83,10 @@ class FeedbackControllerTest {
     }
 
     /*
-    * The following tests will test the getFeedbacksWithVotes method
+    * The following tests will test the getAllFeedbacks method
     * */
     @Test
-    void givenValidProjectID_whenGetAllFeedbacks_thenReturnJsonArray() throws Exception{
+    void givenFeedbacks_whenGetAllFeedbacks_thenReturnJsonArray() throws Exception{
 
         given(service.getFeedbacksWithVotes(mockProjectID)).willReturn(mockFeedbackList);
 
@@ -114,22 +107,6 @@ class FeedbackControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    /*
-     * The following tests will test the getFeedbacksByID method
-     * */
-
-    @Test
-    void givenValidProjectIDAndFeedbackID_whenGetFeedbackByID_thenReturnSpecificFeedback() throws Exception {
-        given(service.getFeedbackByID(mockProjectID, mockFeedbackID)).willReturn(mockFeedback);
-
-        mockMvc.perform(get("/api/v1/projects/" + mockProjectID + "/feedback/" + mockFeedbackID)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.feedbackId", is(mockFeedbackID.toString())))
-                .andExpect(jsonPath("$.projectId", is(mockProjectID)))
-                .andExpect(jsonPath("$.userId", is(mockUserID.toString())));
-    }
-
     @Test
     void givenInvalidProjectIDOrFeedbackID_whenGetFeedbackByID_thenReturnErrorNotFound() throws Exception {
         String projectID = "invalidProjectID";
@@ -146,7 +123,6 @@ class FeedbackControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
-
 
     /*
      * The following tests will test the addNewFeedback method
@@ -236,21 +212,14 @@ class FeedbackControllerTest {
     }
 
     @Test
-    void givenInvalidProjectIDAndFeedbackID_whenDeleteFeedback_thenReturnErrorNotFound() throws Exception {
-        String projectID = "invalidProjectID";
-        UUID feedbackID = UUID.randomUUID();
+    void givenValidProjectIDAndFeedbackID_whenGetFeedbackByID_thenReturnSpecificFeedback() throws Exception {
+        given(service.getFeedbackByID(mockProjectID, mockFeedbackID)).willReturn(mockFeedback);
 
-        given(service.getFeedbackByID(projectID, mockFeedbackID)).willThrow(new NotFoundException());
-        given(service.getFeedbackByID(mockProjectID, feedbackID)).willThrow(new NotFoundException());
-
-        mockMvc.perform(delete("/api/v1/projects/" + projectID + "/feedback/" + mockFeedbackID)
+        mockMvc.perform(get("/api/v1/projects/" + mockProjectID + "/feedback/" + mockFeedbackID)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-
-        mockMvc.perform(delete("/api/v1/projects/" + mockProjectID + "/feedback/" + feedbackID)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.feedbackId", is(mockFeedbackID.toString())))
+                .andExpect(jsonPath("$.projectId", is(mockProjectID)))
+                .andExpect(jsonPath("$.userId", is(mockUserID.toString())));
     }
-
 }

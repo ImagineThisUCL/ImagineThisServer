@@ -7,7 +7,6 @@ import com.ucl.imaginethisserver.Mapper.ProjectMapper;
 import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
-import com.ucl.imaginethisserver.Model.Project;
 import com.ucl.imaginethisserver.Service.ServiceImpl.FeedbackServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,12 +24,10 @@ public class FeedbackServiceImplTest {
     static FeedbackDao mockFeedbackDao;
     static ProjectDao mockProjectDao;
     static Feedback testFeedback;
-    static Project testProject;
     static List<Feedback> testFeedbacks;
     static FeedbackServiceImpl feedbackService;
     static final String FEEDBACK_TEXT = "Good prototype!";
     static final String FEEDBACK_USERNAME = "John";
-    static final String PROJECT_NAME = "ImagineThis";
     static final String FEEDBACK_PROJECT_ID = "MgWqYTZMdjG26oA1CxbWaE";
     static final UUID FEEDBACK_ID = UUID.fromString("4744b5d3-27cd-491d-a8f4-32d263327796");
     static final UUID FEEDBACK_USER_ID = UUID.fromString("2026b917-dddf-47a3-99ab-d413543504f3");
@@ -52,15 +49,9 @@ public class FeedbackServiceImplTest {
         testFeedbacks = new ArrayList<>();
         testFeedbacks.add(testFeedback);
 
-        testProject = new Project();
-        testProject.setProjectId(FEEDBACK_PROJECT_ID);
-        testProject.setProjectName(PROJECT_NAME);
-
         // Stub method calls
         when(mockFeedbackDao.getAllFeedbacks("test")).thenReturn(testFeedbacks);
         when(mockFeedbackDao.getFeedbackByID("test", FEEDBACK_ID)).thenReturn(testFeedback);
-        when(mockProjectDao.getProjectByID(FEEDBACK_PROJECT_ID)).thenReturn(testProject);
-
 
         // Create FeedbackService with mocked DAO
         feedbackService = new FeedbackServiceImpl(mockFeedbackDao, mockProjectDao);
@@ -92,6 +83,7 @@ public class FeedbackServiceImplTest {
         assertEquals(resultFeedback.getUserId(), FEEDBACK_USER_ID);
         assertEquals(resultFeedback.getTimestamp(), FEEDBACK_TIMESTAMP);
     }
+
 
     @Test
     void addNewFeedbackTest(){
@@ -129,7 +121,6 @@ public class FeedbackServiceImplTest {
         boolean result = feedbackService.deleteFeedback(FEEDBACK_PROJECT_ID, FEEDBACK_ID);
         assertEquals(result, true);
     }
-
 
 
 }

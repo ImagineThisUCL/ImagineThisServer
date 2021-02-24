@@ -20,7 +20,6 @@ import java.util.UUID;
 public class FeedbackController {
     private final FeedbackService feedbackService;
 
-
     Logger logger = LoggerFactory.getLogger(FeedbackController.class);
     @Autowired
     public FeedbackController(FeedbackService feedbackService) {
@@ -45,16 +44,14 @@ public class FeedbackController {
     public ResponseEntity<Map<String, Boolean>> updateFeedback(@PathVariable("project-id") String projectID,
                                                                @PathVariable("feedback-id") UUID feedbackID,
                                                                @RequestBody Feedback feedback) {
-
         boolean result = feedbackService.updateFeedback(projectID, feedbackID, feedback);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
-        if(result){
+        if(result) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
-
     }
 
     @DeleteMapping("/projects/{project-id}/feedback/{feedback-id}")
@@ -64,7 +61,7 @@ public class FeedbackController {
         boolean result = feedbackService.deleteFeedback(projectID, feedbackID);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
-        if(result){
+        if(result) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -77,7 +74,7 @@ public class FeedbackController {
         boolean result = feedbackService.addNewFeedback(projectID, feedback);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
-        if(result){
+        if(result) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
