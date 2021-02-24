@@ -21,6 +21,8 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.mockito.ArgumentMatchers;
+
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.mock;
@@ -132,7 +136,7 @@ class VoteControllerTest {
     @Test
     void givenValidProjectIDAndFeedbackID_whenVoteFeedback_thenReturnSuccess() throws Exception {
 
-        given(service.voteFeedback(mockProjectID, mockFeedbackID, mockVote)).willReturn(true);
+        given(service.voteFeedback(eq(mockProjectID), eq(mockFeedbackID), any(Vote.class))).willReturn(true);
 
         ObjectMapper mapper = new ObjectMapper();
         String requestJson = mapper.writeValueAsString(mockVote);
@@ -169,7 +173,7 @@ class VoteControllerTest {
     @Test
     void givenValidProjectIDAndFeedbackIDAndVoteID_whenUpdateVoteForFeedback_thenReturnSuccess() throws Exception {
 
-        given(service.updateVoteForFeedback(mockProjectID, mockFeedbackID, mockVoteID, mockVote)).willReturn(true);
+        given(service.updateVoteForFeedback(eq(mockProjectID), eq(mockFeedbackID), eq(mockVoteID), any(Vote.class))).willReturn(true);
 
         ObjectMapper mapper = new ObjectMapper();
         String requestJson = mapper.writeValueAsString(mockVote);
@@ -212,7 +216,7 @@ class VoteControllerTest {
 
     @Test
     void givenValidProjectIDAndFeedbackIDAndVoteID_whenDeleteVoteForFeedback_thenReturnSuccess() throws Exception {
-        given(service.deleteVoteForFeedback(mockProjectID, mockFeedbackID, mockVoteID, mockVote)).willReturn(true);
+        given(service.deleteVoteForFeedback(eq(mockProjectID), eq(mockFeedbackID), eq(mockVoteID), any(Vote.class))).willReturn(true);
 
         ObjectMapper mapper = new ObjectMapper();
         String requestJson = mapper.writeValueAsString(mockVote);

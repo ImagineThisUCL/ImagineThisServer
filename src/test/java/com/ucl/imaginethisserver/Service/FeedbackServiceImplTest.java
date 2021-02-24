@@ -106,7 +106,7 @@ public class FeedbackServiceImplTest {
         newFeedback.setTimestamp(FEEDBACK_TIMESTAMP);
         testFeedbacks.add(newFeedback);
 
-        when(mockFeedbackDao.addNewFeedback(FEEDBACK_PROJECT_ID, newFeedback)).thenReturn(1);
+        when(mockFeedbackDao.addNewFeedback(eq(FEEDBACK_PROJECT_ID), any(Feedback.class))).thenReturn(1);
 
         boolean result = feedbackService.addNewFeedback(FEEDBACK_PROJECT_ID, newFeedback);
         assertEquals(result, true);

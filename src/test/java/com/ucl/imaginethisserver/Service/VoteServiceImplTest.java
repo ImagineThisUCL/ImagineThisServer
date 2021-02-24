@@ -32,15 +32,12 @@ public class VoteServiceImplTest {
     static List<Vote> testVotes;
     static FeedbackServiceImpl feedbackService;
     static VoteServiceImpl voteService;
-    static final String FEEDBACK_TEXT = "Good prototype!";
-    static final String VOTE_USERNAME = "John";
-    static final String PROJECT_NAME = "ImagineThis";
     static final String VOTE_PROJECT_ID = "MgWqYTZMdjG26oA1CxbWaE";
     static final UUID VOTE_FEEDBACK_ID = UUID.fromString("4744b5d3-27cd-491d-a8f4-32d263327796");
     static final UUID VOTE_ID = UUID.fromString("4744b5d3-27cd-491d-a8f4-32d263327797");
     static final UUID VOTE_USER_ID = UUID.fromString("2026b917-dddf-47a3-99ab-d413543504f3");
     static final long VOTE_TIMESTAMP = Long.parseLong("1612173537");
-    static final int VOTE_VALUE = 1;
+    static final Integer VOTE_VALUE = 1;
     @BeforeAll
     static void mockDAO() {
         mockFeedbackDao = mock(FeedbackDao.class);
@@ -58,6 +55,10 @@ public class VoteServiceImplTest {
         testVotes = new ArrayList<>();
         testVotes.add(testVote);
 
+        // Prepare random feedbacks
+        testFeedback = new Feedback();
+
+
         // Stub method calls
         when(mockVoteDao.getVotesForFeedback(VOTE_PROJECT_ID,VOTE_FEEDBACK_ID)).thenReturn(testVotes);
         when(mockProjectDao.getProjectByID(VOTE_PROJECT_ID)).thenReturn(testProject);
@@ -69,6 +70,9 @@ public class VoteServiceImplTest {
 
     @Test
     void getVotesForFeedbackTest(){
+        //the vote value might changed as updateVoteForFeedbackTest might execute first.
+        testVote.setVoteValue(VOTE_VALUE);
+
         List<Vote> resultList = voteService.getVotesForFeedback(VOTE_PROJECT_ID,VOTE_FEEDBACK_ID);
         // Check size
         assertEquals(1, resultList.size());
@@ -102,7 +106,7 @@ public class VoteServiceImplTest {
 
     @Test
     void updateVoteForFeedbackTest(){
-        testVote.setVoteValue(1-VOTE_VALUE);
+        testVote.setVoteValue(-1);
         when(mockFeedbackDao.getFeedbackByID(VOTE_PROJECT_ID, VOTE_FEEDBACK_ID)).thenReturn(testFeedback);
         when(mockVoteDao.updateVoteForFeedback(VOTE_PROJECT_ID, VOTE_FEEDBACK_ID, VOTE_ID, testVote)).thenReturn(true);
 
@@ -112,8 +116,8 @@ public class VoteServiceImplTest {
 
     @Test
     void deleteVoteForFeedbackTest(){
-        when(mockVoteDao.deleteVoteForFeedback(VOTE_PROJECT_ID, VOTE_FEEDBACK_ID, VOTE_ID, testVote)).thenReturn(true);
         when(mockFeedbackDao.getFeedbackByID(VOTE_PROJECT_ID, VOTE_FEEDBACK_ID)).thenReturn(testFeedback);
+        when(mockVoteDao.deleteVoteForFeedback(VOTE_PROJECT_ID, VOTE_FEEDBACK_ID, VOTE_ID, testVote)).thenReturn(true);
 
         boolean result = voteService.deleteVoteForFeedback(VOTE_PROJECT_ID, VOTE_FEEDBACK_ID, VOTE_ID, testVote);
         assertEquals(result, true);

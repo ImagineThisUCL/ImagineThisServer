@@ -11,6 +11,7 @@ import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,10 +31,12 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import org.mockito.ArgumentMatchers;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import java.nio.charset.Charset;
@@ -151,7 +154,7 @@ class FeedbackControllerTest {
 
     @Test
     void givenValidProjectID_whenAddNewFeedback_thenReturnSuccess() throws Exception {
-        given(service.getFeedbacksWithVotes(mockProjectID)).willReturn(mockFeedbackList);
+        given(service.addNewFeedback(ArgumentMatchers.eq(mockProjectID), any(Feedback.class))).willReturn(true);
         ObjectMapper mapper = new ObjectMapper();
 
         String requestJson= mapper.writeValueAsString(mockFeedback);
@@ -189,7 +192,7 @@ class FeedbackControllerTest {
     void givenValidProjectIDAndFeedbackID_whenUpdateFeedback_thenReturnSuccess() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
-        given(service.updateFeedback(mockProjectID, mockFeedbackID, mockFeedback)).willReturn(true);
+        given(service.updateFeedback(ArgumentMatchers.eq(mockProjectID), ArgumentMatchers.eq(mockFeedbackID), any(Feedback.class))).willReturn(true);
         String requestJson = mapper.writeValueAsString(mockFeedback);
 
         mockMvc.perform(patch("/api/v1/projects/" + mockProjectID + "/feedback/" + mockFeedbackID)
