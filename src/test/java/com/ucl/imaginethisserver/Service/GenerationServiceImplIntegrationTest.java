@@ -3,11 +3,8 @@ package com.ucl.imaginethisserver.Service;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import com.ucl.imaginethisserver.Util.CodeGenerator;
+import com.ucl.imaginethisserver.Util.*;
 import com.ucl.imaginethisserver.Service.ServiceImpl.GenerationServiceImpl;
-import com.ucl.imaginethisserver.Util.Authentication;
-import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
-import com.ucl.imaginethisserver.Util.FileUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +39,9 @@ public class GenerationServiceImplIntegrationTest {
 
     @MockBean
     private FigmaAPIUtil testFigmaApiUtil;
+
+    @MockBean
+    private ExpoUtil testExpoUtil;
 
     @Value("${config.outputStorageFolder}")
     private String OUTPUT_STORAGE_FOLDER;

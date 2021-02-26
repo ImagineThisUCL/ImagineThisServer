@@ -5,12 +5,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.ucl.imaginethisserver.FigmaComponents.*;
-import com.ucl.imaginethisserver.Util.CodeGenerator;
+import com.ucl.imaginethisserver.Util.*;
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.Service.GenerationService;
-import com.ucl.imaginethisserver.Util.Authentication;
-import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
-import com.ucl.imaginethisserver.Util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +26,18 @@ public class GenerationServiceImpl implements GenerationService {
     private final FigmaAPIUtil figmaAPIUtil;
     private final CodeGenerator codeGenerator;
     private final FileUtil fileUtil;
+    private final ExpoUtil expoUtil;
     private final Logger logger = LoggerFactory.getLogger(GenerationServiceImpl.class);
 
     @Value("${config.outputStorageFolder}")
     private String outputStorageFolder;
 
     @Autowired
-    public GenerationServiceImpl(FigmaAPIUtil figmaAPIUtil, CodeGenerator codeGenerator, FileUtil fileUtil) {
+    public GenerationServiceImpl(FigmaAPIUtil figmaAPIUtil, CodeGenerator codeGenerator, FileUtil fileUtil, ExpoUtil expoUtil) {
         this.figmaAPIUtil = figmaAPIUtil;
         this.codeGenerator = codeGenerator;
         this.fileUtil = fileUtil;
+        this.expoUtil = expoUtil;
     }
 
 
@@ -75,6 +74,10 @@ public class GenerationServiceImpl implements GenerationService {
         // Zip the folder where project's source code resides for downloads
         String projectFolder = String.format("%s/%s", outputStorageFolder, projectID);
         fileUtil.zipDirectory(projectFolder);
+
+        // Publish project to Expo
+        expoUtil.publish(figmaFile);
+
         return true;
     }
 

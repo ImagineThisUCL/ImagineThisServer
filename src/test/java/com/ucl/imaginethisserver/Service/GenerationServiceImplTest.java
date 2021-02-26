@@ -3,14 +3,11 @@ package com.ucl.imaginethisserver.Service;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import com.ucl.imaginethisserver.Util.CodeGenerator;
+import com.ucl.imaginethisserver.Util.*;
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
 import com.ucl.imaginethisserver.FigmaComponents.Page;
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
 import com.ucl.imaginethisserver.Service.ServiceImpl.GenerationServiceImpl;
-import com.ucl.imaginethisserver.Util.Authentication;
-import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
-import com.ucl.imaginethisserver.Util.FileUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +35,9 @@ public class GenerationServiceImplTest {
 
     @MockBean
     private CodeGenerator testCodeGenerator;
+
+    @MockBean
+    private ExpoUtil testExpoUtil;
 
     @MockBean
     private FileUtil testFileUtil;
@@ -102,6 +102,9 @@ public class GenerationServiceImplTest {
 
         // Make sure whole directory is zipped
         verify(testFileUtil).zipDirectory(any());
+
+        // Make sure that Docker publishing container is started
+        verify(testExpoUtil).publish(any());
     }
 
 }
