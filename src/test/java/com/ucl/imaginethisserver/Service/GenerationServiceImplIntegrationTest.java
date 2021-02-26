@@ -19,10 +19,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -39,9 +35,6 @@ public class GenerationServiceImplIntegrationTest {
 
     @MockBean
     private FigmaAPIUtil testFigmaApiUtil;
-
-    @MockBean
-    private ExpoUtil testExpoUtil;
 
     @Value("${config.outputStorageFolder}")
     private String OUTPUT_STORAGE_FOLDER;

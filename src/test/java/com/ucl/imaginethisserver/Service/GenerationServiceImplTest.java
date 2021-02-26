@@ -37,9 +37,6 @@ public class GenerationServiceImplTest {
     private CodeGenerator testCodeGenerator;
 
     @MockBean
-    private ExpoUtil testExpoUtil;
-
-    @MockBean
     private FileUtil testFileUtil;
 
     @Autowired
@@ -103,8 +100,6 @@ public class GenerationServiceImplTest {
         // Make sure whole directory is zipped
         verify(testFileUtil).zipDirectory(any());
 
-        // Make sure that Docker publishing container is started
-        verify(testExpoUtil).publish(any());
     }
 
 }
