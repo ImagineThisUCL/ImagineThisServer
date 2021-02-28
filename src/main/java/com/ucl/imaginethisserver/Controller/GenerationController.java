@@ -2,6 +2,7 @@ package com.ucl.imaginethisserver.Controller;
 
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
+import com.ucl.imaginethisserver.Requests.BuildRequest;
 import com.ucl.imaginethisserver.Responses.WireframesResponse;
 import com.ucl.imaginethisserver.Service.GenerationService;
 import com.ucl.imaginethisserver.Util.Authentication;
@@ -14,12 +15,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,12 +51,11 @@ public class GenerationController {
             @PathVariable("project-id") String projectID,
             @RequestParam(value = "accessToken") String accessToken,
             @RequestParam(value = "authType") String type,
-            @RequestBody Map<String, Object> payload) {
+            @Valid @RequestBody BuildRequest payload) {
 
-        Authentication auth = new Authentication(type, accessToken);
-        List<String> wireframeList = (List<String>) payload.get("wireframeList");
+        Authentication auth = new Authentication(type, accessToken, payload.getUserId());
 
-        boolean result = generationService.buildProject(projectID, auth, wireframeList);
+        boolean result = generationService.buildProject(projectID, auth, payload.getWireframeList());
 
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);

@@ -1,28 +1,45 @@
 package com.ucl.imaginethisserver.Util;
 
+
+/*
+ * Class used for authenticating users and for storing data
+ * used for authentication against Figma API.
+ */
 public class Authentication {
 
-    private AuthenticationType type;
-    private String accessToken;
+    private String userID;
+    private AuthenticationType figmaAuthType;
+    private String figmaAccessToken;
 
-    public Authentication(String authType, String authAccessToken) {
+    public Authentication() {}
 
-        assert(authType.equals("originalToken") || authType.equals("oauth2Token"));
-
-        if (authType.equals("originalToken")) {
-            type = AuthenticationType.ORIGINAL_TOKEN;
-        } else if (authType.equals("oauth2Token")) {
-            type = AuthenticationType.OAUTH2;
+    public Authentication(String figmaAuthType, String figmaAccessToken) {
+        assert(figmaAuthType.equals("originalToken") || figmaAuthType.equals("oauth2Token"));
+        if (figmaAuthType.equals("originalToken")) {
+            this.figmaAuthType = AuthenticationType.ORIGINAL_TOKEN;
+        } else if (figmaAuthType.equals("oauth2Token")) {
+            this.figmaAuthType = AuthenticationType.OAUTH2;
         }
-
-        accessToken = authAccessToken;
+        this.figmaAccessToken = figmaAccessToken;
+        this.userID = null;
     }
 
-    public AuthenticationType getType() {
-        return type;
+    public Authentication(String figmaAuthType, String figmaAccessToken, String userID) {
+        this(figmaAuthType, figmaAccessToken);
+        this.userID = userID;
     }
 
-    public String getAccessToken() {
-        return accessToken;
+    public String getUserID() {
+        return userID;
     }
+
+    public AuthenticationType getFigmaAuthType() {
+        return figmaAuthType;
+    }
+
+    public String getFigmaAccessToken() {
+        return figmaAccessToken;
+    }
+
+
 }

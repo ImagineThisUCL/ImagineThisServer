@@ -3,6 +3,8 @@ package com.ucl.imaginethisserver.Service;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import com.ucl.imaginethisserver.DAO.DAOImpl.ConversionDaoImpl;
+import com.ucl.imaginethisserver.DAO.DAOImpl.ProjectDaoImpl;
 import com.ucl.imaginethisserver.Util.*;
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
 import com.ucl.imaginethisserver.FigmaComponents.Page;
@@ -39,11 +41,20 @@ public class GenerationServiceImplTest {
     @MockBean
     private FileUtil testFileUtil;
 
+    @MockBean
+    private ExpoUtil testExpoUtil;
+
+    @MockBean
+    private ProjectDaoImpl testProjectDaoImpl;
+
+    @MockBean
+    private ConversionDaoImpl testConversionDaoImpl;
+
     @Autowired
     private GenerationServiceImpl testGenerationService;
 
     static final String TEST_PROJECT_ID = "testId";
-    static final Authentication TEST_AUTH = null;
+    static final Authentication TEST_AUTH = new Authentication();
     static final List<String> TEST_WIREFRAME_LIST = Arrays.asList("Wireframe 1", "Wireframe 2");
     static JsonObject testDataFile;
 

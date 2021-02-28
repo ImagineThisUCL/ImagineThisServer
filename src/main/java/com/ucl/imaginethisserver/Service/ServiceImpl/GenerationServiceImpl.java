@@ -4,7 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.ucl.imaginethisserver.DAO.ConversionDao;
+import com.ucl.imaginethisserver.DAO.ProjectDao;
 import com.ucl.imaginethisserver.FigmaComponents.*;
+import com.ucl.imaginethisserver.Model.Conversion;
+import com.ucl.imaginethisserver.Model.Project;
 import com.ucl.imaginethisserver.Util.*;
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.Service.GenerationService;
@@ -19,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class GenerationServiceImpl implements GenerationService {
@@ -27,17 +32,26 @@ public class GenerationServiceImpl implements GenerationService {
     private final CodeGenerator codeGenerator;
     private final FileUtil fileUtil;
     private final ExpoUtil expoUtil;
+    private final ConversionDao conversionDao;
+    private final ProjectDao projectDao;
     private final Logger logger = LoggerFactory.getLogger(GenerationServiceImpl.class);
 
     @Value("${config.outputStorageFolder}")
     private String outputStorageFolder;
 
     @Autowired
-    public GenerationServiceImpl(FigmaAPIUtil figmaAPIUtil, CodeGenerator codeGenerator, FileUtil fileUtil, ExpoUtil expoUtil) {
+    public GenerationServiceImpl(FigmaAPIUtil figmaAPIUtil,
+                                 CodeGenerator codeGenerator,
+                                 FileUtil fileUtil,
+                                 ExpoUtil expoUtil,
+                                 ConversionDao conversionDao,
+                                 ProjectDao projectDao) {
         this.figmaAPIUtil = figmaAPIUtil;
         this.codeGenerator = codeGenerator;
         this.fileUtil = fileUtil;
         this.expoUtil = expoUtil;
+        this.conversionDao = conversionDao;
+        this.projectDao = projectDao;
     }
 
 
@@ -52,11 +66,31 @@ public class GenerationServiceImpl implements GenerationService {
 
         FigmaFile figmaFile = getFigmaFile(projectID, auth);
 
-        // TODO: Store conversion, version, timestamp
-
         if (figmaFile == null) {
             throw new NotFoundException("Project " + projectID + " not found.");
         }
+
+        // Add project to database if not existing already, update if exists
+        Project project = projectDao.getProjectByID(projectID);
+        if (project == null) {
+            logger.info("Adding new project record to database.");
+            project = new Project();
+            project.setProjectId(projectID);
+            project.setProjectName(figmaFile.getProjectName());
+            projectDao.addProject(project);
+        } else {
+            project.setProjectName(figmaFile.getProjectName());
+            projectDao.updateProject(projectID, project);
+        }
+
+        // Add conversion record to database
+        logger.info("Adding new conversion record to database.");
+        Conversion conversion = new Conversion();
+        conversion.setProjectId(projectID);
+        conversion.setUserId(auth.getUserID());
+        conversion.setConversionId(UUID.randomUUID());
+        conversion.setTimestamp(System.currentTimeMillis());
+        conversionDao.addNewConversion(conversion);
 
         // Start writing process
         try {
@@ -65,7 +99,6 @@ public class GenerationServiceImpl implements GenerationService {
             codeGenerator.generateWireframes(figmaFile);
             codeGenerator.generateReusableComponents(figmaFile);
             codeGenerator.generateAppJSCode(figmaFile);
-
         } catch (IOException e) {
             logger.error("Error during code generation.");
             return false;
@@ -75,8 +108,8 @@ public class GenerationServiceImpl implements GenerationService {
         String projectFolder = String.format("%s/%s", outputStorageFolder, projectID);
         fileUtil.zipDirectory(projectFolder);
 
-        // Publish project to Expo
-        expoUtil.publish(figmaFile);
+        // Publish project to Expo through a new Docker container job
+        expoUtil.publish(projectID, figmaFile.getProjectName());
 
         return true;
     }
