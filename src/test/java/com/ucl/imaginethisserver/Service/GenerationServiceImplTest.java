@@ -100,7 +100,7 @@ public class GenerationServiceImplTest {
     // Make sure that during code generation, generator is called to create appropriate resources
     @Test
     void givenFigmaFile_whenBuildProjectCalled_thenGenerateAppropriateResources() throws IOException {
-        testGenerationService.buildProject(TEST_PROJECT_ID, TEST_AUTH, TEST_WIREFRAME_LIST);
+        testGenerationService.buildProject(TEST_PROJECT_ID, TEST_AUTH, TEST_WIREFRAME_LIST, false);
         // Verify correct components are built
         verify(testCodeGenerator).generateOutputFolder(any());
         verify(testCodeGenerator).generatePackageFiles(any());

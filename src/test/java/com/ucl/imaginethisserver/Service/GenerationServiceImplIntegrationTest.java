@@ -76,7 +76,7 @@ public class GenerationServiceImplIntegrationTest {
     @Test
     void givenCorrectFigmaJSONFile_whenGeneratingCode_thenCorrectFilesAreCreated() throws IOException {
 
-        testGenerationService.buildProject(TEST_PROJECT_ID, TEST_AUTH, TEST_WIREFRAME_LIST);
+        testGenerationService.buildProject(TEST_PROJECT_ID, TEST_AUTH, TEST_WIREFRAME_LIST, false);
 
         String projectFolder = String.format("%s/%s", OUTPUT_STORAGE_FOLDER, TEST_PROJECT_ID);
         verify(testFileUtil).writeFile(eq(projectFolder + "/package.json"), any());

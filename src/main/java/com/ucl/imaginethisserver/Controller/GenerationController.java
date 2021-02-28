@@ -55,7 +55,9 @@ public class GenerationController {
 
         Authentication auth = new Authentication(type, accessToken, payload.getUserId());
 
-        boolean result = generationService.buildProject(projectID, auth, payload.getWireframeList());
+        List<String> wireframes = payload.getWireframeList();
+        boolean publish = payload.getPublishOption();
+        boolean result = generationService.buildProject(projectID, auth, wireframes, publish);
 
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);

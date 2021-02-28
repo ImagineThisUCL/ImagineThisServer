@@ -60,7 +60,7 @@ public class GenerationServiceImpl implements GenerationService {
      * @param auth
      * @param wireframeList
      */
-    public boolean buildProject(String projectID, Authentication auth, List<String> wireframeList) {
+    public boolean buildProject(String projectID, Authentication auth, List<String> wireframeList, boolean publish) {
 
         logger.info("Starting build of project {}", projectID);
 
@@ -109,7 +109,7 @@ public class GenerationServiceImpl implements GenerationService {
         fileUtil.zipDirectory(projectFolder);
 
         // Publish project to Expo through a new Docker container job
-        expoUtil.publish(projectID, figmaFile.getProjectName());
+        if (publish) expoUtil.publish(projectID, figmaFile.getProjectName());
 
         return true;
     }
