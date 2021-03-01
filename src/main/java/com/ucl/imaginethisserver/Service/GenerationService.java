@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface GenerationService {
 
-    boolean buildProject(String projectID, Authentication auth, List<String> wireframeList);
+    boolean buildProject(String projectID, Authentication auth, List<String> wireframeList, boolean publish);
 
     File downloadProject(String projectID);
 

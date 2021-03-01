@@ -45,10 +45,10 @@ public class FigmaAPIUtil {
         connection.setRequestMethod("GET");
 
         // Set authentication headers
-        if (auth.getType() == AuthenticationType.ORIGINAL_TOKEN) {
-            connection.setRequestProperty("X-Figma-Token", auth.getAccessToken());
-        } else if (auth.getType() == AuthenticationType.OAUTH2) {
-            connection.setRequestProperty("Authorization", "Bearer " + auth.getAccessToken());
+        if (auth.getFigmaAuthType() == AuthenticationType.ORIGINAL_TOKEN) {
+            connection.setRequestProperty("X-Figma-Token", auth.getFigmaAccessToken());
+        } else if (auth.getFigmaAuthType() == AuthenticationType.OAUTH2) {
+            connection.setRequestProperty("Authorization", "Bearer " + auth.getFigmaAccessToken());
         }
 
         // Read and process response
