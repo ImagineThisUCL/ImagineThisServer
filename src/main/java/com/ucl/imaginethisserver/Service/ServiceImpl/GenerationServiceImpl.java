@@ -100,7 +100,7 @@ public class GenerationServiceImpl implements GenerationService {
             codeGenerator.generateReusableComponents(figmaFile);
             codeGenerator.generateAppJSCode(figmaFile);
         } catch (IOException e) {
-            logger.error("Error during code generation.");
+            logger.error("Error during code generation.", e);
             return false;
         }
 
