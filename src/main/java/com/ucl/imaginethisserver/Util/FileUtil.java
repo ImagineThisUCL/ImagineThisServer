@@ -32,14 +32,14 @@ public class FileUtil {
      * @throws IOException
      */
     public void writeFile(String filePath, String text) throws IOException {
-        logger.info("Writing file " + filePath);
+        logger.info("Writing file {}", filePath);
         File file = new File(filePath);
         FileUtils.writeStringToFile(file, text, "UTF-8");
     };
 
     public String readFile(String path) throws IOException {
         Path filePath = Paths.get(path).toAbsolutePath();
-        logger.info("Reading file {}.", filePath);
+        logger.debug("Reading file {}", filePath);
         return new String(Files.readAllBytes(filePath));
     };
 
