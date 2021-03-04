@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Component
@@ -36,8 +37,10 @@ public class FileUtil {
         FileUtils.writeStringToFile(file, text, "UTF-8");
     };
 
-    public String readFile(String filePath) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(filePath)));
+    public String readFile(String path) throws IOException {
+        Path filePath = Paths.get(path).toAbsolutePath();
+        logger.info("Reading file {}.", filePath);
+        return new String(Files.readAllBytes(filePath));
     };
 
     /**
