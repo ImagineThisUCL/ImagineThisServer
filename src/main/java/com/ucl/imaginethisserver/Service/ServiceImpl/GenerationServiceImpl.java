@@ -154,20 +154,26 @@ public class GenerationServiceImpl implements GenerationService {
                 if (!jsonComponent.getAsJsonObject().get("type").getAsString().equals("FRAME")) continue;
                 Wireframe wireframe = new Gson().fromJson(jsonComponent, Wireframe.class);
                 // Further recursively process components in a wireframe
-                wireframe.setComponents(processJsonComponents(projectID, auth, wireframe.getChildren()));
+                wireframe.setComponents(processJsonComponents(wireframe.getChildren()));
                 page.addWireframe(wireframe);
             }
             figmaFile.addPage(page);
         }
 
-        // Add image URL to wireframes
-        List<String> wireframeIDs = new ArrayList<>();
+        // Add image URLs to wireframes and components as batch request for optimisation by reducing slow Figma API calls
+        List<String> ids = new ArrayList<>();
         for (Wireframe wireframe : figmaFile.getWireframes()) {
-            wireframeIDs.add(wireframe.getId());
+            ids.add(wireframe.getId());
         }
-        Map<String, String> wireframeImageURLs = figmaAPIUtil.requestComponentImageURLs(projectID, auth, wireframeIDs);
+        for (FigmaComponent component : figmaFile.getComponents()) {
+            ids.add(component.getId());
+        }
+        Map<String, String> imageURLs = figmaAPIUtil.requestComponentImageURLs(projectID, auth, ids);
         for (Wireframe wireframe : figmaFile.getWireframes()) {
-            wireframe.setImageURL(wireframeImageURLs.get(wireframe.getId()));
+            wireframe.setImageURL(imageURLs.get(wireframe.getId()));
+        }
+        for (FigmaComponent component : figmaFile.getComponents()) {
+            component.setImageURL(imageURLs.get(component.getId()));
         }
 
         // Special cases
@@ -181,15 +187,8 @@ public class GenerationServiceImpl implements GenerationService {
     }
 
 
-    public List<FigmaComponent> processJsonComponents(String projectID, Authentication auth, JsonArray jsonComponents) {
+    public List<FigmaComponent> processJsonComponents(JsonArray jsonComponents) {
         List<FigmaComponent> figmaComponents = new ArrayList<>();
-        // Retrieve URL for individual components. For optimisation do it in batch.
-        List<String> componentIDs = new ArrayList<>();
-        for (JsonElement jsonChild : jsonComponents) {
-            String id = jsonChild.getAsJsonObject().get("id").toString().replaceAll("\"", "");
-            componentIDs.add(id);
-        }
-        Map<String, String> componentImageURLs = figmaAPIUtil.requestComponentImageURLs(projectID, auth, componentIDs);
 
         // Process all children
         for (JsonElement jsonChild : jsonComponents) {
@@ -252,10 +251,8 @@ public class GenerationServiceImpl implements GenerationService {
 
             // Recursively parse all children components as well
             if (component instanceof Group) {
-                ((Group) component).setComponents(processJsonComponents(projectID, auth, ((Group) component).getChildren()));
+                ((Group) component).setComponents(processJsonComponents(((Group) component).getChildren()));
             }
-
-            component.setImageURL(componentImageURLs.get(component.getId()));
 
             figmaComponents.add(component);
         }
