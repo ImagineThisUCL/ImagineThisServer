@@ -16,6 +16,7 @@ public class Page {
     private String type;
     @ExcludeSerialization
     private JsonArray children;
+    private String prototypeStartNodeID;
 
     private List<Wireframe> wireframes = new ArrayList<>();
 
@@ -28,6 +29,7 @@ public class Page {
     public String getType() { return type; }
     public JsonArray getChildren() { return children; }
     public List<Wireframe> getWireframes() { return wireframes; }
+    public String getPrototypeStartNodeID() { return prototypeStartNodeID; }
 
     public void addWireframe(Wireframe wireframe) { wireframes.add(wireframe); }
 
