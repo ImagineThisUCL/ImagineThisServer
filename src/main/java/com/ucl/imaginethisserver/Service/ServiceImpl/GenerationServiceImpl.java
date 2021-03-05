@@ -256,8 +256,7 @@ public class GenerationServiceImpl implements GenerationService {
             }
 
             component.setImageURL(componentImageURLs.get(component.getId()));
-            // TODO: See what to do with absoluteBoundingBox
-            // component.convertRelativePosition(this.absoluteBoundingBox);
+
             figmaComponents.add(component);
         }
 
