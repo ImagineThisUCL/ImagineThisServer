@@ -21,12 +21,12 @@ public class AbsoluteBoundingBox {
         this.y = y;
     }
 
-    public double getHeight() { return height; }
+    public int getHeight() { return (int) height; }
 
-    public double getWidth() { return width; }
+    public int getWidth() { return (int) width; }
 
-    public double getX() { return x; }
+    public int getX() { return (int) x; }
 
-    public double getY() { return y; }
+    public int getY() { return (int) y; }
 
 }
