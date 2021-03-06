@@ -76,6 +76,8 @@
                             typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
             <columnOverride column="project_id" property="projectId" />
             <columnOverride column="c_timestamp" property="timestamp"/>
+            <columnOverride column="conversion_status" property="conversionStatus"/>
+            <columnOverride column="publish_status" property="publishStatus"/>
         </table>
     </context>
 </generatorConfiguration>

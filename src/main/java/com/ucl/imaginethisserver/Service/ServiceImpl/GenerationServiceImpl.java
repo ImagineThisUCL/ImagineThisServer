@@ -101,6 +101,8 @@ public class GenerationServiceImpl implements GenerationService {
         conversion.setUserId(auth.getUserID());
         conversion.setConversionId(UUID.randomUUID());
         conversion.setTimestamp(System.currentTimeMillis());
+        conversion.setConversionStatus(ConversionStatus.RUNNING);
+        conversion.setPublishStatus(publish ? ConversionStatus.NOT_STARTED : ConversionStatus.NOT_TRIGGERED);
         conversionDao.addNewConversion(conversion);
 
         // Start writing process
@@ -112,12 +114,17 @@ public class GenerationServiceImpl implements GenerationService {
             codeGenerator.generateAppJSCode(figmaFile);
         } catch (IOException e) {
             logger.error("Error during code generation.", e);
+            conversion.setConversionStatus(ConversionStatus.FAILED);
+            conversionDao.updateConversion(UUID.fromString(conversion.getConversionId().toString()), conversion);
             return false;
         }
 
         // Zip the folder where project's source code resides for downloads
         String projectFolder = String.format("%s/%s", outputStorageFolder, projectID);
         fileUtil.zipDirectory(projectFolder);
+
+        conversion.setConversionStatus(ConversionStatus.SUCCEEDED);
+        conversionDao.updateConversion(UUID.fromString(conversion.getConversionId().toString()), conversion);
 
         // Publish project to Expo through a new Docker container job
         if (publish) expoUtil.publish(projectID, figmaFile.getProjectName());
