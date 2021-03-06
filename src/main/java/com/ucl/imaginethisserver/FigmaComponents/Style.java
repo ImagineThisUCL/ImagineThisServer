@@ -8,8 +8,8 @@ package com.ucl.imaginethisserver.FigmaComponents;
 public class Style {
     private String fontFamily;
     private String fontPostScriptName;
-    private String fontWeight;
-    private String fontSize;
+    private int fontWeight;
+    private double fontSize;
     private String textAlignHorizontal;
     private String textAlignVertical;
     private double letterSpacing;
@@ -25,13 +25,11 @@ public class Style {
         return fontPostScriptName;
     }
 
-    public String getFontWeight() {
+    public int getFontWeight() {
         return fontWeight;
     }
 
-    public String getFontSize() {
-        return fontSize;
-    }
+    public double getFontSize() { return fontSize; }
 
     public String getTextAlignHorizontal() {
         return textAlignHorizontal;

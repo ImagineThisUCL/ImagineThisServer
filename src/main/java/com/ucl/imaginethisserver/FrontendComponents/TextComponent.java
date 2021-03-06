@@ -20,13 +20,12 @@ public class TextComponent extends FrontendComponent {
 
     @Override
     public String generateCode() {
-        String fontSize = getStyle().getFontSize();
-        String fontWeight = getStyle().getFontWeight();
+        double fontSize = getStyle().getFontSize();
+        int fontWeight = getStyle().getFontWeight();
         String textAlign = getStyle().getTextAlignHorizontal();
-
+        String colorString = getTextFills().get(0).getColor().toString();
         try {
-            String colorString = getTextFills().get(0).getColor().toString();
-            return "<P style={{fontSize: " + fontSize + ", fontWeight: \'" + fontWeight + "\', color: " + colorString + ", textAlign: \'" + textAlign.toLowerCase() + "\', flex: 1 }}>" + text + "</P>";
+            return String.format("<P style={{fontSize: %f, fontWeight: '%d', color: %s, textAlign: '%s', flex: 1 }}>%s</P>", fontSize, fontWeight, colorString, textAlign.toLowerCase(), text);
         } catch (Exception e) {
             return "<P>The text code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
         }
