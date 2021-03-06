@@ -53,6 +53,13 @@ public class FigmaFile {
         }
         return figmaComponents;
     }
+    public List<FigmaComponent> getAllComponents() {
+        List<FigmaComponent> figmaComponents = new ArrayList<>();
+        for (Page page : getPages()) {
+            figmaComponents.addAll(page.getAllComponents());
+        }
+        return figmaComponents;
+    }
 
     public <T extends FigmaComponent> boolean containsComponent(Class<T> cls) {
         return FigmaComponent.containsComponent(getComponents(), cls);

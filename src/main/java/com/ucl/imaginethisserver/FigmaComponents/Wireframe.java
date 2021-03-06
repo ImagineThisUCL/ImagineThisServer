@@ -35,8 +35,14 @@ public class Wireframe {
         return fills;
     }
     public AbsoluteBoundingBox getAbsoluteBoundingBox() { return absoluteBoundingBox; }
-    public List<FigmaComponent> getComponents() {
-        return components;
+    public List<FigmaComponent> getComponents() { return components; }
+    public List<FigmaComponent> getAllComponents() {
+        List<FigmaComponent> allComponents = new ArrayList<>();
+        allComponents.addAll(components);
+        for (FigmaComponent component : components) {
+            if (component instanceof Group) allComponents.addAll(((Group) component).getComponents());
+        }
+        return allComponents;
     }
     public Page getPage() {
         return page;

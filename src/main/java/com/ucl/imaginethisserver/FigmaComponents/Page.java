@@ -54,6 +54,13 @@ public class Page {
         }
         return figmaComponents;
     }
+    public List<FigmaComponent> getAllComponents() {
+        List<FigmaComponent> figmaComponents = new ArrayList<>();
+        for (Wireframe wireframe : getWireframes()) {
+            figmaComponents.addAll(wireframe.getAllComponents());
+        }
+        return figmaComponents;
+    }
 
     public void filterWireframesByName(List<String> wireframeList) {
         List<Wireframe> filteredWireframes = new ArrayList<>();

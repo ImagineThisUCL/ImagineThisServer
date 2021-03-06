@@ -176,14 +176,14 @@ public class GenerationServiceImpl implements GenerationService {
         for (Wireframe wireframe : figmaFile.getWireframes()) {
             ids.add(wireframe.getId());
         }
-        for (FigmaComponent component : figmaFile.getComponents()) {
+        for (FigmaComponent component : figmaFile.getAllComponents()) {
             ids.add(component.getId());
         }
         Map<String, String> imageURLs = figmaAPIUtil.requestComponentImageURLs(projectID, auth, ids);
         for (Wireframe wireframe : figmaFile.getWireframes()) {
             wireframe.setImageURL(imageURLs.get(wireframe.getId()));
         }
-        for (FigmaComponent component : figmaFile.getComponents()) {
+        for (FigmaComponent component : figmaFile.getAllComponents()) {
             component.setImageURL(imageURLs.get(component.getId()));
         }
 
