@@ -95,7 +95,6 @@ public class GenerationServiceImpl implements GenerationService {
         }
 
         // Add conversion record to database
-        logger.info("Adding new conversion record to database.");
         Conversion conversion = new Conversion();
         conversion.setProjectId(projectID);
         conversion.setUserId(auth.getUserID());
@@ -104,6 +103,8 @@ public class GenerationServiceImpl implements GenerationService {
         conversion.setConversionStatus(ConversionStatus.RUNNING);
         conversion.setPublishStatus(publish ? ConversionStatus.NOT_STARTED : ConversionStatus.NOT_TRIGGERED);
         conversionDao.addNewConversion(conversion);
+        UUID conversionId = UUID.fromString(conversion.getConversionId().toString());
+        logger.info("Starting conversion {}", conversionId);
 
         // Start writing process
         try {
@@ -115,7 +116,7 @@ public class GenerationServiceImpl implements GenerationService {
         } catch (IOException e) {
             logger.error("Error during code generation.", e);
             conversion.setConversionStatus(ConversionStatus.FAILED);
-            conversionDao.updateConversion(UUID.fromString(conversion.getConversionId().toString()), conversion);
+            conversionDao.updateConversion(conversionId, conversion);
             return false;
         }
 
@@ -124,10 +125,10 @@ public class GenerationServiceImpl implements GenerationService {
         fileUtil.zipDirectory(projectFolder);
 
         conversion.setConversionStatus(ConversionStatus.SUCCEEDED);
-        conversionDao.updateConversion(UUID.fromString(conversion.getConversionId().toString()), conversion);
+        conversionDao.updateConversion(conversionId, conversion);
 
         // Publish project to Expo through a new Docker container job
-        if (publish) expoUtil.publish(projectID, figmaFile.getProjectName());
+        if (publish) return expoUtil.publish(projectID, figmaFile.getProjectName(), conversionId);
 
         return true;
     }
