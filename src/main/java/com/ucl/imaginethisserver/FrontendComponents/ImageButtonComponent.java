@@ -46,7 +46,7 @@ public class ImageButtonComponent extends FrontendComponent {
             }
             code.append("style={{padding: 10}}\n");
             code.append("imageStyle={{width: ").append(getWidth()).append(", height: ").append(getHeight()).append("}}\n");
-            code.append("imageSrc={require('").append(getImageName()).append("')}/>");
+            code.append("imageSrc='").append(getImageURL()).append("'/>");
 
             return code.toString();
         }catch (Exception e){

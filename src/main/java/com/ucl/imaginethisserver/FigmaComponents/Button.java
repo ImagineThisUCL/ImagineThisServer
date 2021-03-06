@@ -14,39 +14,35 @@ public class Button extends Group {
         buttonComponent.setHeight(this.getHeight());
         buttonComponent.setAlign(this.getAlign());
 
+        // Set button's transition to another wireframe if it exists
         if (getTransitionNodeID() != null) {
-            buttonComponent.setTransitionNodeID(getTransitionNodeID());
             Wireframe transitionWireframe = getFigmaFile().getWireframeById(getTransitionNodeID());
-            buttonComponent.setTransitionNodeName(transitionWireframe.getName());
+            if (transitionWireframe != null) {
+                buttonComponent.setTransitionNodeID(getTransitionNodeID());
+                buttonComponent.setTransitionNodeName(transitionWireframe.getName());
+            }
         }
 
         for (FigmaComponent component : getComponents()) {
-            if (component instanceof Rectangle) {
-                buttonComponent.setCornerRadius(component.getCornerRadius());
-                buttonComponent.setContainerFills(component.getFills());
-                buttonComponent.setBorderColor(component.getStrokes(0).getColor());
-                buttonComponent.setBorderWidth(component.getStrokeWeight());
-            } else if (component instanceof Text) {
+            if (component instanceof Text) {
                 Text text = (Text) component;
                 buttonComponent.setCharacters(text.getCharacters());
                 buttonComponent.setStyle(text.getStyle());
-                buttonComponent.setTextFills(((Text) component).getFills());
-            } else if (component instanceof Vector) {
-                Vector vector = (Vector) component;
-                buttonComponent.setCornerRadius(vector.getCornerRadius());
-                buttonComponent.setContainerFills(vector.getFills());
-                if (!vector.getStrokes().isEmpty()) {
-                    buttonComponent.setBorderColor(vector.getStrokes(0).getColor());
+                buttonComponent.setTextFills(component.getFills());
+            } else if (component instanceof Rectangle || component instanceof Vector) {
+                buttonComponent.setCornerRadius(component.getCornerRadius());
+                buttonComponent.setContainerFills(component.getFills());
+                buttonComponent.setBorderWidth(component.getStrokeWeight());
+                if (!component.getStrokes().isEmpty()) {
+                    buttonComponent.setBorderColor(component.getStrokes(0).getColor());
                 }
-                buttonComponent.setBorderWidth(vector.getStrokeWeight());
             } else if (component instanceof Ellipse) {
-                    Ellipse ellipse = (Ellipse) component;
-                    buttonComponent.setCircle(true);
-                    buttonComponent.setContainerFills(ellipse.getFills());
-                    if (!ellipse.getStrokes().isEmpty()) {
-                        buttonComponent.setBorderColor(ellipse.getStrokes().get(0).getColor());
-                    }
-                    buttonComponent.setBorderWidth(ellipse.getStrokeWeight());
+                buttonComponent.setCircle(true);
+                buttonComponent.setContainerFills(component.getFills());
+                buttonComponent.setBorderWidth(component.getStrokeWeight());
+                if (!component.getStrokes().isEmpty()) {
+                    buttonComponent.setBorderColor(component.getStrokes().get(0).getColor());
+                }
             }
         }
         return buttonComponent;

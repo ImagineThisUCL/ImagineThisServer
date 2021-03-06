@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.ucl.imaginethisserver.CustomExceptions.FigmaDesignException;
 import com.ucl.imaginethisserver.DAO.ConversionDao;
 import com.ucl.imaginethisserver.DAO.ProjectDao;
 import com.ucl.imaginethisserver.FigmaComponents.*;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class GenerationServiceImpl implements GenerationService {
@@ -67,7 +69,16 @@ public class GenerationServiceImpl implements GenerationService {
         FigmaFile figmaFile = getFigmaFile(projectID, auth);
 
         if (figmaFile == null) {
+            logger.error("Could not find Figma design for project {}", projectID);
             throw new NotFoundException("Project " + projectID + " not found.");
+        }
+
+        // Filter out only selected wireframes
+        wireframeList = wireframeList.stream().map(name -> Wireframe.convertToWireframeName(name)).collect(Collectors.toList());
+        figmaFile.filterWireframesByName(wireframeList);
+        if (figmaFile.getWireframes().isEmpty()) {
+            logger.error("No matching wireframes selected in project {}", projectID);
+            throw new FigmaDesignException("No wireframes to generate.");
         }
 
         // Add project to database if not existing already, update if exists
@@ -165,14 +176,14 @@ public class GenerationServiceImpl implements GenerationService {
         for (Wireframe wireframe : figmaFile.getWireframes()) {
             ids.add(wireframe.getId());
         }
-        for (FigmaComponent component : figmaFile.getComponents()) {
+        for (FigmaComponent component : figmaFile.getAllComponents()) {
             ids.add(component.getId());
         }
         Map<String, String> imageURLs = figmaAPIUtil.requestComponentImageURLs(projectID, auth, ids);
         for (Wireframe wireframe : figmaFile.getWireframes()) {
             wireframe.setImageURL(imageURLs.get(wireframe.getId()));
         }
-        for (FigmaComponent component : figmaFile.getComponents()) {
+        for (FigmaComponent component : figmaFile.getAllComponents()) {
             component.setImageURL(imageURLs.get(component.getId()));
         }
 
@@ -237,7 +248,7 @@ public class GenerationServiceImpl implements GenerationService {
             } else if (type.equals("GROUP") && name.contains("dropdown")) {
                 component = new Gson().fromJson(jsonChild, Dropdown.class);
 
-            } else if (type.matches("GROUP|RECTANGLE") && name.matches("image|picture|icon")) {
+            } else if (name.matches(".*(image|picture|icon).*")) {
                 component = new Gson().fromJson(jsonChild, Image.class);
 
             } else if (type.equals("RECTANGLE")) {

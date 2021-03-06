@@ -32,7 +32,7 @@ export default class Button extends Component {
                     style={this.props.style}>
                     <Image
                         style={this.props.imageStyle}
-                        source={this.props.imageSrc}>
+                        source={{uri: this.props.imageSrc}}>
                     </Image>
                 </TouchableOpacity>
             </View>

@@ -2,6 +2,8 @@ package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.*;
 import com.ucl.imaginethisserver.Conf.ExcludeSerialization;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -19,6 +21,8 @@ public class Page {
     private String prototypeStartNodeID;
 
     private List<Wireframe> wireframes = new ArrayList<>();
+
+    private static Logger logger = LoggerFactory.getLogger(Page.class);
 
     public String getId() {
         return id;
@@ -50,6 +54,24 @@ public class Page {
         }
         return figmaComponents;
     }
+    public List<FigmaComponent> getAllComponents() {
+        List<FigmaComponent> figmaComponents = new ArrayList<>();
+        for (Wireframe wireframe : getWireframes()) {
+            figmaComponents.addAll(wireframe.getAllComponents());
+        }
+        return figmaComponents;
+    }
 
+    public void filterWireframesByName(List<String> wireframeList) {
+        List<Wireframe> filteredWireframes = new ArrayList<>();
+        for (Wireframe wireframe : getWireframes()) {
+            // Generate only wanted wireframes
+            if (!wireframeList.contains(wireframe.getName())) {
+                logger.info("Filtering out wireframe {} from page {}.", wireframe.getName(), getName());
+                filteredWireframes.add(wireframe);
+            }
+        }
+        wireframes.removeAll(filteredWireframes);
+    }
 
 }

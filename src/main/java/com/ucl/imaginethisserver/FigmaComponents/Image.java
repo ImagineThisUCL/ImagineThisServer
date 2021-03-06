@@ -2,7 +2,7 @@ package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.ucl.imaginethisserver.FrontendComponents.ImageComponent;
 
-public class Image extends Group {
+public class Image extends FigmaComponent {
 
     /**
      * Convert the current Figma component object to its corresponding Image Object
@@ -16,6 +16,7 @@ public class Image extends Group {
         imageComponent.setPositionX(getPositionX());
         imageComponent.setPositionY(getPositionY());
         imageComponent.setAlign(getAlign());
+        imageComponent.setImageURL(getImageURL());
         return imageComponent;
     }
 }
