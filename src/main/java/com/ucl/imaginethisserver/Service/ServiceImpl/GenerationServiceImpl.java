@@ -248,7 +248,7 @@ public class GenerationServiceImpl implements GenerationService {
             } else if (type.equals("GROUP") && name.contains("dropdown")) {
                 component = new Gson().fromJson(jsonChild, Dropdown.class);
 
-            } else if (type.matches("GROUP|RECTANGLE") && name.matches("image|picture|icon")) {
+            } else if (name.matches(".*(image|picture|icon).*")) {
                 component = new Gson().fromJson(jsonChild, Image.class);
 
             } else if (type.equals("RECTANGLE")) {

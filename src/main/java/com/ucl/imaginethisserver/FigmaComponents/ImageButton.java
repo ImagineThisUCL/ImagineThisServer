@@ -23,7 +23,7 @@ public class ImageButton extends Group {
             imageButtonComponent.setTransitionNodeName(transitionWireframe.getName());
         }
         for (FigmaComponent component : getComponents()) {
-            if ((component instanceof Group || component instanceof Rectangle) && (component.getName().contains("image|icon|picture"))) {
+            if (component.getName().matches(".*(image|icon|picture).*")) {
                 imageButtonComponent.setImageURL(component.getImageURL());
             }
         }
