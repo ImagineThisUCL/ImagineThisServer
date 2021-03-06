@@ -68,4 +68,10 @@ public class FigmaFile {
         }
         return null;
     }
+
+    public void filterWireframesByName(List<String> wireframeList) {
+        for (Page page : getPages()) {
+            page.filterWireframesByName(wireframeList);
+        }
+    }
 }

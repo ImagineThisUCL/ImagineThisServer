@@ -27,11 +27,7 @@ public class Wireframe {
     public String getId() {
         return id;
     }
-    public String getName() {
-        String wireframeName = name.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
-        // Need to capitalize wireframes because they will be converted to JavaScript React classes
-        return StringUtils.capitalize(wireframeName);
-    }
+    public String getName() { return convertToWireframeName(name); }
     public JsonArray getChildren() {
         return children;
     }
@@ -78,6 +74,12 @@ public class Wireframe {
         builder.setPrettyPrinting();
         Gson gson = builder.create();
         return gson.toJson(this);
+    }
+
+    public static String convertToWireframeName(String name) {
+        String wireframeName = name.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
+        // Need to capitalize wireframes because they will be converted to JavaScript React classes
+        return StringUtils.capitalize(wireframeName);
     }
 
 }
