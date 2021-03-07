@@ -1,12 +1,14 @@
 package com.ucl.imaginethisserver.DAO.DAOImpl;
 
 import com.ucl.imaginethisserver.DAO.ConversionDao;
+import com.ucl.imaginethisserver.DAO.ConversionDto;
 import com.ucl.imaginethisserver.Mapper.ConversionDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.ConversionMapper;
 import com.ucl.imaginethisserver.Model.Conversion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
@@ -36,5 +38,10 @@ public class ConversionDaoImpl implements ConversionDao {
                 .set(ConversionDynamicSqlSupport.publishStatus).equalTo(conversion.getPublishStatus())
                 .where(ConversionDynamicSqlSupport.conversionId, isEqualTo(conversionID))
         );
+    }
+
+    @Override
+    public List<ConversionDto> getConversions(String projectID) {
+        return conversionMapper.getConversions(projectID);
     }
 }
