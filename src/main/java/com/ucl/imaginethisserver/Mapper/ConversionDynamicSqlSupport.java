@@ -21,6 +21,12 @@ public final class ConversionDynamicSqlSupport {
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: conversions.c_timestamp")
     public static final SqlColumn<Long> timestamp = conversion.timestamp;
 
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: conversions.conversion_status")
+    public static final SqlColumn<String> conversionStatus = conversion.conversionStatus;
+
+    @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source field: conversions.publish_status")
+    public static final SqlColumn<String> publishStatus = conversion.publishStatus;
+
     @Generated(value="org.mybatis.generator.api.MyBatisGenerator", comments="Source Table: conversions")
     public static final class Conversion extends SqlTable {
         public final SqlColumn<Object> conversionId = column("conversion_id", JDBCType.OTHER, "com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler");
@@ -30,6 +36,10 @@ public final class ConversionDynamicSqlSupport {
         public final SqlColumn<Object> userId = column("user_id", JDBCType.OTHER, "com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler");
 
         public final SqlColumn<Long> timestamp = column("c_timestamp", JDBCType.BIGINT);
+
+        public final SqlColumn<String> conversionStatus = column("conversion_status", JDBCType.VARCHAR);
+
+        public final SqlColumn<String> publishStatus = column("publish_status", JDBCType.VARCHAR);
 
         public Conversion() {
             super("conversions");
