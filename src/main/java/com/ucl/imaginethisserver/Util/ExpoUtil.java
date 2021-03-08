@@ -20,7 +20,7 @@ public class ExpoUtil {
 
     private final Logger logger = LoggerFactory.getLogger(ExpoUtil.class);
 
-    private final String EXPO_CONTAINER_IMAGE = "imaginethis-system_imaginethis-expo";
+    private final String EXPO_CONTAINER_IMAGE = "imaginethissystem_imaginethis-expo";
 
     @Value("${config.outputStorageFolder}")
     private String OUTPUT_STORAGE_FOLDER;
