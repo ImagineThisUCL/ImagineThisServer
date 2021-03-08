@@ -49,7 +49,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public boolean updateProject(String projectID, Project project) {
-        if (projectID == null) {
+        Project get_project = projectDao.getProjectByID(projectID);
+
+        if (get_project == null) {
             logger.error("Error updating project. Project ID not provided");
             throw new InternalServerErrorException();
         }

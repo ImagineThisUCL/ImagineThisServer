@@ -86,7 +86,7 @@ class FeedbackControllerTest {
     * The following tests will test the getAllFeedbacks method
     * */
     @Test
-    void givenFeedbacks_whenGetAllFeedbacks_thenReturnJsonArray() throws Exception{
+    void givenValidProjectID_whenGetAllFeedbacks_thenReturnJsonArray() throws Exception{
 
         given(service.getFeedbacksWithVotes(mockProjectID)).willReturn(mockFeedbackList);
 
@@ -106,6 +106,10 @@ class FeedbackControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+    /*
+     * The following tests will test the getFeedbackByID method
+     * */
 
     @Test
     void givenInvalidProjectIDOrFeedbackID_whenGetFeedbackByID_thenReturnErrorNotFound() throws Exception {
