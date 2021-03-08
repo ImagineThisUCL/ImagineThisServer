@@ -21,6 +21,7 @@ public class ExpoUtil {
     private final Logger logger = LoggerFactory.getLogger(ExpoUtil.class);
 
     private final String EXPO_CONTAINER_IMAGE = "imaginethissystem_imaginethis-expo";
+    private final String EXPO_VOLUME_NAME = "imaginethissystem_imaginethis-backend-output-storage";
 
     @Value("${config.outputStorageFolder}")
     private String OUTPUT_STORAGE_FOLDER;
@@ -52,7 +53,7 @@ public class ExpoUtil {
                     .withName(String.format("imaginethis-expo-%s", projectID)) // Useful so that multiple publishing jobs of same project cannot run at once
                     .withEnv(environmentVariables)
                     .withHostConfig(HostConfig.newHostConfig()
-                            .withBinds(new Bind(projectFolder, new Volume("/usr/src/app")))
+                            .withBinds(Bind.parse(String.format("%s:/usr/src/app", EXPO_VOLUME_NAME)))
                             .withNetworkMode("imaginethis-network") // Connect it to same bridge Docker network as the whole system
                             .withAutoRemove(true)) // Remove container once finished
                     .exec();
