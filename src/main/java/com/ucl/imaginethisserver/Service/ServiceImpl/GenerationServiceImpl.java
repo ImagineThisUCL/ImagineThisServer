@@ -281,12 +281,12 @@ public class GenerationServiceImpl implements GenerationService {
     }
 
     @Override
-    public boolean sendInvitationEmail(String projectID, String email) {
+    public String sendInvitationEmail(String projectID, String email) {
         // first check the email format
         Pattern emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
         if (!emailPattern.matcher(email).matches()) {
             logger.error("Invalid email address");
-            return false;
+            return null;
         }
         //
         try{
@@ -294,6 +294,6 @@ public class GenerationServiceImpl implements GenerationService {
         } catch (IOException e) {
             logger.error("Error sending invitation email", e.fillInStackTrace());
         }
-        return false;
+        return null;
     }
 }

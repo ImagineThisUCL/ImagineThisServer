@@ -22,11 +22,10 @@ public class ExpoGraphqlStatement {
     }
 
     public static String createCancelInvitationStatement(String invitationID) {
-        String cancelInvitationStatement = "{\"query\":\"mutation {userInvitation {" +
-                "deleteUserInvitation(id: \"$invitationID\") " +
-                "{id}}" +
-                "}\"," +
-                "\"variables\":{}}";
+    String cancelInvitationStatement =
+        "{\"query\":\"mutation {userInvitation {deleteUserInvitation(" +
+                "id: \\\"$invitationID\\\") {" +
+                "id}}}\",\"variables\":{}}";
         return cancelInvitationStatement.replace("$invitationID", invitationID);
     }
 }

@@ -126,9 +126,14 @@ public class GenerationController {
      */
     @PostMapping("/projects/{project-id}/publish/invitation")
     @ResponseBody
-    public boolean sendInvitationEmail(
+    public String sendInvitationEmail(
             @PathVariable("project-id") String projectID,
             @RequestParam(value = "email") String email) {
-        return generationService.sendInvitationEmail(projectID, email);
+        String result = generationService.sendInvitationEmail(projectID, email);
+        if (result != null) {
+            return result;
+        } else {
+            return "Error";
+        }
     }
 }
