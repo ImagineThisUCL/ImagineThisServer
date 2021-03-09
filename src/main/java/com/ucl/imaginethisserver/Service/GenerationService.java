@@ -14,4 +14,6 @@ public interface GenerationService {
 
     FigmaFile getFigmaFile(String projectID, Authentication auth);
 
+    String sendInvitationEmail(String projectID, String email);
+
 }

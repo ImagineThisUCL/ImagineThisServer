@@ -7,6 +7,9 @@ jobs:
       CORS_ORIGIN: "*"
       APP_OUTPUT_FOLDER: ""
       APP_TEMPLATES_FOLDER: ""
+      EXPO_ACCOUNT_USERNAME: ""
+      EXPO_ACCOUNT_PASSWORD: ""
+      EXPO_ORGANIZATION_ID: ""
     steps:
       - checkout
       - run : mvn test
