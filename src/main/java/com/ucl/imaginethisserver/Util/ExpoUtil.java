@@ -19,9 +19,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 public class ExpoUtil {
@@ -87,41 +85,24 @@ public class ExpoUtil {
         return true;
     }
 
-    /**
-     * This method will send an invitation email to the target user
-     * @param email
-     * @return
-     */
-    public boolean invite(String email) throws IOException {
-        // check if the env variables has been set
-        if (EXPO_USERNAME == null || EXPO_PASSWORD == null || EXPO_ORGANIZATION_ID == null) {
-            logger.error("Expo user credential hasn't been set! Please check the environment variables.");
-            return false;
-        }
-        // first login to the expo
-        try{
-            JsonObject object = this.login(EXPO_USERNAME, EXPO_PASSWORD);
-        } catch (IOException e) {
-            logger.error("Error sending invitation.", e.fillInStackTrace());
-            return false;
-        }
-        // send request to expo graphql endpoint
-        String statement = ExpoGraphqlStatement.createUserInvitationForAccount(EXPO_ORGANIZATION_ID, email, "[VIEW]");
-        URL queryURL = new URL(EXPO_GRAPHQL_API);
-        HttpURLConnection connection = (HttpURLConnection)queryURL.openConnection();
+    public JsonObject sendPostRequest(URL url, Map<String, String> headers, String payload) throws IOException {
+        // open up connection
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        // open output stream
         connection.setDoOutput(true);
+        // set request method
         connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Accept", "application/json");
-        // set session header
-        connection.setRequestProperty("expo-session", sessionString);
-        logger.info("" + connection.getRequestProperties());
+        // set headers
+        for (Map.Entry<String, String> e : headers.entrySet()) {
+            connection.setRequestProperty(e.getKey(), e.getValue());
+        }
+        // set request body
         try (OutputStream os = connection.getOutputStream()) {
-            byte[] input = statement.getBytes(StandardCharsets.UTF_8);
+            byte[] input = payload.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
-
-        // get the response
+        logger.info("Sending request to " + url.toString());
+        // send request and get response
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
@@ -131,11 +112,49 @@ public class ExpoUtil {
                 response.append(inputLine);
             }
             in.close();
-            logger.info("Response from Expo graphql: " + response.toString());
-            return true;
+            // close connection
+            connection.disconnect();
+            return new Gson().fromJson(response.toString(), JsonObject.class);
         } catch (IOException e) {
-            logger.error("Error: " + e.fillInStackTrace());
-            return false;
+            logger.error("Error sending request.");
+            throw e;
+        }
+    }
+
+    /**
+     * This method will send an invitation email to the target user
+     * @param email
+     * @return the invitation ID
+     */
+    public String invite(String email) throws IOException {
+        // check if the env variables has been set
+        if (EXPO_USERNAME == null || EXPO_PASSWORD == null || EXPO_ORGANIZATION_ID == null) {
+            logger.error("Expo user credential hasn't been set! Please check the environment variables.");
+            return null;
+        }
+        // first login to the expo
+        try{
+            login(EXPO_USERNAME, EXPO_PASSWORD);
+        } catch (IOException e) {
+            logger.error("Error sending invitation.", e.fillInStackTrace());
+            return null;
+        }
+        // send request to expo graphql endpoint
+        String statement = ExpoGraphqlStatement.createUserInvitationForAccount(EXPO_ORGANIZATION_ID, email, "[VIEW]");
+        URL queryURL = new URL(EXPO_GRAPHQL_API);
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
+        headers.put("expo-session", sessionString);
+        try {
+            JsonObject response = sendPostRequest(queryURL, headers, statement);
+            return response.get("data").getAsJsonObject()
+                                    .get("userInvitation").getAsJsonObject()
+                                    .get("createUserInvitationForAccount").getAsJsonObject()
+                                    .get("id").getAsString();
+        } catch (IOException e) {
+            logger.error("Error sending invitation: " + e.fillInStackTrace());
+            return null;
         }
     }
 
@@ -146,32 +165,17 @@ public class ExpoUtil {
         }
         String statement = ExpoGraphqlStatement.createCancelInvitationStatement(invitationID);
         URL queryURL = new URL(EXPO_GRAPHQL_API);
-        HttpURLConnection connection = (HttpURLConnection)queryURL.openConnection();
-        connection.setDoOutput(true);
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        // set session header
-        connection.setRequestProperty("expo-session", sessionString);
-        try (OutputStream os = connection.getOutputStream()) {
-            byte[] input = statement.getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
-        }
-        // get the response
-        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-            logger.info("Response from Expo graphql: " + response.toString());
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
+        headers.put("expo-session", sessionString);
+        try {
+            sendPostRequest(queryURL, headers, statement);
             return true;
-        } else {
-            logger.error("Error canceling invitation: " + connection.getResponseMessage());
-            return false;
+        } catch (IOException e) {
+            logger.error("Error canceling invitation: " + e.fillInStackTrace());
         }
+        return false;
     }
 
     /**
@@ -182,35 +186,19 @@ public class ExpoUtil {
      */
     public JsonObject login(String username, String password) throws IOException {
         URL loginURL = new URL(EXPO_AUTH_API + "/loginAsync");
-        HttpURLConnection connection = (HttpURLConnection)loginURL.openConnection();
-        connection.setRequestMethod("POST");
-        // set request body
-        connection.setDoOutput(true);
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Accept", "application/json");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json");
         JsonObject body = new JsonObject();
         body.addProperty("username", username);
         body.addProperty("password", password);
-        try (OutputStream os = connection.getOutputStream()) {
-            byte[] input = body.toString().getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
+        try {
+            JsonObject response = sendPostRequest(loginURL, headers, body.toString());
+            sessionString = response.get("data").getAsJsonObject().get("sessionSecret").getAsString().replace("\\", "");
+            return response;
+        } catch (IOException e) {
+            logger.error("Error logging to expo: " + e.fillInStackTrace());
         }
-        // get the response
-        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-            JsonObject object = new Gson().fromJson(response.toString(), JsonObject.class);
-            sessionString = object.get("data").getAsJsonObject().get("sessionSecret").getAsString().replace("\\", "");
-            return object;
-        } else {
-            logger.error("Error logging to expo: " + connection.getResponseMessage());
-            return null;
-        }
+        return null;
     }
 }
