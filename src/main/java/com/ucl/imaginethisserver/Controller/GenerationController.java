@@ -117,4 +117,18 @@ public class GenerationController {
         WireframesResponse response = new WireframesResponse(projectID, projectName, wireframes);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    /**
+     * This endpoint sends an invitation to the target email account to join imaginethis organization on expo.io
+     * @param projectID
+     * @param email
+     * @return
+     */
+    @PostMapping("/projects/{project-id}/publish/invitation")
+    @ResponseBody
+    public boolean sendInvitationEmail(
+            @PathVariable("project-id") String projectID,
+            @RequestParam(value = "email") String email) {
+        return generationService.sendInvitationEmail(projectID, email);
+    }
 }

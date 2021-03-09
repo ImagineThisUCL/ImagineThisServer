@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -279,4 +280,20 @@ public class GenerationServiceImpl implements GenerationService {
         return figmaComponents;
     }
 
+    @Override
+    public boolean sendInvitationEmail(String projectID, String email) {
+        // first check the email format
+        Pattern emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        if (!emailPattern.matcher(email).matches()) {
+            logger.error("Invalid email address");
+            return false;
+        }
+        //
+        try{
+            return expoUtil.invite(email);
+        } catch (IOException e) {
+            logger.error("Error sending invitation email", e.fillInStackTrace());
+        }
+        return false;
+    }
 }
