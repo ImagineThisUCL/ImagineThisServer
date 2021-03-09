@@ -3,12 +3,9 @@ package com.ucl.imaginethisserver.Service;
 import com.ucl.imaginethisserver.DAO.FeedbackDao;
 import com.ucl.imaginethisserver.DAO.ProjectDao;
 import com.ucl.imaginethisserver.DAO.VoteDao;
-import com.ucl.imaginethisserver.Mapper.FeedbackMapper;
-import com.ucl.imaginethisserver.Mapper.ProjectMapper;
-import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Feedback;
-import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Model.Project;
+import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.ServiceImpl.FeedbackServiceImpl;
 import com.ucl.imaginethisserver.Service.ServiceImpl.VoteServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,10 +14,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.lang.AssertionError;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class VoteServiceImplTest {
     static FeedbackDao mockFeedbackDao;
@@ -65,7 +62,7 @@ public class VoteServiceImplTest {
 
         // Create FeedbackService with mocked DAO
         feedbackService = new FeedbackServiceImpl(mockFeedbackDao, mockProjectDao);
-        voteService = new VoteServiceImpl(mockVoteDao, mockFeedbackDao);
+        voteService = new VoteServiceImpl(mockVoteDao);
     }
 
     @Test

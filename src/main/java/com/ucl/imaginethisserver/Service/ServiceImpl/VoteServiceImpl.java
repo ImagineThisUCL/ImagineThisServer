@@ -1,7 +1,6 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
 import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
-import com.ucl.imaginethisserver.DAO.FeedbackDao;
 import com.ucl.imaginethisserver.DAO.VoteDao;
 import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.VoteService;
@@ -21,7 +20,7 @@ public class VoteServiceImpl implements VoteService {
     private final VoteDao voteDao;
 
     @Autowired
-    public VoteServiceImpl(VoteDao voteDao, FeedbackDao mockFeedbackDao) {
+    public VoteServiceImpl(VoteDao voteDao) {
         this.voteDao = voteDao;
     }
 
