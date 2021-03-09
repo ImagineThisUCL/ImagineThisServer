@@ -23,10 +23,6 @@ abstract public class FigmaComponent {
     private double cornerRadius;
     private String blendMode;
 
-    private int height;
-    private int width;
-    private int positionX;
-    private int positionY;
     private String imageURL;
     private FigmaFile figmaFile; // Give each component access to the whole file
     private String align;
@@ -86,19 +82,23 @@ abstract public class FigmaComponent {
     public FigmaFile getFigmaFile() { return figmaFile; }
 
     public int getHeight() {
-        return height;
+        if (absoluteBoundingBox == null) return 0;
+        return absoluteBoundingBox.getHeight();
     }
 
     public int getWidth() {
-        return width;
+        if (absoluteBoundingBox == null) return 0;
+        return absoluteBoundingBox.getWidth();
     }
 
     public int getPositionX() {
-        return positionX;
+        if (absoluteBoundingBox == null) return 0;
+        return absoluteBoundingBox.getX();
     }
 
     public int getPositionY() {
-        return positionY;
+        if (absoluteBoundingBox == null) return 0;
+        return absoluteBoundingBox.getY();
     }
 
     public String getAlign() {
@@ -126,28 +126,6 @@ abstract public class FigmaComponent {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-
-    /**
-     * This method calculates the relative position (relative to the wireframe that the component belong to) of current Figma component,
-     * and calculates the align attribute (LEFT, RIGHT, CENTER) for the current Figma component.
-     * @param wireframeBoundingbox the position information of the wireframe which the current Figma component belong to.
-     */
-    public void convertRelativePosition(AbsoluteBoundingBox wireframeBoundingbox) {
-        height = (int) (absoluteBoundingBox.getHeight());
-        width = (int) (absoluteBoundingBox.getWidth());
-
-        positionX = (int) (absoluteBoundingBox.getX() - wireframeBoundingbox.getX());
-        positionY = (int) (absoluteBoundingBox.getY() - wireframeBoundingbox.getY());
-
-        if (this.positionX + this.width < wireframeBoundingbox.getWidth() / 2) {
-            align = "LEFT";
-        } else if (this.positionX > wireframeBoundingbox.getWidth() / 2){
-            align = "RIGHT";
-        } else {
-            align = "CENTER";
-        }
     }
 
     public static <T extends FigmaComponent> boolean containsComponent(List<FigmaComponent> figmaComponents, Class<T> cls) {

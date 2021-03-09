@@ -69,5 +69,15 @@
             <columnOverride column="v_timestamp" property="timestamp"/>
             <columnOverride column="vote" property="voteValue"/>
         </table>
+        <table tableName="conversions" domainObjectName="Conversion">
+            <columnOverride column="conversion_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
+            <columnOverride column="user_id"
+                            typeHandler="com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler" />
+            <columnOverride column="project_id" property="projectId" />
+            <columnOverride column="c_timestamp" property="timestamp"/>
+            <columnOverride column="conversion_status" property="conversionStatus"/>
+            <columnOverride column="publish_status" property="publishStatus"/>
+        </table>
     </context>
 </generatorConfiguration>

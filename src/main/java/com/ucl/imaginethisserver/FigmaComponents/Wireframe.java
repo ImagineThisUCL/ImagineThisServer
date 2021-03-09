@@ -27,11 +27,7 @@ public class Wireframe {
     public String getId() {
         return id;
     }
-    public String getName() {
-        String wireframeName = name.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
-        // Need to capitalize wireframes because they will be converted to JavaScript React classes
-        return StringUtils.capitalize(wireframeName);
-    }
+    public String getName() { return convertToWireframeName(name); }
     public JsonArray getChildren() {
         return children;
     }
@@ -39,8 +35,14 @@ public class Wireframe {
         return fills;
     }
     public AbsoluteBoundingBox getAbsoluteBoundingBox() { return absoluteBoundingBox; }
-    public List<FigmaComponent> getComponents() {
-        return components;
+    public List<FigmaComponent> getComponents() { return components; }
+    public List<FigmaComponent> getAllComponents() {
+        List<FigmaComponent> allComponents = new ArrayList<>();
+        allComponents.addAll(components);
+        for (FigmaComponent component : components) {
+            if (component instanceof Group) allComponents.addAll(((Group) component).getComponents());
+        }
+        return allComponents;
     }
     public Page getPage() {
         return page;
@@ -78,6 +80,12 @@ public class Wireframe {
         builder.setPrettyPrinting();
         Gson gson = builder.create();
         return gson.toJson(this);
+    }
+
+    public static String convertToWireframeName(String name) {
+        String wireframeName = name.replaceAll("[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~@#￥%……&*——+|{}‘”“’ -]","");
+        // Need to capitalize wireframes because they will be converted to JavaScript React classes
+        return StringUtils.capitalize(wireframeName);
     }
 
 }

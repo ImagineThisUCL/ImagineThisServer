@@ -41,29 +41,35 @@ public class ButtonComponent extends FrontendComponent {
     @Override
     public String generateCode() {
         try {
-            String backgroundColor = getContainerFills().get(0).getColor().toString();
+            String backgroundColor;
+            // If no color is chosen, have transparent background
+            if (getContainerFills().isEmpty()) {
+                backgroundColor = "rgba(255,255,255,0)";
+            } else {
+                backgroundColor = getContainerFills().get(0).getColor().toString();
+            }
             String textColor = getTextFills().get(0).getColor().toString();
             StringBuilder buttonCode = new StringBuilder();
             buttonCode.append("<Button\n");
             if (transitionNodeID != null) {
                 buttonCode.append("onPress={() => this.props.navigation.navigate('" + transitionNodeName + "')}\n");
             }
-            buttonCode.append("   style={{backgroundColor:").append(backgroundColor).append(", marginTop: base.margin, minWidth: " + getWidth());
+            buttonCode.append(String.format("style={{backgroundColor: '%s', marginTop: base.margin, minWidth: %d, ", backgroundColor, getWidth()));
             if (!isCircle) {
-                buttonCode.append(", borderRadius: ").append(getCornerRadius());
+                buttonCode.append(String.format("borderRadius: %f, ", getCornerRadius()));
             }
             if (getBorderColor() != null) {
                 String borderColorStr = getBorderColor().toString();
-                buttonCode.append(", borderColor: ").append(borderColorStr).append(" ,borderWidth: ").append(getBorderWidth());
+                buttonCode.append(String.format("borderColor: %s, borderWidth: %f", borderColorStr, getBorderWidth()));
             }
             buttonCode.append("}}\n");
-            buttonCode.append("   textStyle={{color: ").append(textColor).append(", fontSize: ").append(getStyle().getFontSize()).append("}}\n");
+            buttonCode.append(String.format("textStyle={{color: %s, fontSize: %f}}\n", textColor, getStyle().getFontSize()));
             if (isCircle) {
-                buttonCode.append("circleDiameter={").append(getWidth()).append("}");
+                buttonCode.append(String.format("circleDiameter={%d}", getWidth()));
             }
-            buttonCode.append(">").append(this.characters).append("</Button>");
-
+            buttonCode.append(String.format(">%s</Button>", this.characters));
             return buttonCode.toString();
+
         } catch (Exception e) {
             return "<P>The button component code couldn't be generated due to some unexpected errors, please check your structure of figma file based on our guideline</P>\n" ;
         }

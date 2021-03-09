@@ -72,7 +72,6 @@ public class CodeGenerator {
 
         // Create app.config.js file
         String appJson = fileUtil.readFile(templateFilesFolder + "/app.config.js");
-        appJson = appJson.replaceAll("imaginethis-app", figmaFile.getProjectName()); // Replace template name with actual project name
         fileUtil.writeFile(projectFolder + "/app.config.js", appJson);
 
         // Create BaseStyle.js file

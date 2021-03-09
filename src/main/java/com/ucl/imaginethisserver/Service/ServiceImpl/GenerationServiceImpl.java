@@ -4,13 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.ucl.imaginethisserver.CustomExceptions.FigmaDesignException;
+import com.ucl.imaginethisserver.DAO.ConversionDao;
+import com.ucl.imaginethisserver.DAO.ProjectDao;
 import com.ucl.imaginethisserver.FigmaComponents.*;
-import com.ucl.imaginethisserver.Util.CodeGenerator;
+import com.ucl.imaginethisserver.Model.Conversion;
+import com.ucl.imaginethisserver.Model.Project;
+import com.ucl.imaginethisserver.Util.*;
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.Service.GenerationService;
-import com.ucl.imaginethisserver.Util.Authentication;
-import com.ucl.imaginethisserver.Util.FigmaAPIUtil;
-import com.ucl.imaginethisserver.Util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class GenerationServiceImpl implements GenerationService {
@@ -29,16 +33,27 @@ public class GenerationServiceImpl implements GenerationService {
     private final FigmaAPIUtil figmaAPIUtil;
     private final CodeGenerator codeGenerator;
     private final FileUtil fileUtil;
+    private final ExpoUtil expoUtil;
+    private final ConversionDao conversionDao;
+    private final ProjectDao projectDao;
     private final Logger logger = LoggerFactory.getLogger(GenerationServiceImpl.class);
 
     @Value("${config.outputStorageFolder}")
     private String outputStorageFolder;
 
     @Autowired
-    public GenerationServiceImpl(FigmaAPIUtil figmaAPIUtil, CodeGenerator codeGenerator, FileUtil fileUtil) {
+    public GenerationServiceImpl(FigmaAPIUtil figmaAPIUtil,
+                                 CodeGenerator codeGenerator,
+                                 FileUtil fileUtil,
+                                 ExpoUtil expoUtil,
+                                 ConversionDao conversionDao,
+                                 ProjectDao projectDao) {
         this.figmaAPIUtil = figmaAPIUtil;
         this.codeGenerator = codeGenerator;
         this.fileUtil = fileUtil;
+        this.expoUtil = expoUtil;
+        this.conversionDao = conversionDao;
+        this.projectDao = projectDao;
     }
 
 
@@ -47,17 +62,49 @@ public class GenerationServiceImpl implements GenerationService {
      * @param auth
      * @param wireframeList
      */
-    public boolean buildProject(String projectID, Authentication auth, List<String> wireframeList) {
+    public boolean buildProject(String projectID, Authentication auth, List<String> wireframeList, boolean publish) {
 
         logger.info("Starting build of project {}", projectID);
 
         FigmaFile figmaFile = getFigmaFile(projectID, auth);
 
-        // TODO: Store conversion, version, timestamp
-
         if (figmaFile == null) {
+            logger.error("Could not find Figma design for project {}", projectID);
             throw new NotFoundException("Project " + projectID + " not found.");
         }
+
+        // Filter out only selected wireframes
+        wireframeList = wireframeList.stream().map(name -> Wireframe.convertToWireframeName(name)).collect(Collectors.toList());
+        figmaFile.filterWireframesByName(wireframeList);
+        if (figmaFile.getWireframes().isEmpty()) {
+            logger.error("No matching wireframes selected in project {}", projectID);
+            throw new FigmaDesignException("No wireframes to generate.");
+        }
+
+        // Add project to database if not existing already, update if exists
+        Project project = projectDao.getProjectByID(projectID);
+        if (project == null) {
+            logger.info("Adding new project record to database.");
+            project = new Project();
+            project.setProjectId(projectID);
+            project.setProjectName(figmaFile.getProjectName());
+            projectDao.addProject(project);
+        } else {
+            project.setProjectName(figmaFile.getProjectName());
+            projectDao.updateProject(projectID, project);
+        }
+
+        // Add conversion record to database
+        Conversion conversion = new Conversion();
+        conversion.setProjectId(projectID);
+        conversion.setUserId(auth.getUserID());
+        conversion.setConversionId(UUID.randomUUID());
+        conversion.setTimestamp(System.currentTimeMillis());
+        conversion.setConversionStatus(ConversionStatus.RUNNING);
+        conversion.setPublishStatus(publish ? ConversionStatus.NOT_STARTED : ConversionStatus.NOT_TRIGGERED);
+        conversionDao.addNewConversion(conversion);
+        UUID conversionId = UUID.fromString(conversion.getConversionId().toString());
+        logger.info("Starting conversion {}", conversionId);
 
         // Start writing process
         try {
@@ -66,15 +113,23 @@ public class GenerationServiceImpl implements GenerationService {
             codeGenerator.generateWireframes(figmaFile);
             codeGenerator.generateReusableComponents(figmaFile);
             codeGenerator.generateAppJSCode(figmaFile);
-
         } catch (IOException e) {
-            logger.error("Error during code generation.");
+            logger.error("Error during code generation.", e);
+            conversion.setConversionStatus(ConversionStatus.FAILED);
+            conversionDao.updateConversion(conversionId, conversion);
             return false;
         }
 
         // Zip the folder where project's source code resides for downloads
         String projectFolder = String.format("%s/%s", outputStorageFolder, projectID);
         fileUtil.zipDirectory(projectFolder);
+
+        conversion.setConversionStatus(ConversionStatus.SUCCEEDED);
+        conversionDao.updateConversion(conversionId, conversion);
+
+        // Publish project to Expo through a new Docker container job
+        if (publish) return expoUtil.publish(projectID, figmaFile.getProjectName(), conversionId);
+
         return true;
     }
 
@@ -118,20 +173,26 @@ public class GenerationServiceImpl implements GenerationService {
                 if (!jsonComponent.getAsJsonObject().get("type").getAsString().equals("FRAME")) continue;
                 Wireframe wireframe = new Gson().fromJson(jsonComponent, Wireframe.class);
                 // Further recursively process components in a wireframe
-                wireframe.setComponents(processJsonComponents(projectID, auth, wireframe.getChildren()));
+                wireframe.setComponents(processJsonComponents(wireframe.getChildren()));
                 page.addWireframe(wireframe);
             }
             figmaFile.addPage(page);
         }
 
-        // Add image URL to wireframes
-        List<String> wireframeIDs = new ArrayList<>();
+        // Add image URLs to wireframes and components as batch request for optimisation by reducing slow Figma API calls
+        List<String> ids = new ArrayList<>();
         for (Wireframe wireframe : figmaFile.getWireframes()) {
-            wireframeIDs.add(wireframe.getId());
+            ids.add(wireframe.getId());
         }
-        Map<String, String> wireframeImageURLs = figmaAPIUtil.requestComponentImageURLs(projectID, auth, wireframeIDs);
+        for (FigmaComponent component : figmaFile.getAllComponents()) {
+            ids.add(component.getId());
+        }
+        Map<String, String> imageURLs = figmaAPIUtil.requestComponentImageURLs(projectID, auth, ids);
         for (Wireframe wireframe : figmaFile.getWireframes()) {
-            wireframe.setImageURL(wireframeImageURLs.get(wireframe.getId()));
+            wireframe.setImageURL(imageURLs.get(wireframe.getId()));
+        }
+        for (FigmaComponent component : figmaFile.getAllComponents()) {
+            component.setImageURL(imageURLs.get(component.getId()));
         }
 
         // Special cases
@@ -145,15 +206,8 @@ public class GenerationServiceImpl implements GenerationService {
     }
 
 
-    public List<FigmaComponent> processJsonComponents(String projectID, Authentication auth, JsonArray jsonComponents) {
+    public List<FigmaComponent> processJsonComponents(JsonArray jsonComponents) {
         List<FigmaComponent> figmaComponents = new ArrayList<>();
-        // Retrieve URL for individual components. For optimisation do it in batch.
-        List<String> componentIDs = new ArrayList<>();
-        for (JsonElement jsonChild : jsonComponents) {
-            String id = jsonChild.getAsJsonObject().get("id").toString().replaceAll("\"", "");
-            componentIDs.add(id);
-        }
-        Map<String, String> componentImageURLs = figmaAPIUtil.requestComponentImageURLs(projectID, auth, componentIDs);
 
         // Process all children
         for (JsonElement jsonChild : jsonComponents) {
@@ -202,7 +256,7 @@ public class GenerationServiceImpl implements GenerationService {
             } else if (type.equals("GROUP") && name.contains("dropdown")) {
                 component = new Gson().fromJson(jsonChild, Dropdown.class);
 
-            } else if (type.matches("GROUP|RECTANGLE") && name.matches("image|picture|icon")) {
+            } else if (name.matches(".*(image|picture|icon).*")) {
                 component = new Gson().fromJson(jsonChild, Image.class);
 
             } else if (type.equals("RECTANGLE")) {
@@ -216,12 +270,9 @@ public class GenerationServiceImpl implements GenerationService {
 
             // Recursively parse all children components as well
             if (component instanceof Group) {
-                ((Group) component).setComponents(processJsonComponents(projectID, auth, ((Group) component).getChildren()));
+                ((Group) component).setComponents(processJsonComponents(((Group) component).getChildren()));
             }
 
-            component.setImageURL(componentImageURLs.get(component.getId()));
-            // TODO: See what to do with absoluteBoundingBox
-            // component.convertRelativePosition(this.absoluteBoundingBox);
             figmaComponents.add(component);
         }
 

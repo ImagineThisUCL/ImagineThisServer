@@ -130,17 +130,18 @@ public class WireframeComponent {
         if (components.isEmpty()) { return ""; }
         // Put all of the components in the same line in one list
         List<List<FrontendComponent>> inlineComponentList = FrontendComponent.getInlineComponentList(components);
-        int preY = 0;
+        int preY = absoluteBoundingBox.getY();
         for (List<FrontendComponent> line : inlineComponentList) {
-            // There is only one component in this line
+            // There is only one component in this line. Equations for positioning:
+            // widthWireframe = marginLeft + widthElement + marginRight
+            // marginLeft = positionXElement - positionXWireframe
+            // marginTop = positionYElement - positionYPreviousElement - heightPreviousElement
             if (line.size() == 1) {
                 FrontendComponent component = line.get(0);
                 int marginTop = Math.max(component.getPositionY() - preY, 0);
-                int marginLeft = component.getPositionX();
-                int marginRight = Integer.max((int) (absoluteBoundingBox.getWidth() - (component.getPositionX() + component.getWidth())), 0);
-                viewCode.append("<View style={{marginTop: " + marginTop + ",marginLeft: " + marginLeft + ", marginRight: " + marginRight + "}}>\n");
-                viewCode.append(component.generateCode()).append("\n");
-                viewCode.append("</View>\n");
+                int marginLeft = component.getPositionX() - absoluteBoundingBox.getX();
+                viewCode.append(String.format("<View style={{marginTop: %d, marginLeft: %d}}>\n", marginTop, marginLeft));
+                viewCode.append(component.generateCode()).append("\n</View>\n");
                 preY = component.getPositionY() + component.getHeight();
             }
 
@@ -154,7 +155,7 @@ public class WireframeComponent {
                     }
                 }
                 int marginTop = Math.max(minY - preY, 0);
-                viewCode.append("<View style={{flexDirection: \"row\", justifyContent: \"space-between\", marginTop: " + marginTop + "}}>" + "\n");
+                viewCode.append(String.format("<View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: %d}}>\n", marginTop));
                 for (FrontendComponent component : line) {
                     viewCode.append(component.generateCode()).append("\n");
                     if (component.getPositionY() + component.getHeight() > maxY) {
