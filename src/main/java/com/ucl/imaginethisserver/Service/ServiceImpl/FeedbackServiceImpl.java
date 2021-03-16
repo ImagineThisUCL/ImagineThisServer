@@ -4,6 +4,7 @@ import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
 import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.DAO.FeedbackDao;
 import com.ucl.imaginethisserver.DAO.FeedbackDto;
+import com.ucl.imaginethisserver.DAO.ProjectDao;
 import com.ucl.imaginethisserver.Mapper.FeedbackDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.VoteDynamicSqlSupport;
 import com.ucl.imaginethisserver.Mapper.VoteMapper;
@@ -28,10 +29,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     private final Logger logger = LoggerFactory.getLogger(FeedbackServiceImpl.class);
 
     private final FeedbackDao feedbackDao;
+    private final ProjectDao projectDao;
 
     @Autowired
-    public FeedbackServiceImpl(FeedbackDao feedbackDao) {
+    public FeedbackServiceImpl(FeedbackDao feedbackDao, ProjectDao projectDao) {
         this.feedbackDao = feedbackDao;
+        this.projectDao = projectDao;
     }
 
     @Override

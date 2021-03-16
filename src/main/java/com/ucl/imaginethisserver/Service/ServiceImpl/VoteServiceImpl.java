@@ -41,7 +41,7 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public UUID voteFeedback(String projectID, UUID feedbackID, Vote vote) {
+    public boolean voteFeedback(String projectID, UUID feedbackID, Vote vote) {
         if (vote.getVoteValue() != 1 && vote.getVoteValue() != -1) {
             logger.error("Vote value can only be 1 or -1");
             throw new InternalServerErrorException();
@@ -60,9 +60,9 @@ public class VoteServiceImpl implements VoteService {
         logger.info("Getting feedbackID: " + feedbackID);
         vote.setFeedbackId(feedbackID);
         if (voteDao.voteFeedback(projectID, feedbackID, vote)) {
-            return UUID.fromString(vote.getVoteId().toString());
+            return true;
         } else {
-            return null;
+            return false;
         }
     }
 

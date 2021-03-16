@@ -31,14 +31,23 @@ public class ProjectController {
         boolean result = projectService.addProject(project);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(result) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/projects/{project-id}")
     public ResponseEntity<Map<String, String>> getProjectNameByID(@PathVariable("project-id") String projectID) {
-        Map<String, String> m = new HashMap<>();
-        m.put("projectName", projectService.getProjectNameByID(projectID));
-        return ResponseEntity.ok(m);
+        Map<String, String> response = new HashMap<>();
+        String projectName = projectService.getProjectNameByID(projectID);
+        response.put("projectName", projectName);
+        if(projectName!=null){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PatchMapping("/projects/{project-id}")
@@ -47,6 +56,10 @@ public class ProjectController {
         boolean result = projectService.updateProject(projectID, project);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(result) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
     }
 }

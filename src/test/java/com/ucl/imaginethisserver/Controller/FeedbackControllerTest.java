@@ -11,6 +11,7 @@ import com.ucl.imaginethisserver.Model.Vote;
 import com.ucl.imaginethisserver.Service.FeedbackService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,11 +28,13 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import org.mockito.ArgumentMatchers;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -83,7 +86,7 @@ class FeedbackControllerTest {
     * The following tests will test the getAllFeedbacks method
     * */
     @Test
-    void givenFeedbacks_whenGetAllFeedbacks_thenReturnJsonArray() throws Exception{
+    void givenValidProjectID_whenGetAllFeedbacks_thenReturnJsonArray() throws Exception{
 
         given(service.getFeedbacksWithVotes(mockProjectID)).willReturn(mockFeedbackList);
 
@@ -104,6 +107,10 @@ class FeedbackControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /*
+     * The following tests will test the getFeedbackByID method
+     * */
+
     @Test
     void givenInvalidProjectIDOrFeedbackID_whenGetFeedbackByID_thenReturnErrorNotFound() throws Exception {
         String projectID = "invalidProjectID";
@@ -119,6 +126,93 @@ class FeedbackControllerTest {
         mockMvc.perform(get("/api/v1/projects/" + mockProjectID + "/feedback/" + feedbackID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    /*
+     * The following tests will test the addNewFeedback method
+     * */
+
+    @Test
+    void givenValidProjectID_whenAddNewFeedback_thenReturnSuccess() throws Exception {
+        given(service.addNewFeedback(ArgumentMatchers.eq(mockProjectID), any(Feedback.class))).willReturn(true);
+        ObjectMapper mapper = new ObjectMapper();
+
+        String requestJson= mapper.writeValueAsString(mockFeedback);
+
+        mockMvc.perform(post("/api/v1/projects/" + mockProjectID + "/feedback")
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void givenInvalidProjectID_whenAddNewFeedback_thenReturnErrorNotFound() throws Exception {
+        String projectID = "invalidProjectID";
+        ObjectMapper mapper = new ObjectMapper();
+
+        FeedbackDto invalidFeedback = new FeedbackDto();
+        invalidFeedback.setFeedbackId(mockFeedbackID);
+        invalidFeedback.setProjectId(projectID);
+        invalidFeedback.setUserId(mockUserID);
+        invalidFeedback.setUserName(mockUserName);
+        invalidFeedback.setTimestamp(System.currentTimeMillis());
+
+        given(service.getFeedbacksWithVotes(projectID)).willThrow(new NotFoundException());
+        String requestJson= mapper.writeValueAsString(mockFeedback);
+
+        mockMvc.perform(post("/api/v1/projects/" + projectID + "/feedback")
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andExpect(status().isNotFound());
+    }
+
+    /*
+     * The following tests will test the updateFeedback method
+     * */
+
+    @Test
+    void givenValidProjectIDAndFeedbackID_whenUpdateFeedback_thenReturnSuccess() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+
+        given(service.updateFeedback(ArgumentMatchers.eq(mockProjectID), ArgumentMatchers.eq(mockFeedbackID), any(Feedback.class))).willReturn(true);
+        String requestJson = mapper.writeValueAsString(mockFeedback);
+
+        mockMvc.perform(patch("/api/v1/projects/" + mockProjectID + "/feedback/" + mockFeedbackID)
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void givenInvalidProjectIDOrFeedbackID_whenUpdateFeedback_thenReturnErrorNotFound() throws Exception {
+        String projectID = "invalidProjectID";
+        UUID feedbackID = UUID.randomUUID();
+        ObjectMapper mapper = new ObjectMapper();
+
+        given(service.updateFeedback(projectID, mockFeedbackID, mockFeedback)).willThrow(new NotFoundException());
+        given(service.updateFeedback(mockProjectID, feedbackID, mockFeedback)).willThrow(new NotFoundException());
+        String requestJson = mapper.writeValueAsString(mockFeedback);
+
+        mockMvc.perform(patch("/api/v1/projects/" + projectID + "/feedback/" + mockFeedbackID)
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(patch("/api/v1/projects/" + mockProjectID + "/feedback/" + feedbackID)
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andExpect(status().isNotFound());
+    }
+
+    /*
+     * The following tests will test the deleteFeedback method
+     * */
+
+    @Test
+    void givenValidProjectIDAndFeedbackID_whenDeleteFeedback_thenReturnSuccess() throws Exception {
+        given(service.deleteFeedback(mockProjectID, mockFeedbackID)).willReturn(true);
+        ObjectMapper mapper = new ObjectMapper();
+
+        String requestJson= mapper.writeValueAsString(mockFeedback);
+
+        mockMvc.perform(delete("/api/v1/projects/" + mockProjectID + "/feedback/" + mockFeedbackID)
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andExpect(status().isOk());
     }
 
     @Test

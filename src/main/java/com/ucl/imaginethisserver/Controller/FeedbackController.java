@@ -47,7 +47,11 @@ public class FeedbackController {
         boolean result = feedbackService.updateFeedback(projectID, feedbackID, feedback);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(result) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/projects/{project-id}/feedback/{feedback-id}")
@@ -57,15 +61,23 @@ public class FeedbackController {
         boolean result = feedbackService.deleteFeedback(projectID, feedbackID);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(result) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/projects/{project-id}/feedback")
     public ResponseEntity<Map<String, Boolean>> addNewFeedback(@PathVariable("project-id") String projectID,
                                                                @RequestBody Feedback feedback) {
-        Boolean result = feedbackService.addNewFeedback(projectID, feedback);
+        boolean result = feedbackService.addNewFeedback(projectID, feedback);
         Map<String, Boolean> response = new HashMap<>();
         response.put("success", result);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(result) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
     }
 }

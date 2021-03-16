@@ -1,6 +1,7 @@
 package com.ucl.imaginethisserver.Service;
 
 import com.ucl.imaginethisserver.DAO.FeedbackDao;
+import com.ucl.imaginethisserver.DAO.ProjectDao;
 import com.ucl.imaginethisserver.Mapper.FeedbackMapper;
 import com.ucl.imaginethisserver.Mapper.ProjectMapper;
 import com.ucl.imaginethisserver.Mapper.VoteMapper;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FeedbackServiceImplTest {
 
     static FeedbackDao mockFeedbackDao;
+    static ProjectDao mockProjectDao;
     static Feedback testFeedback;
     static List<Feedback> testFeedbacks;
     static FeedbackServiceImpl feedbackService;
@@ -34,6 +36,7 @@ public class FeedbackServiceImplTest {
     @BeforeAll
     static void mockDAO() {
         mockFeedbackDao = mock(FeedbackDao.class);
+        mockProjectDao = mock(ProjectDao.class);
 
         // Prepare random feedbacks
         testFeedback = new Feedback();
@@ -51,7 +54,7 @@ public class FeedbackServiceImplTest {
         when(mockFeedbackDao.getFeedbackByID("test", FEEDBACK_ID)).thenReturn(testFeedback);
 
         // Create FeedbackService with mocked DAO
-        feedbackService = new FeedbackServiceImpl(mockFeedbackDao);
+        feedbackService = new FeedbackServiceImpl(mockFeedbackDao, mockProjectDao);
     }
 
     @Test
@@ -80,4 +83,44 @@ public class FeedbackServiceImplTest {
         assertEquals(resultFeedback.getUserId(), FEEDBACK_USER_ID);
         assertEquals(resultFeedback.getTimestamp(), FEEDBACK_TIMESTAMP);
     }
+
+
+    @Test
+    void addNewFeedbackTest(){
+        UUID FEEDBACK_ID = UUID.fromString("4744b5d3-27cd-491d-a8f4-32d263327797");
+        // Prepare random new feedbacks
+        Feedback newFeedback = new Feedback();
+        newFeedback.setFeedbackId(FEEDBACK_ID);
+        newFeedback.setProjectId(FEEDBACK_PROJECT_ID);
+        newFeedback.setUserId(FEEDBACK_USER_ID);
+        newFeedback.setUserName(FEEDBACK_USERNAME);
+        newFeedback.setText(FEEDBACK_TEXT);
+        newFeedback.setTimestamp(FEEDBACK_TIMESTAMP);
+        testFeedbacks.add(newFeedback);
+
+        when(mockFeedbackDao.addNewFeedback(eq(FEEDBACK_PROJECT_ID), any(Feedback.class))).thenReturn(1);
+
+        boolean result = feedbackService.addNewFeedback(FEEDBACK_PROJECT_ID, newFeedback);
+        assertEquals(result, true);
+    }
+
+    @Test
+    void updateFeedbackTest(){
+        testFeedback.setText("Needs improvement!");
+        when(mockFeedbackDao.getFeedbackByID(FEEDBACK_PROJECT_ID, FEEDBACK_ID)).thenReturn(testFeedback);
+        when(mockFeedbackDao.updateFeedback(FEEDBACK_PROJECT_ID, FEEDBACK_ID, testFeedback)).thenReturn(1);
+
+        boolean result = feedbackService.updateFeedback(FEEDBACK_PROJECT_ID, FEEDBACK_ID, testFeedback);
+        assertEquals(result, true);
+    }
+
+    @Test
+    void deleteFeedbackText(){
+        when(mockFeedbackDao.deleteFeedback(FEEDBACK_PROJECT_ID, FEEDBACK_ID)).thenReturn(1);
+
+        boolean result = feedbackService.deleteFeedback(FEEDBACK_PROJECT_ID, FEEDBACK_ID);
+        assertEquals(result, true);
+    }
+
+
 }

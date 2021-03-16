@@ -1,6 +1,7 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
 import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
+import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.DAO.UserDao;
 import com.ucl.imaginethisserver.Model.User;
 import com.ucl.imaginethisserver.Model.Vote;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
             return votes;
         } else {
             logger.error("Cannot get Votes for Feedback " + userID + ", because there's no record");
-            throw new InternalServerErrorException();
+            throw new NotFoundException();
         }
     }
 
