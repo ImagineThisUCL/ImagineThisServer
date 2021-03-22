@@ -1,6 +1,6 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
-public class RectangleComponent extends FrontendComponent {
+public class RectangleComponent extends ReactComponent {
 
     @Override
     public String getReusableComponentName() { return null; }

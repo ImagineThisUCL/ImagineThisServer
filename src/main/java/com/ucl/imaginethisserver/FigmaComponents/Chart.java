@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.ChartComponent;
+import com.ucl.imaginethisserver.ReactComponents.ChartComponent;
 
 public class Chart extends Group {
 

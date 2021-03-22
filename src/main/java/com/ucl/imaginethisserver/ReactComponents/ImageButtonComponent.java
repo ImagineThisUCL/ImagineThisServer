@@ -1,10 +1,10 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 /**
  *  Image button that contains the image of the button's view and
  *  the transitionNodeID of the button, basically the redirect link of it.
 */
-public class ImageButtonComponent extends FrontendComponent {
+public class ImageButtonComponent extends ReactComponent {
     private String imageURL;
     private String transitionNodeID;
     private String transitionNodeName;

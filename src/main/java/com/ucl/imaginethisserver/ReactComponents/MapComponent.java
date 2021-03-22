@@ -1,7 +1,7 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 
-public class MapComponent extends FrontendComponent {
+public class MapComponent extends ReactComponent {
 
     @Override
     public String getReusableComponentName() { return "GoogleMap.js"; }

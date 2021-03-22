@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.TextBoxComponent;
+import com.ucl.imaginethisserver.ReactComponents.TextBoxComponent;
 
 public class TextBox extends Group {
 

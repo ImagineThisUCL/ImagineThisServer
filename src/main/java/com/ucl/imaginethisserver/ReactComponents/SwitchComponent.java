@@ -1,10 +1,10 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 
 /**
  *  Switch object that only generates switch frontend code with fixed variables
  */
-public class SwitchComponent extends FrontendComponent {
+public class SwitchComponent extends ReactComponent {
 
     @Override
     public String getReusableComponentName() { return "Toggle.js"; }

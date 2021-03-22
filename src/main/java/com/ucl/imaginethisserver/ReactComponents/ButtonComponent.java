@@ -1,6 +1,6 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
-public class ButtonComponent extends FrontendComponent {
+public class ButtonComponent extends ReactComponent {
 
     private String characters;
     private String transitionNodeID;

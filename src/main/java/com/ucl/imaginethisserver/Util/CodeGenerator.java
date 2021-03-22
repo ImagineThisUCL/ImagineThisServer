@@ -2,19 +2,15 @@ package com.ucl.imaginethisserver.Util;
 
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
-import com.ucl.imaginethisserver.FrontendComponents.AppJSComponent;
-import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
-import com.ucl.imaginethisserver.FrontendComponents.NavBarComponent;
-import com.ucl.imaginethisserver.FrontendComponents.WireframeComponent;
+import com.ucl.imaginethisserver.ReactComponents.AppJSComponent;
+import com.ucl.imaginethisserver.ReactComponents.ReactComponent;
+import com.ucl.imaginethisserver.ReactComponents.WireframeComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -105,7 +101,7 @@ public class CodeGenerator {
         Set<String> reusableComponents = new HashSet<>();
         for (Wireframe wireframe : figmaFile.getWireframes()) {
             WireframeComponent wireframeComponent = new WireframeComponent(wireframe);
-            for (FrontendComponent component : wireframeComponent.getComponents()) {
+            for (ReactComponent component : wireframeComponent.getComponents()) {
                 if (component.requiresReusableComponent()) {
                     reusableComponents.add(component.getReusableComponentName());
                 }

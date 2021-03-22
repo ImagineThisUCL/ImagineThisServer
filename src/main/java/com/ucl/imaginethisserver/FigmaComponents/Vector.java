@@ -1,7 +1,7 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
 
-import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
+import com.ucl.imaginethisserver.ReactComponents.ReactComponent;
 
 /**
  *  A class that represents a Vector component passed from Figma API
@@ -33,6 +33,6 @@ public class Vector extends FigmaComponent {
     }
 
     @Override
-    public FrontendComponent convertToFrontendComponent() { return null; }
+    public ReactComponent convertToFrontendComponent() { return null; }
 
 }

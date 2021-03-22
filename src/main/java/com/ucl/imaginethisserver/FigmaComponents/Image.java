@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.ImageComponent;
+import com.ucl.imaginethisserver.ReactComponents.ImageComponent;
 
 public class Image extends FigmaComponent {
 

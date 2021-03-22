@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.*;
+import com.ucl.imaginethisserver.ReactComponents.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +28,9 @@ public class Form extends Group {
         formComponent.setAlign(this.getAlign());
 
         // Process all children
-        List<FrontendComponent> frontendComponents = new ArrayList<>();
+        List<ReactComponent> reactComponents = new ArrayList<>();
         for (FigmaComponent component : getComponents()) {
-            frontendComponents.add(component.convertToFrontendComponent());
+            reactComponents.add(component.convertToFrontendComponent());
 
             // Process background of applicable
             if (component.getName().contains("background")) {
@@ -40,7 +40,7 @@ public class Form extends Group {
                 formComponent.setBorderWidth(component.getStrokeWeight());
             }
         }
-        formComponent.setComponents(frontendComponents);
+        formComponent.setComponents(reactComponents);
 
         return formComponent;
     }

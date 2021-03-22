@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.SwitchComponent;
+import com.ucl.imaginethisserver.ReactComponents.SwitchComponent;
 
 public class Switch extends FigmaComponent {
 
