@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
 import com.ucl.imaginethisserver.FigmaComponents.*;
@@ -10,22 +10,22 @@ import java.util.List;
 public class WireframeComponent {
 
     private Wireframe wireframe;
-    private List<FrontendComponent> components = new ArrayList<>();
+    private List<ReactComponent> components = new ArrayList<>();
 
     private Color backgroundColor;
     private AbsoluteBoundingBox absoluteBoundingBox;
 
-    public List<FrontendComponent> getComponents() { return components; }
+    public List<ReactComponent> getComponents() { return components; }
 
-    public void setComponents(List<FrontendComponent> frontendComponents) {
+    public void setComponents(List<ReactComponent> reactComponents) {
         components = new ArrayList<>();
-        for (FrontendComponent component : frontendComponents) {
+        for (ReactComponent component : reactComponents) {
             components.add(component);
         }
     }
 
-    public WireframeComponent(List<FrontendComponent> frontendComponents) {
-        for (FrontendComponent component : frontendComponents) {
+    public WireframeComponent(List<ReactComponent> reactComponents) {
+        for (ReactComponent component : reactComponents) {
             components.add(component);
         }
     }
@@ -40,8 +40,8 @@ public class WireframeComponent {
         this.backgroundColor = wireframe.getBackgroundColor();
         this.absoluteBoundingBox = wireframe.getAbsoluteBoundingBox();
         for (FigmaComponent component : wireframe.getComponents()) {
-            FrontendComponent frontendComponent = component.convertToFrontendComponent();
-            components.add(frontendComponent);
+            ReactComponent reactComponent = component.convertToFrontendComponent();
+            components.add(reactComponent);
         }
     }
 
@@ -57,8 +57,8 @@ public class WireframeComponent {
         return code.toString();
     }
 
-    public <T extends FrontendComponent> boolean containsComponent(Class<T> cls) {
-        return FrontendComponent.containsComponent(components, cls);
+    public <T extends ReactComponent> boolean containsComponent(Class<T> cls) {
+        return ReactComponent.containsComponent(components, cls);
     }
 
     /**Generate the source code of import section. Which components should be imported are determined by the included reusable components
@@ -129,15 +129,15 @@ public class WireframeComponent {
                 "            <ScrollView style={{flex: 1, padding: 0, backgroundColor: ").append(backgroundColor.toString()).append("}}>\n");
         if (components.isEmpty()) { return ""; }
         // Put all of the components in the same line in one list
-        List<List<FrontendComponent>> inlineComponentList = FrontendComponent.getInlineComponentList(components);
+        List<List<ReactComponent>> inlineComponentList = ReactComponent.getInlineComponentList(components);
         int preY = absoluteBoundingBox.getY();
-        for (List<FrontendComponent> line : inlineComponentList) {
+        for (List<ReactComponent> line : inlineComponentList) {
             // There is only one component in this line. Equations for positioning:
             // widthWireframe = marginLeft + widthElement + marginRight
             // marginLeft = positionXElement - positionXWireframe
             // marginTop = positionYElement - positionYPreviousElement - heightPreviousElement
             if (line.size() == 1) {
-                FrontendComponent component = line.get(0);
+                ReactComponent component = line.get(0);
                 int marginTop = Math.max(component.getPositionY() - preY, 0);
                 int marginLeft = component.getPositionX() - absoluteBoundingBox.getX();
                 viewCode.append(String.format("<View style={{marginTop: %d, marginLeft: %d}}>\n", marginTop, marginLeft));
@@ -149,14 +149,14 @@ public class WireframeComponent {
             else if (line.size() > 1) {
                 int minY = Integer.MAX_VALUE;
                 int maxY = -1;
-                for (FrontendComponent component : line) {
+                for (ReactComponent component : line) {
                     if (component.getPositionY() < minY) {
                         minY = component.getPositionY();
                     }
                 }
                 int marginTop = Math.max(minY - preY, 0);
                 viewCode.append(String.format("<View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: %d}}>\n", marginTop));
-                for (FrontendComponent component : line) {
+                for (ReactComponent component : line) {
                     viewCode.append(component.generateCode()).append("\n");
                     if (component.getPositionY() + component.getHeight() > maxY) {
                         maxY = component.getPositionY() + component.getHeight();

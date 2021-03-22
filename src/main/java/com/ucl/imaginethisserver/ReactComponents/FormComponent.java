@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +35,10 @@ public class FormComponent extends GroupComponent {
             }
             int preY = getPositionY();
             if (!getComponents().isEmpty()) {
-                List<List<FrontendComponent>> inlineComponentList = FrontendComponent.getInlineComponentList(getComponents());
-                for (List<FrontendComponent> curList : inlineComponentList) {
+                List<List<ReactComponent>> inlineComponentList = ReactComponent.getInlineComponentList(getComponents());
+                for (List<ReactComponent> curList : inlineComponentList) {
                     if (curList.size() == 1) {
-                        FrontendComponent component = curList.get(0);
+                        ReactComponent component = curList.get(0);
                         int marginTop = Math.max(curList.get(0).getPositionY() - preY, 0);
                         if (component.getAlign().equals("RIGHT")) {
                             code.append("<View style={{flexDirection: 'row', marginTop: " + marginTop + ", justifyContent: 'flex-end'}}>\n");
@@ -54,14 +54,14 @@ public class FormComponent extends GroupComponent {
                     } else if (curList.size() > 1) {
                         int minY = Integer.MAX_VALUE;
                         int maxY = -1;
-                        for (FrontendComponent component : curList) {
+                        for (ReactComponent component : curList) {
                             if (component.getPositionY() < minY) {
                                 minY = component.getPositionY();
                             }
                         }
                         int marginTop = Math.max(minY - preY, 0);
                         code.append("<View style={{flexDirection: 'row', justifyContent: \"space-between\", marginTop: " + marginTop + "}}>\n");
-                        for (FrontendComponent component : curList) {
+                        for (ReactComponent component : curList) {
                             int flex = Math.max((int) (((double) component.getWidth()) / ((double) getWidth()) * 10), 1);
                             component.setFlex(flex);
                             code.append("<View style={{flex: " + flex + "}}>\n");

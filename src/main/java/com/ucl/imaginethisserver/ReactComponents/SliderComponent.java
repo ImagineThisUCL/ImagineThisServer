@@ -1,11 +1,11 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 
 /**
  *  Frontend Component Slider that contains
  *  the minimum value, the maximum value and current value of the slider.
 */
-public class SliderComponent extends FrontendComponent {
+public class SliderComponent extends ReactComponent {
 
     private int minValue;
     private int maxValue;

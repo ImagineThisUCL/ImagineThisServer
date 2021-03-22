@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Color;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class NavBarComponent extends GroupComponent {
                     "                },\n" +
                     "            }}>").append("\n");
 
-            for (FrontendComponent component : getComponents()) {
+            for (ReactComponent component : getComponents()) {
                 if (!(component instanceof NavigationButtonComponent)) continue;
                 NavigationButtonComponent navigationButton = (NavigationButtonComponent) component;
                 code.append(" <Tab.Screen\n" +

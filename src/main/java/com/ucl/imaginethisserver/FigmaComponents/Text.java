@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.TextComponent;
+import com.ucl.imaginethisserver.ReactComponents.TextComponent;
 
 import java.util.List;
 /**

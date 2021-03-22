@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.DropdownComponent;
+import com.ucl.imaginethisserver.ReactComponents.DropdownComponent;
 
 
 public class Dropdown extends Group {

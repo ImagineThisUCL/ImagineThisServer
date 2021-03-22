@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Color;
 import com.ucl.imaginethisserver.FigmaComponents.Paint;
@@ -6,7 +6,7 @@ import com.ucl.imaginethisserver.FigmaComponents.Paint;
 import java.util.List;
 
 
-public class TextBoxComponent extends FrontendComponent {
+public class TextBoxComponent extends ReactComponent {
 
     private String placeholder = null;
     private String label = null;

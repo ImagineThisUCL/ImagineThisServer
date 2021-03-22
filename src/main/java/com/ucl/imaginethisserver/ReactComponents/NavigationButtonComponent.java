@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 
 public class NavigationButtonComponent extends ImageButtonComponent {

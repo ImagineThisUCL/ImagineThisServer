@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.NavBarComponent;
+import com.ucl.imaginethisserver.ReactComponents.NavBarComponent;
 
 import java.util.ArrayList;
 import java.util.List;

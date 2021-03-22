@@ -1,6 +1,6 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
-public class ChartComponent extends FrontendComponent {
+public class ChartComponent extends ReactComponent {
 
     @Override
     public String getReusableComponentName() { return "Chart.js"; }

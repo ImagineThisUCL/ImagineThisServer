@@ -1,9 +1,9 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 /**
  *  Frontend Component Image that contains the URL of the actual image within.
 */
-public class ImageComponent extends FrontendComponent {
+public class ImageComponent extends ReactComponent {
 
     private String imageURL;
 

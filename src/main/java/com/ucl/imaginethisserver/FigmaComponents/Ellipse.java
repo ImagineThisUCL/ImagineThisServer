@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
+import com.ucl.imaginethisserver.ReactComponents.ReactComponent;
 
 
 /**
@@ -12,7 +12,7 @@ import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
 public class Ellipse extends FigmaComponent {
 
     @Override
-    public FrontendComponent convertToFrontendComponent() {
+    public ReactComponent convertToFrontendComponent() {
         return null;
     }
 

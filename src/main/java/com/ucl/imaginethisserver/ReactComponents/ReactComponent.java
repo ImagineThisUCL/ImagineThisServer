@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.Color;
 import com.ucl.imaginethisserver.FigmaComponents.Paint;
@@ -9,9 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * The abstract class to represent a frontend component. All of the frontend components inherit this class.
+ * The abstract class to represent a React component. All of the React components inherit this class.
  */
-public abstract class FrontendComponent {
+public abstract class ReactComponent {
 
     private int width;
     private int height;
@@ -144,9 +144,9 @@ public abstract class FrontendComponent {
     * @param anotherComponent The other frontend components.
     * @return
     */
-    public boolean isSameLine(FrontendComponent anotherComponent) {
-        FrontendComponent lowerComponent;
-        FrontendComponent higherComponent;
+    public boolean isSameLine(ReactComponent anotherComponent) {
+        ReactComponent lowerComponent;
+        ReactComponent higherComponent;
         if (positionY <= anotherComponent.getPositionY()) {
             lowerComponent = this;
             higherComponent = anotherComponent;
@@ -162,17 +162,17 @@ public abstract class FrontendComponent {
      * Put all of the front components that are considered in the same line into one sub list.
      * @return A list of front component list, each sublist contains the components that are considered at the same horizontal line.
      */
-    public static List<List<FrontendComponent>> getInlineComponentList(List<FrontendComponent> frontendComponents) {
-        List<List<FrontendComponent>> linesList = new ArrayList<>();
+    public static List<List<ReactComponent>> getInlineComponentList(List<ReactComponent> reactComponents) {
+        List<List<ReactComponent>> linesList = new ArrayList<>();
         // Sort components
-        frontendComponents.sort((o1, o2) -> {
+        reactComponents.sort((o1, o2) -> {
             if (o1.getPositionY() > o2.getPositionY()) return 1;
             else return -1;
         });
         // We are going to use the fact that isSameLine is an equivalence relation
-        for (FrontendComponent component : frontendComponents) {
+        for (ReactComponent component : reactComponents) {
             boolean lineFound = false;
-            for (List<FrontendComponent> line : linesList) {
+            for (List<ReactComponent> line : linesList) {
                 if (component.isSameLine(line.get(0))) {
                     line.add(component);
                     lineFound = true;
@@ -185,7 +185,7 @@ public abstract class FrontendComponent {
             }
         }
         // Sort all lines
-        for (List<FrontendComponent> line : linesList) {
+        for (List<ReactComponent> line : linesList) {
             line.sort((o1, o2) -> {
                 if (o1.getPositionX() > o2.getPositionX()) return 1;
                 else return -1;
@@ -195,8 +195,8 @@ public abstract class FrontendComponent {
     }
 
 
-    public static <T extends FrontendComponent> boolean containsComponent(List<FrontendComponent> frontendComponents, Class<T> cls) {
-        for (FrontendComponent component : frontendComponents) {
+    public static <T extends ReactComponent> boolean containsComponent(List<ReactComponent> reactComponents, Class<T> cls) {
+        for (ReactComponent component : reactComponents) {
             if (cls.isInstance(component)) return true;
         }
         return false;

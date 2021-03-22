@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 import com.ucl.imaginethisserver.FigmaComponents.FigmaComponent;
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
@@ -40,7 +40,7 @@ public class AppJSComponent {
         for (FigmaComponent component : figmaFile.getComponents()) {
             if (component instanceof Navigation) {
                 containsNavigation = true;
-                FrontendComponent navBar = component.convertToFrontendComponent();
+                ReactComponent navBar = component.convertToFrontendComponent();
                 viewCode.append("const Tab = createBottomTabNavigator();\n");
                 viewCode.append(navBar.generateCode());
             }

@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.RectangleComponent;
+import com.ucl.imaginethisserver.ReactComponents.RectangleComponent;
 
 import java.util.List;
 

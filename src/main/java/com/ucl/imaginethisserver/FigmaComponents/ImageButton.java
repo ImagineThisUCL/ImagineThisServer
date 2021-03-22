@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.ImageButtonComponent;
+import com.ucl.imaginethisserver.ReactComponents.ImageButtonComponent;
 
 public class ImageButton extends Group {
 

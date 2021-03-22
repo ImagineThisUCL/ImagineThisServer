@@ -2,7 +2,7 @@ package com.ucl.imaginethisserver.FigmaComponents;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ucl.imaginethisserver.FrontendComponents.FrontendComponent;
+import com.ucl.imaginethisserver.ReactComponents.ReactComponent;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ abstract public class FigmaComponent {
     private FigmaFile figmaFile; // Give each component access to the whole file
     private String align;
 
-    public abstract FrontendComponent convertToFrontendComponent();
+    public abstract ReactComponent convertToFrontendComponent();
 
     public String toString() {
         GsonBuilder builder = new GsonBuilder();

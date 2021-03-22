@@ -1,7 +1,7 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.NavBarComponent;
-import com.ucl.imaginethisserver.FrontendComponents.NavigationButtonComponent;
+import com.ucl.imaginethisserver.ReactComponents.NavBarComponent;
+import com.ucl.imaginethisserver.ReactComponents.NavigationButtonComponent;
 
 public class Navigation extends Group {
 

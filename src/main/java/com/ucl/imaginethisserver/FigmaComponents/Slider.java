@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.SliderComponent;
+import com.ucl.imaginethisserver.ReactComponents.SliderComponent;
 
 public class Slider extends Group {
 

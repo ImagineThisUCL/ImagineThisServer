@@ -1,4 +1,4 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 
 /**
@@ -7,7 +7,7 @@ package com.ucl.imaginethisserver.FrontendComponents;
  *  in order to be used in code generation, inheriting most of the Text variables
  *  and modifying some to make it fits the frontend
 */
-public class TextComponent extends FrontendComponent {
+public class TextComponent extends ReactComponent {
 
     private String text;
 

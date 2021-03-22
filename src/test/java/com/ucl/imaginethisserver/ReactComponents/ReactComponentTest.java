@@ -1,19 +1,16 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
-class FrontendComponentTest {
+class ReactComponentTest {
 
     @Test
     void isSameLine() {
-        FrontendComponent a = new ButtonComponent();
-        FrontendComponent b = new ButtonComponent();
+        ReactComponent a = new ButtonComponent();
+        ReactComponent b = new ButtonComponent();
         a.setWidth(100);
         a.setHeight(100);
         a.setPositionX(10);
@@ -35,25 +32,25 @@ class FrontendComponentTest {
 
     @Test
     void getInlineComponentList() {
-        FrontendComponent a = new ButtonComponent();
+        ReactComponent a = new ButtonComponent();
         a.setWidth(30);
         a.setHeight(30);
         a.setPositionX(10);
         a.setPositionY(5);
 
-        FrontendComponent b = new ButtonComponent();
+        ReactComponent b = new ButtonComponent();
         b.setWidth(30);
         b.setHeight(30);
         b.setPositionX(10);
         b.setPositionY(40);
 
-        FrontendComponent c = new ButtonComponent();
+        ReactComponent c = new ButtonComponent();
         c.setWidth(30);
         c.setHeight(30);
         c.setPositionX(100);
         c.setPositionY(40);
 
-        FrontendComponent d = new ButtonComponent();
+        ReactComponent d = new ButtonComponent();
         d.setWidth(30);
         d.setHeight(30);
         d.setPositionX(10);

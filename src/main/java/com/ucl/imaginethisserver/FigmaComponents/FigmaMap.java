@@ -1,6 +1,6 @@
 package com.ucl.imaginethisserver.FigmaComponents;
 
-import com.ucl.imaginethisserver.FrontendComponents.MapComponent;
+import com.ucl.imaginethisserver.ReactComponents.MapComponent;
 
 public class FigmaMap extends FigmaComponent {
 

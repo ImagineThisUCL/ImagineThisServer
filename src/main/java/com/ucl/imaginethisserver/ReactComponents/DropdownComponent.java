@@ -1,6 +1,6 @@
-package com.ucl.imaginethisserver.FrontendComponents;
+package com.ucl.imaginethisserver.ReactComponents;
 
-public class DropdownComponent extends FrontendComponent {
+public class DropdownComponent extends ReactComponent {
 
     // First default option of the dropdown.
     private String option;
