@@ -1,7 +1,7 @@
 package com.ucl.imaginethisserver.Controller;
 
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
-import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
+import com.ucl.imaginethisserver.FigmaComponents.FigmaWireframe;
 import com.ucl.imaginethisserver.Requests.BuildRequest;
 import com.ucl.imaginethisserver.Responses.WireframesResponse;
 import com.ucl.imaginethisserver.Service.GenerationService;
@@ -113,7 +113,7 @@ public class GenerationController {
         Authentication auth = new Authentication(type, accessToken);
         FigmaFile figmaFile = generationService.getFigmaFile(projectID, auth);
         String projectName = figmaFile.getProjectName();
-        List<Wireframe> wireframes = figmaFile.getWireframes();
+        List<FigmaWireframe> wireframes = figmaFile.getWireframes();
         WireframesResponse response = new WireframesResponse(projectID, projectName, wireframes);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

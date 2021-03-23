@@ -1,15 +1,15 @@
 package com.ucl.imaginethisserver.ReactComponents;
 
-import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
+import com.ucl.imaginethisserver.FigmaComponents.FigmaWireframe;
 import com.ucl.imaginethisserver.FigmaComponents.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WireframeComponent {
+public class ReactWireframe {
 
-    private Wireframe wireframe;
+    private FigmaWireframe wireframe;
     private List<ReactComponent> components = new ArrayList<>();
 
     private Color backgroundColor;
@@ -24,7 +24,7 @@ public class WireframeComponent {
         }
     }
 
-    public WireframeComponent(List<ReactComponent> reactComponents) {
+    public ReactWireframe(List<ReactComponent> reactComponents) {
         for (ReactComponent component : reactComponents) {
             components.add(component);
         }
@@ -35,7 +35,7 @@ public class WireframeComponent {
      * @param wireframe
      * @throws IOException
      */
-    public WireframeComponent(Wireframe wireframe) {
+    public ReactWireframe(FigmaWireframe wireframe) {
         this.wireframe = wireframe;
         this.backgroundColor = wireframe.getBackgroundColor();
         this.absoluteBoundingBox = wireframe.getAbsoluteBoundingBox();

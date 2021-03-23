@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class WireframeTest {
+public class FigmaWireframeTest {
 
     @Test
     void givenMalformedWireframeName_whenRequested_thenReturnSanitizedName() {
-        Wireframe wireframe = new Wireframe();
+        FigmaWireframe wireframe = new FigmaWireframe();
         // Make sure wireframe names are capitalized, because they will form React classes
         wireframe.setName("wireframe");
         assertEquals("Wireframe", wireframe.getName());

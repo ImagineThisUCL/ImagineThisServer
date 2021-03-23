@@ -19,7 +19,7 @@ public class ImageButton extends Group {
         imageButtonComponent.setAlign(this.getAlign());
         if (getTransitionNodeID() != null) {
             imageButtonComponent.setTransitionNodeID(getTransitionNodeID());
-            Wireframe transitionWireframe = getFigmaFile().getWireframeById(getTransitionNodeID());
+            FigmaWireframe transitionWireframe = getFigmaFile().getWireframeById(getTransitionNodeID());
             imageButtonComponent.setTransitionNodeName(transitionWireframe.getName());
         }
         for (FigmaComponent component : getComponents()) {

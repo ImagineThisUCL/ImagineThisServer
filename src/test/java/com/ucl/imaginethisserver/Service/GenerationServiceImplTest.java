@@ -7,8 +7,8 @@ import com.ucl.imaginethisserver.DAO.DAOImpl.ConversionDaoImpl;
 import com.ucl.imaginethisserver.DAO.DAOImpl.ProjectDaoImpl;
 import com.ucl.imaginethisserver.Util.*;
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
-import com.ucl.imaginethisserver.FigmaComponents.Page;
-import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
+import com.ucl.imaginethisserver.FigmaComponents.FigmaPage;
+import com.ucl.imaginethisserver.FigmaComponents.FigmaWireframe;
 import com.ucl.imaginethisserver.Service.ServiceImpl.GenerationServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,16 +82,16 @@ public class GenerationServiceImplTest {
         assertEquals("2021-02-14T08:52:49Z", testFigmaFile.getLastModified());
         assertEquals("677374936", testFigmaFile.getVersion());
 
-        List<Page> pages = testFigmaFile.getPages();
-        List<Wireframe> wireframes = testFigmaFile.getWireframes();
+        List<FigmaPage> figmaPages = testFigmaFile.getPages();
+        List<FigmaWireframe> wireframes = testFigmaFile.getWireframes();
         // Secondly, check there is 1 page inside the project with correct name and ID
-        assertEquals(1, pages.size());
-        assertEquals("0:1", pages.get(0).getId());
-        assertEquals("Page 1", pages.get(0).getName());
+        assertEquals(1, figmaPages.size());
+        assertEquals("0:1", figmaPages.get(0).getId());
+        assertEquals("Page 1", figmaPages.get(0).getName());
 
         // Thirdly, check 2 wireframes inside the project with correct names
         assertEquals(2, wireframes.size());
-        for (Wireframe wireframe : wireframes) {
+        for (FigmaWireframe wireframe : wireframes) {
             assertThat(wireframe.getId(), anyOf(is("1:2"), is("202:4")));
             assertThat(wireframe.getName(), anyOf(is("Wireframe1"), is("Wireframe2")));
         }

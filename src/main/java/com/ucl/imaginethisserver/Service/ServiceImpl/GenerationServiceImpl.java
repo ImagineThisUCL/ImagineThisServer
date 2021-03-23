@@ -75,7 +75,7 @@ public class GenerationServiceImpl implements GenerationService {
         }
 
         // Filter out only selected wireframes
-        wireframeList = wireframeList.stream().map(name -> Wireframe.convertToWireframeName(name)).collect(Collectors.toList());
+        wireframeList = wireframeList.stream().map(name -> FigmaWireframe.convertToWireframeName(name)).collect(Collectors.toList());
         figmaFile.filterWireframesByName(wireframeList);
         if (figmaFile.getWireframes().isEmpty()) {
             logger.error("No matching wireframes selected in project {}", projectID);
@@ -168,28 +168,28 @@ public class GenerationServiceImpl implements GenerationService {
         figmaFile.setVersion(rawFigmaFile.get("version").getAsString());
 
         for (JsonElement pageJson : rawFigmaDocument.get("children").getAsJsonArray()) {
-            Page page = new Gson().fromJson(pageJson, Page.class);
-            for (JsonElement jsonComponent : page.getChildren()) {
+            FigmaPage figmaPage = new Gson().fromJson(pageJson, FigmaPage.class);
+            for (JsonElement jsonComponent : figmaPage.getChildren()) {
                 // We are interested only in wireframes
                 if (!jsonComponent.getAsJsonObject().get("type").getAsString().equals("FRAME")) continue;
-                Wireframe wireframe = new Gson().fromJson(jsonComponent, Wireframe.class);
+                FigmaWireframe wireframe = new Gson().fromJson(jsonComponent, FigmaWireframe.class);
                 // Further recursively process components in a wireframe
                 wireframe.setComponents(processJsonComponents(wireframe.getChildren()));
-                page.addWireframe(wireframe);
+                figmaPage.addWireframe(wireframe);
             }
-            figmaFile.addPage(page);
+            figmaFile.addPage(figmaPage);
         }
 
         // Add image URLs to wireframes and components as batch request for optimisation by reducing slow Figma API calls
         List<String> ids = new ArrayList<>();
-        for (Wireframe wireframe : figmaFile.getWireframes()) {
+        for (FigmaWireframe wireframe : figmaFile.getWireframes()) {
             ids.add(wireframe.getId());
         }
         for (FigmaComponent component : figmaFile.getAllComponents()) {
             ids.add(component.getId());
         }
         Map<String, String> imageURLs = figmaAPIUtil.requestComponentImageURLs(projectID, auth, ids);
-        for (Wireframe wireframe : figmaFile.getWireframes()) {
+        for (FigmaWireframe wireframe : figmaFile.getWireframes()) {
             wireframe.setImageURL(imageURLs.get(wireframe.getId()));
         }
         for (FigmaComponent component : figmaFile.getAllComponents()) {

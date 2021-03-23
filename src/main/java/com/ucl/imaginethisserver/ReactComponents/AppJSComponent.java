@@ -3,7 +3,7 @@ package com.ucl.imaginethisserver.ReactComponents;
 import com.ucl.imaginethisserver.FigmaComponents.FigmaComponent;
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
 import com.ucl.imaginethisserver.FigmaComponents.Navigation;
-import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
+import com.ucl.imaginethisserver.FigmaComponents.FigmaWireframe;
 
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ public class AppJSComponent {
                 "import { createStackNavigator } from '@react-navigation/stack';\n" +
                 "import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';\n" +
                 "import { SafeAreaView, Image } from 'react-native';\n");
-        for (Wireframe wireframe : figmaFile.getWireframes()) {
+        for (FigmaWireframe wireframe : figmaFile.getWireframes()) {
             String wireframeName = wireframe.getName();
             importCode.append("import " + wireframeName + " from './components/views/" + wireframeName + ".js';\n");
         }
@@ -61,7 +61,7 @@ public class AppJSComponent {
                     "                        options={{headerShown: false}}/>\n");
         }
         // Add screens for every wireframe
-        for (Wireframe wireframe : figmaFile.getWireframes()) {
+        for (FigmaWireframe wireframe : figmaFile.getWireframes()) {
             viewCode.append("<Stack.Screen\n" +
                             "name='" + wireframe.getName() + "'\n" +
                             "component={" + wireframe.getName() + "}/>\n");
