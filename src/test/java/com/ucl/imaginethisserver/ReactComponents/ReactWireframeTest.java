@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class WireframeComponentTest {
+public class ReactWireframeTest {
 
     @Test
     void getInlineComponentList() {
@@ -40,8 +40,8 @@ public class WireframeComponentTest {
         d.setPositionY(100);
         reactComponents.add(d);
 
-        WireframeComponent wireframeComponent = new WireframeComponent(reactComponents);
-        List<List<ReactComponent>> inlineList = ReactComponent.getInlineComponentList(wireframeComponent.getComponents());
+        ReactWireframe reactWireframe = new ReactWireframe(reactComponents);
+        List<List<ReactComponent>> inlineList = ReactComponent.getInlineComponentList(reactWireframe.getComponents());
         assertEquals(3, inlineList.size());
         assertEquals(1, inlineList.get(0).size());
         assertEquals(2, inlineList.get(1).size());

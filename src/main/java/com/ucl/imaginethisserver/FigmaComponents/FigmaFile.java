@@ -12,35 +12,35 @@ public class FigmaFile {
     private String lastModified;
     private String version;
 
-    private List<Page> pages;
+    private List<FigmaPage> figmaPages;
 
     public FigmaFile(String projectID) {
         this.projectID = projectID;
-        this.pages = new ArrayList<>();
+        this.figmaPages = new ArrayList<>();
     }
 
     public String getProjectID() { return projectID; }
     public String getProjectName() { return projectName; }
     public String getLastModified() { return lastModified; }
     public String getVersion() { return version; }
-    public List<Page> getPages() { return pages; }
+    public List<FigmaPage> getPages() { return figmaPages; }
 
     public void setProjectName(String name) { this.projectName = name; }
     public void setLastModified(String lastModified) { this.lastModified = lastModified; }
     public void setVersion(String version) { this.version = version; }
 
-    public void addPage(Page page) { pages.add(page); }
+    public void addPage(FigmaPage figmaPage) { figmaPages.add(figmaPage); }
 
-    public List<Wireframe> getWireframes() {
-        List<Wireframe> wireframes = new ArrayList<>();
-        for (Page page : pages) {
-            wireframes.addAll(page.getWireframes());
+    public List<FigmaWireframe> getWireframes() {
+        List<FigmaWireframe> wireframes = new ArrayList<>();
+        for (FigmaPage figmaPage : figmaPages) {
+            wireframes.addAll(figmaPage.getWireframes());
         }
         return wireframes;
     }
 
-    public Wireframe getWireframeById(String id) {
-        for (Wireframe wireframe : getWireframes()) {
+    public FigmaWireframe getWireframeById(String id) {
+        for (FigmaWireframe wireframe : getWireframes()) {
             if (wireframe.getId().equals(id)) return wireframe;
         }
         return null;
@@ -48,15 +48,15 @@ public class FigmaFile {
 
     public List<FigmaComponent> getComponents() {
         List<FigmaComponent> figmaComponents = new ArrayList<>();
-        for (Page page : getPages()) {
-            figmaComponents.addAll(page.getComponents());
+        for (FigmaPage figmaPage : getPages()) {
+            figmaComponents.addAll(figmaPage.getComponents());
         }
         return figmaComponents;
     }
     public List<FigmaComponent> getAllComponents() {
         List<FigmaComponent> figmaComponents = new ArrayList<>();
-        for (Page page : getPages()) {
-            figmaComponents.addAll(page.getAllComponents());
+        for (FigmaPage figmaPage : getPages()) {
+            figmaComponents.addAll(figmaPage.getAllComponents());
         }
         return figmaComponents;
     }
@@ -77,8 +77,8 @@ public class FigmaFile {
     }
 
     public void filterWireframesByName(List<String> wireframeList) {
-        for (Page page : getPages()) {
-            page.filterWireframesByName(wireframeList);
+        for (FigmaPage figmaPage : getPages()) {
+            figmaPage.filterWireframesByName(wireframeList);
         }
     }
 }

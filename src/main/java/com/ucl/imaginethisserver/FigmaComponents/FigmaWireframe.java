@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * A wireframe object contains the information of a Figma wireframe.
  */
-public class Wireframe {
+public class FigmaWireframe {
     private String id;
     private String name;
     @ExcludeSerialization
@@ -20,7 +20,7 @@ public class Wireframe {
     private String imageURL;
 
     // Parent page, i.e. page in which this wireframe resides
-    private Page page;
+    private FigmaPage figmaPage;
     @ExcludeSerialization
     private List<FigmaComponent> components;
 
@@ -44,15 +44,15 @@ public class Wireframe {
         }
         return allComponents;
     }
-    public Page getPage() {
-        return page;
+    public FigmaPage getPage() {
+        return figmaPage;
     }
     public Color getBackgroundColor() { return backgroundColor; }
     public String getImageURL() { return imageURL; }
 
     public void setName(String name) { this.name = name; }
-    public void setPage(Page page) {
-        this.page = page;
+    public void setPage(FigmaPage figmaPage) {
+        this.figmaPage = figmaPage;
     }
     public void setImageURL(String imageURL) { this.imageURL = imageURL; }
     public void setComponents(List<FigmaComponent> figmaComponents) {

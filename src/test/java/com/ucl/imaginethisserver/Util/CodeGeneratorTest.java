@@ -66,8 +66,8 @@ public class CodeGeneratorTest {
 
     @Test
     void givenCorrectFigmaFile_whenGeneratingCode_thenCorrectReusableFilesAreCreated() throws IOException {
-        Page testPage = new Page();
-        Wireframe testWireframe = new Wireframe();
+        FigmaPage testPage = new FigmaPage();
+        FigmaWireframe testWireframe = new FigmaWireframe();
         List<FigmaComponent> testComponents = new ArrayList<>();
         // Add some random components, some of which need a reusable component
         testComponents.add(new Button());

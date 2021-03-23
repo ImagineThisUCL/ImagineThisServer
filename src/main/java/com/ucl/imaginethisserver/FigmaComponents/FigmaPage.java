@@ -12,7 +12,7 @@ import java.util.*;
  *  The object contains the id of the page, name of the page and
  *  the wireframes within it listed in the variable children.
  */
-public class Page {
+public class FigmaPage {
     private String id;
     private String name;
     private String type;
@@ -20,9 +20,9 @@ public class Page {
     private JsonArray children;
     private String prototypeStartNodeID;
 
-    private List<Wireframe> wireframes = new ArrayList<>();
+    private List<FigmaWireframe> wireframes = new ArrayList<>();
 
-    private static Logger logger = LoggerFactory.getLogger(Page.class);
+    private static Logger logger = LoggerFactory.getLogger(FigmaPage.class);
 
     public String getId() {
         return id;
@@ -32,10 +32,10 @@ public class Page {
     }
     public String getType() { return type; }
     public JsonArray getChildren() { return children; }
-    public List<Wireframe> getWireframes() { return wireframes; }
+    public List<FigmaWireframe> getWireframes() { return wireframes; }
     public String getPrototypeStartNodeID() { return prototypeStartNodeID; }
 
-    public void addWireframe(Wireframe wireframe) { wireframes.add(wireframe); }
+    public void addWireframe(FigmaWireframe wireframe) { wireframes.add(wireframe); }
 
     /**
      * Function that converts the Figma Page into String
@@ -49,22 +49,22 @@ public class Page {
 
     public List<FigmaComponent> getComponents() {
         List<FigmaComponent> figmaComponents = new ArrayList<>();
-        for (Wireframe wireframe : getWireframes()) {
+        for (FigmaWireframe wireframe : getWireframes()) {
             figmaComponents.addAll(wireframe.getComponents());
         }
         return figmaComponents;
     }
     public List<FigmaComponent> getAllComponents() {
         List<FigmaComponent> figmaComponents = new ArrayList<>();
-        for (Wireframe wireframe : getWireframes()) {
+        for (FigmaWireframe wireframe : getWireframes()) {
             figmaComponents.addAll(wireframe.getAllComponents());
         }
         return figmaComponents;
     }
 
     public void filterWireframesByName(List<String> wireframeList) {
-        List<Wireframe> filteredWireframes = new ArrayList<>();
-        for (Wireframe wireframe : getWireframes()) {
+        List<FigmaWireframe> filteredWireframes = new ArrayList<>();
+        for (FigmaWireframe wireframe : getWireframes()) {
             // Generate only wanted wireframes
             if (!wireframeList.contains(wireframe.getName())) {
                 logger.info("Filtering out wireframe {} from page {}.", wireframe.getName(), getName());

@@ -1,10 +1,10 @@
 package com.ucl.imaginethisserver.Util;
 
 import com.ucl.imaginethisserver.FigmaComponents.FigmaFile;
-import com.ucl.imaginethisserver.FigmaComponents.Wireframe;
+import com.ucl.imaginethisserver.FigmaComponents.FigmaWireframe;
 import com.ucl.imaginethisserver.ReactComponents.AppJSComponent;
 import com.ucl.imaginethisserver.ReactComponents.ReactComponent;
-import com.ucl.imaginethisserver.ReactComponents.WireframeComponent;
+import com.ucl.imaginethisserver.ReactComponents.ReactWireframe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,10 +83,10 @@ public class CodeGenerator {
      */
     public void generateWireframes(FigmaFile figmaFile) throws IOException {
         String projectDirectory = outputStorageFolder + "/" + figmaFile.getProjectID();
-        for (Wireframe wireframe : figmaFile.getWireframes()) {
+        for (FigmaWireframe wireframe : figmaFile.getWireframes()) {
             String wireframeName = wireframe.getName();
-            WireframeComponent wireframeComponent = new WireframeComponent(wireframe);
-            String outputCode = wireframeComponent.generateCode();
+            ReactWireframe reactWireframe = new ReactWireframe(wireframe);
+            String outputCode = reactWireframe.generateCode();
             fileUtil.writeFile(projectDirectory + "/components/views/" + wireframeName + ".js", outputCode);
         }
     }
@@ -99,9 +99,9 @@ public class CodeGenerator {
     public void generateReusableComponents(FigmaFile figmaFile) throws IOException {
         // Find out all the components in the project that require reusable component
         Set<String> reusableComponents = new HashSet<>();
-        for (Wireframe wireframe : figmaFile.getWireframes()) {
-            WireframeComponent wireframeComponent = new WireframeComponent(wireframe);
-            for (ReactComponent component : wireframeComponent.getComponents()) {
+        for (FigmaWireframe wireframe : figmaFile.getWireframes()) {
+            ReactWireframe reactWireframe = new ReactWireframe(wireframe);
+            for (ReactComponent component : reactWireframe.getComponents()) {
                 if (component.requiresReusableComponent()) {
                     reusableComponents.add(component.getReusableComponentName());
                 }

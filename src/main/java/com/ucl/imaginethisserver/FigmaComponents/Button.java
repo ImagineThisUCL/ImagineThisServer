@@ -16,7 +16,7 @@ public class Button extends Group {
 
         // Set button's transition to another wireframe if it exists
         if (getTransitionNodeID() != null) {
-            Wireframe transitionWireframe = getFigmaFile().getWireframeById(getTransitionNodeID());
+            FigmaWireframe transitionWireframe = getFigmaFile().getWireframeById(getTransitionNodeID());
             if (transitionWireframe != null) {
                 buttonComponent.setTransitionNodeID(getTransitionNodeID());
                 buttonComponent.setTransitionNodeName(transitionWireframe.getName());
