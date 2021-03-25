@@ -14,8 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import javax.ws.rs.NotFoundException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -53,15 +55,21 @@ public class GenerationController {
             @RequestParam(value = "authType") String type,
             @Valid @RequestBody BuildRequest payload) {
 
-        Authentication auth = new Authentication(type, accessToken, payload.getUserId());
+        try {
+            Authentication auth = new Authentication(type, accessToken, payload.getUserId());
 
-        List<String> wireframes = payload.getWireframeList();
-        boolean publish = payload.getPublishOption();
-        boolean result = generationService.buildProject(projectID, auth, wireframes, publish);
+            List<String> wireframes = payload.getWireframeList();
+            boolean publish = payload.getPublishOption();
+            boolean result = generationService.buildProject(projectID, auth, wireframes, publish);
 
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("success", result);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("success", result);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Project " + projectID + " not found.", e
+            );
+        }
     }
 
     /**

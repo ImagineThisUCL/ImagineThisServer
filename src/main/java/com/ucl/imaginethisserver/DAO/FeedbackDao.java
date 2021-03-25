@@ -1,15 +1,10 @@
 package com.ucl.imaginethisserver.DAO;
 
 import com.ucl.imaginethisserver.Model.Feedback;
-import com.ucl.imaginethisserver.TypeHandler.UUIDTypeHandler;
-import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.type.JdbcType;
-import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
-import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
 import org.springframework.stereotype.Repository;
 
-import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -19,7 +14,7 @@ public interface FeedbackDao {
      * @param projectID ID of the project
      * @return a list of feedbacksDto
      */
-    List<FeedbackDto> getAllFeedbacksWithVotes(String projectID);
+    Optional<List<FeedbackDto>> getAllFeedbacksWithVotes(String projectID);
 
     /**
      * This method will return all feedbacks for a given project

@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,21 +29,33 @@ public class VoteController {
     @GetMapping("/projects/{project-id}/feedback/{feedback-id}/vote")
     public List<Vote> getVotesForFeedback(@PathVariable("project-id") String projectID,
                                           @PathVariable("feedback-id") UUID feedbackID) {
-        return voteService.getVotesForFeedback(projectID, feedbackID);
+        try {
+            return voteService.getVotesForFeedback(projectID, feedbackID);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Not votes found for feedback", e
+            );
+        }
     }
 
     @PostMapping("/projects/{project-id}/feedback/{feedback-id}/vote")
     public ResponseEntity<Map<String, Object>> voteFeedback(@PathVariable("project-id") String projectID,
                                                              @PathVariable("feedback-id") UUID feedbackID,
                                                              @RequestBody Vote vote) {
-        boolean result = voteService.voteFeedback(projectID, feedbackID, vote);
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", result);
-        if(result) {
+        try {
+            boolean result = voteService.voteFeedback(projectID, feedbackID, vote);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", result);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException | InternalServerErrorException e) {
+            String errorMessage = (e instanceof IllegalArgumentException) ?
+                    "Illegal argument" :
+                    "Error voting Feedback";
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, errorMessage, e
+            );
         }
+
     }
 
     @PatchMapping("/projects/{project-id}/feedback/{feedback-id}/vote/{vote-id}")
@@ -48,13 +63,18 @@ public class VoteController {
                                                                       @PathVariable("feedback-id") UUID feedbackID,
                                                                       @PathVariable("vote-id") UUID voteID,
                                                                       @RequestBody Vote vote) {
-        boolean result = voteService.updateVoteForFeedback(projectID, feedbackID, voteID, vote);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("success", result);
-        if(result) {
+        try {
+            boolean result = voteService.updateVoteForFeedback(projectID, feedbackID, voteID, vote);
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("success", result);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException | InternalServerErrorException e) {
+            String errorMessage = (e instanceof IllegalArgumentException) ?
+                    "Illegal argument" :
+                    "Error updating vote";
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, errorMessage, e
+            );
         }
     }
 
@@ -63,13 +83,16 @@ public class VoteController {
                                                                       @PathVariable("feedback-id") UUID feedbackID,
                                                                       @PathVariable("vote-id") UUID voteID,
                                                                       @RequestBody Vote vote) {
-        boolean result = voteService.deleteVoteForFeedback(projectID, feedbackID, voteID, vote);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("success", result);
-        if(result) {
+        try {
+            boolean result = voteService.deleteVoteForFeedback(projectID, feedbackID, voteID, vote);
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("success", result);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (InternalServerErrorException e) {
+            String errorMessage = "Error deleting vote";
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, errorMessage, e
+            );
         }
     }
 }

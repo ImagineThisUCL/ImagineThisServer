@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.ws.rs.NotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,14 +31,26 @@ public class FeedbackController {
     @GetMapping("/projects/{project-id}/feedback")
     @ResponseBody
     public List<FeedbackDto> getFeedbacksWithVotes(@PathVariable("project-id") String projectID) {
-        return feedbackService.getFeedbacksWithVotes(projectID);
+        try {
+            return feedbackService.getFeedbacksWithVotes(projectID);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "No feedbacks found for this project", e
+            );
+        }
     }
 
     @GetMapping("/projects/{project-id}/feedback/{feedback-id}")
     @ResponseBody
     public Feedback getFeedbackByID(@PathVariable("project-id") String projectID,
                                     @PathVariable("feedback-id") UUID feedbackID) {
-        return feedbackService.getFeedbackByID(projectID, feedbackID);
+        try {
+            return feedbackService.getFeedbackByID(projectID, feedbackID);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Not feedback found with ID " + feedbackID
+            );
+        }
     }
 
     @PatchMapping("/projects/{project-id}/feedback/{feedback-id}")

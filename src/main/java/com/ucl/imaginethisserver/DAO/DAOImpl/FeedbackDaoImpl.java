@@ -33,8 +33,13 @@ public class FeedbackDaoImpl implements FeedbackDao {
     }
 
     @Override
-    public List<FeedbackDto> getAllFeedbacksWithVotes(String projectID) {
-        return feedbackMapper.getAllFeedbacksWithVotes(projectID);
+    public Optional<List<FeedbackDto>> getAllFeedbacksWithVotes(String projectID) {
+        Optional<List<FeedbackDto>> optionalList;
+        List<FeedbackDto> result = feedbackMapper.getAllFeedbacksWithVotes(projectID);
+        // if the size of the list is zero, then consider it as no feedback found
+        List<FeedbackDto> optionalResult = result.size() == 0 ? null : result;
+        optionalList = Optional.ofNullable(optionalResult);
+        return optionalList;
     }
 
     @Override
