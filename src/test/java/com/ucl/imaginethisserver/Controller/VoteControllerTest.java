@@ -1,30 +1,22 @@
 package com.ucl.imaginethisserver.Controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
-import com.ucl.imaginethisserver.CustomExceptions.ProjectNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ucl.imaginethisserver.DAO.FeedbackDto;
-import com.ucl.imaginethisserver.Model.Feedback;
 import com.ucl.imaginethisserver.Model.Vote;
-import com.ucl.imaginethisserver.DAO.VoteDao;
 import com.ucl.imaginethisserver.Service.FeedbackService;
 import com.ucl.imaginethisserver.Service.VoteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.mockito.ArgumentMatchers;
 
-import org.springframework.web.context.WebApplicationContext;
-
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,11 +26,9 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(VoteController.class)
 class VoteControllerTest {
@@ -143,27 +133,31 @@ class VoteControllerTest {
 
         mockMvc.perform(post("/api/v1/projects/" + mockProjectID + "/feedback/" + mockFeedbackID + "/vote")
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk());
     }
 
     @Test
-    void givenInvalidProjectIDOrFeedbackID_whenVoteFeedback_thenReturnErrorNotFound() throws Exception {
+    void givenInvalidProjectIDOrFeedbackID_whenVoteFeedback_thenReturnInternalServerError() throws Exception {
         String projectID = "invalidProjectID";
         UUID feedbackID = UUID.randomUUID();
 
-        given(service.voteFeedback(mockProjectID, feedbackID, mockVote)).willThrow(new NotFoundException());
-        given(service.voteFeedback(projectID, mockFeedbackID, mockVote)).willThrow(new NotFoundException());
+        // service will throw InternalServerErrorException
+        // since the payload mockVote has all fields correctly set
+        given(service.voteFeedback(eq(mockProjectID), eq(feedbackID), any(Vote.class))).willThrow(new InternalServerErrorException());
+        given(service.voteFeedback(eq(projectID), eq(mockFeedbackID), any(Vote.class))).willThrow(new InternalServerErrorException());
 
         ObjectMapper mapper = new ObjectMapper();
         String requestJson = mapper.writeValueAsString(mockVote);
 
+        // controller will return InternalServerError
         mockMvc.perform(post("/api/v1/projects/" + projectID + "/feedback/" + mockFeedbackID + "/vote")
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isInternalServerError());
 
         mockMvc.perform(post("/api/v1/projects/" + mockProjectID + "/feedback/" + feedbackID + "/vote")
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isInternalServerError());
     }
 
     /*
@@ -184,29 +178,31 @@ class VoteControllerTest {
     }
 
     @Test
-    void givenInvalidProjectIDOrFeedbackIDOrVoteID_whenUpdateVoteForFeedback_thenReturnErrorNotFound() throws Exception {
+    void givenInvalidProjectIDOrFeedbackIDOrVoteID_whenUpdateVoteForFeedback_thenReturnInternalServerError() throws Exception {
         String projectID = "invalidProjectID";
         UUID feedbackID = UUID.randomUUID();
         UUID voteID = UUID.randomUUID();
 
-        given(service.updateVoteForFeedback(projectID, mockFeedbackID, mockVoteID, mockVote)).willThrow(new NotFoundException());
-        given(service.updateVoteForFeedback(mockProjectID, feedbackID, mockVoteID, mockVote)).willThrow(new NotFoundException());
-        given(service.updateVoteForFeedback(mockProjectID, mockFeedbackID, voteID, mockVote)).willThrow(new NotFoundException());
+        // service will throw IllegalArgumentException
+        given(service.updateVoteForFeedback(eq(projectID), eq(mockFeedbackID), eq(mockVoteID), any(Vote.class))).willThrow(new IllegalArgumentException());
+        given(service.updateVoteForFeedback(eq(mockProjectID), eq(feedbackID), eq(mockVoteID), any(Vote.class))).willThrow(new IllegalArgumentException());
+        given(service.updateVoteForFeedback(eq(mockProjectID), eq(mockFeedbackID), eq(voteID), any(Vote.class))).willThrow(new InternalServerErrorException());
 
         ObjectMapper mapper = new ObjectMapper();
         String requestJson = mapper.writeValueAsString(mockVote);
 
+        // controller will return InternalServerError
         mockMvc.perform(patch("/api/v1/projects/" + projectID + "/feedback/" + mockFeedbackID + "/vote/" + mockVoteID)
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isInternalServerError());
 
         mockMvc.perform(patch("/api/v1/projects/" + mockProjectID + "/feedback/" + feedbackID + "/vote/" + mockVoteID)
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isInternalServerError());
 
         mockMvc.perform(patch("/api/v1/projects/" + mockProjectID + "/feedback/" + mockFeedbackID + "/vote/" + voteID)
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isInternalServerError());
     }
 
     /*
@@ -227,29 +223,31 @@ class VoteControllerTest {
     }
 
     @Test
-    void givenInvalidProjectIDOrFeedbackIDOrVoteID_whenDeleteVoteForFeedback_thenReturnErrorNotFound() throws Exception {
+    void givenInvalidProjectIDOrFeedbackIDOrVoteID_whenDeleteVoteForFeedback_thenReturnInternalServerError() throws Exception {
         String projectID = "invalidProjectID";
         UUID feedbackID = UUID.randomUUID();
         UUID voteID = UUID.randomUUID();
 
-        given(service.deleteVoteForFeedback(projectID, mockFeedbackID, mockVoteID, mockVote)).willThrow(new NotFoundException());
-        given(service.deleteVoteForFeedback(mockProjectID, feedbackID, mockVoteID, mockVote)).willThrow(new NotFoundException());
-        given(service.deleteVoteForFeedback(mockProjectID, mockFeedbackID, voteID, mockVote)).willThrow(new NotFoundException());
+        // service will throw InternalServerErrorException
+        given(service.deleteVoteForFeedback(eq(projectID), eq(mockFeedbackID), eq(mockVoteID), any(Vote.class))).willThrow(new InternalServerErrorException());
+        given(service.deleteVoteForFeedback(eq(mockProjectID), eq(feedbackID), eq(mockVoteID), any(Vote.class))).willThrow(new InternalServerErrorException());
+        given(service.deleteVoteForFeedback(eq(mockProjectID), eq(mockFeedbackID), eq(voteID), any(Vote.class))).willThrow(new InternalServerErrorException());
 
         ObjectMapper mapper = new ObjectMapper();
-        String requestJson = mapper.writeValueAsString(mockVote);
+        byte[] requestJson = mapper.writeValueAsBytes(mockVote);
 
+        // controller will return InternalServerError
         mockMvc.perform(delete("/api/v1/projects/" + projectID + "/feedback/" + mockFeedbackID + "/vote/"+ mockVoteID)
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isInternalServerError());
 
         mockMvc.perform(delete("/api/v1/projects/" + mockProjectID + "/feedback/" + feedbackID + "/vote/"+ mockVoteID)
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isInternalServerError());
 
         mockMvc.perform(delete("/api/v1/projects/" + mockProjectID + "/feedback/" + mockFeedbackID + "/vote/"+ voteID)
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isInternalServerError());
     }
 
 
