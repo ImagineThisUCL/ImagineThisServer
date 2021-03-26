@@ -1,9 +1,7 @@
 package com.ucl.imaginethisserver.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
-import com.ucl.imaginethisserver.DAO.FeedbackDto;
-import com.ucl.imaginethisserver.Service.FeedbackService;
+import com.ucl.imaginethisserver.Model.Project;
 import com.ucl.imaginethisserver.Service.ProjectService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,25 +9,21 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
-import com.ucl.imaginethisserver.Model.Project;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.mockito.ArgumentMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @WebMvcTest(ProjectController.class)
 class ProjectControllerTest {
@@ -112,9 +106,10 @@ class ProjectControllerTest {
     @Test
     void givenInvalidProjectID_whenGetProjectNameByID_thenReturnNotFound() throws Exception{
         String projectID = "invalidProjectID";
-        given(service.getProjectNameByID(projectID)).willReturn(null);
+        // service throws NotFoundException
+        given(service.getProjectNameByID(projectID)).willThrow(new NotFoundException());
 
-        mockMvc.perform(get("/api/v1/projects/"+mockProjectID)
+        mockMvc.perform(get("/api/v1/projects/"+projectID)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -135,16 +130,18 @@ class ProjectControllerTest {
     }
 
     @Test
-    void givenInvalidProjectID_whenUpdateProject_thenReturnSuccess() throws Exception{
+    void givenInvalidProjectID_whenUpdateProject_thenReturnInternalServerError() throws Exception{
         String projectID = "invalidProjectID";
-        given(service.updateProject(ArgumentMatchers.eq(projectID), ArgumentMatchers.any(Project.class))).willReturn(false);
+        // service will throw InternalServerErrorException
+        given(service.updateProject(ArgumentMatchers.eq(projectID), ArgumentMatchers.any(Project.class)))
+                .willThrow(new InternalServerErrorException());
 
         ObjectMapper mapper = new ObjectMapper();
         String requestJson = mapper.writeValueAsString(mockProject);
 
-        mockMvc.perform(patch("/api/v1/projects/"+mockProjectID)
+        mockMvc.perform(patch("/api/v1/projects/"+projectID)
                 .contentType(MediaType.APPLICATION_JSON).content(requestJson))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isInternalServerError());
     }
 
 }

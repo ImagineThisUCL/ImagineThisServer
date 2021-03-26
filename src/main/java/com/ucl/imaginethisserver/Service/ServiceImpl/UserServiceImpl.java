@@ -1,7 +1,5 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
-import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
-import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.DAO.UserDao;
 import com.ucl.imaginethisserver.Model.User;
 import com.ucl.imaginethisserver.Model.Vote;
@@ -11,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.UUID;
 

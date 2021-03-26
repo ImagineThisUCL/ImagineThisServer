@@ -1,10 +1,8 @@
 package com.ucl.imaginethisserver.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
-import com.ucl.imaginethisserver.DAO.FeedbackDto;
+import com.ucl.imaginethisserver.Model.User;
 import com.ucl.imaginethisserver.Model.Vote;
-import com.ucl.imaginethisserver.Service.FeedbackService;
 import com.ucl.imaginethisserver.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +10,8 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
-import com.ucl.imaginethisserver.Model.User;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
@@ -23,14 +19,10 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.mockito.ArgumentMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @WebMvcTest(UserController.class)
 class UserControllerTest {

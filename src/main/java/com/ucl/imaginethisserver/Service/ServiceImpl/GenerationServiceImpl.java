@@ -10,15 +10,15 @@ import com.ucl.imaginethisserver.DAO.ProjectDao;
 import com.ucl.imaginethisserver.FigmaComponents.*;
 import com.ucl.imaginethisserver.Model.Conversion;
 import com.ucl.imaginethisserver.Model.Project;
-import com.ucl.imaginethisserver.Util.*;
-import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.Service.GenerationService;
+import com.ucl.imaginethisserver.Util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.NotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class GenerationServiceImpl implements GenerationService {
 
         if (figmaFile == null) {
             logger.error("Could not find Figma design for project {}", projectID);
-            throw new NotFoundException("Project " + projectID + " not found.");
+            throw new NotFoundException();
         }
 
         // Filter out only selected wireframes

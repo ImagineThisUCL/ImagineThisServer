@@ -1,28 +1,19 @@
 package com.ucl.imaginethisserver.Service.ServiceImpl;
 
-import com.ucl.imaginethisserver.CustomExceptions.InternalServerErrorException;
-import com.ucl.imaginethisserver.CustomExceptions.NotFoundException;
 import com.ucl.imaginethisserver.DAO.FeedbackDao;
 import com.ucl.imaginethisserver.DAO.FeedbackDto;
 import com.ucl.imaginethisserver.DAO.ProjectDao;
-import com.ucl.imaginethisserver.Mapper.FeedbackDynamicSqlSupport;
-import com.ucl.imaginethisserver.Mapper.VoteDynamicSqlSupport;
-import com.ucl.imaginethisserver.Mapper.VoteMapper;
 import com.ucl.imaginethisserver.Model.Feedback;
-import com.ucl.imaginethisserver.Mapper.FeedbackMapper;
 import com.ucl.imaginethisserver.Service.FeedbackService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.UUID;
-
-import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
@@ -44,7 +35,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public List<FeedbackDto> getFeedbacksWithVotes(String projectID) {
-        return feedbackDao.getAllFeedbacksWithVotes(projectID);
+        return feedbackDao.getAllFeedbacksWithVotes(projectID).orElseThrow(NotFoundException::new);
     }
 
     @Override
